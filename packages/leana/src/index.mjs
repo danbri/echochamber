@@ -20,7 +20,12 @@ export {
   LiteralLabel, LiteralLabelFactory, BaseDatatype, TextDirection, Util, datatypeFor, fromRDFJS, JenaParameters, XSDDateTime,
 } from './node.mjs';
 export { GraphMem, WrappedGraph, GraphMemFactory, GraphFactory, GraphUtil, ExtendedIterator, JenaSet,
-  GraphBase, GraphPlain, WrappedIterator, ReifierStd } from './graph.mjs';
+  GraphBase, GraphPlain, WrappedIterator, ReifierStd, Capabilities, TransactionHandlerBase, SimpleTransactionHandler,
+} from './graph.mjs';
+export {
+  ArrayList, GraphEvents, GraphEventManager, GraphListenerBase, ModelListenerAdapter, StatementListener, NullListener,
+  ObjectListener, ChangedListener,
+} from './events.mjs';
 export { PrefixMapping, PrefixMappingImpl, IllegalPrefixException } from './prefix.mjs';
 export {
   Model, ModelFactory, ResourceFactory, Statement, RDFNode, Resource, Property, Literal,
@@ -32,8 +37,18 @@ export {
   FactoryRDFStd, PrefixMapFactory, RDFReaderFactoryRIOT,
 } from './riot.mjs';
 export {
-  QueryExecution, QueryExecutionFactory, QueryFactory, QuerySolutionMap, DatasetFactory, DatasetGraphFactory,
+  QueryExecution, QueryExecutionFactory, QueryFactory, QuerySolutionMap,
 } from './query.mjs';
+export {
+  Quad, ReadWrite, TxnType, JenaTransactionException, Txn, GraphView, GraphUnionView, DatasetGraph,
+  DatasetGraphInMemory, DatasetGraphMapLink, DatasetGraphOne, Symbol_, Context, Dataset, DatasetFactory,
+  DatasetGraphFactory,
+} from './dataset.mjs';
+export {
+  CompositionBase, Dyadic, Union, Intersection, Difference, DisjointUnion, Delta, Polyadic, MultiUnion,
+  PolyadicPrefixMappingImpl,
+} from './compose.mjs';
+export { InfModel, Rule, GenericRuleReasoner, ReasonerRegistry } from './reasoner.mjs';
 export {
   JenaException, UnsupportedOperationException, LeanaUnsupportedError, NoSuchElementException,
   ClosedException, JenaLockedException, PropertyNotFoundException, LiteralRequiredException,

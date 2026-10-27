@@ -37,9 +37,10 @@ Jena picks the datatype from the Java class (`99` xsd:int, `99L` xsd:long, `14.0
 - `Model.addLiteral(Resource, Property, value)`
 - `Model.containsLiteral(Resource, Property, value)`
 - `Model.createLiteralStatement(Resource, Property, value)`
-- `Model.createTypedLiteral(value)`
 - `Model.createTypedLiteral(value, datatype)`
+- `Model.createTypedLiteral(value)`
 - `Model.listLiteralStatements(Resource, Property, value)`
+- `new XSDDateTime(Calendar)`
 - `NodeFactory.createLiteralByValue`
 - `RDFDatatype.getJavaClass`
 - `RDFDatatype.isValidValue`
@@ -49,7 +50,6 @@ Jena picks the datatype from the Java class (`99` xsd:int, `99L` xsd:long, `14.0
 - `Statement.changeLiteralObject(value)`
 - `TypeMapper.getTypeByClass`
 - `TypeMapper.getTypeByValue`
-- `new XSDDateTime(Calendar)`
 
 ## literal-value: The value of a literal
 
@@ -124,9 +124,15 @@ Issue: https://github.com/danbri/factoidal/issues/1051 (item 5)
 leana holds no rdf:, rdfs:, xsd:, owl: IRIs (the ported tests hold Jena's `Standard` and `Extended` tables as test data in `conformance/leana/lib/testlib.mjs`).
 
 - `Model.createLiteral(String, true) (rdf:XMLLiteral)`
+- `Model.createReifiedStatement`
 - `Model.createReifier`
 - `Model.createResource(Resource type)`
 - `Model.createResource(String, Resource type)`
+- `Model.getAnyReifiedStatement`
+- `Model.isReified`
+- `Model.listReifiedStatements`
+- `Model.removeAllReifications`
+- `Model.removeReification`
 - `PrefixMapping.Extended`
 - `PrefixMapping.Standard`
 - `Property.getOrdinal`
@@ -135,6 +141,9 @@ leana holds no rdf:, rdfs:, xsd:, owl: IRIs (the ported tests hold Jena's `Stand
 - `ReifierStd.hasTriple`
 - `ReifierStd.reifyAs`
 - `ReifierStd.remove`
+- `Statement.createReifiedStatement`
+- `Statement.getStatementProperty`
+- `Statement.isReified`
 - `Triple.toString(PrefixMapping) (datatype written with PrefixMapping.Standard)`
 
 ## collections: RDF collections and containers
@@ -163,6 +172,25 @@ Issue: https://github.com/danbri/factoidal/issues/957
 `isIsomorphicWith` is decided by the engine's RDFC-1.0 canonical form, which has no rule for RDF 1.2 triple terms. Without blank nodes leana compares the triple sets.
 
 - `Graph.isIsomorphicWith (blank nodes and triple terms)`
+
+## inference: Jena rules and a live inference graph
+
+Issue: https://github.com/danbri/factoidal/issues/1087
+
+Jena's rule language (`Rule.parseRules`, `GenericRuleReasoner`) has no reader or engine in @factoidal/core, and Jena's `InfModel` is live and synchronous, where the core closures (`closure`, `Dataset.closure`) answer a Promise of a snapshot. `InfModel`, `Rule`, `GenericRuleReasoner` and `ReasonerRegistry` exist as names only.
+
+- `GenericRuleReasoner`
+- `ModelFactory.createInfModel`
+- `ModelFactory.createOntologyModel`
+- `ModelFactory.createRDFSModel`
+- `ReasonerRegistry.getOWLMicroReasoner`
+- `ReasonerRegistry.getOWLMiniReasoner`
+- `ReasonerRegistry.getOWLReasoner`
+- `ReasonerRegistry.getRDFSReasoner`
+- `ReasonerRegistry.getTransitiveReasoner`
+- `Rule.parseRule`
+- `Rule.parseRules`
+- `Rule.rulesFromURL`
 
 ## echo: Not done in leana (no engine semantics missing)
 

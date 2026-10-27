@@ -38,6 +38,10 @@ export const GAPS = Object.freeze({
     summary: 'isomorphism of graphs with blank nodes and RDF 1.2 triple terms (RDFC-1.0 has no rule for triple terms)',
     issue: 'https://github.com/danbri/factoidal/issues/957',
   },
+  'inference': {
+    summary: 'the Jena rule language and a synchronous (live) inference graph need engine ops',
+    issue: 'https://github.com/danbri/factoidal/issues/1087',
+  },
   // Echo gaps: leana has not done it yet. No engine semantics are missing.
   'echo': {
     summary: 'not implemented in leana stage 1 (no engine semantics missing)',

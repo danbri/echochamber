@@ -24,6 +24,8 @@
 //   jena-core/src/test/java/org/apache/jena/graph/GraphTestLib.java
 //   jena-core/src/test/java/org/apache/jena/rdf/model/ModelTestLib.java
 //   jena-core/src/test/java/org/apache/jena/test/JenaTestLib.java
+//   jena-core/src/test/java/org/apache/jena/junit/AbstractRecordingListener.java
+//   jena-core/src/test/java/org/apache/jena/graph/RecordingGraphListener.java
 //   jena-core/src/main/java/org/apache/jena/shared/PrefixMapping.java (the
 //     Standard and Extended tables, as test data)
 // Changed for echochamber: translated from Java to JavaScript over
@@ -34,7 +36,7 @@
 import assert from 'node:assert/strict';
 import {
   Node, NodeFactory, Triple, PrefixMapping, GraphMemFactory, ModelFactory, Property, JenaException,
-  JenaSet, LeanaUnsupportedError,
+  JenaSet, LeanaUnsupportedError, ArrayList, Model, Statement,
 } from '@factoidal/leana';
 
 // --- PrefixMapping.Standard and PrefixMapping.Extended, as test data.
@@ -250,3 +252,50 @@ export function testContains(g, triples) {
 export function testOmits(g, triples) {
   for (const t of triplesOf(triples)) assert.ok(!g.contains(t), 'omits ' + t);
 }
+
+// --- AbstractRecordingListener and RecordingGraphListener.
+// Java equality of history items: identity for arrays (Java arrays), element-wise for Lists.
+function javaEquals(a, b) {
+  if (a === b) return true;
+  if (a instanceof ArrayList) return a.equals(b);
+  if (Array.isArray(a)) return false;
+  if (a && typeof a.equals === 'function') return a.equals(b);
+  return false;
+}
+export function checkEquality(o1, o2) {
+  if (o1 === o2) return true;
+  const listy = (x) => Array.isArray(x) || x instanceof JenaSet;
+  if (listy(o1) && listy(o2)) {
+    const a = [...o1], b = [...o2];
+    return a.length === b.length && a.every((x, i) => checkEquality(x, b[i]));
+  }
+  if (o1 instanceof Model && o2 instanceof Model) return checkEquality(o1.listStatements().toList(), o2.listStatements().toList());
+  if (o1 instanceof Statement && o2 instanceof Statement) return o1.asTriple().equals(o2.asTriple());
+  if (o1 && typeof o1.toList === 'function' && o2 && typeof o2.toList === 'function') return checkEquality(o1.toList(), o2.toList());
+  return javaEquals(o1, o2);
+}
+export class AbstractRecordingListener {
+  constructor() { this.history = []; }
+  record(...xs) { this.history.push(...xs); }
+  has(...things) { return things.length === this.history.length && things.every((x, i) => javaEquals(this.history[i], x)); }
+  assertHas(things) {
+    assert.ok(this.has(...things), `expected [${things.map(String)}] but got [${this.history.map(String)}]`);
+  }
+  assertEmpty() { assert.equal(this.history.length, 0, 'Should be no history but got ' + this.history); }
+  size() { return this.history.length; }
+}
+export class RecordingGraphListener extends AbstractRecordingListener {
+  notifyAddTriple(g, t) { this.record('add', g, t); }
+  notifyAddArray(g, ts) { this.record('add[]', g, ts); }
+  notifyAddList(g, ts) { this.record('addList', g, ts); }
+  notifyAddIterator(g, ts) { this.record('addIterator', g, ts); }
+  notifyAddGraph(g, added) { this.record('addGraph', g, added); }
+  notifyDeleteTriple(g, t) { this.record('delete', g, t); }
+  notifyDeleteArray(g, ts) { this.record('delete[]', g, ts); }
+  notifyDeleteList(g, ts) { this.record('deleteList', g, ts); }
+  notifyDeleteIterator(g, ts) { this.record('deleteIterator', g, ts); }
+  notifyDeleteGraph(g, removed) { this.record('deleteGraph', g, removed); }
+  notifyEvent(source, event) { this.record('someEvent', source, event); }
+}
+/** Arrays.asList(...): a Java List. */
+export const asList = (xs) => ArrayList.from(xs);

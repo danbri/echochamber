@@ -52,6 +52,18 @@ export function describeJena(cls, source, body) {
         }
       };
       test(name, async () => {
+        if (process.env.LEANA_TRIAGE) {
+          // Triage mode: run the method with no verdict and record what happened.
+          let err = null;
+          try { await fn(); } catch (e) { err = e; }
+          appendFileSync(process.env.LEANA_TRIAGE, JSON.stringify({
+            cls, method: name, ok: err === null, gap: err instanceof LeanaUnsupportedError ? err.gap : undefined,
+            what: err instanceof LeanaUnsupportedError ? err.method : undefined,
+            err: err === null ? undefined : String(err && err.name) + ': ' + String(err && err.message).slice(0, 300),
+            assertion: err instanceof assert.AssertionError, verdict: v,
+          }) + '\n');
+          return;
+        }
         if (!v) { await fn(); record(); return; }
         checkVerdictShape(cls, name, v);
         let err = null;
@@ -73,6 +85,7 @@ export function describeJena(cls, source, body) {
     };
     body(t);
     after(() => {
+      if (process.env.LEANA_TRIAGE) return;
       const stale = Object.keys(verdicts).filter((k) => !used.has(k));
       assert.deepEqual(stale, [], `${cls}: verdicts with no ported test`);
     });

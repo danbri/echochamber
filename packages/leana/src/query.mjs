@@ -22,11 +22,3 @@ export const QueryFactory = Object.freeze({
 export class QuerySolutionMap {
   constructor() { unsupported('QuerySolutionMap (stage 2)', 'echo'); }
 }
-export const DatasetFactory = Object.freeze({
-  create() { return unsupported('DatasetFactory (stage 2)', 'echo'); },
-  createTxnMem() { return unsupported('DatasetFactory (stage 2)', 'echo'); },
-});
-export const DatasetGraphFactory = Object.freeze({
-  create() { return unsupported('DatasetGraphFactory (stage 2)', 'echo'); },
-  createTxnMem() { return unsupported('DatasetGraphFactory (stage 2)', 'echo'); },
-});

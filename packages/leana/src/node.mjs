@@ -61,8 +61,18 @@ export class Node {
   getNameSpace() { return unsupported('Node.getNameSpace', 'iri-split'); }
   getLocalName() { return unsupported('Node.getLocalName', 'iri-split'); }
 
-  /** Value equality (Jena sameValueAs): engine op needed. */
-  sameValueAs(other) { return unsupported('Node.sameValueAs', 'value-matching'); }
+  /**
+   * Value equality (Jena sameValueAs). For nodes with no literal inside, the
+   * value is the term (RDF 1.1 Concepts section 3.6): term equality. For a
+   * literal, value equality needs an engine op.
+   */
+  sameValueAs(other) {
+    if (!(other instanceof Node)) return false;
+    if (hasLiteral(this) || hasLiteral(other)) return unsupported('Node.sameValueAs', 'value-matching');
+    return this.equals(other);
+  }
+  isNodeGraph() { return false; }
+  getGraph() { throw new UnsupportedOperationException(this.constructor.name + ' is not a graph node'); }
 
   /** Jena sameTermAs: term equality; null is refused (Jena 6: NullPointerException). */
   sameTermAs(other) {
@@ -91,6 +101,7 @@ export class Node {
     if (this.isLiteral()) return v.visitLiteral(this, this.getLiteralLexicalForm(), this.getLiteralLanguage(), this.getLiteralDatatype());
     if (this.isVariable()) return v.visitVariable(this, this.getName());
     if (this.isTripleTerm()) return v.visitTriple(this, this.getTriple());
+    if (this.isNodeGraph()) return v.visitGraph(this, this.getGraph());
     throw new JenaException('no visit for ' + this);
   }
 }
@@ -213,9 +224,34 @@ export class Node_Triple extends Node {
   toString() { return '<<( ' + this._triple.toString() + ' )>>'; }
 }
 
-/** Jena Node_Graph (a graph as a node): not in leana. */
+function hasLiteral(n) {
+  if (n.isLiteral()) return true;
+  if (n.isTripleTerm()) {
+    const t = n.getTriple();
+    return hasLiteral(t.getSubject()) || hasLiteral(t.getPredicate()) || hasLiteral(t.getObject());
+  }
+  return false;
+}
+
+const GRAPH_IDS = new WeakMap();
+let graphIds = 0;
+/**
+ * Jena Node_Graph: a graph as a node (a Jena extension, not an RDF term).
+ * Two are equal when they hold the same graph object. It is not concrete
+ * and has no RDF/JS term, so it cannot be stored in a graph.
+ */
 export class Node_Graph extends Node {
-  constructor() { super(); unsupported('Node_Graph', 'echo'); }
+  constructor(graph) {
+    super();
+    if (graph === null || graph === undefined) throw new TypeError('Node_Graph needs a graph');
+    this._graph = graph;
+    if (!GRAPH_IDS.has(graph)) GRAPH_IDS.set(graph, ++graphIds);
+    Object.freeze(this);
+  }
+  isNodeGraph() { return true; }
+  getGraph() { return this._graph; }
+  hashKey() { return 'G' + GRAPH_IDS.get(this._graph); }
+  toString() { return '{graph ' + GRAPH_IDS.get(this._graph) + '}'; }
 }
 
 Node.ANY = new Node_ANY();

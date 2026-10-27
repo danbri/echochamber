@@ -139,8 +139,7 @@ describeJena('TestResourceFactory', 'jena-core/src/test/java/org/apache/jena/rdf
       assert.ok(factory === ResourceFactory.getInstance());
       assert.ok(ResourceFactory.createResource() === r);
     } finally {
-      // Jena restores the old factory; leana has no setInstance (the call above throws).
-      void oldFactory;
+      ResourceFactory.setInstance(oldFactory);
     }
   });
 });
