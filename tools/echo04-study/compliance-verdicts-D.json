@@ -1,0 +1,598 @@
+{
+ "cases": {
+  "NamedGraphScopeTest#explicitEmptyDataset": {
+   "verdict": "divergence",
+   "group": "absent-named-graph",
+   "spec": "SPARQL 1.1 Query §13.2 / §13.2.2 (\"Each IRI is used to provide one named graph in the RDF Dataset\"); how the graph for an IRI is obtained is implementation-defined",
+   "note": "RDF4J keeps FROM NAMED <http://example/empty> (no statements in the store) as an empty named graph, so GRAPH ?g {} gives one row; the engine drops a FROM / FROM NAMED IRI that is not in the local dataset (Factoidal issue 1032 records this as an allowed choice and asks only for a warning). Cross-check: data <urn:a> <urn:b> <urn:c>; SELECT ?g FROM NAMED <urn:x> { GRAPH ?g {} } gives no rows; ASK FROM NAMED <urn:x> { GRAPH <urn:x> {} } gives false. If the caller reads §13.2.2 as requiring the named graph, this becomes a defect."
+  },
+  "NamedGraphScopeTest#defaultAliases": {
+   "verdict": "divergence",
+   "group": "default-graph-alias",
+   "spec": "SPARQL 1.1 Query §13.3.2 and §18.6 (Definition: Evaluation of Graph: \"if IRI is a graph name in D eval(D(G), Graph(IRI,P)) = eval(D(D[IRI]), P); if IRI is not a graph name in D ... the empty multiset\"); §13.2.2 (each FROM NAMED IRI provides one named graph)",
+   "note": "RDF4J treats the IRIs rdf4j:nil (http://rdf4j.org/schema/rdf4j#nil) and sesame:nil (http://www.openrdf.org/schema/sesame#nil) in GRAPH and FROM NAMED as aliases of the default graph. In SPARQL they are ordinary IRIs: GRAPH <rdf4j:nil> matches only a named graph of that name."
+  },
+  "NamedGraphScopeTest#defaultAliases#3": {
+   "verdict": "divergence",
+   "group": "default-graph-alias",
+   "spec": "SPARQL 1.1 Query §13.3.2 and §18.6 (Definition: Evaluation of Graph: \"if IRI is a graph name in D eval(D(G), Graph(IRI,P)) = eval(D(D[IRI]), P); if IRI is not a graph name in D ... the empty multiset\"); §13.2.2 (each FROM NAMED IRI provides one named graph)",
+   "note": "RDF4J treats the IRIs rdf4j:nil (http://rdf4j.org/schema/rdf4j#nil) and sesame:nil (http://www.openrdf.org/schema/sesame#nil) in GRAPH and FROM NAMED as aliases of the default graph. In SPARQL they are ordinary IRIs: GRAPH <rdf4j:nil> matches only a named graph of that name."
+  },
+  "NamedGraphScopeTest#defaultAliases#4": {
+   "verdict": "divergence",
+   "group": "default-graph-alias",
+   "spec": "SPARQL 1.1 Query §13.3.2 and §18.6 (Definition: Evaluation of Graph: \"if IRI is a graph name in D eval(D(G), Graph(IRI,P)) = eval(D(D[IRI]), P); if IRI is not a graph name in D ... the empty multiset\"); §13.2.2 (each FROM NAMED IRI provides one named graph)",
+   "note": "RDF4J treats the IRIs rdf4j:nil (http://rdf4j.org/schema/rdf4j#nil) and sesame:nil (http://www.openrdf.org/schema/sesame#nil) in GRAPH and FROM NAMED as aliases of the default graph. In SPARQL they are ordinary IRIs: GRAPH <rdf4j:nil> matches only a named graph of that name."
+  },
+  "NamedGraphScopeTest#defaultAliases#6": {
+   "verdict": "divergence",
+   "group": "default-graph-alias",
+   "spec": "SPARQL 1.1 Query §13.3.2 and §18.6 (Definition: Evaluation of Graph: \"if IRI is a graph name in D eval(D(G), Graph(IRI,P)) = eval(D(D[IRI]), P); if IRI is not a graph name in D ... the empty multiset\"); §13.2.2 (each FROM NAMED IRI provides one named graph)",
+   "note": "RDF4J treats the IRIs rdf4j:nil (http://rdf4j.org/schema/rdf4j#nil) and sesame:nil (http://www.openrdf.org/schema/sesame#nil) in GRAPH and FROM NAMED as aliases of the default graph. In SPARQL they are ordinary IRIs: GRAPH <rdf4j:nil> matches only a named graph of that name."
+  },
+  "NamedGraphScopeTest#variableGraphAliasesAndDatasets#6": {
+   "verdict": "divergence",
+   "group": "default-graph-alias",
+   "spec": "SPARQL 1.1 Query §13.3.2 and §18.6 (Definition: Evaluation of Graph: \"if IRI is a graph name in D eval(D(G), Graph(IRI,P)) = eval(D(D[IRI]), P); if IRI is not a graph name in D ... the empty multiset\"); §13.2.2 (each FROM NAMED IRI provides one named graph)",
+   "note": "RDF4J treats the IRIs rdf4j:nil (http://rdf4j.org/schema/rdf4j#nil) and sesame:nil (http://www.openrdf.org/schema/sesame#nil) in GRAPH and FROM NAMED as aliases of the default graph. In SPARQL they are ordinary IRIs: GRAPH <rdf4j:nil> matches only a named graph of that name."
+  },
+  "NamedGraphScopeTest#variableGraphAliasesAndDatasets#7": {
+   "verdict": "divergence",
+   "group": "default-graph-alias",
+   "spec": "SPARQL 1.1 Query §13.3.2 and §18.6 (Definition: Evaluation of Graph: \"if IRI is a graph name in D eval(D(G), Graph(IRI,P)) = eval(D(D[IRI]), P); if IRI is not a graph name in D ... the empty multiset\"); §13.2.2 (each FROM NAMED IRI provides one named graph)",
+   "note": "RDF4J treats the IRIs rdf4j:nil (http://rdf4j.org/schema/rdf4j#nil) and sesame:nil (http://www.openrdf.org/schema/sesame#nil) in GRAPH and FROM NAMED as aliases of the default graph. In SPARQL they are ordinary IRIs: GRAPH <rdf4j:nil> matches only a named graph of that name."
+  },
+  "NamedGraphScopeTest#variableGraphAliasesAndDatasets#9": {
+   "verdict": "divergence",
+   "group": "default-graph-alias",
+   "spec": "SPARQL 1.1 Query §13.3.2 and §18.6 (Definition: Evaluation of Graph: \"if IRI is a graph name in D eval(D(G), Graph(IRI,P)) = eval(D(D[IRI]), P); if IRI is not a graph name in D ... the empty multiset\"); §13.2.2 (each FROM NAMED IRI provides one named graph)",
+   "note": "RDF4J treats the IRIs rdf4j:nil (http://rdf4j.org/schema/rdf4j#nil) and sesame:nil (http://www.openrdf.org/schema/sesame#nil) in GRAPH and FROM NAMED as aliases of the default graph. In SPARQL they are ordinary IRIs: GRAPH <rdf4j:nil> matches only a named graph of that name."
+  },
+  "NamedGraphScopeTest#variableGraphAliasesAndDatasets#10": {
+   "verdict": "divergence",
+   "group": "default-graph-alias",
+   "spec": "SPARQL 1.1 Query §13.3.2 and §18.6 (Definition: Evaluation of Graph: \"if IRI is a graph name in D eval(D(G), Graph(IRI,P)) = eval(D(D[IRI]), P); if IRI is not a graph name in D ... the empty multiset\"); §13.2.2 (each FROM NAMED IRI provides one named graph)",
+   "note": "RDF4J treats the IRIs rdf4j:nil (http://rdf4j.org/schema/rdf4j#nil) and sesame:nil (http://www.openrdf.org/schema/sesame#nil) in GRAPH and FROM NAMED as aliases of the default graph. In SPARQL they are ordinary IRIs: GRAPH <rdf4j:nil> matches only a named graph of that name."
+  },
+  "NamedGraphScopeTest#zeroLengthMembership :p?#12": {
+   "verdict": "defect",
+   "group": "path-fixed-endpoints-duplicates",
+   "issue": "https://github.com/danbri/factoidal/issues/1070",
+   "spec": "SPARQL 1.1 Query §18.4 Property Path Patterns: \"eval(Path(X:term, ZeroOrOnePath(P), Y:term)) = { {} } if X = Y or eval(Path(X,P,Y)) is not empty; { } otherwise\" (and ZeroOrMorePath with two terms likewise gives at most one solution)",
+   "note": "The engine answers two empty solutions for <urn:u> <urn:c>? <urn:u> when <urn:u> is not a node of the graph (one when it is). Minimal: data <urn:a> <urn:c> \"x\" . ; SELECT * { <urn:u> <urn:c>? <urn:u> } gives [{},{}], expected [{}]; same with <urn:c>*; SELECT * { <urn:a> <urn:c>? <urn:a> } gives [{}]."
+  },
+  "NamedGraphScopeTest#zeroLengthMembership :p*#12": {
+   "verdict": "defect",
+   "group": "path-fixed-endpoints-duplicates",
+   "issue": "https://github.com/danbri/factoidal/issues/1070",
+   "spec": "SPARQL 1.1 Query §18.4 Property Path Patterns: \"eval(Path(X:term, ZeroOrOnePath(P), Y:term)) = { {} } if X = Y or eval(Path(X,P,Y)) is not empty; { } otherwise\" (and ZeroOrMorePath with two terms likewise gives at most one solution)",
+   "note": "The engine answers two empty solutions for <urn:u> <urn:c>? <urn:u> when <urn:u> is not a node of the graph (one when it is). Minimal: data <urn:a> <urn:c> \"x\" . ; SELECT * { <urn:u> <urn:c>? <urn:u> } gives [{},{}], expected [{}]; same with <urn:c>*; SELECT * { <urn:a> <urn:c>? <urn:a> } gives [{}]."
+  },
+  "NamedGraphScopeTest#zeroLengthMembership ^:p?#12": {
+   "verdict": "defect",
+   "group": "path-fixed-endpoints-duplicates",
+   "issue": "https://github.com/danbri/factoidal/issues/1070",
+   "spec": "SPARQL 1.1 Query §18.4 Property Path Patterns: \"eval(Path(X:term, ZeroOrOnePath(P), Y:term)) = { {} } if X = Y or eval(Path(X,P,Y)) is not empty; { } otherwise\" (and ZeroOrMorePath with two terms likewise gives at most one solution)",
+   "note": "The engine answers two empty solutions for <urn:u> <urn:c>? <urn:u> when <urn:u> is not a node of the graph (one when it is). Minimal: data <urn:a> <urn:c> \"x\" . ; SELECT * { <urn:u> <urn:c>? <urn:u> } gives [{},{}], expected [{}]; same with <urn:c>*; SELECT * { <urn:a> <urn:c>? <urn:a> } gives [{}]."
+  },
+  "NamedGraphScopeTest#zeroLengthMembership (:p?/:p?)#12": {
+   "verdict": "defect",
+   "group": "path-fixed-endpoints-duplicates",
+   "issue": "https://github.com/danbri/factoidal/issues/1070",
+   "spec": "SPARQL 1.1 Query §18.4 Property Path Patterns: \"eval(Path(X:term, ZeroOrOnePath(P), Y:term)) = { {} } if X = Y or eval(Path(X,P,Y)) is not empty; { } otherwise\" (and ZeroOrMorePath with two terms likewise gives at most one solution)",
+   "note": "The engine answers two empty solutions for <urn:u> <urn:c>? <urn:u> when <urn:u> is not a node of the graph (one when it is). Minimal: data <urn:a> <urn:c> \"x\" . ; SELECT * { <urn:u> <urn:c>? <urn:u> } gives [{},{}], expected [{}]; same with <urn:c>*; SELECT * { <urn:a> <urn:c>? <urn:a> } gives [{}]."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-001": {
+   "verdict": "divergence",
+   "group": "bnr-blank-node-reference",
+   "spec": "SPARQL 1.1 Query §19.5 (IRI References: text matched by IRIREF must conform to RFC 3987 IRI-reference syntax) and §4.1.4 (Syntax for Blank Nodes)",
+   "note": "RDF4J BNR-1 (RDF4J-specific, vectors dated 2026-10-10) reads <_:id> as a reference to the stored blank node with that ID. In SPARQL <_:id> is an IRIREF; \"_:id\" is not an RFC 3987 IRI reference (no ALPHA scheme start; a relative first segment cannot contain \":\"), so a conforming processor refuses the request, and blank nodes in a query (_:label, []) never denote a stored node. The engine reads <_:id> as the IRI \"_:id\" instead (see the iriref-rfc3987 defect), so it answers differently from RDF4J."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-002": {
+   "verdict": "defect",
+   "group": "iriref-rfc3987",
+   "issue": "https://github.com/danbri/factoidal/issues/1057",
+   "spec": "SPARQL 1.1 Query §19.5 IRI References: \"Text matched by the IRIREF production and PrefixedName (after prefix expansion) production, after escape processing, must conform to the generic syntax of IRI references in section 2.2 of RFC 3987 ... the IRIREF <abc#def> may occur in a SPARQL query string, but the IRIREF <abc##def> must not.\"",
+   "note": "RDF4J refuses the request statically; so must a conforming processor, since <_:x> is not an RFC 3987 IRI reference. The engine accepts it and treats \"_:x\" as an IRI. Cross-check: ASK { <http://a/abc##def> ?p ?o } (the specification's own example) is also accepted (answers false)."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-003": {
+   "verdict": "defect",
+   "group": "iriref-rfc3987",
+   "issue": "https://github.com/danbri/factoidal/issues/1057",
+   "spec": "SPARQL 1.1 Query §19.5 IRI References: \"Text matched by the IRIREF production and PrefixedName (after prefix expansion) production, after escape processing, must conform to the generic syntax of IRI references in section 2.2 of RFC 3987 ... the IRIREF <abc#def> may occur in a SPARQL query string, but the IRIREF <abc##def> must not.\"",
+   "note": "RDF4J refuses the request statically; so must a conforming processor, since <_:x> is not an RFC 3987 IRI reference. The engine accepts it and treats \"_:x\" as an IRI. Cross-check: ASK { <http://a/abc##def> ?p ?o } (the specification's own example) is also accepted (answers false)."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-005": {
+   "verdict": "divergence",
+   "group": "bnr-blank-node-reference",
+   "spec": "SPARQL 1.1 Query §19.5 (IRI References: text matched by IRIREF must conform to RFC 3987 IRI-reference syntax) and §4.1.4 (Syntax for Blank Nodes)",
+   "note": "RDF4J BNR-1 (RDF4J-specific, vectors dated 2026-10-10) reads <_:id> as a reference to the stored blank node with that ID. In SPARQL <_:id> is an IRIREF; \"_:id\" is not an RFC 3987 IRI reference (no ALPHA scheme start; a relative first segment cannot contain \":\"), so a conforming processor refuses the request, and blank nodes in a query (_:label, []) never denote a stored node. The engine reads <_:id> as the IRI \"_:id\" instead (see the iriref-rfc3987 defect), so it answers differently from RDF4J. Here the engine refuses <\\u005F:a> (a codepoint escape as the first character of an IRIREF, cf. the lexer look-ahead of Factoidal issue 573); per §19.5 the request is refused anyway, since <_:a> is not an IRI reference."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-010": {
+   "verdict": "divergence",
+   "group": "bnr-blank-node-reference",
+   "spec": "SPARQL 1.1 Query §19.5 (IRI References: text matched by IRIREF must conform to RFC 3987 IRI-reference syntax) and §4.1.4 (Syntax for Blank Nodes)",
+   "note": "RDF4J BNR-1 (RDF4J-specific, vectors dated 2026-10-10) reads <_:id> as a reference to the stored blank node with that ID. In SPARQL <_:id> is an IRIREF; \"_:id\" is not an RFC 3987 IRI reference (no ALPHA scheme start; a relative first segment cannot contain \":\"), so a conforming processor refuses the request, and blank nodes in a query (_:label, []) never denote a stored node. The engine reads <_:id> as the IRI \"_:id\" instead (see the iriref-rfc3987 defect), so it answers differently from RDF4J."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-011": {
+   "verdict": "divergence",
+   "group": "bnr-blank-node-reference",
+   "spec": "SPARQL 1.1 Query §19.5 (IRI References: text matched by IRIREF must conform to RFC 3987 IRI-reference syntax) and §4.1.4 (Syntax for Blank Nodes)",
+   "note": "RDF4J BNR-1 (RDF4J-specific, vectors dated 2026-10-10) reads <_:id> as a reference to the stored blank node with that ID. In SPARQL <_:id> is an IRIREF; \"_:id\" is not an RFC 3987 IRI reference (no ALPHA scheme start; a relative first segment cannot contain \":\"), so a conforming processor refuses the request, and blank nodes in a query (_:label, []) never denote a stored node. The engine reads <_:id> as the IRI \"_:id\" instead (see the iriref-rfc3987 defect), so it answers differently from RDF4J."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-018": {
+   "verdict": "defect",
+   "group": "iriref-rfc3987",
+   "issue": "https://github.com/danbri/factoidal/issues/1057",
+   "spec": "SPARQL 1.1 Query §19.5 IRI References: \"Text matched by the IRIREF production and PrefixedName (after prefix expansion) production, after escape processing, must conform to the generic syntax of IRI references in section 2.2 of RFC 3987 ... the IRIREF <abc#def> may occur in a SPARQL query string, but the IRIREF <abc##def> must not.\"",
+   "note": "RDF4J refuses the request statically; so must a conforming processor, since <_:x> is not an RFC 3987 IRI reference. The engine accepts it and treats \"_:x\" as an IRI. Cross-check: ASK { <http://a/abc##def> ?p ?o } (the specification's own example) is also accepted (answers false)."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-019": {
+   "verdict": "defect",
+   "group": "iriref-rfc3987",
+   "issue": "https://github.com/danbri/factoidal/issues/1057",
+   "spec": "SPARQL 1.1 Query §19.5 IRI References: \"Text matched by the IRIREF production and PrefixedName (after prefix expansion) production, after escape processing, must conform to the generic syntax of IRI references in section 2.2 of RFC 3987 ... the IRIREF <abc#def> may occur in a SPARQL query string, but the IRIREF <abc##def> must not.\"",
+   "note": "RDF4J refuses the request statically; so must a conforming processor, since <_:x> is not an RFC 3987 IRI reference. The engine accepts it and treats \"_:x\" as an IRI. Cross-check: ASK { <http://a/abc##def> ?p ?o } (the specification's own example) is also accepted (answers false)."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-020": {
+   "verdict": "defect",
+   "group": "iriref-rfc3987",
+   "issue": "https://github.com/danbri/factoidal/issues/1057",
+   "spec": "SPARQL 1.1 Query §19.5 IRI References: \"Text matched by the IRIREF production and PrefixedName (after prefix expansion) production, after escape processing, must conform to the generic syntax of IRI references in section 2.2 of RFC 3987 ... the IRIREF <abc#def> may occur in a SPARQL query string, but the IRIREF <abc##def> must not.\"",
+   "note": "RDF4J refuses the request statically; so must a conforming processor, since <_:x> is not an RFC 3987 IRI reference. The engine accepts it and treats \"_:x\" as an IRI. Cross-check: ASK { <http://a/abc##def> ?p ?o } (the specification's own example) is also accepted (answers false)."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-021": {
+   "verdict": "defect",
+   "group": "iriref-rfc3987",
+   "issue": "https://github.com/danbri/factoidal/issues/1057",
+   "spec": "SPARQL 1.1 Query §19.5 IRI References: \"Text matched by the IRIREF production and PrefixedName (after prefix expansion) production, after escape processing, must conform to the generic syntax of IRI references in section 2.2 of RFC 3987 ... the IRIREF <abc#def> may occur in a SPARQL query string, but the IRIREF <abc##def> must not.\"",
+   "note": "RDF4J refuses the request statically; so must a conforming processor, since <_:x> is not an RFC 3987 IRI reference. The engine accepts it and treats \"_:x\" as an IRI. Cross-check: ASK { <http://a/abc##def> ?p ?o } (the specification's own example) is also accepted (answers false)."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-022": {
+   "verdict": "defect",
+   "group": "iriref-rfc3987",
+   "issue": "https://github.com/danbri/factoidal/issues/1057",
+   "spec": "SPARQL 1.1 Query §19.5 IRI References: \"Text matched by the IRIREF production and PrefixedName (after prefix expansion) production, after escape processing, must conform to the generic syntax of IRI references in section 2.2 of RFC 3987 ... the IRIREF <abc#def> may occur in a SPARQL query string, but the IRIREF <abc##def> must not.\"",
+   "note": "RDF4J refuses the request statically; so must a conforming processor, since <_:x> is not an RFC 3987 IRI reference. The engine accepts it and treats \"_:x\" as an IRI. Cross-check: ASK { <http://a/abc##def> ?p ?o } (the specification's own example) is also accepted (answers false)."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-023": {
+   "verdict": "defect",
+   "group": "iriref-rfc3987",
+   "issue": "https://github.com/danbri/factoidal/issues/1057",
+   "spec": "SPARQL 1.1 Query §19.5 IRI References: \"Text matched by the IRIREF production and PrefixedName (after prefix expansion) production, after escape processing, must conform to the generic syntax of IRI references in section 2.2 of RFC 3987 ... the IRIREF <abc#def> may occur in a SPARQL query string, but the IRIREF <abc##def> must not.\"",
+   "note": "RDF4J refuses the request statically; so must a conforming processor, since <_:x> is not an RFC 3987 IRI reference. The engine accepts it and treats \"_:x\" as an IRI. Cross-check: ASK { <http://a/abc##def> ?p ?o } (the specification's own example) is also accepted (answers false)."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-025": {
+   "verdict": "defect",
+   "group": "iriref-rfc3987",
+   "issue": "https://github.com/danbri/factoidal/issues/1057",
+   "spec": "SPARQL 1.1 Query §19.5 IRI References: \"Text matched by the IRIREF production and PrefixedName (after prefix expansion) production, after escape processing, must conform to the generic syntax of IRI references in section 2.2 of RFC 3987 ... the IRIREF <abc#def> may occur in a SPARQL query string, but the IRIREF <abc##def> must not.\"",
+   "note": "RDF4J refuses the request statically; so must a conforming processor, since <_:x> is not an RFC 3987 IRI reference. The engine accepts it and treats \"_:x\" as an IRI. Cross-check: ASK { <http://a/abc##def> ?p ?o } (the specification's own example) is also accepted (answers false)."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-026": {
+   "verdict": "defect",
+   "group": "iriref-rfc3987",
+   "issue": "https://github.com/danbri/factoidal/issues/1057",
+   "spec": "SPARQL 1.1 Query §19.5 IRI References: \"Text matched by the IRIREF production and PrefixedName (after prefix expansion) production, after escape processing, must conform to the generic syntax of IRI references in section 2.2 of RFC 3987 ... the IRIREF <abc#def> may occur in a SPARQL query string, but the IRIREF <abc##def> must not.\"",
+   "note": "RDF4J refuses the request statically; so must a conforming processor, since <_:x> is not an RFC 3987 IRI reference. The engine accepts it and treats \"_:x\" as an IRI. Cross-check: ASK { <http://a/abc##def> ?p ?o } (the specification's own example) is also accepted (answers false)."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-027": {
+   "verdict": "defect",
+   "group": "iriref-rfc3987",
+   "issue": "https://github.com/danbri/factoidal/issues/1057",
+   "spec": "SPARQL 1.1 Query §19.5 IRI References: \"Text matched by the IRIREF production and PrefixedName (after prefix expansion) production, after escape processing, must conform to the generic syntax of IRI references in section 2.2 of RFC 3987 ... the IRIREF <abc#def> may occur in a SPARQL query string, but the IRIREF <abc##def> must not.\"",
+   "note": "RDF4J refuses the request statically; so must a conforming processor, since <_:x> is not an RFC 3987 IRI reference. The engine accepts it and treats \"_:x\" as an IRI. Cross-check: ASK { <http://a/abc##def> ?p ?o } (the specification's own example) is also accepted (answers false)."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-028": {
+   "verdict": "defect",
+   "group": "iriref-rfc3987",
+   "issue": "https://github.com/danbri/factoidal/issues/1057",
+   "spec": "SPARQL 1.1 Query §19.5 IRI References: \"Text matched by the IRIREF production and PrefixedName (after prefix expansion) production, after escape processing, must conform to the generic syntax of IRI references in section 2.2 of RFC 3987 ... the IRIREF <abc#def> may occur in a SPARQL query string, but the IRIREF <abc##def> must not.\"",
+   "note": "RDF4J refuses the request statically; so must a conforming processor, since <_:x> is not an RFC 3987 IRI reference. The engine accepts it and treats \"_:x\" as an IRI. Cross-check: ASK { <http://a/abc##def> ?p ?o } (the specification's own example) is also accepted (answers false)."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-029": {
+   "verdict": "defect",
+   "group": "iriref-rfc3987",
+   "issue": "https://github.com/danbri/factoidal/issues/1057",
+   "spec": "SPARQL 1.1 Query §19.5 IRI References: \"Text matched by the IRIREF production and PrefixedName (after prefix expansion) production, after escape processing, must conform to the generic syntax of IRI references in section 2.2 of RFC 3987 ... the IRIREF <abc#def> may occur in a SPARQL query string, but the IRIREF <abc##def> must not.\"",
+   "note": "RDF4J refuses the request statically; so must a conforming processor, since <_:x> is not an RFC 3987 IRI reference. The engine accepts it and treats \"_:x\" as an IRI. Cross-check: ASK { <http://a/abc##def> ?p ?o } (the specification's own example) is also accepted (answers false)."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-030": {
+   "verdict": "defect",
+   "group": "iriref-rfc3987",
+   "issue": "https://github.com/danbri/factoidal/issues/1057",
+   "spec": "SPARQL 1.1 Query §19.5 IRI References: \"Text matched by the IRIREF production and PrefixedName (after prefix expansion) production, after escape processing, must conform to the generic syntax of IRI references in section 2.2 of RFC 3987 ... the IRIREF <abc#def> may occur in a SPARQL query string, but the IRIREF <abc##def> must not.\"",
+   "note": "RDF4J refuses the request statically; so must a conforming processor, since <_:x> is not an RFC 3987 IRI reference. The engine accepts it and treats \"_:x\" as an IRI. Cross-check: ASK { <http://a/abc##def> ?p ?o } (the specification's own example) is also accepted (answers false)."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-035": {
+   "verdict": "divergence",
+   "group": "bnr-blank-node-reference",
+   "spec": "SPARQL 1.1 Query §19.5 (IRI References: text matched by IRIREF must conform to RFC 3987 IRI-reference syntax) and §4.1.4 (Syntax for Blank Nodes)",
+   "note": "RDF4J BNR-1 (RDF4J-specific, vectors dated 2026-10-10) reads <_:id> as a reference to the stored blank node with that ID. In SPARQL <_:id> is an IRIREF; \"_:id\" is not an RFC 3987 IRI reference (no ALPHA scheme start; a relative first segment cannot contain \":\"), so a conforming processor refuses the request, and blank nodes in a query (_:label, []) never denote a stored node. The engine reads <_:id> as the IRI \"_:id\" instead (see the iriref-rfc3987 defect), so it answers differently from RDF4J."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-037": {
+   "verdict": "divergence",
+   "group": "bnr-blank-node-reference",
+   "spec": "SPARQL 1.1 Query §19.5 (IRI References: text matched by IRIREF must conform to RFC 3987 IRI-reference syntax) and §4.1.4 (Syntax for Blank Nodes)",
+   "note": "RDF4J BNR-1 (RDF4J-specific, vectors dated 2026-10-10) reads <_:id> as a reference to the stored blank node with that ID. In SPARQL <_:id> is an IRIREF; \"_:id\" is not an RFC 3987 IRI reference (no ALPHA scheme start; a relative first segment cannot contain \":\"), so a conforming processor refuses the request, and blank nodes in a query (_:label, []) never denote a stored node. The engine reads <_:id> as the IRI \"_:id\" instead (see the iriref-rfc3987 defect), so it answers differently from RDF4J."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-038": {
+   "verdict": "divergence",
+   "group": "bnr-blank-node-reference",
+   "spec": "SPARQL 1.1 Query §19.5 (IRI References: text matched by IRIREF must conform to RFC 3987 IRI-reference syntax) and §4.1.4 (Syntax for Blank Nodes)",
+   "note": "RDF4J BNR-1 (RDF4J-specific, vectors dated 2026-10-10) reads <_:id> as a reference to the stored blank node with that ID. In SPARQL <_:id> is an IRIREF; \"_:id\" is not an RFC 3987 IRI reference (no ALPHA scheme start; a relative first segment cannot contain \":\"), so a conforming processor refuses the request, and blank nodes in a query (_:label, []) never denote a stored node. The engine reads <_:id> as the IRI \"_:id\" instead (see the iriref-rfc3987 defect), so it answers differently from RDF4J."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-039": {
+   "verdict": "divergence",
+   "group": "bnr-blank-node-reference",
+   "spec": "SPARQL 1.1 Query §19.5 (IRI References: text matched by IRIREF must conform to RFC 3987 IRI-reference syntax) and §4.1.4 (Syntax for Blank Nodes)",
+   "note": "RDF4J BNR-1 (RDF4J-specific, vectors dated 2026-10-10) reads <_:id> as a reference to the stored blank node with that ID. In SPARQL <_:id> is an IRIREF; \"_:id\" is not an RFC 3987 IRI reference (no ALPHA scheme start; a relative first segment cannot contain \":\"), so a conforming processor refuses the request, and blank nodes in a query (_:label, []) never denote a stored node. The engine reads <_:id> as the IRI \"_:id\" instead (see the iriref-rfc3987 defect), so it answers differently from RDF4J."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-040": {
+   "verdict": "divergence",
+   "group": "bnr-blank-node-reference",
+   "spec": "SPARQL 1.1 Query §19.5 (IRI References: text matched by IRIREF must conform to RFC 3987 IRI-reference syntax) and §4.1.4 (Syntax for Blank Nodes)",
+   "note": "RDF4J BNR-1 (RDF4J-specific, vectors dated 2026-10-10) reads <_:id> as a reference to the stored blank node with that ID. In SPARQL <_:id> is an IRIREF; \"_:id\" is not an RFC 3987 IRI reference (no ALPHA scheme start; a relative first segment cannot contain \":\"), so a conforming processor refuses the request, and blank nodes in a query (_:label, []) never denote a stored node. The engine reads <_:id> as the IRI \"_:id\" instead (see the iriref-rfc3987 defect), so it answers differently from RDF4J."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-041": {
+   "verdict": "divergence",
+   "group": "bnr-blank-node-reference",
+   "spec": "SPARQL 1.1 Query §19.5 (IRI References: text matched by IRIREF must conform to RFC 3987 IRI-reference syntax) and §4.1.4 (Syntax for Blank Nodes)",
+   "note": "RDF4J BNR-1 (RDF4J-specific, vectors dated 2026-10-10) reads <_:id> as a reference to the stored blank node with that ID. In SPARQL <_:id> is an IRIREF; \"_:id\" is not an RFC 3987 IRI reference (no ALPHA scheme start; a relative first segment cannot contain \":\"), so a conforming processor refuses the request, and blank nodes in a query (_:label, []) never denote a stored node. The engine reads <_:id> as the IRI \"_:id\" instead (see the iriref-rfc3987 defect), so it answers differently from RDF4J."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-042": {
+   "verdict": "divergence",
+   "group": "bnr-blank-node-reference",
+   "spec": "SPARQL 1.1 Query §19.5 (IRI References: text matched by IRIREF must conform to RFC 3987 IRI-reference syntax) and §4.1.4 (Syntax for Blank Nodes)",
+   "note": "RDF4J BNR-1 (RDF4J-specific, vectors dated 2026-10-10) reads <_:id> as a reference to the stored blank node with that ID. In SPARQL <_:id> is an IRIREF; \"_:id\" is not an RFC 3987 IRI reference (no ALPHA scheme start; a relative first segment cannot contain \":\"), so a conforming processor refuses the request, and blank nodes in a query (_:label, []) never denote a stored node. The engine reads <_:id> as the IRI \"_:id\" instead (see the iriref-rfc3987 defect), so it answers differently from RDF4J."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-043": {
+   "verdict": "divergence",
+   "group": "bnr-blank-node-reference",
+   "spec": "SPARQL 1.1 Query §19.5 (IRI References: text matched by IRIREF must conform to RFC 3987 IRI-reference syntax) and §4.1.4 (Syntax for Blank Nodes)",
+   "note": "RDF4J BNR-1 (RDF4J-specific, vectors dated 2026-10-10) reads <_:id> as a reference to the stored blank node with that ID. In SPARQL <_:id> is an IRIREF; \"_:id\" is not an RFC 3987 IRI reference (no ALPHA scheme start; a relative first segment cannot contain \":\"), so a conforming processor refuses the request, and blank nodes in a query (_:label, []) never denote a stored node. The engine reads <_:id> as the IRI \"_:id\" instead (see the iriref-rfc3987 defect), so it answers differently from RDF4J."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-047": {
+   "verdict": "divergence",
+   "group": "bnr-blank-node-reference",
+   "spec": "SPARQL 1.1 Query §19.5 (IRI References: text matched by IRIREF must conform to RFC 3987 IRI-reference syntax) and §4.1.4 (Syntax for Blank Nodes)",
+   "note": "RDF4J BNR-1 (RDF4J-specific, vectors dated 2026-10-10) reads <_:id> as a reference to the stored blank node with that ID. In SPARQL <_:id> is an IRIREF; \"_:id\" is not an RFC 3987 IRI reference (no ALPHA scheme start; a relative first segment cannot contain \":\"), so a conforming processor refuses the request, and blank nodes in a query (_:label, []) never denote a stored node. The engine reads <_:id> as the IRI \"_:id\" instead (see the iriref-rfc3987 defect), so it answers differently from RDF4J."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-049": {
+   "verdict": "divergence",
+   "group": "bnr-blank-node-reference",
+   "spec": "SPARQL 1.1 Query §19.5 (IRI References: text matched by IRIREF must conform to RFC 3987 IRI-reference syntax) and §4.1.4 (Syntax for Blank Nodes)",
+   "note": "RDF4J BNR-1 (RDF4J-specific, vectors dated 2026-10-10) reads <_:id> as a reference to the stored blank node with that ID. In SPARQL <_:id> is an IRIREF; \"_:id\" is not an RFC 3987 IRI reference (no ALPHA scheme start; a relative first segment cannot contain \":\"), so a conforming processor refuses the request, and blank nodes in a query (_:label, []) never denote a stored node. The engine reads <_:id> as the IRI \"_:id\" instead (see the iriref-rfc3987 defect), so it answers differently from RDF4J."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-050": {
+   "verdict": "divergence",
+   "group": "bnr-blank-node-reference",
+   "spec": "SPARQL 1.1 Query §19.5 (IRI References: text matched by IRIREF must conform to RFC 3987 IRI-reference syntax) and §4.1.4 (Syntax for Blank Nodes)",
+   "note": "RDF4J BNR-1 (RDF4J-specific, vectors dated 2026-10-10) reads <_:id> as a reference to the stored blank node with that ID. In SPARQL <_:id> is an IRIREF; \"_:id\" is not an RFC 3987 IRI reference (no ALPHA scheme start; a relative first segment cannot contain \":\"), so a conforming processor refuses the request, and blank nodes in a query (_:label, []) never denote a stored node. The engine reads <_:id> as the IRI \"_:id\" instead (see the iriref-rfc3987 defect), so it answers differently from RDF4J."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-052": {
+   "verdict": "divergence",
+   "group": "bnr-blank-node-reference",
+   "spec": "SPARQL 1.1 Query §19.5 (IRI References: text matched by IRIREF must conform to RFC 3987 IRI-reference syntax) and §4.1.4 (Syntax for Blank Nodes)",
+   "note": "RDF4J BNR-1 (RDF4J-specific, vectors dated 2026-10-10) reads <_:id> as a reference to the stored blank node with that ID. In SPARQL <_:id> is an IRIREF; \"_:id\" is not an RFC 3987 IRI reference (no ALPHA scheme start; a relative first segment cannot contain \":\"), so a conforming processor refuses the request, and blank nodes in a query (_:label, []) never denote a stored node. The engine reads <_:id> as the IRI \"_:id\" instead (see the iriref-rfc3987 defect), so it answers differently from RDF4J."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-053": {
+   "verdict": "divergence",
+   "group": "bnr-blank-node-reference",
+   "spec": "SPARQL 1.1 Query §19.5 (IRI References: text matched by IRIREF must conform to RFC 3987 IRI-reference syntax) and §4.1.4 (Syntax for Blank Nodes)",
+   "note": "RDF4J BNR-1 (RDF4J-specific, vectors dated 2026-10-10) reads <_:id> as a reference to the stored blank node with that ID. In SPARQL <_:id> is an IRIREF; \"_:id\" is not an RFC 3987 IRI reference (no ALPHA scheme start; a relative first segment cannot contain \":\"), so a conforming processor refuses the request, and blank nodes in a query (_:label, []) never denote a stored node. The engine reads <_:id> as the IRI \"_:id\" instead (see the iriref-rfc3987 defect), so it answers differently from RDF4J."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-055": {
+   "verdict": "divergence",
+   "group": "bnr-blank-node-reference",
+   "spec": "SPARQL 1.1 Query §19.5 (IRI References: text matched by IRIREF must conform to RFC 3987 IRI-reference syntax) and §4.1.4 (Syntax for Blank Nodes)",
+   "note": "RDF4J BNR-1 (RDF4J-specific, vectors dated 2026-10-10) reads <_:id> as a reference to the stored blank node with that ID. In SPARQL <_:id> is an IRIREF; \"_:id\" is not an RFC 3987 IRI reference (no ALPHA scheme start; a relative first segment cannot contain \":\"), so a conforming processor refuses the request, and blank nodes in a query (_:label, []) never denote a stored node. The engine reads <_:id> as the IRI \"_:id\" instead (see the iriref-rfc3987 defect), so it answers differently from RDF4J."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-056": {
+   "verdict": "divergence",
+   "group": "bnr-blank-node-reference",
+   "spec": "SPARQL 1.1 Query §19.5 (IRI References: text matched by IRIREF must conform to RFC 3987 IRI-reference syntax) and §4.1.4 (Syntax for Blank Nodes)",
+   "note": "RDF4J BNR-1 (RDF4J-specific, vectors dated 2026-10-10) reads <_:id> as a reference to the stored blank node with that ID. In SPARQL <_:id> is an IRIREF; \"_:id\" is not an RFC 3987 IRI reference (no ALPHA scheme start; a relative first segment cannot contain \":\"), so a conforming processor refuses the request, and blank nodes in a query (_:label, []) never denote a stored node. The engine reads <_:id> as the IRI \"_:id\" instead (see the iriref-rfc3987 defect), so it answers differently from RDF4J."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-058": {
+   "verdict": "divergence",
+   "group": "bnr-blank-node-reference",
+   "spec": "SPARQL 1.1 Query §19.5 (IRI References: text matched by IRIREF must conform to RFC 3987 IRI-reference syntax) and §4.1.4 (Syntax for Blank Nodes)",
+   "note": "RDF4J BNR-1 (RDF4J-specific, vectors dated 2026-10-10) reads <_:id> as a reference to the stored blank node with that ID. In SPARQL <_:id> is an IRIREF; \"_:id\" is not an RFC 3987 IRI reference (no ALPHA scheme start; a relative first segment cannot contain \":\"), so a conforming processor refuses the request, and blank nodes in a query (_:label, []) never denote a stored node. The engine reads <_:id> as the IRI \"_:id\" instead (see the iriref-rfc3987 defect), so it answers differently from RDF4J."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-059": {
+   "verdict": "divergence",
+   "group": "bnr-blank-node-reference",
+   "spec": "SPARQL 1.1 Query §19.5 (IRI References: text matched by IRIREF must conform to RFC 3987 IRI-reference syntax) and §4.1.4 (Syntax for Blank Nodes)",
+   "note": "RDF4J BNR-1 (RDF4J-specific, vectors dated 2026-10-10) reads <_:id> as a reference to the stored blank node with that ID. In SPARQL <_:id> is an IRIREF; \"_:id\" is not an RFC 3987 IRI reference (no ALPHA scheme start; a relative first segment cannot contain \":\"), so a conforming processor refuses the request, and blank nodes in a query (_:label, []) never denote a stored node. The engine reads <_:id> as the IRI \"_:id\" instead (see the iriref-rfc3987 defect), so it answers differently from RDF4J."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-060": {
+   "verdict": "divergence",
+   "group": "bnr-blank-node-reference",
+   "spec": "SPARQL 1.1 Query §19.5 (IRI References: text matched by IRIREF must conform to RFC 3987 IRI-reference syntax) and §4.1.4 (Syntax for Blank Nodes)",
+   "note": "RDF4J BNR-1 (RDF4J-specific, vectors dated 2026-10-10) reads <_:id> as a reference to the stored blank node with that ID. In SPARQL <_:id> is an IRIREF; \"_:id\" is not an RFC 3987 IRI reference (no ALPHA scheme start; a relative first segment cannot contain \":\"), so a conforming processor refuses the request, and blank nodes in a query (_:label, []) never denote a stored node. The engine reads <_:id> as the IRI \"_:id\" instead (see the iriref-rfc3987 defect), so it answers differently from RDF4J."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-062": {
+   "verdict": "divergence",
+   "group": "bnr-blank-node-reference",
+   "spec": "SPARQL 1.1 Query §19.5 (IRI References: text matched by IRIREF must conform to RFC 3987 IRI-reference syntax) and §4.1.4 (Syntax for Blank Nodes)",
+   "note": "RDF4J BNR-1 (RDF4J-specific, vectors dated 2026-10-10) reads <_:id> as a reference to the stored blank node with that ID. In SPARQL <_:id> is an IRIREF; \"_:id\" is not an RFC 3987 IRI reference (no ALPHA scheme start; a relative first segment cannot contain \":\"), so a conforming processor refuses the request, and blank nodes in a query (_:label, []) never denote a stored node. The engine reads <_:id> as the IRI \"_:id\" instead (see the iriref-rfc3987 defect), so it answers differently from RDF4J."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-065": {
+   "verdict": "divergence",
+   "group": "bnr-blank-node-reference",
+   "spec": "SPARQL 1.1 Query §19.5 (IRI References: text matched by IRIREF must conform to RFC 3987 IRI-reference syntax) and §4.1.4 (Syntax for Blank Nodes)",
+   "note": "RDF4J BNR-1 (RDF4J-specific, vectors dated 2026-10-10) reads <_:id> as a reference to the stored blank node with that ID. In SPARQL <_:id> is an IRIREF; \"_:id\" is not an RFC 3987 IRI reference (no ALPHA scheme start; a relative first segment cannot contain \":\"), so a conforming processor refuses the request, and blank nodes in a query (_:label, []) never denote a stored node. The engine reads <_:id> as the IRI \"_:id\" instead (see the iriref-rfc3987 defect), so it answers differently from RDF4J."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-067": {
+   "verdict": "divergence",
+   "group": "bnr-blank-node-reference",
+   "spec": "SPARQL 1.1 Query §19.5 (IRI References: text matched by IRIREF must conform to RFC 3987 IRI-reference syntax) and §4.1.4 (Syntax for Blank Nodes)",
+   "note": "RDF4J BNR-1 (RDF4J-specific, vectors dated 2026-10-10) reads <_:id> as a reference to the stored blank node with that ID. In SPARQL <_:id> is an IRIREF; \"_:id\" is not an RFC 3987 IRI reference (no ALPHA scheme start; a relative first segment cannot contain \":\"), so a conforming processor refuses the request, and blank nodes in a query (_:label, []) never denote a stored node. The engine reads <_:id> as the IRI \"_:id\" instead (see the iriref-rfc3987 defect), so it answers differently from RDF4J."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-068": {
+   "verdict": "divergence",
+   "group": "bnr-blank-node-reference",
+   "spec": "SPARQL 1.1 Query §19.5 (IRI References: text matched by IRIREF must conform to RFC 3987 IRI-reference syntax) and §4.1.4 (Syntax for Blank Nodes)",
+   "note": "RDF4J BNR-1 (RDF4J-specific, vectors dated 2026-10-10) reads <_:id> as a reference to the stored blank node with that ID. In SPARQL <_:id> is an IRIREF; \"_:id\" is not an RFC 3987 IRI reference (no ALPHA scheme start; a relative first segment cannot contain \":\"), so a conforming processor refuses the request, and blank nodes in a query (_:label, []) never denote a stored node. The engine reads <_:id> as the IRI \"_:id\" instead (see the iriref-rfc3987 defect), so it answers differently from RDF4J."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-069": {
+   "verdict": "divergence",
+   "group": "bnr-blank-node-reference",
+   "spec": "SPARQL 1.1 Query §19.5 (IRI References: text matched by IRIREF must conform to RFC 3987 IRI-reference syntax) and §4.1.4 (Syntax for Blank Nodes)",
+   "note": "RDF4J BNR-1 (RDF4J-specific, vectors dated 2026-10-10) reads <_:id> as a reference to the stored blank node with that ID. In SPARQL <_:id> is an IRIREF; \"_:id\" is not an RFC 3987 IRI reference (no ALPHA scheme start; a relative first segment cannot contain \":\"), so a conforming processor refuses the request, and blank nodes in a query (_:label, []) never denote a stored node. The engine reads <_:id> as the IRI \"_:id\" instead (see the iriref-rfc3987 defect), so it answers differently from RDF4J."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-070": {
+   "verdict": "divergence",
+   "group": "bnr-blank-node-reference",
+   "spec": "SPARQL 1.1 Query §19.5 (IRI References: text matched by IRIREF must conform to RFC 3987 IRI-reference syntax) and §4.1.4 (Syntax for Blank Nodes)",
+   "note": "RDF4J BNR-1 (RDF4J-specific, vectors dated 2026-10-10) reads <_:id> as a reference to the stored blank node with that ID. In SPARQL <_:id> is an IRIREF; \"_:id\" is not an RFC 3987 IRI reference (no ALPHA scheme start; a relative first segment cannot contain \":\"), so a conforming processor refuses the request, and blank nodes in a query (_:label, []) never denote a stored node. The engine reads <_:id> as the IRI \"_:id\" instead (see the iriref-rfc3987 defect), so it answers differently from RDF4J."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-071": {
+   "verdict": "divergence",
+   "group": "bnr-blank-node-reference",
+   "spec": "SPARQL 1.1 Query §19.5 (IRI References: text matched by IRIREF must conform to RFC 3987 IRI-reference syntax) and §4.1.4 (Syntax for Blank Nodes)",
+   "note": "RDF4J BNR-1 (RDF4J-specific, vectors dated 2026-10-10) reads <_:id> as a reference to the stored blank node with that ID. In SPARQL <_:id> is an IRIREF; \"_:id\" is not an RFC 3987 IRI reference (no ALPHA scheme start; a relative first segment cannot contain \":\"), so a conforming processor refuses the request, and blank nodes in a query (_:label, []) never denote a stored node. The engine reads <_:id> as the IRI \"_:id\" instead (see the iriref-rfc3987 defect), so it answers differently from RDF4J."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-073": {
+   "verdict": "divergence",
+   "group": "bnr-blank-node-reference",
+   "spec": "SPARQL 1.1 Query §19.5 (IRI References: text matched by IRIREF must conform to RFC 3987 IRI-reference syntax) and §4.1.4 (Syntax for Blank Nodes)",
+   "note": "RDF4J BNR-1 (RDF4J-specific, vectors dated 2026-10-10) reads <_:id> as a reference to the stored blank node with that ID. In SPARQL <_:id> is an IRIREF; \"_:id\" is not an RFC 3987 IRI reference (no ALPHA scheme start; a relative first segment cannot contain \":\"), so a conforming processor refuses the request, and blank nodes in a query (_:label, []) never denote a stored node. The engine reads <_:id> as the IRI \"_:id\" instead (see the iriref-rfc3987 defect), so it answers differently from RDF4J."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-074": {
+   "verdict": "divergence",
+   "group": "bnr-blank-node-reference",
+   "spec": "SPARQL 1.1 Query §19.5 (IRI References: text matched by IRIREF must conform to RFC 3987 IRI-reference syntax) and §4.1.4 (Syntax for Blank Nodes)",
+   "note": "RDF4J BNR-1 (RDF4J-specific, vectors dated 2026-10-10) reads <_:id> as a reference to the stored blank node with that ID. In SPARQL <_:id> is an IRIREF; \"_:id\" is not an RFC 3987 IRI reference (no ALPHA scheme start; a relative first segment cannot contain \":\"), so a conforming processor refuses the request, and blank nodes in a query (_:label, []) never denote a stored node. The engine reads <_:id> as the IRI \"_:id\" instead (see the iriref-rfc3987 defect), so it answers differently from RDF4J."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-075": {
+   "verdict": "divergence",
+   "group": "bnr-blank-node-reference",
+   "spec": "SPARQL 1.1 Query §19.5 (IRI References: text matched by IRIREF must conform to RFC 3987 IRI-reference syntax) and §4.1.4 (Syntax for Blank Nodes)",
+   "note": "RDF4J BNR-1 (RDF4J-specific, vectors dated 2026-10-10) reads <_:id> as a reference to the stored blank node with that ID. In SPARQL <_:id> is an IRIREF; \"_:id\" is not an RFC 3987 IRI reference (no ALPHA scheme start; a relative first segment cannot contain \":\"), so a conforming processor refuses the request, and blank nodes in a query (_:label, []) never denote a stored node. The engine reads <_:id> as the IRI \"_:id\" instead (see the iriref-rfc3987 defect), so it answers differently from RDF4J."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-076": {
+   "verdict": "divergence",
+   "group": "bnr-blank-node-reference",
+   "spec": "SPARQL 1.1 Query §19.5 (IRI References: text matched by IRIREF must conform to RFC 3987 IRI-reference syntax) and §4.1.4 (Syntax for Blank Nodes)",
+   "note": "RDF4J BNR-1 (RDF4J-specific, vectors dated 2026-10-10) reads <_:id> as a reference to the stored blank node with that ID. In SPARQL <_:id> is an IRIREF; \"_:id\" is not an RFC 3987 IRI reference (no ALPHA scheme start; a relative first segment cannot contain \":\"), so a conforming processor refuses the request, and blank nodes in a query (_:label, []) never denote a stored node. The engine reads <_:id> as the IRI \"_:id\" instead (see the iriref-rfc3987 defect), so it answers differently from RDF4J."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-077": {
+   "verdict": "divergence",
+   "group": "bnr-blank-node-reference",
+   "spec": "SPARQL 1.1 Query §19.5 (IRI References: text matched by IRIREF must conform to RFC 3987 IRI-reference syntax) and §4.1.4 (Syntax for Blank Nodes)",
+   "note": "RDF4J BNR-1 (RDF4J-specific, vectors dated 2026-10-10) reads <_:id> as a reference to the stored blank node with that ID. In SPARQL <_:id> is an IRIREF; \"_:id\" is not an RFC 3987 IRI reference (no ALPHA scheme start; a relative first segment cannot contain \":\"), so a conforming processor refuses the request, and blank nodes in a query (_:label, []) never denote a stored node. The engine reads <_:id> as the IRI \"_:id\" instead (see the iriref-rfc3987 defect), so it answers differently from RDF4J."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-089": {
+   "verdict": "defect",
+   "group": "update-grammar-quadpattern",
+   "issue": "https://github.com/danbri/factoidal/issues/1071",
+   "spec": "SPARQL 1.1 Update §3.1.3.3 DELETE WHERE and grammar §19.8 [40] DeleteWhere ::= 'DELETE WHERE' QuadPattern, [48] QuadPattern ::= '{' Quads '}', [50] Quads ::= TriplesTemplate? ( QuadsNotTriples '.'? TriplesTemplate? )* (TriplesSameSubject uses Verb, not VerbPath; no FILTER)",
+   "note": "The engine accepts DELETE WHERE with a FILTER or a property path; the grammar has neither in a QuadPattern. Cross-check with plain IRIs: DELETE WHERE { <urn:x> ?p ?o FILTER(?p = <urn:p>) } and DELETE WHERE { <urn:x> <urn:p>+ ?o } both succeed on an empty store."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-090": {
+   "verdict": "defect",
+   "group": "update-grammar-quadpattern",
+   "issue": "https://github.com/danbri/factoidal/issues/1071",
+   "spec": "SPARQL 1.1 Update §3.1.3.3 DELETE WHERE and grammar §19.8 [40] DeleteWhere ::= 'DELETE WHERE' QuadPattern, [48] QuadPattern ::= '{' Quads '}', [50] Quads ::= TriplesTemplate? ( QuadsNotTriples '.'? TriplesTemplate? )* (TriplesSameSubject uses Verb, not VerbPath; no FILTER)",
+   "note": "The engine accepts DELETE WHERE with a FILTER or a property path; the grammar has neither in a QuadPattern. Cross-check with plain IRIs: DELETE WHERE { <urn:x> ?p ?o FILTER(?p = <urn:p>) } and DELETE WHERE { <urn:x> <urn:p>+ ?o } both succeed on an empty store."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-091": {
+   "verdict": "defect",
+   "group": "construct-template-graph",
+   "issue": "https://github.com/danbri/factoidal/issues/1071",
+   "spec": "SPARQL 1.1 Query §19.8 grammar [73] ConstructTemplate ::= '{' ConstructTriples? '}', [74] ConstructTriples ::= TriplesSameSubject ( '.' ConstructTriples? )? (no GRAPH in a CONSTRUCT template; SPARQL 1.2 Query keeps this)",
+   "note": "Cross-check with IRIs: CONSTRUCT { GRAPH <urn:g> { <urn:x> <urn:p> 1 } } WHERE {} is accepted and answers an empty graph."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-093": {
+   "verdict": "divergence",
+   "group": "bnr-blank-node-reference",
+   "spec": "SPARQL 1.1 Query §19.5 (IRI References: text matched by IRIREF must conform to RFC 3987 IRI-reference syntax) and §4.1.4 (Syntax for Blank Nodes)",
+   "note": "RDF4J BNR-1 (RDF4J-specific, vectors dated 2026-10-10) reads <_:id> as a reference to the stored blank node with that ID. In SPARQL <_:id> is an IRIREF; \"_:id\" is not an RFC 3987 IRI reference (no ALPHA scheme start; a relative first segment cannot contain \":\"), so a conforming processor refuses the request, and blank nodes in a query (_:label, []) never denote a stored node. The engine reads <_:id> as the IRI \"_:id\" instead (see the iriref-rfc3987 defect), so it answers differently from RDF4J. The engine also refuses this request at parse time: it has no SPARQL 1.2 Update syntax (see the update-sparql12-syntax defect)."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-094": {
+   "verdict": "defect",
+   "group": "update-sparql12-syntax",
+   "issue": "https://github.com/danbri/factoidal/issues/1072",
+   "spec": "SPARQL 1.2 Update WD §3.1.1 INSERT DATA / §3.1.2 DELETE DATA (QuadData), which use the SPARQL 1.2 Query WD grammar §19.8 (TripleTerm, ReifiedTriple, Reifier, AnnotationBlock) and Prologue (VersionDecl)",
+   "note": "Dataset.update has no SPARQL 1.2 option and the update parser refuses SPARQL 1.2 syntax: INSERT DATA { <urn:h> <urn:t> <<( <urn:s> <urn:p> <urn:o> )>> } fails with update.syntax at offset 14; so do reifiers (~ <urn:r>), annotations ({| |}), reified triples (<< >>) and VERSION \"1.2\". The RDF4J expectation of this vector is the standard outcome once parsed (no BNR reference is involved in the result)."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-095": {
+   "verdict": "divergence",
+   "group": "bnr-blank-node-reference",
+   "spec": "SPARQL 1.1 Query §19.5 (IRI References: text matched by IRIREF must conform to RFC 3987 IRI-reference syntax) and §4.1.4 (Syntax for Blank Nodes)",
+   "note": "RDF4J BNR-1 (RDF4J-specific, vectors dated 2026-10-10) reads <_:id> as a reference to the stored blank node with that ID. In SPARQL <_:id> is an IRIREF; \"_:id\" is not an RFC 3987 IRI reference (no ALPHA scheme start; a relative first segment cannot contain \":\"), so a conforming processor refuses the request, and blank nodes in a query (_:label, []) never denote a stored node. The engine reads <_:id> as the IRI \"_:id\" instead (see the iriref-rfc3987 defect), so it answers differently from RDF4J. The engine also refuses this request at parse time: it has no SPARQL 1.2 Update syntax (see the update-sparql12-syntax defect)."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-096": {
+   "verdict": "divergence",
+   "group": "bnr-blank-node-reference",
+   "spec": "SPARQL 1.1 Query §19.5 (IRI References: text matched by IRIREF must conform to RFC 3987 IRI-reference syntax) and §4.1.4 (Syntax for Blank Nodes)",
+   "note": "RDF4J BNR-1 (RDF4J-specific, vectors dated 2026-10-10) reads <_:id> as a reference to the stored blank node with that ID. In SPARQL <_:id> is an IRIREF; \"_:id\" is not an RFC 3987 IRI reference (no ALPHA scheme start; a relative first segment cannot contain \":\"), so a conforming processor refuses the request, and blank nodes in a query (_:label, []) never denote a stored node. The engine reads <_:id> as the IRI \"_:id\" instead (see the iriref-rfc3987 defect), so it answers differently from RDF4J. The engine also refuses this request at parse time: it has no SPARQL 1.2 Update syntax (see the update-sparql12-syntax defect)."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-097": {
+   "verdict": "defect",
+   "group": "update-sparql12-syntax",
+   "issue": "https://github.com/danbri/factoidal/issues/1072",
+   "spec": "SPARQL 1.2 Update WD §3.1.1 INSERT DATA / §3.1.2 DELETE DATA (QuadData), which use the SPARQL 1.2 Query WD grammar §19.8 (TripleTerm, ReifiedTriple, Reifier, AnnotationBlock) and Prologue (VersionDecl)",
+   "note": "Dataset.update has no SPARQL 1.2 option and the update parser refuses SPARQL 1.2 syntax: INSERT DATA { <urn:h> <urn:t> <<( <urn:s> <urn:p> <urn:o> )>> } fails with update.syntax at offset 14; so do reifiers (~ <urn:r>), annotations ({| |}), reified triples (<< >>) and VERSION \"1.2\". The RDF4J expectation of this vector is the standard outcome once parsed (no BNR reference is involved in the result)."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-098": {
+   "verdict": "divergence",
+   "group": "bnr-blank-node-reference",
+   "spec": "SPARQL 1.1 Query §19.5 (IRI References: text matched by IRIREF must conform to RFC 3987 IRI-reference syntax) and §4.1.4 (Syntax for Blank Nodes)",
+   "note": "RDF4J BNR-1 (RDF4J-specific, vectors dated 2026-10-10) reads <_:id> as a reference to the stored blank node with that ID. In SPARQL <_:id> is an IRIREF; \"_:id\" is not an RFC 3987 IRI reference (no ALPHA scheme start; a relative first segment cannot contain \":\"), so a conforming processor refuses the request, and blank nodes in a query (_:label, []) never denote a stored node. The engine reads <_:id> as the IRI \"_:id\" instead (see the iriref-rfc3987 defect), so it answers differently from RDF4J. The engine also refuses this request at parse time: it has no SPARQL 1.2 Update syntax (see the update-sparql12-syntax defect)."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-102": {
+   "verdict": "divergence",
+   "group": "bnr-blank-node-reference",
+   "spec": "SPARQL 1.1 Query §19.5 (IRI References: text matched by IRIREF must conform to RFC 3987 IRI-reference syntax) and §4.1.4 (Syntax for Blank Nodes)",
+   "note": "RDF4J BNR-1 (RDF4J-specific, vectors dated 2026-10-10) reads <_:id> as a reference to the stored blank node with that ID. In SPARQL <_:id> is an IRIREF; \"_:id\" is not an RFC 3987 IRI reference (no ALPHA scheme start; a relative first segment cannot contain \":\"), so a conforming processor refuses the request, and blank nodes in a query (_:label, []) never denote a stored node. The engine reads <_:id> as the IRI \"_:id\" instead (see the iriref-rfc3987 defect), so it answers differently from RDF4J. The engine also refuses this request at parse time: it has no SPARQL 1.2 Update syntax (see the update-sparql12-syntax defect)."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-104": {
+   "verdict": "defect",
+   "group": "update-sparql12-syntax",
+   "issue": "https://github.com/danbri/factoidal/issues/1072",
+   "spec": "SPARQL 1.2 Update WD §3.1.1 INSERT DATA / §3.1.2 DELETE DATA (QuadData), which use the SPARQL 1.2 Query WD grammar §19.8 (TripleTerm, ReifiedTriple, Reifier, AnnotationBlock) and Prologue (VersionDecl)",
+   "note": "Dataset.update has no SPARQL 1.2 option and the update parser refuses SPARQL 1.2 syntax: INSERT DATA { <urn:h> <urn:t> <<( <urn:s> <urn:p> <urn:o> )>> } fails with update.syntax at offset 14; so do reifiers (~ <urn:r>), annotations ({| |}), reified triples (<< >>) and VERSION \"1.2\". The RDF4J expectation of this vector is the standard outcome once parsed (no BNR reference is involved in the result)."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-106": {
+   "verdict": "divergence",
+   "group": "bnr-blank-node-reference",
+   "spec": "SPARQL 1.1 Query §19.5 (IRI References: text matched by IRIREF must conform to RFC 3987 IRI-reference syntax) and §4.1.4 (Syntax for Blank Nodes)",
+   "note": "RDF4J BNR-1 (RDF4J-specific, vectors dated 2026-10-10) reads <_:id> as a reference to the stored blank node with that ID. In SPARQL <_:id> is an IRIREF; \"_:id\" is not an RFC 3987 IRI reference (no ALPHA scheme start; a relative first segment cannot contain \":\"), so a conforming processor refuses the request, and blank nodes in a query (_:label, []) never denote a stored node. The engine reads <_:id> as the IRI \"_:id\" instead (see the iriref-rfc3987 defect), so it answers differently from RDF4J. The engine also refuses this request at parse time: it has no SPARQL 1.2 Update syntax (see the update-sparql12-syntax defect)."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-107": {
+   "verdict": "divergence",
+   "group": "bnr-blank-node-reference",
+   "spec": "SPARQL 1.1 Query §19.5 (IRI References: text matched by IRIREF must conform to RFC 3987 IRI-reference syntax) and §4.1.4 (Syntax for Blank Nodes)",
+   "note": "RDF4J BNR-1 (RDF4J-specific, vectors dated 2026-10-10) reads <_:id> as a reference to the stored blank node with that ID. In SPARQL <_:id> is an IRIREF; \"_:id\" is not an RFC 3987 IRI reference (no ALPHA scheme start; a relative first segment cannot contain \":\"), so a conforming processor refuses the request, and blank nodes in a query (_:label, []) never denote a stored node. The engine reads <_:id> as the IRI \"_:id\" instead (see the iriref-rfc3987 defect), so it answers differently from RDF4J."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-108": {
+   "verdict": "divergence",
+   "group": "bnr-blank-node-reference",
+   "spec": "SPARQL 1.1 Query §19.5 (IRI References: text matched by IRIREF must conform to RFC 3987 IRI-reference syntax) and §4.1.4 (Syntax for Blank Nodes)",
+   "note": "RDF4J BNR-1 (RDF4J-specific, vectors dated 2026-10-10) reads <_:id> as a reference to the stored blank node with that ID. In SPARQL <_:id> is an IRIREF; \"_:id\" is not an RFC 3987 IRI reference (no ALPHA scheme start; a relative first segment cannot contain \":\"), so a conforming processor refuses the request, and blank nodes in a query (_:label, []) never denote a stored node. The engine reads <_:id> as the IRI \"_:id\" instead (see the iriref-rfc3987 defect), so it answers differently from RDF4J."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-109": {
+   "verdict": "divergence",
+   "group": "bnr-blank-node-reference",
+   "spec": "SPARQL 1.1 Query §19.5 (IRI References: text matched by IRIREF must conform to RFC 3987 IRI-reference syntax) and §4.1.4 (Syntax for Blank Nodes)",
+   "note": "RDF4J BNR-1 (RDF4J-specific, vectors dated 2026-10-10) reads <_:id> as a reference to the stored blank node with that ID. In SPARQL <_:id> is an IRIREF; \"_:id\" is not an RFC 3987 IRI reference (no ALPHA scheme start; a relative first segment cannot contain \":\"), so a conforming processor refuses the request, and blank nodes in a query (_:label, []) never denote a stored node. The engine reads <_:id> as the IRI \"_:id\" instead (see the iriref-rfc3987 defect), so it answers differently from RDF4J."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-110": {
+   "verdict": "divergence",
+   "group": "bnr-blank-node-reference",
+   "spec": "SPARQL 1.1 Query §19.5 (IRI References: text matched by IRIREF must conform to RFC 3987 IRI-reference syntax) and §4.1.4 (Syntax for Blank Nodes)",
+   "note": "RDF4J BNR-1 (RDF4J-specific, vectors dated 2026-10-10) reads <_:id> as a reference to the stored blank node with that ID. In SPARQL <_:id> is an IRIREF; \"_:id\" is not an RFC 3987 IRI reference (no ALPHA scheme start; a relative first segment cannot contain \":\"), so a conforming processor refuses the request, and blank nodes in a query (_:label, []) never denote a stored node. The engine reads <_:id> as the IRI \"_:id\" instead (see the iriref-rfc3987 defect), so it answers differently from RDF4J."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-111": {
+   "verdict": "divergence",
+   "group": "bnr-blank-node-reference",
+   "spec": "SPARQL 1.1 Query §19.5 (IRI References: text matched by IRIREF must conform to RFC 3987 IRI-reference syntax) and §4.1.4 (Syntax for Blank Nodes)",
+   "note": "RDF4J BNR-1 (RDF4J-specific, vectors dated 2026-10-10) reads <_:id> as a reference to the stored blank node with that ID. In SPARQL <_:id> is an IRIREF; \"_:id\" is not an RFC 3987 IRI reference (no ALPHA scheme start; a relative first segment cannot contain \":\"), so a conforming processor refuses the request, and blank nodes in a query (_:label, []) never denote a stored node. The engine reads <_:id> as the IRI \"_:id\" instead (see the iriref-rfc3987 defect), so it answers differently from RDF4J."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-112": {
+   "verdict": "divergence",
+   "group": "bnr-blank-node-reference",
+   "spec": "SPARQL 1.1 Query §19.5 (IRI References: text matched by IRIREF must conform to RFC 3987 IRI-reference syntax) and §4.1.4 (Syntax for Blank Nodes)",
+   "note": "RDF4J BNR-1 (RDF4J-specific, vectors dated 2026-10-10) reads <_:id> as a reference to the stored blank node with that ID. In SPARQL <_:id> is an IRIREF; \"_:id\" is not an RFC 3987 IRI reference (no ALPHA scheme start; a relative first segment cannot contain \":\"), so a conforming processor refuses the request, and blank nodes in a query (_:label, []) never denote a stored node. The engine reads <_:id> as the IRI \"_:id\" instead (see the iriref-rfc3987 defect), so it answers differently from RDF4J."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-113": {
+   "verdict": "divergence",
+   "group": "bnr-blank-node-reference",
+   "spec": "SPARQL 1.1 Query §19.5 (IRI References: text matched by IRIREF must conform to RFC 3987 IRI-reference syntax) and §4.1.4 (Syntax for Blank Nodes)",
+   "note": "RDF4J BNR-1 (RDF4J-specific, vectors dated 2026-10-10) reads <_:id> as a reference to the stored blank node with that ID. In SPARQL <_:id> is an IRIREF; \"_:id\" is not an RFC 3987 IRI reference (no ALPHA scheme start; a relative first segment cannot contain \":\"), so a conforming processor refuses the request, and blank nodes in a query (_:label, []) never denote a stored node. The engine reads <_:id> as the IRI \"_:id\" instead (see the iriref-rfc3987 defect), so it answers differently from RDF4J."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-114": {
+   "verdict": "divergence",
+   "group": "bnr-blank-node-reference",
+   "spec": "SPARQL 1.1 Query §19.5 (IRI References: text matched by IRIREF must conform to RFC 3987 IRI-reference syntax) and §4.1.4 (Syntax for Blank Nodes)",
+   "note": "RDF4J BNR-1 (RDF4J-specific, vectors dated 2026-10-10) reads <_:id> as a reference to the stored blank node with that ID. In SPARQL <_:id> is an IRIREF; \"_:id\" is not an RFC 3987 IRI reference (no ALPHA scheme start; a relative first segment cannot contain \":\"), so a conforming processor refuses the request, and blank nodes in a query (_:label, []) never denote a stored node. The engine reads <_:id> as the IRI \"_:id\" instead (see the iriref-rfc3987 defect), so it answers differently from RDF4J."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-115": {
+   "verdict": "divergence",
+   "group": "bnr-blank-node-reference",
+   "spec": "SPARQL 1.1 Query §19.5 (IRI References: text matched by IRIREF must conform to RFC 3987 IRI-reference syntax) and §4.1.4 (Syntax for Blank Nodes)",
+   "note": "RDF4J BNR-1 (RDF4J-specific, vectors dated 2026-10-10) reads <_:id> as a reference to the stored blank node with that ID. In SPARQL <_:id> is an IRIREF; \"_:id\" is not an RFC 3987 IRI reference (no ALPHA scheme start; a relative first segment cannot contain \":\"), so a conforming processor refuses the request, and blank nodes in a query (_:label, []) never denote a stored node. The engine reads <_:id> as the IRI \"_:id\" instead (see the iriref-rfc3987 defect), so it answers differently from RDF4J."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-116": {
+   "verdict": "divergence",
+   "group": "bnr-blank-node-reference",
+   "spec": "SPARQL 1.1 Query §19.5 (IRI References: text matched by IRIREF must conform to RFC 3987 IRI-reference syntax) and §4.1.4 (Syntax for Blank Nodes)",
+   "note": "RDF4J BNR-1 (RDF4J-specific, vectors dated 2026-10-10) reads <_:id> as a reference to the stored blank node with that ID. In SPARQL <_:id> is an IRIREF; \"_:id\" is not an RFC 3987 IRI reference (no ALPHA scheme start; a relative first segment cannot contain \":\"), so a conforming processor refuses the request, and blank nodes in a query (_:label, []) never denote a stored node. The engine reads <_:id> as the IRI \"_:id\" instead (see the iriref-rfc3987 defect), so it answers differently from RDF4J."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-117": {
+   "verdict": "divergence",
+   "group": "bnr-blank-node-reference",
+   "spec": "SPARQL 1.1 Query §19.5 (IRI References: text matched by IRIREF must conform to RFC 3987 IRI-reference syntax) and §4.1.4 (Syntax for Blank Nodes)",
+   "note": "RDF4J BNR-1 (RDF4J-specific, vectors dated 2026-10-10) reads <_:id> as a reference to the stored blank node with that ID. In SPARQL <_:id> is an IRIREF; \"_:id\" is not an RFC 3987 IRI reference (no ALPHA scheme start; a relative first segment cannot contain \":\"), so a conforming processor refuses the request, and blank nodes in a query (_:label, []) never denote a stored node. The engine reads <_:id> as the IRI \"_:id\" instead (see the iriref-rfc3987 defect), so it answers differently from RDF4J."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-121": {
+   "verdict": "divergence",
+   "group": "bnr-blank-node-reference",
+   "spec": "SPARQL 1.1 Query §19.5 (IRI References: text matched by IRIREF must conform to RFC 3987 IRI-reference syntax) and §4.1.4 (Syntax for Blank Nodes)",
+   "note": "RDF4J BNR-1 (RDF4J-specific, vectors dated 2026-10-10) reads <_:id> as a reference to the stored blank node with that ID. In SPARQL <_:id> is an IRIREF; \"_:id\" is not an RFC 3987 IRI reference (no ALPHA scheme start; a relative first segment cannot contain \":\"), so a conforming processor refuses the request, and blank nodes in a query (_:label, []) never denote a stored node. The engine reads <_:id> as the IRI \"_:id\" instead (see the iriref-rfc3987 defect), so it answers differently from RDF4J."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-122": {
+   "verdict": "divergence",
+   "group": "bnr-blank-node-reference",
+   "spec": "SPARQL 1.1 Query §19.5 (IRI References: text matched by IRIREF must conform to RFC 3987 IRI-reference syntax) and §4.1.4 (Syntax for Blank Nodes)",
+   "note": "RDF4J BNR-1 (RDF4J-specific, vectors dated 2026-10-10) reads <_:id> as a reference to the stored blank node with that ID. In SPARQL <_:id> is an IRIREF; \"_:id\" is not an RFC 3987 IRI reference (no ALPHA scheme start; a relative first segment cannot contain \":\"), so a conforming processor refuses the request, and blank nodes in a query (_:label, []) never denote a stored node. The engine reads <_:id> as the IRI \"_:id\" instead (see the iriref-rfc3987 defect), so it answers differently from RDF4J."
+  },
+  "BlankNodeReferenceConformanceTest#BNR-122#2": {
+   "verdict": "divergence",
+   "group": "bnr-blank-node-reference",
+   "spec": "SPARQL 1.1 Query §19.5 (IRI References: text matched by IRIREF must conform to RFC 3987 IRI-reference syntax) and §4.1.4 (Syntax for Blank Nodes)",
+   "note": "RDF4J BNR-1 (RDF4J-specific, vectors dated 2026-10-10) reads <_:id> as a reference to the stored blank node with that ID. In SPARQL <_:id> is an IRIREF; \"_:id\" is not an RFC 3987 IRI reference (no ALPHA scheme start; a relative first segment cannot contain \":\"), so a conforming processor refuses the request, and blank nodes in a query (_:label, []) never denote a stored node. The engine reads <_:id> as the IRI \"_:id\" instead (see the iriref-rfc3987 defect), so it answers differently from RDF4J."
+  },
+  "BlankNodeReferenceConformanceTest#nested-depth-1": {
+   "verdict": "divergence",
+   "group": "bnr-blank-node-reference",
+   "spec": "SPARQL 1.1 Query §19.5 (IRI References: text matched by IRIREF must conform to RFC 3987 IRI-reference syntax) and §4.1.4 (Syntax for Blank Nodes)",
+   "note": "RDF4J BNR-1 (RDF4J-specific, vectors dated 2026-10-10) reads <_:id> as a reference to the stored blank node with that ID. In SPARQL <_:id> is an IRIREF; \"_:id\" is not an RFC 3987 IRI reference (no ALPHA scheme start; a relative first segment cannot contain \":\"), so a conforming processor refuses the request, and blank nodes in a query (_:label, []) never denote a stored node. The engine reads <_:id> as the IRI \"_:id\" instead (see the iriref-rfc3987 defect), so it answers differently from RDF4J."
+  },
+  "BlankNodeReferenceConformanceTest#nested-depth-2": {
+   "verdict": "divergence",
+   "group": "bnr-blank-node-reference",
+   "spec": "SPARQL 1.1 Query §19.5 (IRI References: text matched by IRIREF must conform to RFC 3987 IRI-reference syntax) and §4.1.4 (Syntax for Blank Nodes)",
+   "note": "RDF4J BNR-1 (RDF4J-specific, vectors dated 2026-10-10) reads <_:id> as a reference to the stored blank node with that ID. In SPARQL <_:id> is an IRIREF; \"_:id\" is not an RFC 3987 IRI reference (no ALPHA scheme start; a relative first segment cannot contain \":\"), so a conforming processor refuses the request, and blank nodes in a query (_:label, []) never denote a stored node. The engine reads <_:id> as the IRI \"_:id\" instead (see the iriref-rfc3987 defect), so it answers differently from RDF4J."
+  },
+  "BlankNodeReferenceConformanceTest#nested-depth-3": {
+   "verdict": "divergence",
+   "group": "bnr-blank-node-reference",
+   "spec": "SPARQL 1.1 Query §19.5 (IRI References: text matched by IRIREF must conform to RFC 3987 IRI-reference syntax) and §4.1.4 (Syntax for Blank Nodes)",
+   "note": "RDF4J BNR-1 (RDF4J-specific, vectors dated 2026-10-10) reads <_:id> as a reference to the stored blank node with that ID. In SPARQL <_:id> is an IRIREF; \"_:id\" is not an RFC 3987 IRI reference (no ALPHA scheme start; a relative first segment cannot contain \":\"), so a conforming processor refuses the request, and blank nodes in a query (_:label, []) never denote a stored node. The engine reads <_:id> as the IRI \"_:id\" instead (see the iriref-rfc3987 defect), so it answers differently from RDF4J."
+  },
+  "BlankNodeReferenceConformanceTest#nested-depth-4": {
+   "verdict": "divergence",
+   "group": "bnr-blank-node-reference",
+   "spec": "SPARQL 1.1 Query §19.5 (IRI References: text matched by IRIREF must conform to RFC 3987 IRI-reference syntax) and §4.1.4 (Syntax for Blank Nodes)",
+   "note": "RDF4J BNR-1 (RDF4J-specific, vectors dated 2026-10-10) reads <_:id> as a reference to the stored blank node with that ID. In SPARQL <_:id> is an IRIREF; \"_:id\" is not an RFC 3987 IRI reference (no ALPHA scheme start; a relative first segment cannot contain \":\"), so a conforming processor refuses the request, and blank nodes in a query (_:label, []) never denote a stored node. The engine reads <_:id> as the IRI \"_:id\" instead (see the iriref-rfc3987 defect), so it answers differently from RDF4J."
+  },
+  "BlankNodeReferenceConformanceTest#nested-depth-5": {
+   "verdict": "divergence",
+   "group": "bnr-blank-node-reference",
+   "spec": "SPARQL 1.1 Query §19.5 (IRI References: text matched by IRIREF must conform to RFC 3987 IRI-reference syntax) and §4.1.4 (Syntax for Blank Nodes)",
+   "note": "RDF4J BNR-1 (RDF4J-specific, vectors dated 2026-10-10) reads <_:id> as a reference to the stored blank node with that ID. In SPARQL <_:id> is an IRIREF; \"_:id\" is not an RFC 3987 IRI reference (no ALPHA scheme start; a relative first segment cannot contain \":\"), so a conforming processor refuses the request, and blank nodes in a query (_:label, []) never denote a stored node. The engine reads <_:id> as the IRI \"_:id\" instead (see the iriref-rfc3987 defect), so it answers differently from RDF4J."
+  },
+  "BlankNodeReferenceConformanceTest#nested-depth-6": {
+   "verdict": "divergence",
+   "group": "bnr-blank-node-reference",
+   "spec": "SPARQL 1.1 Query §19.5 (IRI References: text matched by IRIREF must conform to RFC 3987 IRI-reference syntax) and §4.1.4 (Syntax for Blank Nodes)",
+   "note": "RDF4J BNR-1 (RDF4J-specific, vectors dated 2026-10-10) reads <_:id> as a reference to the stored blank node with that ID. In SPARQL <_:id> is an IRIREF; \"_:id\" is not an RFC 3987 IRI reference (no ALPHA scheme start; a relative first segment cannot contain \":\"), so a conforming processor refuses the request, and blank nodes in a query (_:label, []) never denote a stored node. The engine reads <_:id> as the IRI \"_:id\" instead (see the iriref-rfc3987 defect), so it answers differently from RDF4J."
+  },
+  "BlankNodeReferenceConformanceTest#nested-depth-7": {
+   "verdict": "divergence",
+   "group": "bnr-blank-node-reference",
+   "spec": "SPARQL 1.1 Query §19.5 (IRI References: text matched by IRIREF must conform to RFC 3987 IRI-reference syntax) and §4.1.4 (Syntax for Blank Nodes)",
+   "note": "RDF4J BNR-1 (RDF4J-specific, vectors dated 2026-10-10) reads <_:id> as a reference to the stored blank node with that ID. In SPARQL <_:id> is an IRIREF; \"_:id\" is not an RFC 3987 IRI reference (no ALPHA scheme start; a relative first segment cannot contain \":\"), so a conforming processor refuses the request, and blank nodes in a query (_:label, []) never denote a stored node. The engine reads <_:id> as the IRI \"_:id\" instead (see the iriref-rfc3987 defect), so it answers differently from RDF4J."
+  },
+  "BlankNodeReferenceConformanceTest#nested-depth-8": {
+   "verdict": "divergence",
+   "group": "bnr-blank-node-reference",
+   "spec": "SPARQL 1.1 Query §19.5 (IRI References: text matched by IRIREF must conform to RFC 3987 IRI-reference syntax) and §4.1.4 (Syntax for Blank Nodes)",
+   "note": "RDF4J BNR-1 (RDF4J-specific, vectors dated 2026-10-10) reads <_:id> as a reference to the stored blank node with that ID. In SPARQL <_:id> is an IRIREF; \"_:id\" is not an RFC 3987 IRI reference (no ALPHA scheme start; a relative first segment cannot contain \":\"), so a conforming processor refuses the request, and blank nodes in a query (_:label, []) never denote a stored node. The engine reads <_:id> as the IRI \"_:id\" instead (see the iriref-rfc3987 defect), so it answers differently from RDF4J."
+  }
+ }
+}

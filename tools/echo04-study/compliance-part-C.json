@@ -1,0 +1,1868 @@
+{
+ "classes": [
+  "ConstructTest",
+  "DefaultGraphTest",
+  "LateralScopeTest",
+  "LateralTest",
+  "FilterScopeTest",
+  "SparqlMinusScopingTests",
+  "DescribeTest"
+ ],
+ "methods": [
+  "ConstructTest#ConstructModifiers",
+  "ConstructTest#SES2104ConstructBGPSameURI",
+  "ConstructTest#Construct_CyclicPathWithJoin",
+  "DefaultGraphTest#SesameNilAsGraph",
+  "DefaultGraphTest#NullContext2",
+  "DefaultGraphTest#NullContext1",
+  "LateralScopeTest#LateralSubSelectWithSiblingFilterDoesNotSeeHiddenOuterVariable",
+  "LateralTest#LateralBasic",
+  "LateralTest#LateralWithOptional",
+  "LateralTest#LateralMultipleResults",
+  "LateralTest#LateralWithFilter",
+  "LateralTest#LateralVariableScoping",
+  "LateralTest#LateralSubSelectDoesNotSeeHiddenOuterVariable",
+  "LateralTest#LateralGroupedSubSelectDoesNotSeeHiddenOuterVariable",
+  "LateralTest#NestedLateralSubSelectDoesNotSeeHiddenOuterBinding",
+  "LateralTest#LateralParseErrorOnRebindingVariable",
+  "LateralTest#LateralAllowsHiddenSubSelectAssignmentToOuterName",
+  "LateralTest#LateralRejectsBindToLeftVariable",
+  "LateralTest#LateralRejectsValuesForLeftVariable",
+  "LateralTest#LateralUnboundVariableWithCoalesce",
+  "LateralTest#LateralComplexUnionInteraction",
+  "LateralTest#LateralLargeDatasetCorrelation",
+  "LateralTest#LateralFilterBeforeClauseSeesRightBinding",
+  "LateralTest#LateralPreservesInitialBindingForRightOnlyVariable",
+  "FilterScopeTest#testScope1",
+  "FilterScopeTest#testScope1WithoutScopingIssue",
+  "FilterScopeTest#testScope1WithCorrectScope",
+  "FilterScopeTest#testScope2",
+  "FilterScopeTest#testScope3",
+  "FilterScopeTest#testScope3WithoutScopingIssue",
+  "FilterScopeTest#testScope4",
+  "SparqlMinusScopingTests#T1_bindCreatesFreshVarInRight_NoOverlap_NoEffect",
+  "SparqlMinusScopingTests#T3_bindBeforeUseIntroducesOverlap_EverythingRemoved",
+  "SparqlMinusScopingTests#T4_renamedVarsInsideRight_NoTrueOverlap_NoEffect",
+  "SparqlMinusScopingTests#T5_randInsideDisjointRight_MinusHasNoEffect",
+  "SparqlMinusScopingTests#T8_projectionExprOnLeftDoesNotAffectMinusOverlap_NoEffect",
+  "SparqlMinusScopingTests#T9_projectionBeforeMinus_NoSharedVarsAfterSubselect_NoEffect",
+  "SparqlMinusScopingTests#T10_minusVsNotExists_WithThisDataTheyCoincide",
+  "SparqlMinusScopingTests#T11_multipleMinus_sharedThenIndependent_onlyFirstMatters",
+  "SparqlMinusScopingTests#T12_minusInsideOptional_withDisjointVars_isNoop",
+  "SparqlMinusScopingTests#T13_minus_no_shared_vars_is_noop_select",
+  "SparqlMinusScopingTests#T14_not_exists_contrast_to_minus_no_shared_vars",
+  "SparqlMinusScopingTests#T15_rhs_filter_referencing_outer_var_is_unbound_and_ignored",
+  "SparqlMinusScopingTests#T16_rhs_bind_of_outer_var_produces_unbound_then_overremoves_on_shared_subset",
+  "SparqlMinusScopingTests#T17_rhs_bind_creates_intentional_shared_var_equalities",
+  "SparqlMinusScopingTests#T18_early_projection_should_not_change_minus_semantics",
+  "SparqlMinusScopingTests#T19_subquery_pins_shared_var_against_optimizer",
+  "SparqlMinusScopingTests#T20_optional_inside_minus_only_removes_when_optional_matches",
+  "SparqlMinusScopingTests#T21_not_exists_over_optional_is_always_false_here",
+  "SparqlMinusScopingTests#T22_graph_isolation_same_g_on_both_sides_no_removal_when_values_differ",
+  "SparqlMinusScopingTests#T23_graph_isolation_removes_only_in_graph_where_match_exists",
+  "SparqlMinusScopingTests#T24_minus_disjoint_varsets_is_noop_even_with_union_on_lhs",
+  "SparqlMinusScopingTests#T25_values_left_only_no_shared_vars_is_noop",
+  "SparqlMinusScopingTests#T26_minus_shared_subset_only_subject_shared_removes_all_rows_for_that_subject",
+  "SparqlMinusScopingTests#T27_rhs_subselect_order_by_limit_one_global_elimination",
+  "SparqlMinusScopingTests#T28_bnode_function_on_rhs_cannot_match_data_terms",
+  "SparqlMinusScopingTests#T29_syntax_error_rebinding_in_rhs_must_fail_to_parse",
+  "DescribeTest#DescribeMultipleD",
+  "DescribeTest#DescribeMultipleC",
+  "DescribeTest#DescribeMultipleB",
+  "DescribeTest#DescribeMultipleA",
+  "DescribeTest#DescribeF",
+  "DescribeTest#DescribeD",
+  "DescribeTest#DescribeB",
+  "DescribeTest#DescribeWhere",
+  "DescribeTest#DescribeAWhere",
+  "DescribeTest#DescribeA"
+ ],
+ "cases": [
+  {
+   "id": "ConstructTest#ConstructModifiers",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/ConstructTest.java",
+   "line": 56,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix foaf: <http://xmlns.com/foaf/0.1/> .\n@prefix site: <http://example.org/stats#> .\n\n<urn:1> foaf:name \"Alice\" ;\n  site:hits 2349 ;\n  foaf:nick \"Al\" .\n\n<urn:2> foaf:name \"Bob\" ;\n  site:hits 105 ;\n  foaf:nick \"Bo\" .\n\n<urn:3> foaf:name \"Eve\" ;\n  site:hits 181 ;\n  foaf:nick \"Ev\" .\n\n<urn:4> foaf:name \"Samuel\" ;\n  site:hits 11 ;\n  foaf:nick \"Sam\" .\n"
+   },
+   "query": "PREFIX foaf: <http://xmlns.com/foaf/0.1/> \nPREFIX site: <http://example.org/stats#> \nCONSTRUCT { \n  ?iri foaf:name ?name . \n  ?iri foaf:nick ?nick . \n} \nWHERE { \n  ?iri foaf:name ?name ; \n    site:hits ?hits ; \n    foaf:nick ?nick . \n} \nORDER BY desc(?hits) \nLIMIT 3",
+   "expect": {
+    "kind": "graph",
+    "format": "turtle",
+    "text": "<urn:1> <http://xmlns.com/foaf/0.1/name> \"Alice\" ; <http://xmlns.com/foaf/0.1/nick> \"Al\" .\n<urn:3> <http://xmlns.com/foaf/0.1/name> \"Eve\" ; <http://xmlns.com/foaf/0.1/nick> \"Ev\" .\n<urn:2> <http://xmlns.com/foaf/0.1/name> \"Bob\" ; <http://xmlns.com/foaf/0.1/nick> \"Bo\" .\n"
+   },
+   "note": "Upstream also checks the order in which the CONSTRUCT statements stream out; a graph result has no order, so the port compares the graph (the LIMIT 3 after ORDER BY DESC(?hits) still decides which three subjects appear)."
+  },
+  {
+   "id": "ConstructTest#SES2104ConstructBGPSameURI",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/ConstructTest.java",
+   "line": 120,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix : <urn:> . :a :p :b . "
+   },
+   "query": "PREFIX : <urn:> CONSTRUCT {:x :p :x } WHERE {} ",
+   "expect": {
+    "kind": "graphContains",
+    "format": "turtle",
+    "text": "<urn:x> <urn:p> <urn:x> ."
+   }
+  },
+  {
+   "id": "ConstructTest#Construct_CyclicPathWithJoin",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/ConstructTest.java",
+   "line": 100,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "<urn:test> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/ns/dcat#Catalog> ."
+   },
+   "query": "PREFIX dcat: <http://www.w3.org/ns/dcat#>\n\nCONSTRUCT {\n<urn:a> <urn:b> ?x .\n  ?x <urn:c> ?x .\n}\nWHERE {\n  ?x a dcat:Catalog .\n}",
+   "expect": {
+    "kind": "graphContains",
+    "format": "turtle",
+    "text": "<urn:a> <urn:b> <urn:test> . <urn:test> <urn:c> <urn:test> ."
+   }
+  },
+  {
+   "id": "DefaultGraphTest#SesameNilAsGraph",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/DefaultGraphTest.java",
+   "line": 107,
+   "sparql12": false,
+   "data": {
+    "format": "trig",
+    "text": "@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n@prefix dc: <http://purl.org/dc/elements/1.1/> .\n@prefix foaf: <http://xmlns.com/foaf/0.1/> .\n@prefix ex: <http://example.org/> .\n\n{\n    ex:graph1 dc:publisher \"Bob\" ;\n\t      ex:containsPerson ex:bob .\n\n    ex:graph2 dc:publisher \"Alice\" ;\n\t      ex:containsPerson ex:alice .\n\n    ex:graph3 dc:publisher \"William\" ;\n\t      ex:containsPerson ex:william .\n\n    ex:groupconcat-test \n         ex:p \"a\";\n         ex:p \"b\"; \n\t ex:p \"c\";\n\t ex:p \"d\";\n\t ex:q \"b\";\n\t ex:q \"c\".\n}\n\nex:graph1 {\n    ex:bob foaf:name \"Bob\" ;\n       foaf:mbox \"bob@example.org\" ;\n       foaf:knows ex:alice .\n\n    ex:bob foaf:knows ex:alice .\n    ex:bob foaf:knows ex:william .\n\n    ex:alice foaf:knows ex:bob .\n}\n\nex:graph2 {\n    ex:alice foaf:name \"Alice\" ;\n\tfoaf:mbox \"alice@example.org\" .\n\n    ex:alice foaf:knows ex:william .\n}\n\nex:graph3 {\n    ex:william foaf:name \"William\" ;\n\tfoaf:mbox \"william@example.org\" .\n}\n\nex:tree-graph {\n    ex:a ex:name \"aa\" .\n    ex:b ex:name \"bb\" .\n    ex:c ex:name \"cc\" .\n    ex:d ex:name \"dd\" .\n    ex:e ex:name \"ee\" .\n    ex:f ex:name \"ff\" .\n    ex:g ex:name \"gg\" .\n    ex:h ex:name \"hh\" .\n    ex:i ex:name \"ii\" .\n    ex:j ex:name \"jj\" .\n    ex:k ex:name \"kk\" .\n\n    ex:b ex:hasParent ex:a .\n    ex:c ex:hasParent ex:a .\n    ex:d ex:hasParent ex:a .\n\n    ex:g ex:hasParent ex:c .\n    \n    ex:e ex:hasParent ex:b .\n    ex:f ex:hasParent ex:b .\n    \n    ex:i ex:hasParent ex:g .\n    ex:h ex:hasPerent ex:g .\n\n    ex:j ex:hasParent ex:f .\n    ex:k ex:hasParent ex:f .\n}\n\nex:optional-sameterm-graph {\n\tex:a ex:p ex:A ;\n\t\t rdfs:label \"label\" ;\n\t\t ex:prop1 \"prop1\" ;\n\t\t ex:prop2 \"prop2\" .\n}\n"
+   },
+   "query": "PREFIX rdf4j: <http://rdf4j.org/schema/rdf4j#>\n SELECT *  WHERE { GRAPH rdf4j:nil { ?s ?p ?o } } ",
+   "implicitPrefixes": [
+    "rdf4j"
+   ],
+   "expect": {
+    "kind": "all",
+    "of": [
+     {
+      "kind": "count",
+      "n": 12
+     },
+     {
+      "kind": "absent",
+      "rows": [
+       {
+        "s": {
+         "type": "uri",
+         "value": "http://example.org/bob"
+        }
+       },
+       {
+        "s": {
+         "type": "uri",
+         "value": "http://example.org/alice"
+        }
+       }
+      ]
+     }
+    ]
+   },
+   "note": "rdf4j:nil is RDF4J's name for the default graph. Upstream asserts more than one row and no ex:bob/ex:alice subject; the port asserts the default graph's 12 triples (the trig file's unnamed block)."
+  },
+  {
+   "id": "DefaultGraphTest#NullContext2",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/DefaultGraphTest.java",
+   "line": 77,
+   "sparql12": false,
+   "data": {
+    "format": "trig",
+    "text": "@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n@prefix dc: <http://purl.org/dc/elements/1.1/> .\n@prefix foaf: <http://xmlns.com/foaf/0.1/> .\n@prefix ex: <http://example.org/> .\n\n{\n    ex:graph1 dc:publisher \"Bob\" ;\n\t      ex:containsPerson ex:bob .\n\n    ex:graph2 dc:publisher \"Alice\" ;\n\t      ex:containsPerson ex:alice .\n\n    ex:graph3 dc:publisher \"William\" ;\n\t      ex:containsPerson ex:william .\n\n    ex:groupconcat-test \n         ex:p \"a\";\n         ex:p \"b\"; \n\t ex:p \"c\";\n\t ex:p \"d\";\n\t ex:q \"b\";\n\t ex:q \"c\".\n}\n\nex:graph1 {\n    ex:bob foaf:name \"Bob\" ;\n       foaf:mbox \"bob@example.org\" ;\n       foaf:knows ex:alice .\n\n    ex:bob foaf:knows ex:alice .\n    ex:bob foaf:knows ex:william .\n\n    ex:alice foaf:knows ex:bob .\n}\n\nex:graph2 {\n    ex:alice foaf:name \"Alice\" ;\n\tfoaf:mbox \"alice@example.org\" .\n\n    ex:alice foaf:knows ex:william .\n}\n\nex:graph3 {\n    ex:william foaf:name \"William\" ;\n\tfoaf:mbox \"william@example.org\" .\n}\n\nex:tree-graph {\n    ex:a ex:name \"aa\" .\n    ex:b ex:name \"bb\" .\n    ex:c ex:name \"cc\" .\n    ex:d ex:name \"dd\" .\n    ex:e ex:name \"ee\" .\n    ex:f ex:name \"ff\" .\n    ex:g ex:name \"gg\" .\n    ex:h ex:name \"hh\" .\n    ex:i ex:name \"ii\" .\n    ex:j ex:name \"jj\" .\n    ex:k ex:name \"kk\" .\n\n    ex:b ex:hasParent ex:a .\n    ex:c ex:hasParent ex:a .\n    ex:d ex:hasParent ex:a .\n\n    ex:g ex:hasParent ex:c .\n    \n    ex:e ex:hasParent ex:b .\n    ex:f ex:hasParent ex:b .\n    \n    ex:i ex:hasParent ex:g .\n    ex:h ex:hasPerent ex:g .\n\n    ex:j ex:hasParent ex:f .\n    ex:k ex:hasParent ex:f .\n}\n\nex:optional-sameterm-graph {\n\tex:a ex:p ex:A ;\n\t\t rdfs:label \"label\" ;\n\t\t ex:prop1 \"prop1\" ;\n\t\t ex:prop2 \"prop2\" .\n}\n"
+   },
+   "query": "PREFIX rdf4j: <http://rdf4j.org/schema/rdf4j#>\n SELECT *  FROM rdf4j:nil  WHERE { ?s ?p ?o } ",
+   "implicitPrefixes": [
+    "rdf4j"
+   ],
+   "expect": {
+    "kind": "absent",
+    "rows": [
+     {
+      "s": {
+       "type": "uri",
+       "value": "http://example.org/bob"
+      }
+     },
+     {
+      "s": {
+       "type": "uri",
+       "value": "http://example.org/alice"
+      }
+     }
+    ]
+   },
+   "note": "Upstream asserts only that no solution has ex:bob or ex:alice as subject (FROM rdf4j:nil = the default graph in RDF4J). Under SPARQL 1.1 §13.2 FROM <rdf4j:nil> names a graph absent from the data, so the answer is empty and the assertion holds vacuously."
+  },
+  {
+   "id": "DefaultGraphTest#NullContext1",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/DefaultGraphTest.java",
+   "line": 47,
+   "sparql12": false,
+   "data": {
+    "format": "trig",
+    "text": "@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n@prefix dc: <http://purl.org/dc/elements/1.1/> .\n@prefix foaf: <http://xmlns.com/foaf/0.1/> .\n@prefix ex: <http://example.org/> .\n\n{\n    ex:graph1 dc:publisher \"Bob\" ;\n\t      ex:containsPerson ex:bob .\n\n    ex:graph2 dc:publisher \"Alice\" ;\n\t      ex:containsPerson ex:alice .\n\n    ex:graph3 dc:publisher \"William\" ;\n\t      ex:containsPerson ex:william .\n\n    ex:groupconcat-test \n         ex:p \"a\";\n         ex:p \"b\"; \n\t ex:p \"c\";\n\t ex:p \"d\";\n\t ex:q \"b\";\n\t ex:q \"c\".\n}\n\nex:graph1 {\n    ex:bob foaf:name \"Bob\" ;\n       foaf:mbox \"bob@example.org\" ;\n       foaf:knows ex:alice .\n\n    ex:bob foaf:knows ex:alice .\n    ex:bob foaf:knows ex:william .\n\n    ex:alice foaf:knows ex:bob .\n}\n\nex:graph2 {\n    ex:alice foaf:name \"Alice\" ;\n\tfoaf:mbox \"alice@example.org\" .\n\n    ex:alice foaf:knows ex:william .\n}\n\nex:graph3 {\n    ex:william foaf:name \"William\" ;\n\tfoaf:mbox \"william@example.org\" .\n}\n\nex:tree-graph {\n    ex:a ex:name \"aa\" .\n    ex:b ex:name \"bb\" .\n    ex:c ex:name \"cc\" .\n    ex:d ex:name \"dd\" .\n    ex:e ex:name \"ee\" .\n    ex:f ex:name \"ff\" .\n    ex:g ex:name \"gg\" .\n    ex:h ex:name \"hh\" .\n    ex:i ex:name \"ii\" .\n    ex:j ex:name \"jj\" .\n    ex:k ex:name \"kk\" .\n\n    ex:b ex:hasParent ex:a .\n    ex:c ex:hasParent ex:a .\n    ex:d ex:hasParent ex:a .\n\n    ex:g ex:hasParent ex:c .\n    \n    ex:e ex:hasParent ex:b .\n    ex:f ex:hasParent ex:b .\n    \n    ex:i ex:hasParent ex:g .\n    ex:h ex:hasPerent ex:g .\n\n    ex:j ex:hasParent ex:f .\n    ex:k ex:hasParent ex:f .\n}\n\nex:optional-sameterm-graph {\n\tex:a ex:p ex:A ;\n\t\t rdfs:label \"label\" ;\n\t\t ex:prop1 \"prop1\" ;\n\t\t ex:prop2 \"prop2\" .\n}\n"
+   },
+   "query": " SELECT *  FROM DEFAULT  WHERE { ?s ?p ?o } ",
+   "expect": {
+    "kind": "absent",
+    "rows": [
+     {
+      "s": {
+       "type": "uri",
+       "value": "http://example.org/bob"
+      }
+     },
+     {
+      "s": {
+       "type": "uri",
+       "value": "http://example.org/alice"
+      }
+     }
+    ]
+   },
+   "note": "FROM DEFAULT is RDF4J syntax for the default graph; upstream asserts the query runs and no solution has ex:bob or ex:alice as subject."
+  },
+  {
+   "id": "LateralScopeTest#LateralSubSelectWithSiblingFilterDoesNotSeeHiddenOuterVariable",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/LateralScopeTest.java",
+   "line": 41,
+   "sparql12": true,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix ex: <http://example.org/> .\n@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n\nex:subject1 ex:predicate ex:object1 .\nex:subject1 rdfs:label \"Label 1\" .\nex:subject2 ex:predicate ex:object2 .\nex:subject2 rdfs:label \"Label 2\" .\nex:subject3 ex:predicate ex:object3 .\nex:subject3 rdfs:label \"Label 3\" .\n"
+   },
+   "query": "PREFIX ex: <http://example.org/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT * {\n   ?s ex:predicate ?o\n   LATERAL {\n      { SELECT ?label { ?s rdfs:label ?label } ORDER BY ?label LIMIT 1 }\n      FILTER(?label = \"Label 1\")\n   }\n}\n",
+   "expect": {
+    "kind": "bindings",
+    "vars": [
+     "label"
+    ],
+    "rows": [
+     {
+      "label": {
+       "type": "literal",
+       "value": "Label 1"
+      }
+     },
+     {
+      "label": {
+       "type": "literal",
+       "value": "Label 1"
+      }
+     },
+     {
+      "label": {
+       "type": "literal",
+       "value": "Label 1"
+      }
+     }
+    ]
+   },
+   "note": "LATERAL is not in the SPARQL 1.1 REC nor in the SPARQL 1.2 Query WD of 25 October 2026 (it is the SEP-0006 proposal); RDF4J and the engine both accept it. Run with version 1.2."
+  },
+  {
+   "id": "LateralTest#LateralBasic",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/LateralTest.java",
+   "line": 48,
+   "sparql12": true,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix ex: <http://example.org/> .\n@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n\nex:subject1 ex:predicate ex:object1 .\nex:subject1 rdfs:label \"Label 1\" .\nex:subject2 ex:predicate ex:object2 .\nex:subject2 rdfs:label \"Label 2\" .\nex:subject3 ex:predicate ex:object3 .\nex:subject3 rdfs:label \"Label 3\" .\n"
+   },
+   "query": "PREFIX ex: <http://example.org/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT * {\n   ?s ex:predicate ?o\n   LATERAL {\n      SELECT * { ?s rdfs:label ?label } LIMIT 1\n   }\n}\n",
+   "expect": {
+    "kind": "bindings",
+    "vars": [
+     "s",
+     "label"
+    ],
+    "rows": [
+     {
+      "s": {
+       "type": "uri",
+       "value": "http://example.org/subject1"
+      },
+      "label": {
+       "type": "literal",
+       "value": "Label 1"
+      }
+     },
+     {
+      "s": {
+       "type": "uri",
+       "value": "http://example.org/subject2"
+      },
+      "label": {
+       "type": "literal",
+       "value": "Label 2"
+      }
+     },
+     {
+      "s": {
+       "type": "uri",
+       "value": "http://example.org/subject3"
+      },
+      "label": {
+       "type": "literal",
+       "value": "Label 3"
+      }
+     }
+    ]
+   },
+   "note": "LATERAL is not in the SPARQL 1.1 REC nor in the SPARQL 1.2 Query WD of 25 October 2026 (it is the SEP-0006 proposal); RDF4J and the engine both accept it. Run with version 1.2. Upstream: 3 rows, and some row has s~subjectN with label 'Label N' for each N."
+  },
+  {
+   "id": "LateralTest#LateralWithOptional",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/LateralTest.java",
+   "line": 98,
+   "sparql12": true,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix ex: <http://example.org/> .\n@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n\nex:subject1 ex:predicate ex:object1 .\nex:subject1 rdfs:label \"Label 1\" .\nex:subject2 ex:predicate ex:object2 .\nex:subject2 rdfs:label \"Label 2\" .\nex:subject3 ex:predicate ex:object3 .\n"
+   },
+   "query": "PREFIX ex: <http://example.org/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT * {\n   ?s ex:predicate ?o\n   LATERAL { OPTIONAL { SELECT * { ?s rdfs:label ?label } LIMIT 1} }\n}\n",
+   "expect": {
+    "kind": "count",
+    "n": 3
+   },
+   "note": "LATERAL is not in the SPARQL 1.1 REC nor in the SPARQL 1.2 Query WD of 25 October 2026 (it is the SEP-0006 proposal); RDF4J and the engine both accept it. Run with version 1.2."
+  },
+  {
+   "id": "LateralTest#LateralMultipleResults",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/LateralTest.java",
+   "line": 133,
+   "sparql12": true,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix ex: <http://example.org/> .\n\nex:subject1 ex:predicate ex:object1 .\nex:subject1 ex:alternative \"Alt 1A\" .\nex:subject1 ex:alternative \"Alt 1B\" .\nex:subject2 ex:predicate ex:object2 .\nex:subject2 ex:alternative \"Alt 2\" .\nex:subject3 ex:predicate ex:object3 .\n"
+   },
+   "query": "PREFIX ex: <http://example.org/>\n\nSELECT * {\n   ?s ex:predicate ?o\n   LATERAL {\n      SELECT * { ?s ex:alternative ?alt }\n   }\n}\n",
+   "expect": {
+    "kind": "count",
+    "n": 3
+   },
+   "note": "LATERAL is not in the SPARQL 1.1 REC nor in the SPARQL 1.2 Query WD of 25 October 2026 (it is the SEP-0006 proposal); RDF4J and the engine both accept it. Run with version 1.2."
+  },
+  {
+   "id": "LateralTest#LateralWithFilter",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/LateralTest.java",
+   "line": 170,
+   "sparql12": true,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix ex: <http://example.org/> .\n@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n\nex:subject1 ex:predicate ex:object1 .\nex:subject1 rdfs:label \"Label 1\" .\nex:subject2 ex:predicate ex:object2 .\nex:subject2 rdfs:label \"Label 2\" .\nex:subject3 ex:predicate ex:object3 .\nex:subject3 rdfs:label \"Label 3\" .\n"
+   },
+   "query": "PREFIX ex: <http://example.org/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT * {\n   ?s ex:predicate ?o\n   LATERAL {\n      SELECT * { ?s rdfs:label ?label FILTER(CONTAINS(STR(?label), \"1\")) } LIMIT 1\n   }\n}\n",
+   "expect": {
+    "kind": "bindings",
+    "vars": [
+     "label"
+    ],
+    "rows": [
+     {
+      "label": {
+       "type": "literal",
+       "value": "Label 1"
+      }
+     }
+    ]
+   },
+   "note": "LATERAL is not in the SPARQL 1.1 REC nor in the SPARQL 1.2 Query WD of 25 October 2026 (it is the SEP-0006 proposal); RDF4J and the engine both accept it. Run with version 1.2."
+  },
+  {
+   "id": "LateralTest#LateralVariableScoping",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/LateralTest.java",
+   "line": 209,
+   "sparql12": true,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix ex: <http://example.org/> .\n\nex:s1 ex:p ex:o1 .\nex:s1 ex:related ex:r1 .\nex:r1 ex:data \"data1\" .\n\nex:s2 ex:p ex:o2 .\nex:s2 ex:related ex:r2 .\nex:r2 ex:data \"data2\" .\n"
+   },
+   "query": "PREFIX ex: <http://example.org/>\n\nSELECT * {\n   ?s ex:p ?o\n   LATERAL {\n      SELECT ?s ?related ?data { ?s ex:related ?related . ?related ex:data ?data }\n   }\n}\n",
+   "expect": {
+    "kind": "all",
+    "of": [
+     {
+      "kind": "count",
+      "n": 2
+     },
+     {
+      "kind": "contains",
+      "rows": [
+       {
+        "s": {
+         "type": "uri",
+         "value": "http://example.org/s1"
+        },
+        "data": {
+         "type": "literal",
+         "value": "data1"
+        }
+       }
+      ]
+     }
+    ]
+   },
+   "note": "LATERAL is not in the SPARQL 1.1 REC nor in the SPARQL 1.2 Query WD of 25 October 2026 (it is the SEP-0006 proposal); RDF4J and the engine both accept it. Run with version 1.2."
+  },
+  {
+   "id": "LateralTest#LateralSubSelectDoesNotSeeHiddenOuterVariable",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/LateralTest.java",
+   "line": 250,
+   "sparql12": true,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix ex: <http://example.org/> .\n@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n\nex:subject1 ex:predicate ex:object1 .\nex:subject1 rdfs:label \"Label 1\" .\nex:subject2 ex:predicate ex:object2 .\nex:subject2 rdfs:label \"Label 2\" .\nex:subject3 ex:predicate ex:object3 .\nex:subject3 rdfs:label \"Label 3\" .\n"
+   },
+   "query": "PREFIX ex: <http://example.org/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT * {\n   ?s ex:predicate ?o\n   LATERAL {\n      SELECT ?label { ?s rdfs:label ?label } ORDER BY ?label LIMIT 1\n   }\n}\n",
+   "expect": {
+    "kind": "bindings",
+    "vars": [
+     "label"
+    ],
+    "rows": [
+     {
+      "label": {
+       "type": "literal",
+       "value": "Label 1"
+      }
+     },
+     {
+      "label": {
+       "type": "literal",
+       "value": "Label 1"
+      }
+     },
+     {
+      "label": {
+       "type": "literal",
+       "value": "Label 1"
+      }
+     }
+    ]
+   },
+   "note": "LATERAL is not in the SPARQL 1.1 REC nor in the SPARQL 1.2 Query WD of 25 October 2026 (it is the SEP-0006 proposal); RDF4J and the engine both accept it. Run with version 1.2."
+  },
+  {
+   "id": "LateralTest#LateralGroupedSubSelectDoesNotSeeHiddenOuterVariable",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/LateralTest.java",
+   "line": 289,
+   "sparql12": true,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix ex: <http://example.org/> .\n@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n\nex:subject1 ex:predicate ex:object1 .\nex:subject1 rdfs:label \"Label 1\" .\nex:subject2 ex:predicate ex:object2 .\nex:subject2 rdfs:label \"Label 2\" .\nex:subject3 ex:predicate ex:object3 .\nex:subject3 rdfs:label \"Label 3\" .\n"
+   },
+   "query": "PREFIX ex: <http://example.org/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT * {\n   ?s ex:predicate ?o\n   LATERAL {\n      { SELECT ?label { ?s rdfs:label ?label } ORDER BY ?label LIMIT 1 }\n   }\n}\n",
+   "expect": {
+    "kind": "bindings",
+    "vars": [
+     "label"
+    ],
+    "rows": [
+     {
+      "label": {
+       "type": "literal",
+       "value": "Label 1"
+      }
+     },
+     {
+      "label": {
+       "type": "literal",
+       "value": "Label 1"
+      }
+     },
+     {
+      "label": {
+       "type": "literal",
+       "value": "Label 1"
+      }
+     }
+    ]
+   },
+   "note": "LATERAL is not in the SPARQL 1.1 REC nor in the SPARQL 1.2 Query WD of 25 October 2026 (it is the SEP-0006 proposal); RDF4J and the engine both accept it. Run with version 1.2."
+  },
+  {
+   "id": "LateralTest#NestedLateralSubSelectDoesNotSeeHiddenOuterBinding",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/LateralTest.java",
+   "line": 322,
+   "sparql12": true,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix ex: <http://example.org/> .\n\nex:s1 ex:p ex:o1 .\nex:s1 ex:q ex:left1 .\nex:left1 ex:r ex:r1 .\nex:left1 ex:r ex:r1b .\nex:s2 ex:p ex:o2 .\nex:s2 ex:q ex:left2 .\nex:left2 ex:r ex:r2 .\n"
+   },
+   "query": "PREFIX ex: <http://example.org/>\n\nSELECT * {\n   ?s ex:p ?o\n   LATERAL {\n      ?s ex:q ?left\n      LATERAL {\n         SELECT ?r { ?s ex:q ?left . ?left ex:r ?r } ORDER BY ?r LIMIT 1\n      }\n   }\n}\n",
+   "expect": {
+    "kind": "bindings",
+    "vars": [
+     "r"
+    ],
+    "rows": [
+     {
+      "r": {
+       "type": "uri",
+       "value": "http://example.org/r1"
+      }
+     },
+     {
+      "r": {
+       "type": "uri",
+       "value": "http://example.org/r1"
+      }
+     }
+    ]
+   },
+   "note": "LATERAL is not in the SPARQL 1.1 REC nor in the SPARQL 1.2 Query WD of 25 October 2026 (it is the SEP-0006 proposal); RDF4J and the engine both accept it. Run with version 1.2."
+  },
+  {
+   "id": "LateralTest#LateralParseErrorOnRebindingVariable",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/LateralTest.java",
+   "line": 357,
+   "sparql12": true,
+   "data": null,
+   "query": "PREFIX ex: <http://example.org/>\n\nSELECT * {\n   ?s ex:predicate ?o\n   LATERAL {\n      ?s ex:alternative ?alt\n      BIND(\"rebinding\" AS ?alt)\n   }\n}\n",
+   "expect": {
+    "kind": "error"
+   },
+   "note": "LATERAL is not in the SPARQL 1.1 REC nor in the SPARQL 1.2 Query WD of 25 October 2026 (it is the SEP-0006 proposal); RDF4J and the engine both accept it. Run with version 1.2. Upstream expects MalformedQueryException at prepare time: BIND to a variable already in use in the preceding triples block (SPARQL 1.1 §18.2.1 / §10.1), independent of LATERAL."
+  },
+  {
+   "id": "LateralTest#LateralAllowsHiddenSubSelectAssignmentToOuterName",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/LateralTest.java",
+   "line": 371,
+   "sparql12": true,
+   "data": null,
+   "query": "PREFIX ex: <http://example.org/>\n\nSELECT * {\n   ?s ex:predicate ?o\n   LATERAL {\n      SELECT ?label {\n         BIND(\"local\" AS ?o)\n         BIND(STR(?o) AS ?label)\n      } LIMIT 1\n   }\n}\n",
+   "expect": {
+    "kind": "count",
+    "n": 0
+   },
+   "note": "LATERAL is not in the SPARQL 1.1 REC nor in the SPARQL 1.2 Query WD of 25 October 2026 (it is the SEP-0006 proposal); RDF4J and the engine both accept it. Run with version 1.2. Upstream asserts only that the query parses (prepareTupleQuery); the port runs it on an empty store, where any answer has no rows."
+  },
+  {
+   "id": "LateralTest#LateralRejectsBindToLeftVariable",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/LateralTest.java",
+   "line": 387,
+   "sparql12": true,
+   "data": null,
+   "query": "PREFIX ex: <http://example.org/>\n\nSELECT * {\n   ?s ex:predicate ?o\n   LATERAL {\n      BIND(\"rebinding\" AS ?o)\n   }\n}\n",
+   "expect": {
+    "kind": "error"
+   },
+   "note": "LATERAL is not in the SPARQL 1.1 REC nor in the SPARQL 1.2 Query WD of 25 October 2026 (it is the SEP-0006 proposal); RDF4J and the engine both accept it. Run with version 1.2. Upstream expects MalformedQueryException: the right side of LATERAL may not BIND a variable in scope from the left (an RDF4J rule from SEP-0006)."
+  },
+  {
+   "id": "LateralTest#LateralRejectsValuesForLeftVariable",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/LateralTest.java",
+   "line": 400,
+   "sparql12": true,
+   "data": null,
+   "query": "PREFIX ex: <http://example.org/>\n\nSELECT * {\n   ?s ex:predicate ?o\n   LATERAL {\n      VALUES ?o { ex:object1 }\n   }\n}\n",
+   "expect": {
+    "kind": "error"
+   },
+   "note": "LATERAL is not in the SPARQL 1.1 REC nor in the SPARQL 1.2 Query WD of 25 October 2026 (it is the SEP-0006 proposal); RDF4J and the engine both accept it. Run with version 1.2. Upstream expects MalformedQueryException: VALUES on the right side of LATERAL may not bind a variable in scope from the left (an RDF4J rule from SEP-0006)."
+  },
+  {
+   "id": "LateralTest#LateralUnboundVariableWithCoalesce",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/LateralTest.java",
+   "line": 413,
+   "sparql12": true,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix ex: <http://example.org/> .\n\nex:subject1 ex:predicate ex:object1 .\nex:subject2 ex:predicate ex:object2 .\n"
+   },
+   "query": "PREFIX ex: <http://example.org/>\n\nSELECT * {\n   ?s ex:predicate ?o\n   LATERAL {\n      VALUES ?alt { UNDEF }\n   }\n}\n",
+   "expect": {
+    "kind": "all",
+    "of": [
+     {
+      "kind": "count",
+      "n": 2
+     },
+     {
+      "kind": "unbound",
+      "vars": [
+       "alt"
+      ]
+     }
+    ]
+   },
+   "note": "LATERAL is not in the SPARQL 1.1 REC nor in the SPARQL 1.2 Query WD of 25 October 2026 (it is the SEP-0006 proposal); RDF4J and the engine both accept it. Run with version 1.2."
+  },
+  {
+   "id": "LateralTest#LateralComplexUnionInteraction",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/LateralTest.java",
+   "line": 447,
+   "sparql12": true,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix ex: <http://example.org/> .\n\nex:s1 ex:p ex:o1 .\nex:s1 ex:related ex:r1 .\nex:r1 ex:data \"data1\" .\nex:r1 ex:rank 1 .\n\nex:s2 ex:p ex:o2 .\nex:s2 ex:related ex:r2 .\nex:r2 ex:data \"data2\" .\n\nex:s3 ex:p ex:o3 .\n"
+   },
+   "query": "PREFIX ex: <http://example.org/>\n\nSELECT * {\n   ?s ex:p ?o\n   LATERAL {\n      { ?s ex:related ?related . ?related ex:data ?data }\n      UNION\n      { ?s ex:related ?related . OPTIONAL { ?related ex:rank ?rank } FILTER(BOUND(?rank)) }\n   }\n}\n",
+   "expect": {
+    "kind": "all",
+    "of": [
+     {
+      "kind": "count",
+      "n": 3
+     },
+     {
+      "kind": "bindings",
+      "vars": [
+       "rank"
+      ],
+      "rows": [
+       {},
+       {},
+       {
+        "rank": {
+         "type": "literal",
+         "value": "1",
+         "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+        }
+       }
+      ]
+     }
+    ]
+   },
+   "note": "LATERAL is not in the SPARQL 1.1 REC nor in the SPARQL 1.2 Query WD of 25 October 2026 (it is the SEP-0006 proposal); RDF4J and the engine both accept it. Run with version 1.2. Upstream: 3 rows, exactly one with ?rank bound; the port states that as the multiset of ?rank values (two unbound, one 1)."
+  },
+  {
+   "id": "LateralTest#LateralLargeDatasetCorrelation",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/LateralTest.java",
+   "line": 489,
+   "sparql12": true,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix ex: <http://example.org/> .\n@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n\nex:subject1 ex:predicate ex:object1 .\nex:subject1 rdfs:label \"Label-1-A\" .\nex:subject1 rdfs:label \"Label-1-B\" .\nex:subject2 ex:predicate ex:object2 .\nex:subject2 rdfs:label \"Label-2-A\" .\nex:subject2 rdfs:label \"Label-2-B\" .\nex:subject3 ex:predicate ex:object3 .\nex:subject3 rdfs:label \"Label-3-A\" .\nex:subject3 rdfs:label \"Label-3-B\" .\nex:subject4 ex:predicate ex:object4 .\nex:subject4 rdfs:label \"Label-4-A\" .\nex:subject4 rdfs:label \"Label-4-B\" .\nex:subject5 ex:predicate ex:object5 .\nex:subject5 rdfs:label \"Label-5-A\" .\nex:subject5 rdfs:label \"Label-5-B\" .\nex:subject6 ex:predicate ex:object6 .\nex:subject6 rdfs:label \"Label-6-A\" .\nex:subject6 rdfs:label \"Label-6-B\" .\nex:subject7 ex:predicate ex:object7 .\nex:subject7 rdfs:label \"Label-7-A\" .\nex:subject7 rdfs:label \"Label-7-B\" .\nex:subject8 ex:predicate ex:object8 .\nex:subject8 rdfs:label \"Label-8-A\" .\nex:subject8 rdfs:label \"Label-8-B\" .\nex:subject9 ex:predicate ex:object9 .\nex:subject9 rdfs:label \"Label-9-A\" .\nex:subject9 rdfs:label \"Label-9-B\" .\nex:subject10 ex:predicate ex:object10 .\nex:subject10 rdfs:label \"Label-10-A\" .\nex:subject10 rdfs:label \"Label-10-B\" .\nex:subject11 ex:predicate ex:object11 .\nex:subject11 rdfs:label \"Label-11-A\" .\nex:subject11 rdfs:label \"Label-11-B\" .\nex:subject12 ex:predicate ex:object12 .\nex:subject12 rdfs:label \"Label-12-A\" .\nex:subject12 rdfs:label \"Label-12-B\" .\nex:subject13 ex:predicate ex:object13 .\nex:subject13 rdfs:label \"Label-13-A\" .\nex:subject13 rdfs:label \"Label-13-B\" .\nex:subject14 ex:predicate ex:object14 .\nex:subject14 rdfs:label \"Label-14-A\" .\nex:subject14 rdfs:label \"Label-14-B\" .\nex:subject15 ex:predicate ex:object15 .\nex:subject15 rdfs:label \"Label-15-A\" .\nex:subject15 rdfs:label \"Label-15-B\" .\nex:subject16 ex:predicate ex:object16 .\nex:subject16 rdfs:label \"Label-16-A\" .\nex:subject16 rdfs:label \"Label-16-B\" .\nex:subject17 ex:predicate ex:object17 .\nex:subject17 rdfs:label \"Label-17-A\" .\nex:subject17 rdfs:label \"Label-17-B\" .\nex:subject18 ex:predicate ex:object18 .\nex:subject18 rdfs:label \"Label-18-A\" .\nex:subject18 rdfs:label \"Label-18-B\" .\nex:subject19 ex:predicate ex:object19 .\nex:subject19 rdfs:label \"Label-19-A\" .\nex:subject19 rdfs:label \"Label-19-B\" .\nex:subject20 ex:predicate ex:object20 .\nex:subject20 rdfs:label \"Label-20-A\" .\nex:subject20 rdfs:label \"Label-20-B\" .\nex:subject21 ex:predicate ex:object21 .\nex:subject21 rdfs:label \"Label-21-A\" .\nex:subject21 rdfs:label \"Label-21-B\" .\nex:subject22 ex:predicate ex:object22 .\nex:subject22 rdfs:label \"Label-22-A\" .\nex:subject22 rdfs:label \"Label-22-B\" .\nex:subject23 ex:predicate ex:object23 .\nex:subject23 rdfs:label \"Label-23-A\" .\nex:subject23 rdfs:label \"Label-23-B\" .\nex:subject24 ex:predicate ex:object24 .\nex:subject24 rdfs:label \"Label-24-A\" .\nex:subject24 rdfs:label \"Label-24-B\" .\nex:subject25 ex:predicate ex:object25 .\nex:subject25 rdfs:label \"Label-25-A\" .\nex:subject25 rdfs:label \"Label-25-B\" .\nex:subject26 ex:predicate ex:object26 .\nex:subject26 rdfs:label \"Label-26-A\" .\nex:subject26 rdfs:label \"Label-26-B\" .\nex:subject27 ex:predicate ex:object27 .\nex:subject27 rdfs:label \"Label-27-A\" .\nex:subject27 rdfs:label \"Label-27-B\" .\nex:subject28 ex:predicate ex:object28 .\nex:subject28 rdfs:label \"Label-28-A\" .\nex:subject28 rdfs:label \"Label-28-B\" .\nex:subject29 ex:predicate ex:object29 .\nex:subject29 rdfs:label \"Label-29-A\" .\nex:subject29 rdfs:label \"Label-29-B\" .\nex:subject30 ex:predicate ex:object30 .\nex:subject30 rdfs:label \"Label-30-A\" .\nex:subject30 rdfs:label \"Label-30-B\" .\nex:subject31 ex:predicate ex:object31 .\nex:subject31 rdfs:label \"Label-31-A\" .\nex:subject31 rdfs:label \"Label-31-B\" .\nex:subject32 ex:predicate ex:object32 .\nex:subject32 rdfs:label \"Label-32-A\" .\nex:subject32 rdfs:label \"Label-32-B\" .\nex:subject33 ex:predicate ex:object33 .\nex:subject33 rdfs:label \"Label-33-A\" .\nex:subject33 rdfs:label \"Label-33-B\" .\nex:subject34 ex:predicate ex:object34 .\nex:subject34 rdfs:label \"Label-34-A\" .\nex:subject34 rdfs:label \"Label-34-B\" .\nex:subject35 ex:predicate ex:object35 .\nex:subject35 rdfs:label \"Label-35-A\" .\nex:subject35 rdfs:label \"Label-35-B\" .\nex:subject36 ex:predicate ex:object36 .\nex:subject36 rdfs:label \"Label-36-A\" .\nex:subject36 rdfs:label \"Label-36-B\" .\nex:subject37 ex:predicate ex:object37 .\nex:subject37 rdfs:label \"Label-37-A\" .\nex:subject37 rdfs:label \"Label-37-B\" .\nex:subject38 ex:predicate ex:object38 .\nex:subject38 rdfs:label \"Label-38-A\" .\nex:subject38 rdfs:label \"Label-38-B\" .\nex:subject39 ex:predicate ex:object39 .\nex:subject39 rdfs:label \"Label-39-A\" .\nex:subject39 rdfs:label \"Label-39-B\" .\nex:subject40 ex:predicate ex:object40 .\nex:subject40 rdfs:label \"Label-40-A\" .\nex:subject40 rdfs:label \"Label-40-B\" .\nex:subject41 ex:predicate ex:object41 .\nex:subject41 rdfs:label \"Label-41-A\" .\nex:subject41 rdfs:label \"Label-41-B\" .\nex:subject42 ex:predicate ex:object42 .\nex:subject42 rdfs:label \"Label-42-A\" .\nex:subject42 rdfs:label \"Label-42-B\" .\nex:subject43 ex:predicate ex:object43 .\nex:subject43 rdfs:label \"Label-43-A\" .\nex:subject43 rdfs:label \"Label-43-B\" .\nex:subject44 ex:predicate ex:object44 .\nex:subject44 rdfs:label \"Label-44-A\" .\nex:subject44 rdfs:label \"Label-44-B\" .\nex:subject45 ex:predicate ex:object45 .\nex:subject45 rdfs:label \"Label-45-A\" .\nex:subject45 rdfs:label \"Label-45-B\" .\nex:subject46 ex:predicate ex:object46 .\nex:subject46 rdfs:label \"Label-46-A\" .\nex:subject46 rdfs:label \"Label-46-B\" .\nex:subject47 ex:predicate ex:object47 .\nex:subject47 rdfs:label \"Label-47-A\" .\nex:subject47 rdfs:label \"Label-47-B\" .\nex:subject48 ex:predicate ex:object48 .\nex:subject48 rdfs:label \"Label-48-A\" .\nex:subject48 rdfs:label \"Label-48-B\" .\nex:subject49 ex:predicate ex:object49 .\nex:subject49 rdfs:label \"Label-49-A\" .\nex:subject49 rdfs:label \"Label-49-B\" .\nex:subject50 ex:predicate ex:object50 .\nex:subject50 rdfs:label \"Label-50-A\" .\nex:subject50 rdfs:label \"Label-50-B\" .\nex:subject51 ex:predicate ex:object51 .\nex:subject51 rdfs:label \"Label-51-A\" .\nex:subject51 rdfs:label \"Label-51-B\" .\nex:subject52 ex:predicate ex:object52 .\nex:subject52 rdfs:label \"Label-52-A\" .\nex:subject52 rdfs:label \"Label-52-B\" .\nex:subject53 ex:predicate ex:object53 .\nex:subject53 rdfs:label \"Label-53-A\" .\nex:subject53 rdfs:label \"Label-53-B\" .\nex:subject54 ex:predicate ex:object54 .\nex:subject54 rdfs:label \"Label-54-A\" .\nex:subject54 rdfs:label \"Label-54-B\" .\nex:subject55 ex:predicate ex:object55 .\nex:subject55 rdfs:label \"Label-55-A\" .\nex:subject55 rdfs:label \"Label-55-B\" .\nex:subject56 ex:predicate ex:object56 .\nex:subject56 rdfs:label \"Label-56-A\" .\nex:subject56 rdfs:label \"Label-56-B\" .\nex:subject57 ex:predicate ex:object57 .\nex:subject57 rdfs:label \"Label-57-A\" .\nex:subject57 rdfs:label \"Label-57-B\" .\nex:subject58 ex:predicate ex:object58 .\nex:subject58 rdfs:label \"Label-58-A\" .\nex:subject58 rdfs:label \"Label-58-B\" .\nex:subject59 ex:predicate ex:object59 .\nex:subject59 rdfs:label \"Label-59-A\" .\nex:subject59 rdfs:label \"Label-59-B\" .\nex:subject60 ex:predicate ex:object60 .\nex:subject60 rdfs:label \"Label-60-A\" .\nex:subject60 rdfs:label \"Label-60-B\" .\nex:subject61 ex:predicate ex:object61 .\nex:subject61 rdfs:label \"Label-61-A\" .\nex:subject61 rdfs:label \"Label-61-B\" .\nex:subject62 ex:predicate ex:object62 .\nex:subject62 rdfs:label \"Label-62-A\" .\nex:subject62 rdfs:label \"Label-62-B\" .\nex:subject63 ex:predicate ex:object63 .\nex:subject63 rdfs:label \"Label-63-A\" .\nex:subject63 rdfs:label \"Label-63-B\" .\nex:subject64 ex:predicate ex:object64 .\nex:subject64 rdfs:label \"Label-64-A\" .\nex:subject64 rdfs:label \"Label-64-B\" .\nex:subject65 ex:predicate ex:object65 .\nex:subject65 rdfs:label \"Label-65-A\" .\nex:subject65 rdfs:label \"Label-65-B\" .\nex:subject66 ex:predicate ex:object66 .\nex:subject66 rdfs:label \"Label-66-A\" .\nex:subject66 rdfs:label \"Label-66-B\" .\nex:subject67 ex:predicate ex:object67 .\nex:subject67 rdfs:label \"Label-67-A\" .\nex:subject67 rdfs:label \"Label-67-B\" .\nex:subject68 ex:predicate ex:object68 .\nex:subject68 rdfs:label \"Label-68-A\" .\nex:subject68 rdfs:label \"Label-68-B\" .\nex:subject69 ex:predicate ex:object69 .\nex:subject69 rdfs:label \"Label-69-A\" .\nex:subject69 rdfs:label \"Label-69-B\" .\nex:subject70 ex:predicate ex:object70 .\nex:subject70 rdfs:label \"Label-70-A\" .\nex:subject70 rdfs:label \"Label-70-B\" .\nex:subject71 ex:predicate ex:object71 .\nex:subject71 rdfs:label \"Label-71-A\" .\nex:subject71 rdfs:label \"Label-71-B\" .\nex:subject72 ex:predicate ex:object72 .\nex:subject72 rdfs:label \"Label-72-A\" .\nex:subject72 rdfs:label \"Label-72-B\" .\nex:subject73 ex:predicate ex:object73 .\nex:subject73 rdfs:label \"Label-73-A\" .\nex:subject73 rdfs:label \"Label-73-B\" .\nex:subject74 ex:predicate ex:object74 .\nex:subject74 rdfs:label \"Label-74-A\" .\nex:subject74 rdfs:label \"Label-74-B\" .\nex:subject75 ex:predicate ex:object75 .\nex:subject75 rdfs:label \"Label-75-A\" .\nex:subject75 rdfs:label \"Label-75-B\" .\nex:subject76 ex:predicate ex:object76 .\nex:subject76 rdfs:label \"Label-76-A\" .\nex:subject76 rdfs:label \"Label-76-B\" .\nex:subject77 ex:predicate ex:object77 .\nex:subject77 rdfs:label \"Label-77-A\" .\nex:subject77 rdfs:label \"Label-77-B\" .\nex:subject78 ex:predicate ex:object78 .\nex:subject78 rdfs:label \"Label-78-A\" .\nex:subject78 rdfs:label \"Label-78-B\" .\nex:subject79 ex:predicate ex:object79 .\nex:subject79 rdfs:label \"Label-79-A\" .\nex:subject79 rdfs:label \"Label-79-B\" .\nex:subject80 ex:predicate ex:object80 .\nex:subject80 rdfs:label \"Label-80-A\" .\nex:subject80 rdfs:label \"Label-80-B\" .\nex:subject81 ex:predicate ex:object81 .\nex:subject81 rdfs:label \"Label-81-A\" .\nex:subject81 rdfs:label \"Label-81-B\" .\nex:subject82 ex:predicate ex:object82 .\nex:subject82 rdfs:label \"Label-82-A\" .\nex:subject82 rdfs:label \"Label-82-B\" .\nex:subject83 ex:predicate ex:object83 .\nex:subject83 rdfs:label \"Label-83-A\" .\nex:subject83 rdfs:label \"Label-83-B\" .\nex:subject84 ex:predicate ex:object84 .\nex:subject84 rdfs:label \"Label-84-A\" .\nex:subject84 rdfs:label \"Label-84-B\" .\nex:subject85 ex:predicate ex:object85 .\nex:subject85 rdfs:label \"Label-85-A\" .\nex:subject85 rdfs:label \"Label-85-B\" .\nex:subject86 ex:predicate ex:object86 .\nex:subject86 rdfs:label \"Label-86-A\" .\nex:subject86 rdfs:label \"Label-86-B\" .\nex:subject87 ex:predicate ex:object87 .\nex:subject87 rdfs:label \"Label-87-A\" .\nex:subject87 rdfs:label \"Label-87-B\" .\nex:subject88 ex:predicate ex:object88 .\nex:subject88 rdfs:label \"Label-88-A\" .\nex:subject88 rdfs:label \"Label-88-B\" .\nex:subject89 ex:predicate ex:object89 .\nex:subject89 rdfs:label \"Label-89-A\" .\nex:subject89 rdfs:label \"Label-89-B\" .\nex:subject90 ex:predicate ex:object90 .\nex:subject90 rdfs:label \"Label-90-A\" .\nex:subject90 rdfs:label \"Label-90-B\" .\nex:subject91 ex:predicate ex:object91 .\nex:subject91 rdfs:label \"Label-91-A\" .\nex:subject91 rdfs:label \"Label-91-B\" .\nex:subject92 ex:predicate ex:object92 .\nex:subject92 rdfs:label \"Label-92-A\" .\nex:subject92 rdfs:label \"Label-92-B\" .\nex:subject93 ex:predicate ex:object93 .\nex:subject93 rdfs:label \"Label-93-A\" .\nex:subject93 rdfs:label \"Label-93-B\" .\nex:subject94 ex:predicate ex:object94 .\nex:subject94 rdfs:label \"Label-94-A\" .\nex:subject94 rdfs:label \"Label-94-B\" .\nex:subject95 ex:predicate ex:object95 .\nex:subject95 rdfs:label \"Label-95-A\" .\nex:subject95 rdfs:label \"Label-95-B\" .\nex:subject96 ex:predicate ex:object96 .\nex:subject96 rdfs:label \"Label-96-A\" .\nex:subject96 rdfs:label \"Label-96-B\" .\nex:subject97 ex:predicate ex:object97 .\nex:subject97 rdfs:label \"Label-97-A\" .\nex:subject97 rdfs:label \"Label-97-B\" .\nex:subject98 ex:predicate ex:object98 .\nex:subject98 rdfs:label \"Label-98-A\" .\nex:subject98 rdfs:label \"Label-98-B\" .\nex:subject99 ex:predicate ex:object99 .\nex:subject99 rdfs:label \"Label-99-A\" .\nex:subject99 rdfs:label \"Label-99-B\" .\nex:subject100 ex:predicate ex:object100 .\nex:subject100 rdfs:label \"Label-100-A\" .\nex:subject100 rdfs:label \"Label-100-B\" .\nex:subject101 ex:predicate ex:object101 .\nex:subject101 rdfs:label \"Label-101-A\" .\nex:subject101 rdfs:label \"Label-101-B\" .\nex:subject102 ex:predicate ex:object102 .\nex:subject102 rdfs:label \"Label-102-A\" .\nex:subject102 rdfs:label \"Label-102-B\" .\nex:subject103 ex:predicate ex:object103 .\nex:subject103 rdfs:label \"Label-103-A\" .\nex:subject103 rdfs:label \"Label-103-B\" .\nex:subject104 ex:predicate ex:object104 .\nex:subject104 rdfs:label \"Label-104-A\" .\nex:subject104 rdfs:label \"Label-104-B\" .\nex:subject105 ex:predicate ex:object105 .\nex:subject105 rdfs:label \"Label-105-A\" .\nex:subject105 rdfs:label \"Label-105-B\" .\nex:subject106 ex:predicate ex:object106 .\nex:subject106 rdfs:label \"Label-106-A\" .\nex:subject106 rdfs:label \"Label-106-B\" .\nex:subject107 ex:predicate ex:object107 .\nex:subject107 rdfs:label \"Label-107-A\" .\nex:subject107 rdfs:label \"Label-107-B\" .\nex:subject108 ex:predicate ex:object108 .\nex:subject108 rdfs:label \"Label-108-A\" .\nex:subject108 rdfs:label \"Label-108-B\" .\nex:subject109 ex:predicate ex:object109 .\nex:subject109 rdfs:label \"Label-109-A\" .\nex:subject109 rdfs:label \"Label-109-B\" .\nex:subject110 ex:predicate ex:object110 .\nex:subject110 rdfs:label \"Label-110-A\" .\nex:subject110 rdfs:label \"Label-110-B\" .\nex:subject111 ex:predicate ex:object111 .\nex:subject111 rdfs:label \"Label-111-A\" .\nex:subject111 rdfs:label \"Label-111-B\" .\nex:subject112 ex:predicate ex:object112 .\nex:subject112 rdfs:label \"Label-112-A\" .\nex:subject112 rdfs:label \"Label-112-B\" .\nex:subject113 ex:predicate ex:object113 .\nex:subject113 rdfs:label \"Label-113-A\" .\nex:subject113 rdfs:label \"Label-113-B\" .\nex:subject114 ex:predicate ex:object114 .\nex:subject114 rdfs:label \"Label-114-A\" .\nex:subject114 rdfs:label \"Label-114-B\" .\nex:subject115 ex:predicate ex:object115 .\nex:subject115 rdfs:label \"Label-115-A\" .\nex:subject115 rdfs:label \"Label-115-B\" .\nex:subject116 ex:predicate ex:object116 .\nex:subject116 rdfs:label \"Label-116-A\" .\nex:subject116 rdfs:label \"Label-116-B\" .\nex:subject117 ex:predicate ex:object117 .\nex:subject117 rdfs:label \"Label-117-A\" .\nex:subject117 rdfs:label \"Label-117-B\" .\nex:subject118 ex:predicate ex:object118 .\nex:subject118 rdfs:label \"Label-118-A\" .\nex:subject118 rdfs:label \"Label-118-B\" .\nex:subject119 ex:predicate ex:object119 .\nex:subject119 rdfs:label \"Label-119-A\" .\nex:subject119 rdfs:label \"Label-119-B\" .\nex:subject120 ex:predicate ex:object120 .\nex:subject120 rdfs:label \"Label-120-A\" .\nex:subject120 rdfs:label \"Label-120-B\" .\nex:subject121 ex:predicate ex:object121 .\nex:subject121 rdfs:label \"Label-121-A\" .\nex:subject121 rdfs:label \"Label-121-B\" .\nex:subject122 ex:predicate ex:object122 .\nex:subject122 rdfs:label \"Label-122-A\" .\nex:subject122 rdfs:label \"Label-122-B\" .\nex:subject123 ex:predicate ex:object123 .\nex:subject123 rdfs:label \"Label-123-A\" .\nex:subject123 rdfs:label \"Label-123-B\" .\nex:subject124 ex:predicate ex:object124 .\nex:subject124 rdfs:label \"Label-124-A\" .\nex:subject124 rdfs:label \"Label-124-B\" .\nex:subject125 ex:predicate ex:object125 .\nex:subject125 rdfs:label \"Label-125-A\" .\nex:subject125 rdfs:label \"Label-125-B\" .\nex:subject126 ex:predicate ex:object126 .\nex:subject126 rdfs:label \"Label-126-A\" .\nex:subject126 rdfs:label \"Label-126-B\" .\nex:subject127 ex:predicate ex:object127 .\nex:subject127 rdfs:label \"Label-127-A\" .\nex:subject127 rdfs:label \"Label-127-B\" .\nex:subject128 ex:predicate ex:object128 .\nex:subject128 rdfs:label \"Label-128-A\" .\nex:subject128 rdfs:label \"Label-128-B\" .\nex:subject129 ex:predicate ex:object129 .\nex:subject129 rdfs:label \"Label-129-A\" .\nex:subject129 rdfs:label \"Label-129-B\" .\nex:subject130 ex:predicate ex:object130 .\nex:subject130 rdfs:label \"Label-130-A\" .\nex:subject130 rdfs:label \"Label-130-B\" .\nex:subject131 ex:predicate ex:object131 .\nex:subject131 rdfs:label \"Label-131-A\" .\nex:subject131 rdfs:label \"Label-131-B\" .\nex:subject132 ex:predicate ex:object132 .\nex:subject132 rdfs:label \"Label-132-A\" .\nex:subject132 rdfs:label \"Label-132-B\" .\nex:subject133 ex:predicate ex:object133 .\nex:subject133 rdfs:label \"Label-133-A\" .\nex:subject133 rdfs:label \"Label-133-B\" .\nex:subject134 ex:predicate ex:object134 .\nex:subject134 rdfs:label \"Label-134-A\" .\nex:subject134 rdfs:label \"Label-134-B\" .\nex:subject135 ex:predicate ex:object135 .\nex:subject135 rdfs:label \"Label-135-A\" .\nex:subject135 rdfs:label \"Label-135-B\" .\nex:subject136 ex:predicate ex:object136 .\nex:subject136 rdfs:label \"Label-136-A\" .\nex:subject136 rdfs:label \"Label-136-B\" .\nex:subject137 ex:predicate ex:object137 .\nex:subject137 rdfs:label \"Label-137-A\" .\nex:subject137 rdfs:label \"Label-137-B\" .\nex:subject138 ex:predicate ex:object138 .\nex:subject138 rdfs:label \"Label-138-A\" .\nex:subject138 rdfs:label \"Label-138-B\" .\nex:subject139 ex:predicate ex:object139 .\nex:subject139 rdfs:label \"Label-139-A\" .\nex:subject139 rdfs:label \"Label-139-B\" .\nex:subject140 ex:predicate ex:object140 .\nex:subject140 rdfs:label \"Label-140-A\" .\nex:subject140 rdfs:label \"Label-140-B\" .\nex:subject141 ex:predicate ex:object141 .\nex:subject141 rdfs:label \"Label-141-A\" .\nex:subject141 rdfs:label \"Label-141-B\" .\nex:subject142 ex:predicate ex:object142 .\nex:subject142 rdfs:label \"Label-142-A\" .\nex:subject142 rdfs:label \"Label-142-B\" .\nex:subject143 ex:predicate ex:object143 .\nex:subject143 rdfs:label \"Label-143-A\" .\nex:subject143 rdfs:label \"Label-143-B\" .\nex:subject144 ex:predicate ex:object144 .\nex:subject144 rdfs:label \"Label-144-A\" .\nex:subject144 rdfs:label \"Label-144-B\" .\nex:subject145 ex:predicate ex:object145 .\nex:subject145 rdfs:label \"Label-145-A\" .\nex:subject145 rdfs:label \"Label-145-B\" .\nex:subject146 ex:predicate ex:object146 .\nex:subject146 rdfs:label \"Label-146-A\" .\nex:subject146 rdfs:label \"Label-146-B\" .\nex:subject147 ex:predicate ex:object147 .\nex:subject147 rdfs:label \"Label-147-A\" .\nex:subject147 rdfs:label \"Label-147-B\" .\nex:subject148 ex:predicate ex:object148 .\nex:subject148 rdfs:label \"Label-148-A\" .\nex:subject148 rdfs:label \"Label-148-B\" .\nex:subject149 ex:predicate ex:object149 .\nex:subject149 rdfs:label \"Label-149-A\" .\nex:subject149 rdfs:label \"Label-149-B\" .\nex:subject150 ex:predicate ex:object150 .\nex:subject150 rdfs:label \"Label-150-A\" .\nex:subject150 rdfs:label \"Label-150-B\" .\nex:subject151 ex:predicate ex:object151 .\nex:subject151 rdfs:label \"Label-151-A\" .\nex:subject151 rdfs:label \"Label-151-B\" .\nex:subject152 ex:predicate ex:object152 .\nex:subject152 rdfs:label \"Label-152-A\" .\nex:subject152 rdfs:label \"Label-152-B\" .\nex:subject153 ex:predicate ex:object153 .\nex:subject153 rdfs:label \"Label-153-A\" .\nex:subject153 rdfs:label \"Label-153-B\" .\nex:subject154 ex:predicate ex:object154 .\nex:subject154 rdfs:label \"Label-154-A\" .\nex:subject154 rdfs:label \"Label-154-B\" .\nex:subject155 ex:predicate ex:object155 .\nex:subject155 rdfs:label \"Label-155-A\" .\nex:subject155 rdfs:label \"Label-155-B\" .\nex:subject156 ex:predicate ex:object156 .\nex:subject156 rdfs:label \"Label-156-A\" .\nex:subject156 rdfs:label \"Label-156-B\" .\nex:subject157 ex:predicate ex:object157 .\nex:subject157 rdfs:label \"Label-157-A\" .\nex:subject157 rdfs:label \"Label-157-B\" .\nex:subject158 ex:predicate ex:object158 .\nex:subject158 rdfs:label \"Label-158-A\" .\nex:subject158 rdfs:label \"Label-158-B\" .\nex:subject159 ex:predicate ex:object159 .\nex:subject159 rdfs:label \"Label-159-A\" .\nex:subject159 rdfs:label \"Label-159-B\" .\nex:subject160 ex:predicate ex:object160 .\nex:subject160 rdfs:label \"Label-160-A\" .\nex:subject160 rdfs:label \"Label-160-B\" .\nex:subject161 ex:predicate ex:object161 .\nex:subject161 rdfs:label \"Label-161-A\" .\nex:subject161 rdfs:label \"Label-161-B\" .\nex:subject162 ex:predicate ex:object162 .\nex:subject162 rdfs:label \"Label-162-A\" .\nex:subject162 rdfs:label \"Label-162-B\" .\nex:subject163 ex:predicate ex:object163 .\nex:subject163 rdfs:label \"Label-163-A\" .\nex:subject163 rdfs:label \"Label-163-B\" .\nex:subject164 ex:predicate ex:object164 .\nex:subject164 rdfs:label \"Label-164-A\" .\nex:subject164 rdfs:label \"Label-164-B\" .\nex:subject165 ex:predicate ex:object165 .\nex:subject165 rdfs:label \"Label-165-A\" .\nex:subject165 rdfs:label \"Label-165-B\" .\nex:subject166 ex:predicate ex:object166 .\nex:subject166 rdfs:label \"Label-166-A\" .\nex:subject166 rdfs:label \"Label-166-B\" .\nex:subject167 ex:predicate ex:object167 .\nex:subject167 rdfs:label \"Label-167-A\" .\nex:subject167 rdfs:label \"Label-167-B\" .\nex:subject168 ex:predicate ex:object168 .\nex:subject168 rdfs:label \"Label-168-A\" .\nex:subject168 rdfs:label \"Label-168-B\" .\nex:subject169 ex:predicate ex:object169 .\nex:subject169 rdfs:label \"Label-169-A\" .\nex:subject169 rdfs:label \"Label-169-B\" .\nex:subject170 ex:predicate ex:object170 .\nex:subject170 rdfs:label \"Label-170-A\" .\nex:subject170 rdfs:label \"Label-170-B\" .\nex:subject171 ex:predicate ex:object171 .\nex:subject171 rdfs:label \"Label-171-A\" .\nex:subject171 rdfs:label \"Label-171-B\" .\nex:subject172 ex:predicate ex:object172 .\nex:subject172 rdfs:label \"Label-172-A\" .\nex:subject172 rdfs:label \"Label-172-B\" .\nex:subject173 ex:predicate ex:object173 .\nex:subject173 rdfs:label \"Label-173-A\" .\nex:subject173 rdfs:label \"Label-173-B\" .\nex:subject174 ex:predicate ex:object174 .\nex:subject174 rdfs:label \"Label-174-A\" .\nex:subject174 rdfs:label \"Label-174-B\" .\nex:subject175 ex:predicate ex:object175 .\nex:subject175 rdfs:label \"Label-175-A\" .\nex:subject175 rdfs:label \"Label-175-B\" .\nex:subject176 ex:predicate ex:object176 .\nex:subject176 rdfs:label \"Label-176-A\" .\nex:subject176 rdfs:label \"Label-176-B\" .\nex:subject177 ex:predicate ex:object177 .\nex:subject177 rdfs:label \"Label-177-A\" .\nex:subject177 rdfs:label \"Label-177-B\" .\nex:subject178 ex:predicate ex:object178 .\nex:subject178 rdfs:label \"Label-178-A\" .\nex:subject178 rdfs:label \"Label-178-B\" .\nex:subject179 ex:predicate ex:object179 .\nex:subject179 rdfs:label \"Label-179-A\" .\nex:subject179 rdfs:label \"Label-179-B\" .\nex:subject180 ex:predicate ex:object180 .\nex:subject180 rdfs:label \"Label-180-A\" .\nex:subject180 rdfs:label \"Label-180-B\" .\nex:subject181 ex:predicate ex:object181 .\nex:subject181 rdfs:label \"Label-181-A\" .\nex:subject181 rdfs:label \"Label-181-B\" .\nex:subject182 ex:predicate ex:object182 .\nex:subject182 rdfs:label \"Label-182-A\" .\nex:subject182 rdfs:label \"Label-182-B\" .\nex:subject183 ex:predicate ex:object183 .\nex:subject183 rdfs:label \"Label-183-A\" .\nex:subject183 rdfs:label \"Label-183-B\" .\nex:subject184 ex:predicate ex:object184 .\nex:subject184 rdfs:label \"Label-184-A\" .\nex:subject184 rdfs:label \"Label-184-B\" .\nex:subject185 ex:predicate ex:object185 .\nex:subject185 rdfs:label \"Label-185-A\" .\nex:subject185 rdfs:label \"Label-185-B\" .\nex:subject186 ex:predicate ex:object186 .\nex:subject186 rdfs:label \"Label-186-A\" .\nex:subject186 rdfs:label \"Label-186-B\" .\nex:subject187 ex:predicate ex:object187 .\nex:subject187 rdfs:label \"Label-187-A\" .\nex:subject187 rdfs:label \"Label-187-B\" .\nex:subject188 ex:predicate ex:object188 .\nex:subject188 rdfs:label \"Label-188-A\" .\nex:subject188 rdfs:label \"Label-188-B\" .\nex:subject189 ex:predicate ex:object189 .\nex:subject189 rdfs:label \"Label-189-A\" .\nex:subject189 rdfs:label \"Label-189-B\" .\nex:subject190 ex:predicate ex:object190 .\nex:subject190 rdfs:label \"Label-190-A\" .\nex:subject190 rdfs:label \"Label-190-B\" .\nex:subject191 ex:predicate ex:object191 .\nex:subject191 rdfs:label \"Label-191-A\" .\nex:subject191 rdfs:label \"Label-191-B\" .\nex:subject192 ex:predicate ex:object192 .\nex:subject192 rdfs:label \"Label-192-A\" .\nex:subject192 rdfs:label \"Label-192-B\" .\nex:subject193 ex:predicate ex:object193 .\nex:subject193 rdfs:label \"Label-193-A\" .\nex:subject193 rdfs:label \"Label-193-B\" .\nex:subject194 ex:predicate ex:object194 .\nex:subject194 rdfs:label \"Label-194-A\" .\nex:subject194 rdfs:label \"Label-194-B\" .\nex:subject195 ex:predicate ex:object195 .\nex:subject195 rdfs:label \"Label-195-A\" .\nex:subject195 rdfs:label \"Label-195-B\" .\nex:subject196 ex:predicate ex:object196 .\nex:subject196 rdfs:label \"Label-196-A\" .\nex:subject196 rdfs:label \"Label-196-B\" .\nex:subject197 ex:predicate ex:object197 .\nex:subject197 rdfs:label \"Label-197-A\" .\nex:subject197 rdfs:label \"Label-197-B\" .\nex:subject198 ex:predicate ex:object198 .\nex:subject198 rdfs:label \"Label-198-A\" .\nex:subject198 rdfs:label \"Label-198-B\" .\nex:subject199 ex:predicate ex:object199 .\nex:subject199 rdfs:label \"Label-199-A\" .\nex:subject199 rdfs:label \"Label-199-B\" .\nex:subject200 ex:predicate ex:object200 .\nex:subject200 rdfs:label \"Label-200-A\" .\nex:subject200 rdfs:label \"Label-200-B\" .\nex:subject201 ex:predicate ex:object201 .\nex:subject201 rdfs:label \"Label-201-A\" .\nex:subject201 rdfs:label \"Label-201-B\" .\nex:subject202 ex:predicate ex:object202 .\nex:subject202 rdfs:label \"Label-202-A\" .\nex:subject202 rdfs:label \"Label-202-B\" .\nex:subject203 ex:predicate ex:object203 .\nex:subject203 rdfs:label \"Label-203-A\" .\nex:subject203 rdfs:label \"Label-203-B\" .\nex:subject204 ex:predicate ex:object204 .\nex:subject204 rdfs:label \"Label-204-A\" .\nex:subject204 rdfs:label \"Label-204-B\" .\nex:subject205 ex:predicate ex:object205 .\nex:subject205 rdfs:label \"Label-205-A\" .\nex:subject205 rdfs:label \"Label-205-B\" .\nex:subject206 ex:predicate ex:object206 .\nex:subject206 rdfs:label \"Label-206-A\" .\nex:subject206 rdfs:label \"Label-206-B\" .\nex:subject207 ex:predicate ex:object207 .\nex:subject207 rdfs:label \"Label-207-A\" .\nex:subject207 rdfs:label \"Label-207-B\" .\nex:subject208 ex:predicate ex:object208 .\nex:subject208 rdfs:label \"Label-208-A\" .\nex:subject208 rdfs:label \"Label-208-B\" .\nex:subject209 ex:predicate ex:object209 .\nex:subject209 rdfs:label \"Label-209-A\" .\nex:subject209 rdfs:label \"Label-209-B\" .\nex:subject210 ex:predicate ex:object210 .\nex:subject210 rdfs:label \"Label-210-A\" .\nex:subject210 rdfs:label \"Label-210-B\" .\nex:subject211 ex:predicate ex:object211 .\nex:subject211 rdfs:label \"Label-211-A\" .\nex:subject211 rdfs:label \"Label-211-B\" .\nex:subject212 ex:predicate ex:object212 .\nex:subject212 rdfs:label \"Label-212-A\" .\nex:subject212 rdfs:label \"Label-212-B\" .\nex:subject213 ex:predicate ex:object213 .\nex:subject213 rdfs:label \"Label-213-A\" .\nex:subject213 rdfs:label \"Label-213-B\" .\nex:subject214 ex:predicate ex:object214 .\nex:subject214 rdfs:label \"Label-214-A\" .\nex:subject214 rdfs:label \"Label-214-B\" .\nex:subject215 ex:predicate ex:object215 .\nex:subject215 rdfs:label \"Label-215-A\" .\nex:subject215 rdfs:label \"Label-215-B\" .\nex:subject216 ex:predicate ex:object216 .\nex:subject216 rdfs:label \"Label-216-A\" .\nex:subject216 rdfs:label \"Label-216-B\" .\nex:subject217 ex:predicate ex:object217 .\nex:subject217 rdfs:label \"Label-217-A\" .\nex:subject217 rdfs:label \"Label-217-B\" .\nex:subject218 ex:predicate ex:object218 .\nex:subject218 rdfs:label \"Label-218-A\" .\nex:subject218 rdfs:label \"Label-218-B\" .\nex:subject219 ex:predicate ex:object219 .\nex:subject219 rdfs:label \"Label-219-A\" .\nex:subject219 rdfs:label \"Label-219-B\" .\nex:subject220 ex:predicate ex:object220 .\nex:subject220 rdfs:label \"Label-220-A\" .\nex:subject220 rdfs:label \"Label-220-B\" .\nex:subject221 ex:predicate ex:object221 .\nex:subject221 rdfs:label \"Label-221-A\" .\nex:subject221 rdfs:label \"Label-221-B\" .\nex:subject222 ex:predicate ex:object222 .\nex:subject222 rdfs:label \"Label-222-A\" .\nex:subject222 rdfs:label \"Label-222-B\" .\nex:subject223 ex:predicate ex:object223 .\nex:subject223 rdfs:label \"Label-223-A\" .\nex:subject223 rdfs:label \"Label-223-B\" .\nex:subject224 ex:predicate ex:object224 .\nex:subject224 rdfs:label \"Label-224-A\" .\nex:subject224 rdfs:label \"Label-224-B\" .\nex:subject225 ex:predicate ex:object225 .\nex:subject225 rdfs:label \"Label-225-A\" .\nex:subject225 rdfs:label \"Label-225-B\" .\nex:subject226 ex:predicate ex:object226 .\nex:subject226 rdfs:label \"Label-226-A\" .\nex:subject226 rdfs:label \"Label-226-B\" .\nex:subject227 ex:predicate ex:object227 .\nex:subject227 rdfs:label \"Label-227-A\" .\nex:subject227 rdfs:label \"Label-227-B\" .\nex:subject228 ex:predicate ex:object228 .\nex:subject228 rdfs:label \"Label-228-A\" .\nex:subject228 rdfs:label \"Label-228-B\" .\nex:subject229 ex:predicate ex:object229 .\nex:subject229 rdfs:label \"Label-229-A\" .\nex:subject229 rdfs:label \"Label-229-B\" .\nex:subject230 ex:predicate ex:object230 .\nex:subject230 rdfs:label \"Label-230-A\" .\nex:subject230 rdfs:label \"Label-230-B\" .\nex:subject231 ex:predicate ex:object231 .\nex:subject231 rdfs:label \"Label-231-A\" .\nex:subject231 rdfs:label \"Label-231-B\" .\nex:subject232 ex:predicate ex:object232 .\nex:subject232 rdfs:label \"Label-232-A\" .\nex:subject232 rdfs:label \"Label-232-B\" .\nex:subject233 ex:predicate ex:object233 .\nex:subject233 rdfs:label \"Label-233-A\" .\nex:subject233 rdfs:label \"Label-233-B\" .\nex:subject234 ex:predicate ex:object234 .\nex:subject234 rdfs:label \"Label-234-A\" .\nex:subject234 rdfs:label \"Label-234-B\" .\nex:subject235 ex:predicate ex:object235 .\nex:subject235 rdfs:label \"Label-235-A\" .\nex:subject235 rdfs:label \"Label-235-B\" .\nex:subject236 ex:predicate ex:object236 .\nex:subject236 rdfs:label \"Label-236-A\" .\nex:subject236 rdfs:label \"Label-236-B\" .\nex:subject237 ex:predicate ex:object237 .\nex:subject237 rdfs:label \"Label-237-A\" .\nex:subject237 rdfs:label \"Label-237-B\" .\nex:subject238 ex:predicate ex:object238 .\nex:subject238 rdfs:label \"Label-238-A\" .\nex:subject238 rdfs:label \"Label-238-B\" .\nex:subject239 ex:predicate ex:object239 .\nex:subject239 rdfs:label \"Label-239-A\" .\nex:subject239 rdfs:label \"Label-239-B\" .\nex:subject240 ex:predicate ex:object240 .\nex:subject240 rdfs:label \"Label-240-A\" .\nex:subject240 rdfs:label \"Label-240-B\" .\nex:subject241 ex:predicate ex:object241 .\nex:subject241 rdfs:label \"Label-241-A\" .\nex:subject241 rdfs:label \"Label-241-B\" .\nex:subject242 ex:predicate ex:object242 .\nex:subject242 rdfs:label \"Label-242-A\" .\nex:subject242 rdfs:label \"Label-242-B\" .\nex:subject243 ex:predicate ex:object243 .\nex:subject243 rdfs:label \"Label-243-A\" .\nex:subject243 rdfs:label \"Label-243-B\" .\nex:subject244 ex:predicate ex:object244 .\nex:subject244 rdfs:label \"Label-244-A\" .\nex:subject244 rdfs:label \"Label-244-B\" .\nex:subject245 ex:predicate ex:object245 .\nex:subject245 rdfs:label \"Label-245-A\" .\nex:subject245 rdfs:label \"Label-245-B\" .\nex:subject246 ex:predicate ex:object246 .\nex:subject246 rdfs:label \"Label-246-A\" .\nex:subject246 rdfs:label \"Label-246-B\" .\nex:subject247 ex:predicate ex:object247 .\nex:subject247 rdfs:label \"Label-247-A\" .\nex:subject247 rdfs:label \"Label-247-B\" .\nex:subject248 ex:predicate ex:object248 .\nex:subject248 rdfs:label \"Label-248-A\" .\nex:subject248 rdfs:label \"Label-248-B\" .\nex:subject249 ex:predicate ex:object249 .\nex:subject249 rdfs:label \"Label-249-A\" .\nex:subject249 rdfs:label \"Label-249-B\" .\nex:subject250 ex:predicate ex:object250 .\nex:subject250 rdfs:label \"Label-250-A\" .\nex:subject250 rdfs:label \"Label-250-B\" .\n"
+   },
+   "query": "PREFIX ex: <http://example.org/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT (COUNT(*) AS ?count) {\n   ?s ex:predicate ?o\n   LATERAL {\n      ?s rdfs:label ?label\n      FILTER(STRENDS(STR(?label), \"-A\"))\n   }\n}\n",
+   "expect": {
+    "kind": "bindings",
+    "rows": [
+     {
+      "count": {
+       "type": "literal",
+       "value": "250",
+       "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+      }
+     }
+    ]
+   },
+   "note": "LATERAL is not in the SPARQL 1.1 REC nor in the SPARQL 1.2 Query WD of 25 October 2026 (it is the SEP-0006 proposal); RDF4J and the engine both accept it. Run with version 1.2. Data generated by the Java loop (250 subjects), written out."
+  },
+  {
+   "id": "LateralTest#LateralFilterBeforeClauseSeesRightBinding",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/LateralTest.java",
+   "line": 527,
+   "sparql12": true,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix ex: <http://example.org/> .\n@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n\nex:subject1 ex:predicate ex:object1 .\nex:subject1 rdfs:label \"Label 1\" .\nex:subject2 ex:predicate ex:object2 .\nex:subject2 rdfs:label \"Label 2\" .\nex:subject3 ex:predicate ex:object3 .\nex:subject3 rdfs:label \"Label 3\" .\n"
+   },
+   "query": "PREFIX ex: <http://example.org/>\nPREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\n\nSELECT * {\n   ?s ex:predicate ?o\n   FILTER(?label = \"Label 2\")\n   LATERAL { ?s rdfs:label ?label }\n}\n",
+   "expect": {
+    "kind": "bindings",
+    "vars": [
+     "label"
+    ],
+    "rows": [
+     {
+      "label": {
+       "type": "literal",
+       "value": "Label 2"
+      }
+     }
+    ]
+   },
+   "note": "LATERAL is not in the SPARQL 1.1 REC nor in the SPARQL 1.2 Query WD of 25 October 2026 (it is the SEP-0006 proposal); RDF4J and the engine both accept it. Run with version 1.2. The FILTER applies to the whole group (SPARQL 1.1 §5.2.2 / §18.2.2.6), so it sees ?label bound by LATERAL."
+  },
+  {
+   "id": "FilterScopeTest#testScope1",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/FilterScopeTest.java",
+   "line": 43,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix foaf: <http://xmlns.com/foaf/0.1/> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n_:1 a foaf:Person .\n_:2 a foaf:Person .\n_:3 a foaf:Person .\n_:4 a foaf:Person .\n_:5 a foaf:Person .\n_:1 foaf:age \"1\"^^xsd:int .\n_:2 foaf:age \"2\"^^xsd:int .\n_:3 foaf:age \"3\"^^xsd:int .\n_:4 foaf:age \"4\"^^xsd:int .\n_:5 foaf:age \"5\"^^xsd:int .\n_:5 foaf:age \"6\"^^xsd:int .\n_:5 foaf:age \"7\"^^xsd:int .\n_:5 foaf:age \"8\"^^xsd:int .\n_:5 foaf:age \"9\"^^xsd:int .\n_:1 foaf:knows _:2 .\n_:2 foaf:knows _:3 .\n_:3 foaf:knows _:4 .\n_:4 foaf:knows _:5 .\n"
+   },
+   "query": "\nPREFIX foaf: <http://xmlns.com/foaf/0.1/>\nSELECT * WHERE {\n  ?person a ?type ; \n  foaf:age ?age ;\n  foaf:knows ?person2 .\n  FILTER(?person != <http://example.org/2> && ?type = foaf:Person)\n\t{\n      ?person foaf:age ?age .\n      FILTER(?type NOT IN (foaf:NotPerson)) #?type is not in scope, so should produce an error. \n\t}\n} ",
+   "expect": {
+    "kind": "count",
+    "n": 0
+   },
+   "note": "Data: Values.bnode(\"1\")..(\"5\") and Values.literal(int) (xsd:int), written as Turtle."
+  },
+  {
+   "id": "FilterScopeTest#testScope1WithoutScopingIssue",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/FilterScopeTest.java",
+   "line": 67,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix foaf: <http://xmlns.com/foaf/0.1/> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n_:1 a foaf:Person .\n_:2 a foaf:Person .\n_:3 a foaf:Person .\n_:4 a foaf:Person .\n_:5 a foaf:Person .\n_:1 foaf:age \"1\"^^xsd:int .\n_:2 foaf:age \"2\"^^xsd:int .\n_:3 foaf:age \"3\"^^xsd:int .\n_:4 foaf:age \"4\"^^xsd:int .\n_:5 foaf:age \"5\"^^xsd:int .\n_:5 foaf:age \"6\"^^xsd:int .\n_:5 foaf:age \"7\"^^xsd:int .\n_:5 foaf:age \"8\"^^xsd:int .\n_:5 foaf:age \"9\"^^xsd:int .\n_:1 foaf:knows _:2 .\n_:2 foaf:knows _:3 .\n_:3 foaf:knows _:4 .\n_:4 foaf:knows _:5 .\n"
+   },
+   "query": "\nPREFIX foaf: <http://xmlns.com/foaf/0.1/>\nSELECT * WHERE {\n  ?person a ?type ; \n  foaf:age ?age ;\n  foaf:knows ?person2 .\n  FILTER(?person != <http://example.org/2> && ?type = foaf:Person)\n\t{\n      ?person foaf:age ?age .\n      # FILTER(?type NOT IN (foaf:NotPerson)) COMMENTED OUT ON PURPOSE TO SHOW THAT WE GET RESULTS WHEN THERE IS NO LONGER A SCOPE ISSUE  \n\t}\n} ",
+   "expect": {
+    "kind": "count",
+    "n": 4
+   },
+   "note": "Data: Values.bnode(\"1\")..(\"5\") and Values.literal(int) (xsd:int), written as Turtle."
+  },
+  {
+   "id": "FilterScopeTest#testScope1WithCorrectScope",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/FilterScopeTest.java",
+   "line": 91,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix foaf: <http://xmlns.com/foaf/0.1/> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n_:1 a foaf:Person .\n_:2 a foaf:Person .\n_:3 a foaf:Person .\n_:4 a foaf:Person .\n_:5 a foaf:Person .\n_:1 foaf:age \"1\"^^xsd:int .\n_:2 foaf:age \"2\"^^xsd:int .\n_:3 foaf:age \"3\"^^xsd:int .\n_:4 foaf:age \"4\"^^xsd:int .\n_:5 foaf:age \"5\"^^xsd:int .\n_:5 foaf:age \"6\"^^xsd:int .\n_:5 foaf:age \"7\"^^xsd:int .\n_:5 foaf:age \"8\"^^xsd:int .\n_:5 foaf:age \"9\"^^xsd:int .\n_:1 foaf:knows _:2 .\n_:2 foaf:knows _:3 .\n_:3 foaf:knows _:4 .\n_:4 foaf:knows _:5 .\n"
+   },
+   "query": "\nPREFIX foaf: <http://xmlns.com/foaf/0.1/>\nSELECT * WHERE {\n  ?person a ?type ; \n  foaf:age ?age ;\n  foaf:knows ?person2 .\n  FILTER(?person != <http://example.org/2> && ?type = foaf:Person)\n\t{\n      ?person foaf:age ?age .\n\t}\n   FILTER(?type NOT IN (foaf:NotPerson)) # ?type is now in scope\n} ",
+   "expect": {
+    "kind": "count",
+    "n": 4
+   },
+   "note": "Data: Values.bnode(\"1\")..(\"5\") and Values.literal(int) (xsd:int), written as Turtle."
+  },
+  {
+   "id": "FilterScopeTest#testScope2",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/FilterScopeTest.java",
+   "line": 115,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix foaf: <http://xmlns.com/foaf/0.1/> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n_:1 a foaf:Person .\n_:2 a foaf:Person .\n_:3 a foaf:Person .\n_:4 a foaf:Person .\n_:5 a foaf:Person .\n_:1 foaf:age \"1\"^^xsd:int .\n_:2 foaf:age \"2\"^^xsd:int .\n_:3 foaf:age \"3\"^^xsd:int .\n_:4 foaf:age \"4\"^^xsd:int .\n_:5 foaf:age \"5\"^^xsd:int .\n_:5 foaf:age \"6\"^^xsd:int .\n_:5 foaf:age \"7\"^^xsd:int .\n_:5 foaf:age \"8\"^^xsd:int .\n_:5 foaf:age \"9\"^^xsd:int .\n_:1 foaf:knows _:2 .\n_:2 foaf:knows _:3 .\n_:3 foaf:knows _:4 .\n_:4 foaf:knows _:5 .\n"
+   },
+   "query": "\nPREFIX foaf: <http://xmlns.com/foaf/0.1/>\nSELECT * WHERE {\n  ?person a ?type ; \n  foaf:age ?age ;\n  foaf:knows ?person2 .\n\t{\n      ?person foaf:age ?age .\n      FILTER(?type NOT IN (foaf:NotPerson)) #?type is not in scope, so should produce an error. \n\t}\n} ",
+   "expect": {
+    "kind": "count",
+    "n": 0
+   },
+   "note": "Data: Values.bnode(\"1\")..(\"5\") and Values.literal(int) (xsd:int), written as Turtle."
+  },
+  {
+   "id": "FilterScopeTest#testScope3",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/FilterScopeTest.java",
+   "line": 138,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix foaf: <http://xmlns.com/foaf/0.1/> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n_:1 a foaf:Person .\n_:2 a foaf:Person .\n_:3 a foaf:Person .\n_:4 a foaf:Person .\n_:5 a foaf:Person .\n_:1 foaf:age \"1\"^^xsd:int .\n_:2 foaf:age \"2\"^^xsd:int .\n_:3 foaf:age \"3\"^^xsd:int .\n_:4 foaf:age \"4\"^^xsd:int .\n_:5 foaf:age \"5\"^^xsd:int .\n_:5 foaf:age \"6\"^^xsd:int .\n_:5 foaf:age \"7\"^^xsd:int .\n_:5 foaf:age \"8\"^^xsd:int .\n_:5 foaf:age \"9\"^^xsd:int .\n_:1 foaf:knows _:2 .\n_:2 foaf:knows _:3 .\n_:3 foaf:knows _:4 .\n_:4 foaf:knows _:5 .\n"
+   },
+   "query": "\nPREFIX foaf: <http://xmlns.com/foaf/0.1/>\nSELECT * WHERE {\n  ?person a ?type ; \n  foaf:age ?age ;\n  foaf:knows ?person2 .\n\t{\n      ?person a ?type .\n      FILTER(?person2 NOT IN (<http://example.com/person1>)) #?person2 is not in scope, so should produce an error. \n\t}\n  FILTER(?type IN (foaf:Person))\n} ",
+   "expect": {
+    "kind": "count",
+    "n": 0
+   },
+   "note": "Data: Values.bnode(\"1\")..(\"5\") and Values.literal(int) (xsd:int), written as Turtle."
+  },
+  {
+   "id": "FilterScopeTest#testScope3WithoutScopingIssue",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/FilterScopeTest.java",
+   "line": 162,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix foaf: <http://xmlns.com/foaf/0.1/> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n_:1 a foaf:Person .\n_:2 a foaf:Person .\n_:3 a foaf:Person .\n_:4 a foaf:Person .\n_:5 a foaf:Person .\n_:1 foaf:age \"1\"^^xsd:int .\n_:2 foaf:age \"2\"^^xsd:int .\n_:3 foaf:age \"3\"^^xsd:int .\n_:4 foaf:age \"4\"^^xsd:int .\n_:5 foaf:age \"5\"^^xsd:int .\n_:5 foaf:age \"6\"^^xsd:int .\n_:5 foaf:age \"7\"^^xsd:int .\n_:5 foaf:age \"8\"^^xsd:int .\n_:5 foaf:age \"9\"^^xsd:int .\n_:1 foaf:knows _:2 .\n_:2 foaf:knows _:3 .\n_:3 foaf:knows _:4 .\n_:4 foaf:knows _:5 .\n"
+   },
+   "query": "\nPREFIX foaf: <http://xmlns.com/foaf/0.1/>\nSELECT * WHERE {\n  ?person a ?type ; \n  foaf:age ?age ;\n  foaf:knows ?person2 .\n\t{\n      ?person a ?type .\n      # FILTER(?person2 NOT IN (<http://example.com/person1>)) COMMENTED OUT ON PURPOSE TO SHOW THAT WE GET RESULTS WHEN THERE IS NO LONGER A SCOPE ISSUE \n\t}\n  FILTER(?type IN (foaf:Person))\n} ",
+   "expect": {
+    "kind": "count",
+    "n": 4
+   },
+   "note": "Data: Values.bnode(\"1\")..(\"5\") and Values.literal(int) (xsd:int), written as Turtle."
+  },
+  {
+   "id": "FilterScopeTest#testScope4",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/FilterScopeTest.java",
+   "line": 186,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix foaf: <http://xmlns.com/foaf/0.1/> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n_:1 a foaf:Person .\n_:2 a foaf:Person .\n_:3 a foaf:Person .\n_:4 a foaf:Person .\n_:5 a foaf:Person .\n_:1 foaf:age \"1\"^^xsd:int .\n_:2 foaf:age \"2\"^^xsd:int .\n_:3 foaf:age \"3\"^^xsd:int .\n_:4 foaf:age \"4\"^^xsd:int .\n_:5 foaf:age \"5\"^^xsd:int .\n_:5 foaf:age \"6\"^^xsd:int .\n_:5 foaf:age \"7\"^^xsd:int .\n_:5 foaf:age \"8\"^^xsd:int .\n_:5 foaf:age \"9\"^^xsd:int .\n_:1 foaf:knows _:2 .\n_:2 foaf:knows _:3 .\n_:3 foaf:knows _:4 .\n_:4 foaf:knows _:5 .\n"
+   },
+   "query": "\nPREFIX foaf: <http://xmlns.com/foaf/0.1/>\nSELECT * WHERE {\n  ?person a ?type ; \n  foaf:age ?age ;\n  foaf:knows ?person2 .\n\t{\n      ?person a ?type .\n      FILTER(?person2 NOT IN (<http://example.com/person1>)) #?person2 is not in scope, so should produce an error. \n\t}\n  FILTER(?type IN (foaf:Person, foaf:NotPerson))\n} ",
+   "expect": {
+    "kind": "count",
+    "n": 0
+   },
+   "note": "Data: Values.bnode(\"1\")..(\"5\") and Values.literal(int) (xsd:int), written as Turtle."
+  },
+  {
+   "id": "SparqlMinusScopingTests#T1_bindCreatesFreshVarInRight_NoOverlap_NoEffect",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/SparqlMinusScopingTests.java",
+   "line": 134,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix : <http://ex/> .\n:a :p 1 .   :a :q 10 .  :a :r 100 .\n:b :p 2 .   :b :q 20 .  :b :r 200 .\n:c :p 3 .                 :c :r 300 .\n:d :q 40 .  :d :r 400 .\n:e :p 5 .   :e :q 50 ."
+   },
+   "query": "PREFIX : <http://ex/>\nSELECT ?s ?pVal WHERE {\n  ?s :p ?pVal .\n  MINUS { ?x :q ?qVal . BIND(?qVal*2 AS ?fresh) }\n}",
+   "expect": {
+    "kind": "bindings",
+    "vars": [
+     "s"
+    ],
+    "rows": [
+     {
+      "s": {
+       "type": "uri",
+       "value": "http://ex/a"
+      }
+     },
+     {
+      "s": {
+       "type": "uri",
+       "value": "http://ex/b"
+      }
+     },
+     {
+      "s": {
+       "type": "uri",
+       "value": "http://ex/c"
+      }
+     },
+     {
+      "s": {
+       "type": "uri",
+       "value": "http://ex/e"
+      }
+     }
+    ]
+   },
+   "note": "Upstream compares the set of local names of ?s; the port compares the multiset of ?s values (the spec answer has no duplicates here)."
+  },
+  {
+   "id": "SparqlMinusScopingTests#T3_bindBeforeUseIntroducesOverlap_EverythingRemoved",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/SparqlMinusScopingTests.java",
+   "line": 145,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix : <http://ex/> .\n:a :p 1 .   :a :q 10 .  :a :r 100 .\n:b :p 2 .   :b :q 20 .  :b :r 200 .\n:c :p 3 .                 :c :r 300 .\n:d :q 40 .  :d :r 400 .\n:e :p 5 .   :e :q 50 ."
+   },
+   "query": "PREFIX : <http://ex/>\nSELECT ?s ?qVal WHERE {\n  ?s :q ?qVal .\n  MINUS { ?t :q ?x . BIND(?x AS ?qVal) }\n}",
+   "expect": {
+    "kind": "count",
+    "n": 0
+   }
+  },
+  {
+   "id": "SparqlMinusScopingTests#T4_renamedVarsInsideRight_NoTrueOverlap_NoEffect",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/SparqlMinusScopingTests.java",
+   "line": 155,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix : <http://ex/> .\n:a :p 1 .   :a :q 10 .  :a :r 100 .\n:b :p 2 .   :b :q 20 .  :b :r 200 .\n:c :p 3 .                 :c :r 300 .\n:d :q 40 .  :d :r 400 .\n:e :p 5 .   :e :q 50 ."
+   },
+   "query": "PREFIX : <http://ex/>\nSELECT ?s ?pVal WHERE {\n  ?s :p ?pVal .\n  MINUS { ?s2 :p ?pVal2 . BIND(?pVal2 AS ?pVal_tmp) }\n}",
+   "expect": {
+    "kind": "bindings",
+    "vars": [
+     "s"
+    ],
+    "rows": [
+     {
+      "s": {
+       "type": "uri",
+       "value": "http://ex/a"
+      }
+     },
+     {
+      "s": {
+       "type": "uri",
+       "value": "http://ex/b"
+      }
+     },
+     {
+      "s": {
+       "type": "uri",
+       "value": "http://ex/c"
+      }
+     },
+     {
+      "s": {
+       "type": "uri",
+       "value": "http://ex/e"
+      }
+     }
+    ]
+   },
+   "note": "Upstream compares the set of local names of ?s; the port compares the multiset of ?s values (the spec answer has no duplicates here)."
+  },
+  {
+   "id": "SparqlMinusScopingTests#T5_randInsideDisjointRight_MinusHasNoEffect",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/SparqlMinusScopingTests.java",
+   "line": 166,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix : <http://ex/> .\n:a :p 1 .   :a :q 10 .  :a :r 100 .\n:b :p 2 .   :b :q 20 .  :b :r 200 .\n:c :p 3 .                 :c :r 300 .\n:d :q 40 .  :d :r 400 .\n:e :p 5 .   :e :q 50 ."
+   },
+   "query": "PREFIX : <http://ex/>\nSELECT ?s WHERE {\n  ?s :p ?v .\n  MINUS { ?x :q ?w . FILTER(RAND() < 2) }\n}",
+   "expect": {
+    "kind": "bindings",
+    "vars": [
+     "s"
+    ],
+    "rows": [
+     {
+      "s": {
+       "type": "uri",
+       "value": "http://ex/a"
+      }
+     },
+     {
+      "s": {
+       "type": "uri",
+       "value": "http://ex/b"
+      }
+     },
+     {
+      "s": {
+       "type": "uri",
+       "value": "http://ex/c"
+      }
+     },
+     {
+      "s": {
+       "type": "uri",
+       "value": "http://ex/e"
+      }
+     }
+    ]
+   },
+   "note": "Upstream compares the set of local names of ?s; the port compares the multiset of ?s values (the spec answer has no duplicates here)."
+  },
+  {
+   "id": "SparqlMinusScopingTests#T8_projectionExprOnLeftDoesNotAffectMinusOverlap_NoEffect",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/SparqlMinusScopingTests.java",
+   "line": 177,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix : <http://ex/> .\n:a :p 1 .   :a :q 10 .  :a :r 100 .\n:b :p 2 .   :b :q 20 .  :b :r 200 .\n:c :p 3 .                 :c :r 300 .\n:d :q 40 .  :d :r 400 .\n:e :p 5 .   :e :q 50 ."
+   },
+   "query": "PREFIX : <http://ex/>\nSELECT ?s ?pVal (STR(?s) AS ?z) WHERE {\n  ?s :p ?pVal .\n  MINUS { ?x :q ?q . BIND(STR(?x) AS ?z) }\n}",
+   "expect": {
+    "kind": "bindings",
+    "vars": [
+     "s"
+    ],
+    "rows": [
+     {
+      "s": {
+       "type": "uri",
+       "value": "http://ex/a"
+      }
+     },
+     {
+      "s": {
+       "type": "uri",
+       "value": "http://ex/b"
+      }
+     },
+     {
+      "s": {
+       "type": "uri",
+       "value": "http://ex/c"
+      }
+     },
+     {
+      "s": {
+       "type": "uri",
+       "value": "http://ex/e"
+      }
+     }
+    ]
+   },
+   "note": "Upstream compares the set of local names of ?s; the port compares the multiset of ?s values (the spec answer has no duplicates here)."
+  },
+  {
+   "id": "SparqlMinusScopingTests#T9_projectionBeforeMinus_NoSharedVarsAfterSubselect_NoEffect",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/SparqlMinusScopingTests.java",
+   "line": 189,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix : <http://ex/> .\n:a :p 1 .   :a :q 10 .  :a :r 100 .\n:b :p 2 .   :b :q 20 .  :b :r 200 .\n:c :p 3 .                 :c :r 300 .\n:d :q 40 .  :d :r 400 .\n:e :p 5 .   :e :q 50 ."
+   },
+   "query": "PREFIX : <http://ex/>\nSELECT ?s WHERE {\n  { SELECT ?s WHERE { ?s :p ?v } }\n  MINUS { ?x :p ?v }\n}",
+   "expect": {
+    "kind": "bindings",
+    "vars": [
+     "s"
+    ],
+    "rows": [
+     {
+      "s": {
+       "type": "uri",
+       "value": "http://ex/a"
+      }
+     },
+     {
+      "s": {
+       "type": "uri",
+       "value": "http://ex/b"
+      }
+     },
+     {
+      "s": {
+       "type": "uri",
+       "value": "http://ex/c"
+      }
+     },
+     {
+      "s": {
+       "type": "uri",
+       "value": "http://ex/e"
+      }
+     }
+    ]
+   },
+   "note": "Upstream compares the set of local names of ?s; the port compares the multiset of ?s values (the spec answer has no duplicates here)."
+  },
+  {
+   "id": "SparqlMinusScopingTests#T10_minusVsNotExists_WithThisDataTheyCoincide",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/SparqlMinusScopingTests.java",
+   "line": 200,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix : <http://ex/> .\n:a :p 1 .   :a :q 10 .  :a :r 100 .\n:b :p 2 .   :b :q 20 .  :b :r 200 .\n:c :p 3 .                 :c :r 300 .\n:d :q 40 .  :d :r 400 .\n:e :p 5 .   :e :q 50 ."
+   },
+   "query": "PREFIX : <http://ex/>\nSELECT ?s WHERE {\n  ?s :p ?v .\n  MINUS { ?s :q ?w }\n}",
+   "expect": {
+    "kind": "bindings",
+    "vars": [
+     "s"
+    ],
+    "rows": [
+     {
+      "s": {
+       "type": "uri",
+       "value": "http://ex/c"
+      }
+     }
+    ]
+   },
+   "note": "First of the two queries of this method (MINUS). Upstream compares the set of local names of ?s; the port compares the multiset of ?s values (the spec answer has no duplicates here)."
+  },
+  {
+   "id": "SparqlMinusScopingTests#T10_minusVsNotExists_WithThisDataTheyCoincide#2",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/SparqlMinusScopingTests.java",
+   "line": 200,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix : <http://ex/> .\n:a :p 1 .   :a :q 10 .  :a :r 100 .\n:b :p 2 .   :b :q 20 .  :b :r 200 .\n:c :p 3 .                 :c :r 300 .\n:d :q 40 .  :d :r 400 .\n:e :p 5 .   :e :q 50 ."
+   },
+   "query": "PREFIX : <http://ex/>\nSELECT ?s WHERE {\n  ?s :p ?v .\n  FILTER NOT EXISTS { ?s :q ?w }\n}",
+   "expect": {
+    "kind": "bindings",
+    "vars": [
+     "s"
+    ],
+    "rows": [
+     {
+      "s": {
+       "type": "uri",
+       "value": "http://ex/c"
+      }
+     }
+    ]
+   },
+   "note": "Second of the two queries of this method (FILTER NOT EXISTS). Upstream compares the set of local names of ?s; the port compares the multiset of ?s values (the spec answer has no duplicates here)."
+  },
+  {
+   "id": "SparqlMinusScopingTests#T11_multipleMinus_sharedThenIndependent_onlyFirstMatters",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/SparqlMinusScopingTests.java",
+   "line": 218,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix : <http://ex/> .\n:a :p 1 .   :a :q 10 .  :a :r 100 .\n:b :p 2 .   :b :q 20 .  :b :r 200 .\n:c :p 3 .                 :c :r 300 .\n:d :q 40 .  :d :r 400 .\n:e :p 5 .   :e :q 50 ."
+   },
+   "query": "PREFIX : <http://ex/>\nSELECT ?s WHERE {\n  ?s :p ?v .\n  MINUS { ?s :q ?w }   # removes a, b, e\n  MINUS { ?x :r ?r }   # no shared vars -> no further effect\n}",
+   "expect": {
+    "kind": "bindings",
+    "vars": [
+     "s"
+    ],
+    "rows": [
+     {
+      "s": {
+       "type": "uri",
+       "value": "http://ex/c"
+      }
+     }
+    ]
+   },
+   "note": "Upstream compares the set of local names of ?s; the port compares the multiset of ?s values (the spec answer has no duplicates here)."
+  },
+  {
+   "id": "SparqlMinusScopingTests#T12_minusInsideOptional_withDisjointVars_isNoop",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/SparqlMinusScopingTests.java",
+   "line": 229,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix : <http://ex/> .\n:a :p 1 .   :a :q 10 .  :a :r 100 .\n:b :p 2 .   :b :q 20 .  :b :r 200 .\n:c :p 3 .                 :c :r 300 .\n:d :q 40 .  :d :r 400 .\n:e :p 5 .   :e :q 50 ."
+   },
+   "query": "PREFIX : <http://ex/>\nSELECT ?s ?maybe WHERE {\n  ?s :p ?v .\n  OPTIONAL {\n    BIND(1 AS ?maybe)\n    MINUS { ?s :q ?w }\n  }\n}",
+   "expect": {
+    "kind": "bindings",
+    "rows": [
+     {
+      "s": {
+       "type": "uri",
+       "value": "http://ex/a"
+      },
+      "maybe": {
+       "type": "literal",
+       "value": "1",
+       "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+      }
+     },
+     {
+      "s": {
+       "type": "uri",
+       "value": "http://ex/b"
+      },
+      "maybe": {
+       "type": "literal",
+       "value": "1",
+       "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+      }
+     },
+     {
+      "s": {
+       "type": "uri",
+       "value": "http://ex/c"
+      },
+      "maybe": {
+       "type": "literal",
+       "value": "1",
+       "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+      }
+     },
+     {
+      "s": {
+       "type": "uri",
+       "value": "http://ex/e"
+      },
+      "maybe": {
+       "type": "literal",
+       "value": "1",
+       "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "SparqlMinusScopingTests#T13_minus_no_shared_vars_is_noop_select",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/SparqlMinusScopingTests.java",
+   "line": 263,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix : <http://ex/> .\n:a :p 1 . :a :q 1 . :b :p 1 .",
+    "base": "http://ex/"
+   },
+   "query": "PREFIX : <http://ex/>\nSELECT ?s WHERE { ?s :p 1 MINUS { ?x :q 1 } }",
+   "expect": {
+    "kind": "bindings",
+    "vars": [
+     "s"
+    ],
+    "rows": [
+     {
+      "s": {
+       "type": "uri",
+       "value": "http://ex/a"
+      }
+     },
+     {
+      "s": {
+       "type": "uri",
+       "value": "http://ex/b"
+      }
+     }
+    ]
+   },
+   "note": "Upstream compares the set of local names of ?s; the port compares the multiset of ?s values (the spec answer has no duplicates here)."
+  },
+  {
+   "id": "SparqlMinusScopingTests#T14_not_exists_contrast_to_minus_no_shared_vars",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/SparqlMinusScopingTests.java",
+   "line": 272,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix : <http://ex/> .\n:a :p 1 . :a :q 1 . :b :p 1 .",
+    "base": "http://ex/"
+   },
+   "query": "PREFIX : <http://ex/>\nSELECT ?s WHERE { ?s :p 1 FILTER NOT EXISTS { ?x :q 1 } }",
+   "expect": {
+    "kind": "count",
+    "n": 0
+   }
+  },
+  {
+   "id": "SparqlMinusScopingTests#T15_rhs_filter_referencing_outer_var_is_unbound_and_ignored",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/SparqlMinusScopingTests.java",
+   "line": 280,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix : <http://ex/> .\n:a :p 1 ; :q 1, 2 .\n:b :p 3 ; :q 4 .",
+    "base": "http://ex/"
+   },
+   "query": "PREFIX : <http://ex/>\nSELECT ?x ?n WHERE {\n  ?x :p ?n .\n  MINUS { ?x :q ?m . FILTER(?m = ?n) }  # ?n unbound on RHS → filter errors → RHS empty\n} ORDER BY ?x",
+   "expect": {
+    "kind": "bindings",
+    "rows": [
+     {
+      "x": {
+       "type": "uri",
+       "value": "http://ex/a"
+      },
+      "n": {
+       "type": "literal",
+       "value": "1",
+       "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+      }
+     },
+     {
+      "x": {
+       "type": "uri",
+       "value": "http://ex/b"
+      },
+      "n": {
+       "type": "literal",
+       "value": "3",
+       "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "SparqlMinusScopingTests#T16_rhs_bind_of_outer_var_produces_unbound_then_overremoves_on_shared_subset",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/SparqlMinusScopingTests.java",
+   "line": 293,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix : <http://ex/> .\n:a :p 1 ; :q 1, 2 .\n:b :p 3 ; :q 4 .\n:c :p 7 .",
+    "base": "http://ex/"
+   },
+   "query": "PREFIX : <http://ex/>\nSELECT ?x WHERE {\n  ?x :p ?n .\n  MINUS { BIND(?n AS ?k) ?x :q ?k }\n} ORDER BY ?x",
+   "expect": {
+    "kind": "bindings",
+    "vars": [
+     "x"
+    ],
+    "rows": [
+     {
+      "x": {
+       "type": "uri",
+       "value": "http://ex/c"
+      }
+     }
+    ]
+   },
+   "note": "Upstream compares the set of local names of ?x; the port compares the multiset of ?x values (the spec answer has no duplicates here)."
+  },
+  {
+   "id": "SparqlMinusScopingTests#T17_rhs_bind_creates_intentional_shared_var_equalities",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/SparqlMinusScopingTests.java",
+   "line": 308,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix : <http://ex/> .\n:e :p 10 ; :q 42 .\n:f :p 20 ; :q 20 .\n:g :p 30 ; :q 99 .",
+    "base": "http://ex/"
+   },
+   "query": "PREFIX : <http://ex/>\nSELECT ?x WHERE {\n  ?x :p ?v .\n  MINUS { ?x :q ?m . BIND(?m AS ?v) }  # removes only when q==p\n} ORDER BY ?x",
+   "expect": {
+    "kind": "bindings",
+    "vars": [
+     "x"
+    ],
+    "rows": [
+     {
+      "x": {
+       "type": "uri",
+       "value": "http://ex/e"
+      }
+     },
+     {
+      "x": {
+       "type": "uri",
+       "value": "http://ex/g"
+      }
+     }
+    ]
+   },
+   "note": "Upstream compares the set of local names of ?x; the port compares the multiset of ?x values (the spec answer has no duplicates here)."
+  },
+  {
+   "id": "SparqlMinusScopingTests#T18_early_projection_should_not_change_minus_semantics",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/SparqlMinusScopingTests.java",
+   "line": 322,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix : <http://ex/> .\n:e :p 10 ; :q 42 .\n:f :p 20 ; :q 20 .\n:g :p 30 ; :q 99 .",
+    "base": "http://ex/"
+   },
+   "query": "PREFIX : <http://ex/>\nSELECT ?x WHERE { ?x :p ?v MINUS { ?x :q ?v } } ORDER BY ?x",
+   "expect": {
+    "kind": "bindings",
+    "vars": [
+     "x"
+    ],
+    "rows": [
+     {
+      "x": {
+       "type": "uri",
+       "value": "http://ex/e"
+      }
+     },
+     {
+      "x": {
+       "type": "uri",
+       "value": "http://ex/g"
+      }
+     }
+    ]
+   },
+   "note": "Upstream compares the set of local names of ?x; the port compares the multiset of ?x values (the spec answer has no duplicates here)."
+  },
+  {
+   "id": "SparqlMinusScopingTests#T19_subquery_pins_shared_var_against_optimizer",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/SparqlMinusScopingTests.java",
+   "line": 333,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix : <http://ex/> .\n:e :p 10 ; :q 42 .\n:f :p 20 ; :q 20 .\n:g :p 30 ; :q 99 .",
+    "base": "http://ex/"
+   },
+   "query": "PREFIX : <http://ex/>\nSELECT ?x WHERE {\n  { SELECT ?x ?v WHERE { ?x :p ?v } }   # box the LHS\n  MINUS { ?x :q ?v }\n} ORDER BY ?x",
+   "expect": {
+    "kind": "bindings",
+    "vars": [
+     "x"
+    ],
+    "rows": [
+     {
+      "x": {
+       "type": "uri",
+       "value": "http://ex/e"
+      }
+     },
+     {
+      "x": {
+       "type": "uri",
+       "value": "http://ex/g"
+      }
+     }
+    ]
+   },
+   "note": "Upstream compares the set of local names of ?x; the port compares the multiset of ?x values (the spec answer has no duplicates here)."
+  },
+  {
+   "id": "SparqlMinusScopingTests#T20_optional_inside_minus_only_removes_when_optional_matches",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/SparqlMinusScopingTests.java",
+   "line": 346,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix : <http://ex/> .\n:e :name \"Alice\" ; :formerName \"Alice\" .\n:f :name \"Carol\" .",
+    "base": "http://ex/"
+   },
+   "query": "PREFIX : <http://ex/>\nSELECT ?x WHERE {\n  ?x :name ?n .\n  MINUS { OPTIONAL { ?x :formerName ?n } }\n} ORDER BY ?x",
+   "expect": {
+    "kind": "bindings",
+    "vars": [
+     "x"
+    ],
+    "rows": [
+     {
+      "x": {
+       "type": "uri",
+       "value": "http://ex/f"
+      }
+     }
+    ]
+   },
+   "note": "Upstream compares the set of local names of ?x; the port compares the multiset of ?x values (the spec answer has no duplicates here)."
+  },
+  {
+   "id": "SparqlMinusScopingTests#T21_not_exists_over_optional_is_always_false_here",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/SparqlMinusScopingTests.java",
+   "line": 359,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix : <http://ex/> .\n:e :name \"Alice\" ; :formerName \"Alice\" .\n:f :name \"Carol\" .",
+    "base": "http://ex/"
+   },
+   "query": "PREFIX : <http://ex/>\nSELECT ?x WHERE {\n  ?x :name ?n .\n  FILTER NOT EXISTS { OPTIONAL { ?x :formerName ?n } }\n}",
+   "expect": {
+    "kind": "count",
+    "n": 0
+   }
+  },
+  {
+   "id": "SparqlMinusScopingTests#T22_graph_isolation_same_g_on_both_sides_no_removal_when_values_differ",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/SparqlMinusScopingTests.java",
+   "line": 371,
+   "sparql12": false,
+   "data": {
+    "format": "trig",
+    "text": "@prefix : <http://ex/> .\nGRAPH :g1 { :a :p 1 . }\nGRAPH :g2 { :a :q 1 . :a :p 2 . }",
+    "base": "http://ex/"
+   },
+   "query": "PREFIX : <http://ex/>\nSELECT ?g ?x ?n WHERE {\n  GRAPH ?g { ?x :p ?n }\n  MINUS { GRAPH ?g { ?x :q ?n } }\n} ORDER BY ?g ?x ?n",
+   "expect": {
+    "kind": "bindings",
+    "rows": [
+     {
+      "g": {
+       "type": "uri",
+       "value": "http://ex/g1"
+      },
+      "x": {
+       "type": "uri",
+       "value": "http://ex/a"
+      },
+      "n": {
+       "type": "literal",
+       "value": "1",
+       "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+      }
+     },
+     {
+      "g": {
+       "type": "uri",
+       "value": "http://ex/g2"
+      },
+      "x": {
+       "type": "uri",
+       "value": "http://ex/a"
+      },
+      "n": {
+       "type": "literal",
+       "value": "2",
+       "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "SparqlMinusScopingTests#T23_graph_isolation_removes_only_in_graph_where_match_exists",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/SparqlMinusScopingTests.java",
+   "line": 385,
+   "sparql12": false,
+   "data": {
+    "format": "trig",
+    "text": "@prefix : <http://ex/> .\nGRAPH :g1 { :a :p 1 . }\nGRAPH :g2 { :a :q 1 . :a :p 2 . :a :q 2 . }",
+    "base": "http://ex/"
+   },
+   "query": "PREFIX : <http://ex/>\nSELECT ?g ?x ?n WHERE {\n  GRAPH ?g { ?x :p ?n }\n  MINUS { GRAPH ?g { ?x :q ?n } }\n} ORDER BY ?g",
+   "expect": {
+    "kind": "bindings",
+    "rows": [
+     {
+      "g": {
+       "type": "uri",
+       "value": "http://ex/g1"
+      },
+      "x": {
+       "type": "uri",
+       "value": "http://ex/a"
+      },
+      "n": {
+       "type": "literal",
+       "value": "1",
+       "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "SparqlMinusScopingTests#T24_minus_disjoint_varsets_is_noop_even_with_union_on_lhs",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/SparqlMinusScopingTests.java",
+   "line": 398,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix : <http://ex/> .\n:a :p 1 ; :q 1 .\n:b :p 1 .\n:c :p 2 .",
+    "base": "http://ex/"
+   },
+   "query": "PREFIX : <http://ex/>\nSELECT ?x WHERE {\n  { ?x :p 1 } UNION { ?x :p 2 }\n  MINUS { ?y :q 1 }\n} ORDER BY ?x",
+   "expect": {
+    "kind": "bindings",
+    "vars": [
+     "x"
+    ],
+    "rows": [
+     {
+      "x": {
+       "type": "uri",
+       "value": "http://ex/a"
+      }
+     },
+     {
+      "x": {
+       "type": "uri",
+       "value": "http://ex/b"
+      }
+     },
+     {
+      "x": {
+       "type": "uri",
+       "value": "http://ex/c"
+      }
+     }
+    ]
+   },
+   "note": "Upstream compares the set of local names of ?x; the port compares the multiset of ?x values (the spec answer has no duplicates here)."
+  },
+  {
+   "id": "SparqlMinusScopingTests#T25_values_left_only_no_shared_vars_is_noop",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/SparqlMinusScopingTests.java",
+   "line": 411,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix : <http://ex/> . :a :q 1 .",
+    "base": "http://ex/"
+   },
+   "query": "PREFIX : <http://ex/>\nSELECT ?a WHERE { VALUES ?a { 1 2 } MINUS { ?x :q 1 } } ORDER BY ?a",
+   "expect": {
+    "kind": "bindings",
+    "rows": [
+     {
+      "a": {
+       "type": "literal",
+       "value": "1",
+       "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+      }
+     },
+     {
+      "a": {
+       "type": "literal",
+       "value": "2",
+       "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "SparqlMinusScopingTests#T26_minus_shared_subset_only_subject_shared_removes_all_rows_for_that_subject",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/SparqlMinusScopingTests.java",
+   "line": 419,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix : <http://ex/> .\n:a :p 1 ; :q 99 .\n:b :p 2 .",
+    "base": "http://ex/"
+   },
+   "query": "PREFIX : <http://ex/>\nSELECT ?x ?n WHERE { ?x :p ?n MINUS { ?x :q ?m } } ORDER BY ?x",
+   "expect": {
+    "kind": "bindings",
+    "rows": [
+     {
+      "x": {
+       "type": "uri",
+       "value": "http://ex/b"
+      },
+      "n": {
+       "type": "literal",
+       "value": "2",
+       "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "SparqlMinusScopingTests#T27_rhs_subselect_order_by_limit_one_global_elimination",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/SparqlMinusScopingTests.java",
+   "line": 430,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix : <http://ex/> .\n:a :p 1 ; :q 1 .\n:b :p 2 ; :q 2 .\n:c :p 3 ; :q 3 .",
+    "base": "http://ex/"
+   },
+   "query": "PREFIX : <http://ex/>\nSELECT ?x WHERE {\n  ?x :p ?n .\n  MINUS {\n    { SELECT ?x WHERE { ?x :q ?m } ORDER BY ?m LIMIT 1 }\n  }\n} ORDER BY ?x",
+   "expect": {
+    "kind": "bindings",
+    "vars": [
+     "x"
+    ],
+    "rows": [
+     {
+      "x": {
+       "type": "uri",
+       "value": "http://ex/b"
+      }
+     },
+     {
+      "x": {
+       "type": "uri",
+       "value": "http://ex/c"
+      }
+     }
+    ]
+   },
+   "note": "Upstream compares the set of local names of ?x; the port compares the multiset of ?x values (the spec answer has no duplicates here)."
+  },
+  {
+   "id": "SparqlMinusScopingTests#T28_bnode_function_on_rhs_cannot_match_data_terms",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/SparqlMinusScopingTests.java",
+   "line": 446,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix : <http://ex/> .\n_:b1 a [] . _:b2 a [] .\n:k :p _:b1 . :l :p _:b2 .",
+    "base": "http://ex/"
+   },
+   "query": "PREFIX : <http://ex/>\nSELECT ?s WHERE { ?s :p ?id MINUS { BIND(BNODE() AS ?id) } } ORDER BY ?s",
+   "expect": {
+    "kind": "bindings",
+    "vars": [
+     "s"
+    ],
+    "rows": [
+     {
+      "s": {
+       "type": "uri",
+       "value": "http://ex/k"
+      }
+     },
+     {
+      "s": {
+       "type": "uri",
+       "value": "http://ex/l"
+      }
+     }
+    ]
+   },
+   "note": "Upstream compares the set of local names of ?s; the port compares the multiset of ?s values (the spec answer has no duplicates here)."
+  },
+  {
+   "id": "SparqlMinusScopingTests#T29_syntax_error_rebinding_in_rhs_must_fail_to_parse",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/SparqlMinusScopingTests.java",
+   "line": 456,
+   "sparql12": false,
+   "data": null,
+   "query": "PREFIX : <http://ex/>\nSELECT * WHERE {\n  ?x :p ?v .\n  MINUS { ?x :q ?v . BIND(1 AS ?v) }   # re-binding ?v inside same RHS group is illegal\n}",
+   "expect": {
+    "kind": "error"
+   },
+   "note": "SPARQL 1.1 §18.2.1: the variable assigned in a BIND must not be in use in the preceding triples block of the group."
+  },
+  {
+   "id": "DescribeTest#DescribeA",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/DescribeTest.java",
+   "line": 47,
+   "sparql12": false,
+   "data": {
+    "format": "trig",
+    "text": "@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n@prefix dc: <http://purl.org/dc/elements/1.1/> .\n@prefix foaf: <http://xmlns.com/foaf/0.1/> .\n@prefix ex: <http://example.org/> .\n\n{\n\tex:a rdfs:label \"a\";\n\t     ex:p [ rdfs:label \"anonymous 1\" ;\n\t            ex:p ex:b ] .\n\t            \n\tex:b rdfs:label \"b\" .\n\t\n\tex:c ex:p _:node1 ;\n\t     rdfs:label \"c\" .\n\t_:node1 ex:p ex:b .\n\t\n\tex:d ex:p _:node2 .\n\t_:node2 ex:p _:node3 .\n\t_:node3 ex:p ex:e .\n\t\n\tex:e rdfs:label \"e\" .\n\t\n\tex:f ex:p _:node4 .\n\t_:node4 ex:p _:node5 .\n\t_:node5 ex:p _:node6 .\n\t_:node6 ex:p _:node4 .\n\t\n}"
+   },
+   "query": "PREFIX dc: <http://purl.org/dc/terms/> \nPREFIX foaf: <http://xmlns.com/foaf/0.1/> \nPREFIX ex: <http://example.org/> \n\nDESCRIBE ex:a",
+   "expect": {
+    "kind": "graph",
+    "format": "turtle",
+    "text": "@prefix ex: <http://example.org/> . @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\nex:a rdfs:label \"a\" ; ex:p _:x . _:x rdfs:label \"anonymous 1\" ; ex:p ex:b ."
+   },
+   "note": "RDF4J's DESCRIBE (DescribeIteration) answers the symmetric concise bounded description: outgoing and incoming statements, recursing through blank nodes both ways. The port compares the whole RDF4J description, which is stronger than the upstream assertions (each blank object of ex:a ex:p has exactly 2 statements in the result); it is the answer RDF4J gives."
+  },
+  {
+   "id": "DescribeTest#DescribeAWhere",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/DescribeTest.java",
+   "line": 70,
+   "sparql12": false,
+   "data": {
+    "format": "trig",
+    "text": "@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n@prefix dc: <http://purl.org/dc/elements/1.1/> .\n@prefix foaf: <http://xmlns.com/foaf/0.1/> .\n@prefix ex: <http://example.org/> .\n\n{\n\tex:a rdfs:label \"a\";\n\t     ex:p [ rdfs:label \"anonymous 1\" ;\n\t            ex:p ex:b ] .\n\t            \n\tex:b rdfs:label \"b\" .\n\t\n\tex:c ex:p _:node1 ;\n\t     rdfs:label \"c\" .\n\t_:node1 ex:p ex:b .\n\t\n\tex:d ex:p _:node2 .\n\t_:node2 ex:p _:node3 .\n\t_:node3 ex:p ex:e .\n\t\n\tex:e rdfs:label \"e\" .\n\t\n\tex:f ex:p _:node4 .\n\t_:node4 ex:p _:node5 .\n\t_:node5 ex:p _:node6 .\n\t_:node6 ex:p _:node4 .\n\t\n}"
+   },
+   "query": "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX dc: <http://purl.org/dc/terms/> \nPREFIX foaf: <http://xmlns.com/foaf/0.1/> \nPREFIX ex: <http://example.org/> \n\nDESCRIBE ?x WHERE {?x rdfs:label \"a\". } ",
+   "implicitPrefixes": [
+    "rdfs"
+   ],
+   "expect": {
+    "kind": "graph",
+    "format": "turtle",
+    "text": "@prefix ex: <http://example.org/> . @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\nex:a rdfs:label \"a\" ; ex:p _:x . _:x rdfs:label \"anonymous 1\" ; ex:p ex:b ."
+   },
+   "note": "RDF4J's DESCRIBE (DescribeIteration) answers the symmetric concise bounded description: outgoing and incoming statements, recursing through blank nodes both ways. The port compares the whole RDF4J description, which is stronger than the upstream assertions (each blank object of ex:a ex:p has exactly 2 statements in the result); it is the answer RDF4J gives."
+  },
+  {
+   "id": "DescribeTest#DescribeWhere",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/DescribeTest.java",
+   "line": 93,
+   "sparql12": false,
+   "data": {
+    "format": "trig",
+    "text": "@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n@prefix dc: <http://purl.org/dc/elements/1.1/> .\n@prefix foaf: <http://xmlns.com/foaf/0.1/> .\n@prefix ex: <http://example.org/> .\n\n{\n\tex:a rdfs:label \"a\";\n\t     ex:p [ rdfs:label \"anonymous 1\" ;\n\t            ex:p ex:b ] .\n\t            \n\tex:b rdfs:label \"b\" .\n\t\n\tex:c ex:p _:node1 ;\n\t     rdfs:label \"c\" .\n\t_:node1 ex:p ex:b .\n\t\n\tex:d ex:p _:node2 .\n\t_:node2 ex:p _:node3 .\n\t_:node3 ex:p ex:e .\n\t\n\tex:e rdfs:label \"e\" .\n\t\n\tex:f ex:p _:node4 .\n\t_:node4 ex:p _:node5 .\n\t_:node5 ex:p _:node6 .\n\t_:node6 ex:p _:node4 .\n\t\n}"
+   },
+   "query": "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX dc: <http://purl.org/dc/terms/> \nPREFIX foaf: <http://xmlns.com/foaf/0.1/> \nPREFIX ex: <http://example.org/> \n\nDESCRIBE ?x WHERE {?x rdfs:label ?y . } ",
+   "implicitPrefixes": [
+    "rdfs"
+   ],
+   "expect": {
+    "kind": "graph",
+    "format": "turtle",
+    "text": "@prefix ex: <http://example.org/> . @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\nex:a rdfs:label \"a\" ; ex:p _:x . _:x rdfs:label \"anonymous 1\" ; ex:p ex:b . ex:b rdfs:label \"b\" . ex:c ex:p _:n1 ; rdfs:label \"c\" . _:n1 ex:p ex:b . ex:e rdfs:label \"e\" . ex:d ex:p _:n2 . _:n2 ex:p _:n3 . _:n3 ex:p ex:e ."
+   },
+   "note": "RDF4J's DESCRIBE (DescribeIteration) answers the symmetric concise bounded description: outgoing and incoming statements, recursing through blank nodes both ways. The port compares the whole RDF4J description, which is stronger than the upstream assertions (ex:a ex:p ?, ex:b/ex:c/ex:e have labels, some ? ex:p ex:b and some ? ex:p ex:e (an incoming statement of ex:e), nothing about ex:f, and each blank object of ex:a ex:p has 2 statements); it is the answer RDF4J gives."
+  },
+  {
+   "id": "DescribeTest#DescribeB",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/DescribeTest.java",
+   "line": 127,
+   "sparql12": false,
+   "data": {
+    "format": "trig",
+    "text": "@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n@prefix dc: <http://purl.org/dc/elements/1.1/> .\n@prefix foaf: <http://xmlns.com/foaf/0.1/> .\n@prefix ex: <http://example.org/> .\n\n{\n\tex:a rdfs:label \"a\";\n\t     ex:p [ rdfs:label \"anonymous 1\" ;\n\t            ex:p ex:b ] .\n\t            \n\tex:b rdfs:label \"b\" .\n\t\n\tex:c ex:p _:node1 ;\n\t     rdfs:label \"c\" .\n\t_:node1 ex:p ex:b .\n\t\n\tex:d ex:p _:node2 .\n\t_:node2 ex:p _:node3 .\n\t_:node3 ex:p ex:e .\n\t\n\tex:e rdfs:label \"e\" .\n\t\n\tex:f ex:p _:node4 .\n\t_:node4 ex:p _:node5 .\n\t_:node5 ex:p _:node6 .\n\t_:node6 ex:p _:node4 .\n\t\n}"
+   },
+   "query": "PREFIX dc: <http://purl.org/dc/terms/> \nPREFIX foaf: <http://xmlns.com/foaf/0.1/> \nPREFIX ex: <http://example.org/> \n\nDESCRIBE ex:b",
+   "expect": {
+    "kind": "graphContains",
+    "format": "turtle",
+    "text": "@prefix ex: <http://example.org/> . @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\nex:b rdfs:label \"b\" ."
+   },
+   "note": "Upstream asserts only that each blank subject s of (s ex:p ex:b) in the result also has an incoming statement in the result; that is not expressible with the runner's kinds (and holds vacuously when the result has no s ex:p ex:b). The port checks that the description of ex:b holds its own label. RDF4J's own answer also holds the incoming statements (symmetric CBD)."
+  },
+  {
+   "id": "DescribeTest#DescribeD",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/DescribeTest.java",
+   "line": 148,
+   "sparql12": false,
+   "data": {
+    "format": "trig",
+    "text": "@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n@prefix dc: <http://purl.org/dc/elements/1.1/> .\n@prefix foaf: <http://xmlns.com/foaf/0.1/> .\n@prefix ex: <http://example.org/> .\n\n{\n\tex:a rdfs:label \"a\";\n\t     ex:p [ rdfs:label \"anonymous 1\" ;\n\t            ex:p ex:b ] .\n\t            \n\tex:b rdfs:label \"b\" .\n\t\n\tex:c ex:p _:node1 ;\n\t     rdfs:label \"c\" .\n\t_:node1 ex:p ex:b .\n\t\n\tex:d ex:p _:node2 .\n\t_:node2 ex:p _:node3 .\n\t_:node3 ex:p ex:e .\n\t\n\tex:e rdfs:label \"e\" .\n\t\n\tex:f ex:p _:node4 .\n\t_:node4 ex:p _:node5 .\n\t_:node5 ex:p _:node6 .\n\t_:node6 ex:p _:node4 .\n\t\n}"
+   },
+   "query": "PREFIX dc: <http://purl.org/dc/terms/> \nPREFIX foaf: <http://xmlns.com/foaf/0.1/> \nPREFIX ex: <http://example.org/> \n\nDESCRIBE ex:d",
+   "expect": {
+    "kind": "graph",
+    "format": "turtle",
+    "text": "@prefix ex: <http://example.org/> . @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\nex:d ex:p _:n2 . _:n2 ex:p _:n3 . _:n3 ex:p ex:e ."
+   },
+   "note": "RDF4J's DESCRIBE (DescribeIteration) answers the symmetric concise bounded description: outgoing and incoming statements, recursing through blank nodes both ways. The port compares the whole RDF4J description, which is stronger than the upstream assertions (some ? ex:p ex:e, nothing with subject ex:e, and the blank chain from ex:d is followed); it is the answer RDF4J gives."
+  },
+  {
+   "id": "DescribeTest#DescribeF",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/DescribeTest.java",
+   "line": 180,
+   "sparql12": false,
+   "data": {
+    "format": "trig",
+    "text": "@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n@prefix dc: <http://purl.org/dc/elements/1.1/> .\n@prefix foaf: <http://xmlns.com/foaf/0.1/> .\n@prefix ex: <http://example.org/> .\n\n{\n\tex:a rdfs:label \"a\";\n\t     ex:p [ rdfs:label \"anonymous 1\" ;\n\t            ex:p ex:b ] .\n\t            \n\tex:b rdfs:label \"b\" .\n\t\n\tex:c ex:p _:node1 ;\n\t     rdfs:label \"c\" .\n\t_:node1 ex:p ex:b .\n\t\n\tex:d ex:p _:node2 .\n\t_:node2 ex:p _:node3 .\n\t_:node3 ex:p ex:e .\n\t\n\tex:e rdfs:label \"e\" .\n\t\n\tex:f ex:p _:node4 .\n\t_:node4 ex:p _:node5 .\n\t_:node5 ex:p _:node6 .\n\t_:node6 ex:p _:node4 .\n\t\n}"
+   },
+   "query": "PREFIX dc: <http://purl.org/dc/terms/> \nPREFIX foaf: <http://xmlns.com/foaf/0.1/> \nPREFIX ex: <http://example.org/> \n\nDESCRIBE ex:f",
+   "expect": {
+    "kind": "graph",
+    "format": "turtle",
+    "text": "@prefix ex: <http://example.org/> . @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\nex:f ex:p _:n4 . _:n4 ex:p _:n5 . _:n5 ex:p _:n6 . _:n6 ex:p _:n4 ."
+   },
+   "note": "RDF4J's DESCRIBE (DescribeIteration) answers the symmetric concise bounded description: outgoing and incoming statements, recursing through blank nodes both ways. The port compares the whole RDF4J description, which is stronger than the upstream assertions (exactly 4 statements, the blank cycle from ex:f followed); it is the answer RDF4J gives."
+  },
+  {
+   "id": "DescribeTest#DescribeMultipleD",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/DescribeTest.java",
+   "line": 280,
+   "sparql12": false,
+   "data": null,
+   "setup": [
+    "insert data { <urn:1> <urn:p1> <urn:v> . [] <urn:blank> <urn:1>. <urn:2> <urn:p2> <urn:3> . [] <urn:blank> <urn:2> . <urn:4> <urn:p2> <urn:3> . <urn:4> <urn:blank> [] .} "
+   ],
+   "query": "PREFIX dc: <http://purl.org/dc/terms/> \nPREFIX foaf: <http://xmlns.com/foaf/0.1/> \nPREFIX ex: <http://example.org/> \n\nDESCRIBE <urn:1> <urn:2> <urn:4> ",
+   "expect": {
+    "kind": "graph",
+    "format": "turtle",
+    "text": "<urn:1> <urn:p1> <urn:v> . [] <urn:blank> <urn:1>. <urn:2> <urn:p2> <urn:3> . [] <urn:blank> <urn:2> . <urn:4> <urn:p2> <urn:3> . <urn:4> <urn:blank> [] ."
+   },
+   "note": "RDF4J's DESCRIBE (DescribeIteration) answers the symmetric concise bounded description: outgoing and incoming statements, recursing through blank nodes both ways. The port compares the whole RDF4J description, which is stronger than the upstream assertions (urn:1 urn:p1 ?, ? urn:blank urn:1 (incoming), urn:2 urn:p2 ?, urn:4 urn:p2 ?, urn:4 urn:blank ?); it is the answer RDF4J gives."
+  },
+  {
+   "id": "DescribeTest#DescribeMultipleC",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/DescribeTest.java",
+   "line": 256,
+   "sparql12": false,
+   "data": null,
+   "setup": [
+    "insert data { <urn:1> <urn:p1> <urn:v> . [] <urn:blank> <urn:1>. <urn:1> <urn:blank> [] . <urn:2> <urn:p2> <urn:3> . } "
+   ],
+   "query": "PREFIX dc: <http://purl.org/dc/terms/> \nPREFIX foaf: <http://xmlns.com/foaf/0.1/> \nPREFIX ex: <http://example.org/> \n\nDESCRIBE <urn:1> <urn:2> ",
+   "expect": {
+    "kind": "graph",
+    "format": "turtle",
+    "text": "<urn:1> <urn:p1> <urn:v> . [] <urn:blank> <urn:1>. <urn:1> <urn:blank> [] . <urn:2> <urn:p2> <urn:3> ."
+   },
+   "note": "RDF4J's DESCRIBE (DescribeIteration) answers the symmetric concise bounded description: outgoing and incoming statements, recursing through blank nodes both ways. The port compares the whole RDF4J description, which is stronger than the upstream assertions (urn:1 urn:p1 ?, urn:1 urn:blank ?, ? urn:blank urn:1 (incoming), urn:2 urn:p2 ?); it is the answer RDF4J gives."
+  },
+  {
+   "id": "DescribeTest#DescribeMultipleB",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/DescribeTest.java",
+   "line": 233,
+   "sparql12": false,
+   "data": null,
+   "setup": [
+    "insert data { <urn:1> <urn:p1> <urn:v> . <urn:1> <urn:blank> [] . <urn:2> <urn:p2> <urn:3> . } "
+   ],
+   "query": "PREFIX dc: <http://purl.org/dc/terms/> \nPREFIX foaf: <http://xmlns.com/foaf/0.1/> \nPREFIX ex: <http://example.org/> \n\nDESCRIBE <urn:1> <urn:2> ",
+   "expect": {
+    "kind": "graph",
+    "format": "turtle",
+    "text": "<urn:1> <urn:p1> <urn:v> . <urn:1> <urn:blank> [] . <urn:2> <urn:p2> <urn:3> ."
+   },
+   "note": "RDF4J's DESCRIBE (DescribeIteration) answers the symmetric concise bounded description: outgoing and incoming statements, recursing through blank nodes both ways. The port compares the whole RDF4J description, which is stronger than the upstream assertions (urn:1 urn:p1 ?, urn:1 urn:blank ?, urn:2 urn:p2 ?); it is the answer RDF4J gives."
+  },
+  {
+   "id": "DescribeTest#DescribeMultipleA",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/DescribeTest.java",
+   "line": 210,
+   "sparql12": false,
+   "data": null,
+   "setup": [
+    "insert data { <urn:1> <urn:p1> <urn:v> . [] <urn:blank> <urn:1> . <urn:2> <urn:p2> <urn:3> . } "
+   ],
+   "query": "PREFIX dc: <http://purl.org/dc/terms/> \nPREFIX foaf: <http://xmlns.com/foaf/0.1/> \nPREFIX ex: <http://example.org/> \n\nDESCRIBE <urn:1> <urn:2> ",
+   "expect": {
+    "kind": "graph",
+    "format": "turtle",
+    "text": "<urn:1> <urn:p1> <urn:v> . [] <urn:blank> <urn:1> . <urn:2> <urn:p2> <urn:3> ."
+   },
+   "note": "RDF4J's DESCRIBE (DescribeIteration) answers the symmetric concise bounded description: outgoing and incoming statements, recursing through blank nodes both ways. The port compares the whole RDF4J description, which is stronger than the upstream assertions (urn:1 urn:p1 ?, ? urn:blank urn:1 (incoming), urn:2 urn:p2 ?); it is the answer RDF4J gives."
+  }
+ ],
+ "notPorted": [
+  {
+   "id": "LateralTest#LateralPreservesInitialBindingForRightOnlyVariable",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/LateralTest.java",
+   "reason": "Uses TupleQuery.setBinding(\"s\", ex:subject2): RDF4J pre-binds ?s everywhere, including inside the sub-select where ?s is not projected, so the answer is Label 2. A VALUES clause cannot express that (it would join with the projected ?label only and give Label 1), so the test is not expressible via the core API."
+  }
+ ]
+}

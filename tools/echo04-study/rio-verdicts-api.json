@@ -1,0 +1,55 @@
+{
+ "cases": {
+  "AbstractParserHandlingTest#testNoLanguageWithRDFLangStringNoFailCase1#turtle": {
+   "verdict": "divergence",
+   "group": "langstring-without-tag",
+   "spec": "RDF 1.1 Concepts section 3.3 (Literals): a literal is a language-tagged string if and only if its datatype IRI is rdf:langString, and then it has a non-empty language tag; RDF 1.2 Concepts section 3.4",
+   "note": "\"G'day mate\"^^rdf:langString has no language tag, so it is not a literal of the abstract syntax. RDF4J (RDFLangStringDatatypeHandler) turns it into the xsd:string literal \"G'day mate\"; core refuses (term.invalid-langtag)."
+  },
+  "AbstractParserHandlingTest#testNoLanguageWithRDFLangStringNoFailCase1#ntriples": {
+   "verdict": "divergence",
+   "group": "langstring-without-tag",
+   "spec": "RDF 1.1 Concepts section 3.3 (Literals); RDF 1.2 Concepts section 3.4",
+   "note": "as #turtle"
+  },
+  "AbstractParserHandlingTest#testNoLanguageWithRDFLangStringNoFailCase1#nquads": {
+   "verdict": "divergence",
+   "group": "langstring-without-tag",
+   "spec": "RDF 1.1 Concepts section 3.3 (Literals); RDF 1.2 Concepts section 3.4",
+   "note": "as #turtle"
+  },
+  "AbstractParserHandlingTest#testNoLanguageWithRDFLangStringNoFailCase1#trig": {
+   "verdict": "divergence",
+   "group": "langstring-without-tag",
+   "spec": "RDF 1.1 Concepts section 3.3 (Literals); RDF 1.2 Concepts section 3.4",
+   "note": "as #turtle"
+  },
+  "AbstractParserHandlingTest#testNoLanguageWithRDFLangStringNoFailCase1#rdfxml": {
+   "verdict": "divergence",
+   "group": "langstring-without-tag",
+   "spec": "RDF 1.1 Concepts section 3.3 (Literals); RDF 1.2 Concepts section 3.4",
+   "note": "rdf:datatype=\"...#langString\" with no xml:lang; core refuses (parse.syntax)"
+  },
+  "AbstractParserHandlingTest#testNoLanguageWithRDFLangStringNoFailCase1#jsonld": {
+   "verdict": "defect",
+   "group": "jsonld-keyword-form-key-with-base",
+   "issue": "https://github.com/danbri/factoidal/issues/1064",
+   "spec": "JSON-LD 1.1 API section 5.2.2 IRI Expansion step 2: \"If value has the form of a keyword (i.e., it matches the ABNF rule \\\"@\\\"1*ALPHA from [RFC5234]), a processor SHOULD generate a warning and return null.\"; section 5.1.2 Expansion Algorithm step 13.3: \"If expanded property is null or it neither contains a colon (:) nor it is a keyword, drop key by continuing to the next key.\"",
+   "note": "The RDF4J resource spells the key \"@datatype\" (not a JSON-LD keyword), so the key is dropped and the value object is {\"@value\": \"G'day mate\"}, an xsd:string literal: RDF4J's expectation. core.parse(text, {format:'jsonld'}) gives that answer; with baseIRI 'urn:test:base:' (what RDF4J passes) or 'http://ex/' it refuses with parse.syntax 'invalid value object'. Minimal: core.parse('[{\"@id\":\"_:a\",\"http://p\":[{\"@value\":\"x\",\"@foo\":\"y\"}]}]', {format:'jsonld', baseIRI:'http://ex/'}) refuses; without baseIRI it gives _:a <http://p> \"x\". A keyword-form key at node level ({\"@foo\":\"y\"}) is dropped correctly with a base."
+  },
+  "ResolveUriTest#colonInPathWithoutBaseFails": {
+   "verdict": "defect",
+   "group": "iri-colon-absolute",
+   "issue": "https://github.com/danbri/factoidal/issues/472",
+   "spec": "RFC 3986 section 3.1 (scheme = ALPHA *( ALPHA / DIGIT / \"+\" / \"-\" / \".\" ) \":\") and section 4.2; RDF 1.2 Turtle section 6.3",
+   "note": "core.parse('<urn:s> <urn:p> <path/foo:bar> .', {format:'turtle'}) accepts and keeps the relative reference <path/foo:bar> unresolved, while <a/b> with no base is refused. 'path/foo' cannot be a scheme (contains '/'), so the reference is relative and there is no base."
+  },
+  "ResolveUriTest#leadingColonInFirstPathSegmentIsRejected": {
+   "verdict": "defect",
+   "group": "iri-generic-syntax",
+   "issue": "https://github.com/danbri/factoidal/issues/1057",
+   "spec": "RDF 1.2 Turtle section 6.3 (relative IRI references are resolved per RFC 3986); RFC 3986 section 4.2 (\"A path segment that contains a colon character (e.g., \\\"this:that\\\") cannot be used as the first segment of a relative-path reference\"); RFC 3987 section 2.2 irelative-ref / ipath-noscheme",
+   "note": "core.parse('<urn:s> <urn:p> <:foo> .', {format:'turtle', baseIRI:'http://example.org/dir/doc'}) accepts and gives <http://example.org/dir/:foo>. ':foo' is neither an absolute IRI (a scheme starts with ALPHA) nor a relative reference (ipath-noscheme forbids ':' in the first segment), so RFC 3986 5.2 resolution is not defined for it. The same check would refuse <:foo> and <1a:foo> in N-Triples, which core also accepts."
+  }
+ }
+}

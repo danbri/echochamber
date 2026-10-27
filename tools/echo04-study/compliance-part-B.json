@@ -1,0 +1,1549 @@
+{
+ "classes": [
+  "ArbitraryLengthPathTest",
+  "PropertyPathTest",
+  "BindTest",
+  "OptionalTest",
+  "UnionTest",
+  "ValuesTest",
+  "SubselectTest"
+ ],
+ "methods": [
+  "ArbitraryLengthPathTest#PropertyPathInTree",
+  "ArbitraryLengthPathTest#ArbitraryLengthPathWithBinding1",
+  "ArbitraryLengthPathTest#ArbitraryLengthPathWithFilter3",
+  "ArbitraryLengthPathTest#ArbitraryLengthPathWithFilter2",
+  "ArbitraryLengthPathTest#ArbitraryLengthPathWithFilter1",
+  "ArbitraryLengthPathTest#ArbitraryLengthPathWithBinding8",
+  "ArbitraryLengthPathTest#ArbitraryLengthPathWithBinding2",
+  "ArbitraryLengthPathTest#ArbitraryLengthPathWithBinding3",
+  "ArbitraryLengthPathTest#ArbitraryLengthPathWithBinding4",
+  "ArbitraryLengthPathTest#ArbitraryLengthPathWithBinding5",
+  "ArbitraryLengthPathTest#ArbitraryLengthPathWithBinding6",
+  "ArbitraryLengthPathTest#ArbitraryLengthPathWithBinding7",
+  "PropertyPathTest#SES2147PropertyPathsWithIdenticalSubsPreds",
+  "PropertyPathTest#InversePath",
+  "PropertyPathTest#ComplexPath",
+  "PropertyPathTest#NestedInversePropertyPathWithZeroLength",
+  "PropertyPathTest#SES1073InverseSymmetricPattern",
+  "PropertyPathTest#SES1685propPathSameVar",
+  "PropertyPathTest#SES2336NegatedPropertyPathMod",
+  "PropertyPathTest#PropertyPathNegationInversion",
+  "PropertyPathTest#SES2024PropertyPathAnonVarSharing",
+  "BindTest#GH4499BindFilterNotExist2",
+  "BindTest#GH4499BindFilterNotExist1",
+  "BindTest#GH3696Bind",
+  "BindTest#SelectBindOnly",
+  "BindTest#SES2250BindErrorsInPath",
+  "BindTest#SES2250BindErrors",
+  "BindTest#BindScopeUnion",
+  "BindTest#BindScope",
+  "BindTest#BindError",
+  "OptionalTest#SameTermRepeatInOptional",
+  "OptionalTest#ValuesAfterOptional",
+  "OptionalTest#OptionalFilterCanUseOuterBinding",
+  "OptionalTest#SES1121VarNamesInOptionals",
+  "OptionalTest#SES1898LeftJoinSemantics1",
+  "UnionTest#EmptyUnion",
+  "UnionTest#SameTermRepeatInUnion",
+  "UnionTest#SameTermRepeatInUnionAndOptional",
+  "ValuesTest#ValuesInOptional",
+  "ValuesTest#ValuesClauseNamedGraph",
+  "ValuesTest#ValuesCartesianProduct",
+  "ValuesTest#SES1081SameTermWithValues",
+  "ValuesTest#SES2136",
+  "ValuesTest#FilterExistsExternalValuesClause",
+  "ValuesTest#MultipleValuesClauses",
+  "SubselectTest#SES2373SubselectOptional",
+  "SubselectTest#SES2154SubselectOptional"
+ ],
+ "cases": [
+  {
+   "id": "ArbitraryLengthPathTest#ArbitraryLengthPathWithBinding1#1",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/ArbitraryLengthPathTest.java",
+   "line": 67,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix owl: <http://www.w3.org/2002/07/owl#> .\n@prefix ex: <http://example.org/> .\n\nex:A rdfs:subClassOf owl:Thing .\nex:A rdf:type owl:Class .\nex:B rdf:type owl:Class .\nex:B rdfs:subClassOf ex:A .\nex:C rdf:type owl:Class .\nex:C rdfs:subClassOf ex:A .\nex:D rdf:type owl:Class .\nex:D rdfs:subClassOf ex:A . "
+   },
+   "query": "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\nPREFIX dc: <http://purl.org/dc/terms/> \nPREFIX foaf: <http://xmlns.com/foaf/0.1/> \nPREFIX ex: <http://example.org/> \n\nSELECT ?parent ?child WHERE { ?child a owl:Class . ?child rdfs:subClassOf+ ?parent . }",
+   "expect": {
+    "kind": "count",
+    "n": 7
+   },
+   "implicitPrefixes": [
+    "rdfs",
+    "owl"
+   ],
+   "note": "first evaluation, no binding"
+  },
+  {
+   "id": "ArbitraryLengthPathTest#ArbitraryLengthPathWithBinding1#2",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/ArbitraryLengthPathTest.java",
+   "line": 67,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix owl: <http://www.w3.org/2002/07/owl#> .\n@prefix ex: <http://example.org/> .\n\nex:A rdfs:subClassOf owl:Thing .\nex:A rdf:type owl:Class .\nex:B rdf:type owl:Class .\nex:B rdfs:subClassOf ex:A .\nex:C rdf:type owl:Class .\nex:C rdfs:subClassOf ex:A .\nex:D rdf:type owl:Class .\nex:D rdfs:subClassOf ex:A . "
+   },
+   "query": "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\nPREFIX dc: <http://purl.org/dc/terms/> \nPREFIX foaf: <http://xmlns.com/foaf/0.1/> \nPREFIX ex: <http://example.org/> \n\nSELECT ?parent ?child WHERE { ?child a owl:Class . ?child rdfs:subClassOf+ ?parent . }\nVALUES ?parent { owl:Thing }",
+   "expect": {
+    "kind": "count",
+    "n": 4
+   },
+   "implicitPrefixes": [
+    "rdfs",
+    "owl"
+   ],
+   "note": "second evaluation with tq.setBinding(\"parent\", owl:Thing); setBinding expressed as a trailing VALUES clause (the query is changed)"
+  },
+  {
+   "id": "ArbitraryLengthPathTest#ArbitraryLengthPathWithBinding2#1",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/ArbitraryLengthPathTest.java",
+   "line": 115,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix owl: <http://www.w3.org/2002/07/owl#> .\n@prefix ex: <http://example.org/> .\n\nex:A rdfs:subClassOf owl:Thing .\nex:A rdf:type owl:Class .\nex:B rdf:type owl:Class .\nex:B rdfs:subClassOf ex:A .\nex:C rdf:type owl:Class .\nex:C rdfs:subClassOf ex:A .\nex:D rdf:type owl:Class .\nex:D rdfs:subClassOf ex:A . "
+   },
+   "query": "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\nPREFIX dc: <http://purl.org/dc/terms/> \nPREFIX foaf: <http://xmlns.com/foaf/0.1/> \nPREFIX ex: <http://example.org/> \n\nSELECT ?parent ?child WHERE { ?child rdfs:subClassOf+ ?parent . }",
+   "expect": {
+    "kind": "count",
+    "n": 7
+   },
+   "implicitPrefixes": [
+    "rdfs",
+    "owl"
+   ],
+   "note": "first evaluation, no binding"
+  },
+  {
+   "id": "ArbitraryLengthPathTest#ArbitraryLengthPathWithBinding2#2",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/ArbitraryLengthPathTest.java",
+   "line": 115,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix owl: <http://www.w3.org/2002/07/owl#> .\n@prefix ex: <http://example.org/> .\n\nex:A rdfs:subClassOf owl:Thing .\nex:A rdf:type owl:Class .\nex:B rdf:type owl:Class .\nex:B rdfs:subClassOf ex:A .\nex:C rdf:type owl:Class .\nex:C rdfs:subClassOf ex:A .\nex:D rdf:type owl:Class .\nex:D rdfs:subClassOf ex:A . "
+   },
+   "query": "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\nPREFIX dc: <http://purl.org/dc/terms/> \nPREFIX foaf: <http://xmlns.com/foaf/0.1/> \nPREFIX ex: <http://example.org/> \n\nSELECT ?parent ?child WHERE { ?child rdfs:subClassOf+ ?parent . }\nVALUES ?parent { owl:Thing }",
+   "expect": {
+    "kind": "count",
+    "n": 4
+   },
+   "implicitPrefixes": [
+    "rdfs",
+    "owl"
+   ],
+   "note": "second evaluation with tq.setBinding(\"parent\", owl:Thing); setBinding expressed as a trailing VALUES clause (the query is changed)"
+  },
+  {
+   "id": "ArbitraryLengthPathTest#ArbitraryLengthPathWithBinding3#1",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/ArbitraryLengthPathTest.java",
+   "line": 165,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix owl: <http://www.w3.org/2002/07/owl#> .\n@prefix ex: <http://example.org/> .\n\nex:A rdfs:subClassOf owl:Thing .\nex:A rdf:type owl:Class .\nex:B rdf:type owl:Class .\nex:B rdfs:subClassOf ex:A .\nex:C rdf:type owl:Class .\nex:C rdfs:subClassOf ex:A .\nex:D rdf:type owl:Class .\nex:D rdfs:subClassOf ex:A . "
+   },
+   "query": "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\nPREFIX dc: <http://purl.org/dc/terms/> \nPREFIX foaf: <http://xmlns.com/foaf/0.1/> \nPREFIX ex: <http://example.org/> \n\nSELECT ?parent ?child WHERE { ?child rdfs:subClassOf+ ?parent . }",
+   "expect": {
+    "kind": "count",
+    "n": 7
+   },
+   "implicitPrefixes": [
+    "rdfs",
+    "owl"
+   ],
+   "note": "first evaluation, no binding"
+  },
+  {
+   "id": "ArbitraryLengthPathTest#ArbitraryLengthPathWithBinding3#2",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/ArbitraryLengthPathTest.java",
+   "line": 165,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix owl: <http://www.w3.org/2002/07/owl#> .\n@prefix ex: <http://example.org/> .\n\nex:A rdfs:subClassOf owl:Thing .\nex:A rdf:type owl:Class .\nex:B rdf:type owl:Class .\nex:B rdfs:subClassOf ex:A .\nex:C rdf:type owl:Class .\nex:C rdfs:subClassOf ex:A .\nex:D rdf:type owl:Class .\nex:D rdfs:subClassOf ex:A . "
+   },
+   "query": "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\nPREFIX dc: <http://purl.org/dc/terms/> \nPREFIX foaf: <http://xmlns.com/foaf/0.1/> \nPREFIX ex: <http://example.org/> \n\nSELECT ?parent ?child WHERE { ?child rdfs:subClassOf+ ?parent . }\nVALUES ?child { ex:C }",
+   "expect": {
+    "kind": "count",
+    "n": 2
+   },
+   "implicitPrefixes": [
+    "rdfs",
+    "owl"
+   ],
+   "note": "second evaluation with tq.setBinding(\"child\", ex:C); setBinding expressed as a trailing VALUES clause (the query is changed)"
+  },
+  {
+   "id": "ArbitraryLengthPathTest#ArbitraryLengthPathWithBinding4#1",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/ArbitraryLengthPathTest.java",
+   "line": 215,
+   "sparql12": false,
+   "data": {
+    "format": "trig",
+    "text": "@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix owl: <http://www.w3.org/2002/07/owl#> .\n@prefix ex: <http://example.org/> .\n<http://example.org/alice> {\n\nex:A rdfs:subClassOf owl:Thing .\nex:A rdf:type owl:Class .\nex:B rdf:type owl:Class .\nex:B rdfs:subClassOf ex:A .\nex:C rdf:type owl:Class .\nex:C rdfs:subClassOf ex:A .\nex:D rdf:type owl:Class .\nex:D rdfs:subClassOf ex:A . \n}\n"
+   },
+   "query": "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\nPREFIX dc: <http://purl.org/dc/terms/> \nPREFIX foaf: <http://xmlns.com/foaf/0.1/> \nPREFIX ex: <http://example.org/> \n\nSELECT ?parent ?child WHERE { ?child rdfs:subClassOf+ ?parent . }",
+   "expect": {
+    "kind": "count",
+    "n": 7
+   },
+   "implicitPrefixes": [
+    "rdfs",
+    "owl"
+   ],
+   "unionDefaultGraph": true,
+   "note": "first evaluation, no binding; data loaded into context ex:alice"
+  },
+  {
+   "id": "ArbitraryLengthPathTest#ArbitraryLengthPathWithBinding4#2",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/ArbitraryLengthPathTest.java",
+   "line": 215,
+   "sparql12": false,
+   "data": {
+    "format": "trig",
+    "text": "@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix owl: <http://www.w3.org/2002/07/owl#> .\n@prefix ex: <http://example.org/> .\n<http://example.org/alice> {\n\nex:A rdfs:subClassOf owl:Thing .\nex:A rdf:type owl:Class .\nex:B rdf:type owl:Class .\nex:B rdfs:subClassOf ex:A .\nex:C rdf:type owl:Class .\nex:C rdfs:subClassOf ex:A .\nex:D rdf:type owl:Class .\nex:D rdfs:subClassOf ex:A . \n}\n"
+   },
+   "query": "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\nPREFIX dc: <http://purl.org/dc/terms/> \nPREFIX foaf: <http://xmlns.com/foaf/0.1/> \nPREFIX ex: <http://example.org/> \n\nSELECT ?parent ?child WHERE { ?child rdfs:subClassOf+ ?parent . }\nVALUES ?child { ex:C }",
+   "expect": {
+    "kind": "count",
+    "n": 2
+   },
+   "implicitPrefixes": [
+    "rdfs",
+    "owl"
+   ],
+   "unionDefaultGraph": true,
+   "note": "second evaluation with tq.setBinding(\"child\", ex:C); setBinding expressed as a trailing VALUES clause (the query is changed); data loaded into context ex:alice"
+  },
+  {
+   "id": "ArbitraryLengthPathTest#ArbitraryLengthPathWithBinding5#1",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/ArbitraryLengthPathTest.java",
+   "line": 265,
+   "sparql12": false,
+   "data": {
+    "format": "trig",
+    "text": "@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix owl: <http://www.w3.org/2002/07/owl#> .\n@prefix ex: <http://example.org/> .\n<http://example.org/alice> {\n\nex:A rdfs:subClassOf owl:Thing .\nex:A rdf:type owl:Class .\nex:B rdf:type owl:Class .\nex:B rdfs:subClassOf ex:A .\nex:C rdf:type owl:Class .\nex:C rdfs:subClassOf ex:A .\nex:D rdf:type owl:Class .\nex:D rdfs:subClassOf ex:A . \n}\n<http://example.org/bob> {\n\nex:A rdfs:subClassOf owl:Thing .\nex:A rdf:type owl:Class .\nex:B rdf:type owl:Class .\nex:B rdfs:subClassOf ex:A .\nex:C rdf:type owl:Class .\nex:C rdfs:subClassOf ex:A .\nex:D rdf:type owl:Class .\nex:D rdfs:subClassOf ex:A . \n}\n"
+   },
+   "query": "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\nPREFIX dc: <http://purl.org/dc/terms/> \nPREFIX foaf: <http://xmlns.com/foaf/0.1/> \nPREFIX ex: <http://example.org/> \n\nSELECT ?parent ?child WHERE { ?child rdfs:subClassOf+ ?parent . }",
+   "expect": {
+    "kind": "count",
+    "n": 7
+   },
+   "implicitPrefixes": [
+    "rdfs",
+    "owl"
+   ],
+   "unionDefaultGraph": true,
+   "note": "first evaluation, no binding; data loaded into contexts ex:alice and ex:bob"
+  },
+  {
+   "id": "ArbitraryLengthPathTest#ArbitraryLengthPathWithBinding5#2",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/ArbitraryLengthPathTest.java",
+   "line": 265,
+   "sparql12": false,
+   "data": {
+    "format": "trig",
+    "text": "@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix owl: <http://www.w3.org/2002/07/owl#> .\n@prefix ex: <http://example.org/> .\n<http://example.org/alice> {\n\nex:A rdfs:subClassOf owl:Thing .\nex:A rdf:type owl:Class .\nex:B rdf:type owl:Class .\nex:B rdfs:subClassOf ex:A .\nex:C rdf:type owl:Class .\nex:C rdfs:subClassOf ex:A .\nex:D rdf:type owl:Class .\nex:D rdfs:subClassOf ex:A . \n}\n<http://example.org/bob> {\n\nex:A rdfs:subClassOf owl:Thing .\nex:A rdf:type owl:Class .\nex:B rdf:type owl:Class .\nex:B rdfs:subClassOf ex:A .\nex:C rdf:type owl:Class .\nex:C rdfs:subClassOf ex:A .\nex:D rdf:type owl:Class .\nex:D rdfs:subClassOf ex:A . \n}\n"
+   },
+   "query": "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\nPREFIX dc: <http://purl.org/dc/terms/> \nPREFIX foaf: <http://xmlns.com/foaf/0.1/> \nPREFIX ex: <http://example.org/> \n\nSELECT ?parent ?child WHERE { ?child rdfs:subClassOf+ ?parent . }\nVALUES ?child { ex:C }",
+   "expect": {
+    "kind": "count",
+    "n": 2
+   },
+   "implicitPrefixes": [
+    "rdfs",
+    "owl"
+   ],
+   "unionDefaultGraph": true,
+   "note": "second evaluation with tq.setBinding(\"child\", ex:C); setBinding expressed as a trailing VALUES clause (the query is changed); data loaded into contexts ex:alice and ex:bob"
+  },
+  {
+   "id": "ArbitraryLengthPathTest#ArbitraryLengthPathWithBinding6#1",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/ArbitraryLengthPathTest.java",
+   "line": 321,
+   "sparql12": false,
+   "data": {
+    "format": "trig",
+    "text": "@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix owl: <http://www.w3.org/2002/07/owl#> .\n@prefix ex: <http://example.org/> .\n<http://example.org/alice> {\n\nex:A rdfs:subClassOf owl:Thing .\nex:A rdf:type owl:Class .\nex:B rdf:type owl:Class .\nex:B rdfs:subClassOf ex:A .\nex:C rdf:type owl:Class .\nex:C rdfs:subClassOf ex:A .\nex:D rdf:type owl:Class .\nex:D rdfs:subClassOf ex:A . \n}\n<http://example.org/bob> {\n\nex:A rdfs:subClassOf owl:Thing .\nex:A rdf:type owl:Class .\nex:B rdf:type owl:Class .\nex:B rdfs:subClassOf ex:A .\nex:C rdf:type owl:Class .\nex:C rdfs:subClassOf ex:A .\nex:D rdf:type owl:Class .\nex:D rdfs:subClassOf ex:A . \n}\n<http://example.org/mary> {\n\nex:A rdfs:subClassOf owl:Thing .\nex:A rdf:type owl:Class .\nex:B rdf:type owl:Class .\nex:B rdfs:subClassOf ex:A .\nex:C rdf:type owl:Class .\nex:C rdfs:subClassOf ex:A .\nex:D rdf:type owl:Class .\nex:D rdfs:subClassOf ex:A . \n}\n"
+   },
+   "query": "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\nPREFIX dc: <http://purl.org/dc/terms/> \nPREFIX foaf: <http://xmlns.com/foaf/0.1/> \nPREFIX ex: <http://example.org/> \n\nSELECT ?parent ?child WHERE { ?child rdfs:subClassOf+ ?parent . }",
+   "expect": {
+    "kind": "count",
+    "n": 7
+   },
+   "implicitPrefixes": [
+    "rdfs",
+    "owl"
+   ],
+   "unionDefaultGraph": true,
+   "note": "first evaluation, no binding; data loaded into contexts ex:alice, ex:bob, ex:mary"
+  },
+  {
+   "id": "ArbitraryLengthPathTest#ArbitraryLengthPathWithBinding6#2",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/ArbitraryLengthPathTest.java",
+   "line": 321,
+   "sparql12": false,
+   "data": {
+    "format": "trig",
+    "text": "@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix owl: <http://www.w3.org/2002/07/owl#> .\n@prefix ex: <http://example.org/> .\n<http://example.org/alice> {\n\nex:A rdfs:subClassOf owl:Thing .\nex:A rdf:type owl:Class .\nex:B rdf:type owl:Class .\nex:B rdfs:subClassOf ex:A .\nex:C rdf:type owl:Class .\nex:C rdfs:subClassOf ex:A .\nex:D rdf:type owl:Class .\nex:D rdfs:subClassOf ex:A . \n}\n<http://example.org/bob> {\n\nex:A rdfs:subClassOf owl:Thing .\nex:A rdf:type owl:Class .\nex:B rdf:type owl:Class .\nex:B rdfs:subClassOf ex:A .\nex:C rdf:type owl:Class .\nex:C rdfs:subClassOf ex:A .\nex:D rdf:type owl:Class .\nex:D rdfs:subClassOf ex:A . \n}\n<http://example.org/mary> {\n\nex:A rdfs:subClassOf owl:Thing .\nex:A rdf:type owl:Class .\nex:B rdf:type owl:Class .\nex:B rdfs:subClassOf ex:A .\nex:C rdf:type owl:Class .\nex:C rdfs:subClassOf ex:A .\nex:D rdf:type owl:Class .\nex:D rdfs:subClassOf ex:A . \n}\n"
+   },
+   "query": "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\nPREFIX dc: <http://purl.org/dc/terms/> \nPREFIX foaf: <http://xmlns.com/foaf/0.1/> \nPREFIX ex: <http://example.org/> \n\nSELECT ?parent ?child WHERE { ?child rdfs:subClassOf+ ?parent . }\nVALUES ?child { ex:C }",
+   "expect": {
+    "kind": "count",
+    "n": 2
+   },
+   "implicitPrefixes": [
+    "rdfs",
+    "owl"
+   ],
+   "unionDefaultGraph": true,
+   "note": "second evaluation with tq.setBinding(\"child\", ex:C); setBinding expressed as a trailing VALUES clause (the query is changed); data loaded into contexts ex:alice, ex:bob, ex:mary"
+  },
+  {
+   "id": "ArbitraryLengthPathTest#ArbitraryLengthPathWithBinding7#1",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/ArbitraryLengthPathTest.java",
+   "line": 377,
+   "sparql12": false,
+   "data": {
+    "format": "trig",
+    "text": "@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix owl: <http://www.w3.org/2002/07/owl#> .\n@prefix ex: <http://example.org/> .\n<http://example.org/alice> {\n\nex:A rdfs:subClassOf owl:Thing .\nex:A rdf:type owl:Class .\nex:B rdf:type owl:Class .\nex:B rdfs:subClassOf ex:A .\nex:C rdf:type owl:Class .\nex:C rdfs:subClassOf ex:A .\nex:D rdf:type owl:Class .\nex:D rdfs:subClassOf ex:A . \n}\n<http://example.org/bob> {\n\nex:A rdfs:subClassOf owl:Thing .\nex:A rdf:type owl:Class .\nex:B rdf:type owl:Class .\nex:B rdfs:subClassOf ex:A .\nex:C rdf:type owl:Class .\nex:C rdfs:subClassOf ex:A .\nex:D rdf:type owl:Class .\nex:D rdfs:subClassOf ex:A . \n}\n<http://example.org/mary> {\n\nex:A rdfs:subClassOf owl:Thing .\nex:A rdf:type owl:Class .\nex:B rdf:type owl:Class .\nex:B rdfs:subClassOf ex:A .\nex:C rdf:type owl:Class .\nex:C rdfs:subClassOf ex:A .\nex:D rdf:type owl:Class .\nex:D rdfs:subClassOf ex:A . \n}\n"
+   },
+   "query": "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\nPREFIX dc: <http://purl.org/dc/terms/> \nPREFIX foaf: <http://xmlns.com/foaf/0.1/> \nPREFIX ex: <http://example.org/> \n\nSELECT ?parent ?child FROM ex:alice WHERE { ?child rdfs:subClassOf+ ?parent . }",
+   "expect": {
+    "kind": "count",
+    "n": 7
+   },
+   "implicitPrefixes": [
+    "rdfs",
+    "owl"
+   ],
+   "note": "first evaluation, no binding; data in ex:alice, ex:bob, ex:mary; tq.setDataset(default graph ex:alice) expressed as FROM ex:alice (the query is changed)"
+  },
+  {
+   "id": "ArbitraryLengthPathTest#ArbitraryLengthPathWithBinding7#2",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/ArbitraryLengthPathTest.java",
+   "line": 377,
+   "sparql12": false,
+   "data": {
+    "format": "trig",
+    "text": "@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix owl: <http://www.w3.org/2002/07/owl#> .\n@prefix ex: <http://example.org/> .\n<http://example.org/alice> {\n\nex:A rdfs:subClassOf owl:Thing .\nex:A rdf:type owl:Class .\nex:B rdf:type owl:Class .\nex:B rdfs:subClassOf ex:A .\nex:C rdf:type owl:Class .\nex:C rdfs:subClassOf ex:A .\nex:D rdf:type owl:Class .\nex:D rdfs:subClassOf ex:A . \n}\n<http://example.org/bob> {\n\nex:A rdfs:subClassOf owl:Thing .\nex:A rdf:type owl:Class .\nex:B rdf:type owl:Class .\nex:B rdfs:subClassOf ex:A .\nex:C rdf:type owl:Class .\nex:C rdfs:subClassOf ex:A .\nex:D rdf:type owl:Class .\nex:D rdfs:subClassOf ex:A . \n}\n<http://example.org/mary> {\n\nex:A rdfs:subClassOf owl:Thing .\nex:A rdf:type owl:Class .\nex:B rdf:type owl:Class .\nex:B rdfs:subClassOf ex:A .\nex:C rdf:type owl:Class .\nex:C rdfs:subClassOf ex:A .\nex:D rdf:type owl:Class .\nex:D rdfs:subClassOf ex:A . \n}\n"
+   },
+   "query": "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\nPREFIX dc: <http://purl.org/dc/terms/> \nPREFIX foaf: <http://xmlns.com/foaf/0.1/> \nPREFIX ex: <http://example.org/> \n\nSELECT ?parent ?child FROM ex:alice WHERE { ?child rdfs:subClassOf+ ?parent . }\nVALUES ?child { ex:C }",
+   "expect": {
+    "kind": "count",
+    "n": 2
+   },
+   "implicitPrefixes": [
+    "rdfs",
+    "owl"
+   ],
+   "note": "second evaluation with tq.setBinding(\"child\", ex:C); setBinding expressed as a trailing VALUES clause (the query is changed); data in ex:alice, ex:bob, ex:mary; tq.setDataset(default graph ex:alice) expressed as FROM ex:alice (the query is changed)"
+  },
+  {
+   "id": "ArbitraryLengthPathTest#ArbitraryLengthPathWithBinding8#1",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/ArbitraryLengthPathTest.java",
+   "line": 436,
+   "sparql12": false,
+   "data": {
+    "format": "trig",
+    "text": "@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix owl: <http://www.w3.org/2002/07/owl#> .\n@prefix ex: <http://example.org/> .\n<http://example.org/alice> {\n\nex:A rdfs:subClassOf owl:Thing .\nex:A rdf:type owl:Class .\nex:B rdf:type owl:Class .\nex:B rdfs:subClassOf ex:A .\nex:C rdf:type owl:Class .\nex:C rdfs:subClassOf ex:A .\nex:D rdf:type owl:Class .\nex:D rdfs:subClassOf ex:A . \n}\n<http://example.org/bob> {\n\nex:A rdfs:subClassOf owl:Thing .\nex:A rdf:type owl:Class .\nex:B rdf:type owl:Class .\nex:B rdfs:subClassOf ex:A .\nex:C rdf:type owl:Class .\nex:C rdfs:subClassOf ex:A .\nex:D rdf:type owl:Class .\nex:D rdfs:subClassOf ex:A . \n}\n<http://example.org/mary> {\n\nex:A rdfs:subClassOf owl:Thing .\nex:A rdf:type owl:Class .\nex:B rdf:type owl:Class .\nex:B rdfs:subClassOf ex:A .\nex:C rdf:type owl:Class .\nex:C rdfs:subClassOf ex:A .\nex:D rdf:type owl:Class .\nex:D rdfs:subClassOf ex:A . \n}\n"
+   },
+   "query": "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\nPREFIX dc: <http://purl.org/dc/terms/> \nPREFIX foaf: <http://xmlns.com/foaf/0.1/> \nPREFIX ex: <http://example.org/> \n\nSELECT ?parent ?child FROM ex:alice FROM ex:bob WHERE { ?child rdfs:subClassOf+ ?parent . }",
+   "expect": {
+    "kind": "count",
+    "n": 7
+   },
+   "implicitPrefixes": [
+    "rdfs",
+    "owl"
+   ],
+   "note": "first evaluation, no binding; data in ex:alice, ex:bob, ex:mary; tq.setDataset(default graphs ex:alice, ex:bob) expressed as FROM ex:alice FROM ex:bob (the query is changed)"
+  },
+  {
+   "id": "ArbitraryLengthPathTest#ArbitraryLengthPathWithBinding8#2",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/ArbitraryLengthPathTest.java",
+   "line": 436,
+   "sparql12": false,
+   "data": {
+    "format": "trig",
+    "text": "@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix owl: <http://www.w3.org/2002/07/owl#> .\n@prefix ex: <http://example.org/> .\n<http://example.org/alice> {\n\nex:A rdfs:subClassOf owl:Thing .\nex:A rdf:type owl:Class .\nex:B rdf:type owl:Class .\nex:B rdfs:subClassOf ex:A .\nex:C rdf:type owl:Class .\nex:C rdfs:subClassOf ex:A .\nex:D rdf:type owl:Class .\nex:D rdfs:subClassOf ex:A . \n}\n<http://example.org/bob> {\n\nex:A rdfs:subClassOf owl:Thing .\nex:A rdf:type owl:Class .\nex:B rdf:type owl:Class .\nex:B rdfs:subClassOf ex:A .\nex:C rdf:type owl:Class .\nex:C rdfs:subClassOf ex:A .\nex:D rdf:type owl:Class .\nex:D rdfs:subClassOf ex:A . \n}\n<http://example.org/mary> {\n\nex:A rdfs:subClassOf owl:Thing .\nex:A rdf:type owl:Class .\nex:B rdf:type owl:Class .\nex:B rdfs:subClassOf ex:A .\nex:C rdf:type owl:Class .\nex:C rdfs:subClassOf ex:A .\nex:D rdf:type owl:Class .\nex:D rdfs:subClassOf ex:A . \n}\n"
+   },
+   "query": "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\nPREFIX dc: <http://purl.org/dc/terms/> \nPREFIX foaf: <http://xmlns.com/foaf/0.1/> \nPREFIX ex: <http://example.org/> \n\nSELECT ?parent ?child FROM ex:alice FROM ex:bob WHERE { ?child rdfs:subClassOf+ ?parent . }\nVALUES ?child { ex:C }",
+   "expect": {
+    "kind": "count",
+    "n": 2
+   },
+   "implicitPrefixes": [
+    "rdfs",
+    "owl"
+   ],
+   "note": "second evaluation with tq.setBinding(\"child\", ex:C); setBinding expressed as a trailing VALUES clause (the query is changed); data in ex:alice, ex:bob, ex:mary; tq.setDataset(default graphs ex:alice, ex:bob) expressed as FROM ex:alice FROM ex:bob (the query is changed)"
+  },
+  {
+   "id": "ArbitraryLengthPathTest#ArbitraryLengthPathWithFilter1",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/ArbitraryLengthPathTest.java",
+   "line": 494,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix owl: <http://www.w3.org/2002/07/owl#> .\n@prefix ex: <http://example.org/> .\n\nex:A rdfs:subClassOf owl:Thing .\nex:A rdf:type owl:Class .\nex:B rdf:type owl:Class .\nex:B rdfs:subClassOf ex:A .\nex:C rdf:type owl:Class .\nex:C rdfs:subClassOf ex:A .\nex:D rdf:type owl:Class .\nex:D rdfs:subClassOf ex:A . "
+   },
+   "query": "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\nPREFIX dc: <http://purl.org/dc/terms/> \nPREFIX foaf: <http://xmlns.com/foaf/0.1/> \nPREFIX ex: <http://example.org/> \n\nSELECT ?parent ?child WHERE { ?child a owl:Class . ?child rdfs:subClassOf+ ?parent . FILTER (?parent = owl:Thing) }",
+   "expect": {
+    "kind": "count",
+    "n": 4
+   },
+   "implicitPrefixes": [
+    "rdfs",
+    "owl"
+   ]
+  },
+  {
+   "id": "ArbitraryLengthPathTest#ArbitraryLengthPathWithFilter2",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/ArbitraryLengthPathTest.java",
+   "line": 525,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix owl: <http://www.w3.org/2002/07/owl#> .\n@prefix ex: <http://example.org/> .\n\nex:A rdfs:subClassOf owl:Thing .\nex:A rdf:type owl:Class .\nex:B rdf:type owl:Class .\nex:B rdfs:subClassOf ex:A .\nex:C rdf:type owl:Class .\nex:C rdfs:subClassOf ex:A .\nex:D rdf:type owl:Class .\nex:D rdfs:subClassOf ex:A . "
+   },
+   "query": "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX owl: <http://www.w3.org/2002/07/owl#>\nPREFIX dc: <http://purl.org/dc/terms/> \nPREFIX foaf: <http://xmlns.com/foaf/0.1/> \nPREFIX ex: <http://example.org/> \n\nSELECT ?parent ?child WHERE { ?child rdfs:subClassOf+ ?parent . FILTER (?parent = owl:Thing) }",
+   "expect": {
+    "kind": "count",
+    "n": 4
+   },
+   "implicitPrefixes": [
+    "rdfs",
+    "owl"
+   ]
+  },
+  {
+   "id": "ArbitraryLengthPathTest#ArbitraryLengthPathWithFilter3",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/ArbitraryLengthPathTest.java",
+   "line": 556,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix owl: <http://www.w3.org/2002/07/owl#> .\n@prefix ex: <http://example.org/> .\n\nex:A rdfs:subClassOf owl:Thing .\nex:A rdf:type owl:Class .\nex:B rdf:type owl:Class .\nex:B rdfs:subClassOf ex:A .\nex:C rdf:type owl:Class .\nex:C rdfs:subClassOf ex:A .\nex:D rdf:type owl:Class .\nex:D rdfs:subClassOf ex:A . "
+   },
+   "query": "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX dc: <http://purl.org/dc/terms/> \nPREFIX foaf: <http://xmlns.com/foaf/0.1/> \nPREFIX ex: <http://example.org/> \n\nSELECT ?parent ?child WHERE { ?child rdfs:subClassOf+ ?parent . FILTER (?child = <http://example.org/C>) }",
+   "expect": {
+    "kind": "count",
+    "n": 2
+   },
+   "implicitPrefixes": [
+    "rdfs"
+   ]
+  },
+  {
+   "id": "ArbitraryLengthPathTest#PropertyPathInTree",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/ArbitraryLengthPathTest.java",
+   "line": 582,
+   "sparql12": false,
+   "data": {
+    "format": "trig",
+    "text": "@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n@prefix dc: <http://purl.org/dc/elements/1.1/> .\n@prefix foaf: <http://xmlns.com/foaf/0.1/> .\n@prefix ex: <http://example.org/> .\n\n{\n    ex:graph1 dc:publisher \"Bob\" ;\n\t      ex:containsPerson ex:bob .\n\n    ex:graph2 dc:publisher \"Alice\" ;\n\t      ex:containsPerson ex:alice .\n\n    ex:graph3 dc:publisher \"William\" ;\n\t      ex:containsPerson ex:william .\n\n    ex:groupconcat-test \n         ex:p \"a\";\n         ex:p \"b\"; \n\t ex:p \"c\";\n\t ex:p \"d\";\n\t ex:q \"b\";\n\t ex:q \"c\".\n}\n\nex:graph1 {\n    ex:bob foaf:name \"Bob\" ;\n       foaf:mbox \"bob@example.org\" ;\n       foaf:knows ex:alice .\n\n    ex:bob foaf:knows ex:alice .\n    ex:bob foaf:knows ex:william .\n\n    ex:alice foaf:knows ex:bob .\n}\n\nex:graph2 {\n    ex:alice foaf:name \"Alice\" ;\n\tfoaf:mbox \"alice@example.org\" .\n\n    ex:alice foaf:knows ex:william .\n}\n\nex:graph3 {\n    ex:william foaf:name \"William\" ;\n\tfoaf:mbox \"william@example.org\" .\n}\n\nex:tree-graph {\n    ex:a ex:name \"aa\" .\n    ex:b ex:name \"bb\" .\n    ex:c ex:name \"cc\" .\n    ex:d ex:name \"dd\" .\n    ex:e ex:name \"ee\" .\n    ex:f ex:name \"ff\" .\n    ex:g ex:name \"gg\" .\n    ex:h ex:name \"hh\" .\n    ex:i ex:name \"ii\" .\n    ex:j ex:name \"jj\" .\n    ex:k ex:name \"kk\" .\n\n    ex:b ex:hasParent ex:a .\n    ex:c ex:hasParent ex:a .\n    ex:d ex:hasParent ex:a .\n\n    ex:g ex:hasParent ex:c .\n    \n    ex:e ex:hasParent ex:b .\n    ex:f ex:hasParent ex:b .\n    \n    ex:i ex:hasParent ex:g .\n    ex:h ex:hasPerent ex:g .\n\n    ex:j ex:hasParent ex:f .\n    ex:k ex:hasParent ex:f .\n}\n\nex:optional-sameterm-graph {\n\tex:a ex:p ex:A ;\n\t\t rdfs:label \"label\" ;\n\t\t ex:prop1 \"prop1\" ;\n\t\t ex:prop2 \"prop2\" .\n}\n"
+   },
+   "query": "PREFIX dc: <http://purl.org/dc/terms/> \nPREFIX foaf: <http://xmlns.com/foaf/0.1/> \nPREFIX ex: <http://example.org/> \n\n SELECT ?node ?name  FROM ex:tree-graph  WHERE { ?node ex:hasParent+ ex:b . ?node ex:name ?name . }",
+   "expect": {
+    "kind": "unbound",
+    "vars": []
+   },
+   "note": "upstream asserts only that evaluation succeeds; the port checks for a SELECT answer"
+  },
+  {
+   "id": "PropertyPathTest#SES2147PropertyPathsWithIdenticalSubsPreds",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/PropertyPathTest.java",
+   "line": 65,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "<urn:s1> <urn:p> <urn:s2> .\n<urn:s2> <urn:p> <urn:s3> .\n<urn:s3> <urn:q> <urn:s4> .\n<urn:s1> <urn:p> <urn:s5> .\n<urn:s5> <urn:q> <urn:s6> .\n"
+   },
+   "query": "PREFIX dc: <http://purl.org/dc/terms/> \nPREFIX foaf: <http://xmlns.com/foaf/0.1/> \nPREFIX ex: <http://example.org/> \n\nSELECT ?x \nWHERE { ?x <urn:p>*/<urn:q> <urn:s4> . \n        ?x <urn:p>*/<urn:q> <urn:s6> . \n} \n",
+   "expect": {
+    "kind": "contains",
+    "rows": [
+     {
+      "x": {
+       "type": "uri",
+       "value": "urn:s1"
+      }
+     }
+    ]
+   },
+   "note": "N-Triples data; upstream checks the first solution has ?x = urn:s1"
+  },
+  {
+   "id": "PropertyPathTest#SES2024PropertyPathAnonVarSharing",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/PropertyPathTest.java",
+   "line": 100,
+   "sparql12": false,
+   "data": {
+    "format": "trig",
+    "text": "@prefix : <http://example.org/> .\n\n{\n  :a :p :b .\n  :b :lit \"b\" .\n  :a :diff :d .\n  :d :p :c .\n  :c :lit \"c\" .\n}\n\n"
+   },
+   "query": "PREFIX : <http://example.org/> SELECT * WHERE { ?x1 :p/:lit ?l1 . ?x1 :diff ?x2 . ?x2 :p/:lit ?l2 . }",
+   "expect": {
+    "kind": "bindings",
+    "vars": [
+     "l1",
+     "l2"
+    ],
+    "rows": [
+     {
+      "l1": {
+       "type": "literal",
+       "value": "b"
+      },
+      "l2": {
+       "type": "literal",
+       "value": "c"
+      }
+     }
+    ]
+   },
+   "note": "upstream asserts l1 bound and l1 != l2 on the first solution; the port pins the one solution"
+  },
+  {
+   "id": "PropertyPathTest#PropertyPathNegationInversion#1",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/PropertyPathTest.java",
+   "line": 121,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix : <http://example.org/>.\n:Mary :parentOf :Jim.\n:Jim :knows :Jane.\n:Jane :worksFor :IBM."
+   },
+   "query": "prefix : <http://example.org/> ASK WHERE { :IBM ^(:|!:) :Jane } ",
+   "expect": {
+    "kind": "boolean",
+    "value": true
+   }
+  },
+  {
+   "id": "PropertyPathTest#PropertyPathNegationInversion#2",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/PropertyPathTest.java",
+   "line": 121,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix : <http://example.org/>.\n:Mary :parentOf :Jim.\n:Jim :knows :Jane.\n:Jane :worksFor :IBM."
+   },
+   "query": "prefix : <http://example.org/> ASK WHERE { :IBM ^(:|!:) ?a } ",
+   "expect": {
+    "kind": "boolean",
+    "value": true
+   }
+  },
+  {
+   "id": "PropertyPathTest#PropertyPathNegationInversion#3",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/PropertyPathTest.java",
+   "line": 121,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix : <http://example.org/>.\n:Mary :parentOf :Jim.\n:Jim :knows :Jane.\n:Jane :worksFor :IBM."
+   },
+   "query": "prefix : <http://example.org/> ASK WHERE { :IBM (^(:|!:))* :Mary } ",
+   "expect": {
+    "kind": "boolean",
+    "value": true
+   }
+  },
+  {
+   "id": "PropertyPathTest#SES2336NegatedPropertyPathMod",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/PropertyPathTest.java",
+   "line": 138,
+   "sparql12": false,
+   "data": {
+    "format": "trig",
+    "text": "@prefix : <http://example.org/> .\n\n{\n  :a a :Test .\n  :a :p :b .\n  :a :q :c .\n  :d a :Test .\n  :d :p :e .\n  :d :q :e .\n}\n\n"
+   },
+   "query": "prefix : <http://example.org/> select * where { ?s a :Test ; !:p? ?o . }",
+   "expect": {
+    "kind": "all",
+    "of": [
+     {
+      "kind": "contains",
+      "exact": true,
+      "rows": [
+       {
+        "s": {
+         "type": "uri",
+         "value": "http://example.org/a"
+        },
+        "o": {
+         "type": "uri",
+         "value": "http://example.org/a"
+        }
+       },
+       {
+        "s": {
+         "type": "uri",
+         "value": "http://example.org/a"
+        },
+        "o": {
+         "type": "uri",
+         "value": "http://example.org/Test"
+        }
+       },
+       {
+        "s": {
+         "type": "uri",
+         "value": "http://example.org/a"
+        },
+        "o": {
+         "type": "uri",
+         "value": "http://example.org/c"
+        }
+       },
+       {
+        "s": {
+         "type": "uri",
+         "value": "http://example.org/d"
+        },
+        "o": {
+         "type": "uri",
+         "value": "http://example.org/d"
+        }
+       },
+       {
+        "s": {
+         "type": "uri",
+         "value": "http://example.org/d"
+        },
+        "o": {
+         "type": "uri",
+         "value": "http://example.org/e"
+        }
+       },
+       {
+        "s": {
+         "type": "uri",
+         "value": "http://example.org/d"
+        },
+        "o": {
+         "type": "uri",
+         "value": "http://example.org/Test"
+        }
+       }
+      ]
+     },
+     {
+      "kind": "absent",
+      "rows": [
+       {
+        "s": {
+         "type": "uri",
+         "value": "http://example.org/a"
+        },
+        "o": {
+         "type": "uri",
+         "value": "http://example.org/b"
+        }
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "PropertyPathTest#SES1685propPathSameVar",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/PropertyPathTest.java",
+   "line": 172,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix : <urn:> . :a :p :b . :b :p :a ."
+   },
+   "query": "PREFIX : <urn:> SELECT ?x WHERE {?x :p+ ?x}",
+   "expect": {
+    "kind": "count",
+    "n": 2
+   }
+  },
+  {
+   "id": "PropertyPathTest#SES1073InverseSymmetricPattern",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/PropertyPathTest.java",
+   "line": 185,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "<http://example.org/a> <http://example.org/a2b> <http://example.org/b1> .\n<http://example.org/a> <http://example.org/a2b> <http://example.org/b2> .\n<http://example.org/b1> <http://example.org/b2c> <http://example.org/c1> .\n<http://example.org/b2> <http://example.org/b2c> <http://example.org/c2> .\n"
+   },
+   "query": "select * where{ ?c1 ^<http://example.org/b2c>/^<http://example.org/a2b>/<http://example.org/a2b>/<http://example.org/b2c> ?c2 .  } ",
+   "expect": {
+    "kind": "count",
+    "n": 4
+   }
+  },
+  {
+   "id": "PropertyPathTest#NestedInversePropertyPathWithZeroLength",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/PropertyPathTest.java",
+   "line": 213,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "<urn:1> <urn:prop> <urn:object> .\n<urn:2> <urn:prop> <urn:mid:1> .\n<urn:mid:1> <urn:prop> <urn:object> .\n<urn:3> <urn:prop> <urn:mid:2> .\n<urn:mid:2> <urn:prop> <urn:mid:3> .\n<urn:mid:3> <urn:prop> <urn:object> .\n"
+   },
+   "query": "select * where { \n    <urn:object> (^<urn:prop>)? ?o .\n}",
+   "expect": {
+    "kind": "count",
+    "n": 4
+   },
+   "note": "INSERT DATA setup given as data"
+  },
+  {
+   "id": "PropertyPathTest#ComplexPath",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/PropertyPathTest.java",
+   "line": 237,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "_:b1 <http://www.w3.org/2004/02/skos/core#broader> _:b2 .\n_:b3 <http://www.w3.org/2004/02/skos/core#topConceptOf> _:b4 .\n"
+   },
+   "query": "PREFIX skos:<http://www.w3.org/2004/02/skos/core#> \r\n SELECT *   WHERE {\r\n   ?s (skos:broader|^skos:narrower|skos:topConceptOf|^skos:hasTopConcept) ?o.\r\n }",
+   "expect": {
+    "kind": "count",
+    "n": 2
+   }
+  },
+  {
+   "id": "PropertyPathTest#InversePath",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/PropertyPathTest.java",
+   "line": 252,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "_:x1 <http://xmlns.com/foaf/0.1/knows> _:bnode1 .\n_:x2 <http://xmlns.com/foaf/0.1/knows> _:bnode1 .\n"
+   },
+   "query": "PREFIX foaf: <http://xmlns.com/foaf/0.1/>\nSELECT * WHERE {\n  ?x foaf:knows/^foaf:knows ?y . \n  FILTER(?x != ?y)\n}",
+   "expect": {
+    "kind": "count",
+    "n": 2
+   }
+  },
+  {
+   "id": "BindTest#BindError",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/BindTest.java",
+   "line": 62,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "<urn:test:subj> <urn:test:pred> _:blank ."
+   },
+   "query": "PREFIX owl: <http://www.w3.org/2002/07/owl#>\nSELECT * \nWHERE { \n  VALUES (?NAValue) { (<http://null>) } \n   BIND(IF(?NAValue != <http://null>, ?NAValue, ?notBoundVar) as ?ValidNAValue) \n   { ?disjClass (owl:disjointWith|^owl:disjointWith)? ?disjClass2 . }\n}\n",
+   "expect": {
+    "kind": "count",
+    "n": 2
+   },
+   "implicitPrefixes": [
+    "owl"
+   ],
+   "note": "INSERT DATA setup given as data"
+  },
+  {
+   "id": "BindTest#BindScope",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/BindTest.java",
+   "line": 82,
+   "sparql12": false,
+   "data": null,
+   "query": "SELECT * {\n  { BIND (\"a\" AS ?a) }\n  { BIND (?a AS ?b) } \n}",
+   "expect": {
+    "kind": "bindings",
+    "rows": [
+     {
+      "a": {
+       "type": "literal",
+       "value": "a"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "BindTest#BindScopeUnion",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/BindTest.java",
+   "line": 101,
+   "sparql12": false,
+   "data": null,
+   "query": "prefix ex: <http://example.org/> \nselect * {\n  bind(ex:v1 as ?v)\n  bind(strafter(str(?v),str(ex:)) as ?b)\n  {\n    bind(?b as ?b1)\n  } union {\n    bind(?b as ?b2)\n  }\n}",
+   "expect": {
+    "kind": "all",
+    "of": [
+     {
+      "kind": "count",
+      "n": 2
+     },
+     {
+      "kind": "bindings",
+      "vars": [
+       "v"
+      ],
+      "rows": [
+       {
+        "v": {
+         "type": "uri",
+         "value": "http://example.org/v1"
+        }
+       },
+       {
+        "v": {
+         "type": "uri",
+         "value": "http://example.org/v1"
+        }
+       }
+      ]
+     },
+     {
+      "kind": "unbound",
+      "vars": [
+       "b1",
+       "b2"
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "BindTest#SES2250BindErrors",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/BindTest.java",
+   "line": 130,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "<urn:test:subj> <urn:test:pred> _:blank ."
+   },
+   "query": "SELECT * {\n    ?s1 ?p1 ?blank .     FILTER(isBlank(?blank))    BIND (iri(?blank) as ?biri)    ?biri ?p2 ?o2 .}",
+   "expect": {
+    "kind": "bindings",
+    "rows": [
+     {
+      "s1": {
+       "type": "uri",
+       "value": "urn:test:subj"
+      },
+      "p1": {
+       "type": "uri",
+       "value": "urn:test:pred"
+      },
+      "blank": {
+       "type": "bnode",
+       "value": "b"
+      },
+      "biri": {
+       "type": "uri",
+       "value": "urn:test:subj"
+      },
+      "p2": {
+       "type": "uri",
+       "value": "urn:test:pred"
+      },
+      "o2": {
+       "type": "bnode",
+       "value": "b"
+      }
+     }
+    ]
+   },
+   "note": "INSERT DATA setup given as data"
+  },
+  {
+   "id": "BindTest#SES2250BindErrorsInPath",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/BindTest.java",
+   "line": 155,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "<urn:test:subj> <urn:test:pred> _:blank ."
+   },
+   "query": "SELECT * {\n    ?s1 ?p1 ?blank .     FILTER(isBlank(?blank))    BIND (iri(?blank) as ?biri)    ?biri <urn:test:pred>* ?o2 .}",
+   "expect": {
+    "kind": "bindings",
+    "rows": [
+     {
+      "s1": {
+       "type": "uri",
+       "value": "urn:test:subj"
+      },
+      "p1": {
+       "type": "uri",
+       "value": "urn:test:pred"
+      },
+      "blank": {
+       "type": "bnode",
+       "value": "b"
+      },
+      "biri": {
+       "type": "uri",
+       "value": "urn:test:subj"
+      },
+      "o2": {
+       "type": "uri",
+       "value": "urn:test:subj"
+      }
+     },
+     {
+      "s1": {
+       "type": "uri",
+       "value": "urn:test:subj"
+      },
+      "p1": {
+       "type": "uri",
+       "value": "urn:test:pred"
+      },
+      "blank": {
+       "type": "bnode",
+       "value": "b"
+      },
+      "biri": {
+       "type": "bnode",
+       "value": "b"
+      },
+      "o2": {
+       "type": "bnode",
+       "value": "b"
+      }
+     },
+     {
+      "s1": {
+       "type": "uri",
+       "value": "urn:test:subj"
+      },
+      "p1": {
+       "type": "uri",
+       "value": "urn:test:pred"
+      },
+      "blank": {
+       "type": "bnode",
+       "value": "b"
+      },
+      "biri": {
+       "type": "uri",
+       "value": "urn:test:subj"
+      },
+      "o2": {
+       "type": "bnode",
+       "value": "b"
+      }
+     }
+    ]
+   },
+   "note": "INSERT DATA setup given as data"
+  },
+  {
+   "id": "BindTest#SelectBindOnly",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/BindTest.java",
+   "line": 186,
+   "sparql12": false,
+   "data": null,
+   "query": "select ?b1 ?b2 ?b3\nwhere {\n  bind(1 as ?b1)\n}",
+   "expect": {
+    "kind": "bindings",
+    "rows": [
+     {
+      "b1": {
+       "type": "literal",
+       "value": "1",
+       "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "BindTest#GH3696Bind",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/BindTest.java",
+   "line": 202,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix ex: <http://example.org/> .\n@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\nex:unit1 a ex:Unit ; rdfs:label \"Unit1\" ; ex:has \"Unit1\" .\nex:unit2 a ex:Unit ; rdfs:label \"Unit2\" .\n"
+   },
+   "query": "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX ex: <http://example.org/>\nSELECT  * {\n  ?bind rdfs:label ?b1 ;\n        a ex:Unit .\n  FILTER (?b1 = 'Unit2') .\n  BIND(?bind AS ?n0)\n  ?n0 ex:has ?n1 \n }",
+   "expect": {
+    "kind": "count",
+    "n": 0
+   },
+   "implicitPrefixes": [
+    "rdfs"
+   ]
+  },
+  {
+   "id": "BindTest#GH4499BindFilterNotExist1",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/BindTest.java",
+   "line": 229,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix ex: <http://example.org/> .\nex:a ex:p ex:c1, ex:c2, ex:c3 .\nex:c1 a ex:T ; ex:q \"something\" .\nex:c2 a ex:T .\n"
+   },
+   "query": "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX ex: <http://example.org/>\nSELECT *\n    WHERE {\n            BIND ( ex:a AS ?a )\n            BIND ( ex:b AS ?b )\n            ?a ex:p* ?c .\n            FILTER EXISTS { ?c rdf:type ex:T }\n            FILTER NOT EXISTS { ?c ex:q ?d}\n}",
+   "expect": {
+    "kind": "all",
+    "of": [
+     {
+      "kind": "count",
+      "n": 1
+     },
+     {
+      "kind": "bindings",
+      "vars": [
+       "a",
+       "c"
+      ],
+      "rows": [
+       {
+        "a": {
+         "type": "uri",
+         "value": "http://example.org/a"
+        },
+        "c": {
+         "type": "uri",
+         "value": "http://example.org/c2"
+        }
+       }
+      ]
+     },
+     {
+      "kind": "unbound",
+      "vars": [
+       "d"
+      ]
+     }
+    ]
+   },
+   "implicitPrefixes": [
+    "rdf"
+   ]
+  },
+  {
+   "id": "BindTest#GH4499BindFilterNotExist2",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/BindTest.java",
+   "line": 264,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix ex: <http://example.org/> .\nex:a ex:p ex:c1, ex:c2, ex:c3 .\nex:c1 a ex:T ; ex:q \"something\" .\nex:c2 a ex:T .\n"
+   },
+   "query": "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\nPREFIX ex: <http://example.org/>\nSELECT *\n    WHERE {\n            FILTER EXISTS { ?c rdf:type ex:T }\n            FILTER NOT EXISTS { ?c ex:q ?d }\n            BIND ( ex:a AS ?a )\n            BIND ( ex:b AS ?b )\n            ?a ex:p* ?c .\n}",
+   "expect": {
+    "kind": "all",
+    "of": [
+     {
+      "kind": "count",
+      "n": 1
+     },
+     {
+      "kind": "bindings",
+      "vars": [
+       "a",
+       "c"
+      ],
+      "rows": [
+       {
+        "a": {
+         "type": "uri",
+         "value": "http://example.org/a"
+        },
+        "c": {
+         "type": "uri",
+         "value": "http://example.org/c2"
+        }
+       }
+      ]
+     },
+     {
+      "kind": "unbound",
+      "vars": [
+       "d"
+      ]
+     }
+    ]
+   },
+   "implicitPrefixes": [
+    "rdf"
+   ]
+  },
+  {
+   "id": "OptionalTest#SES1898LeftJoinSemantics1",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/OptionalTest.java",
+   "line": 52,
+   "sparql12": false,
+   "data": {
+    "format": "trig",
+    "text": "@prefix : <http://example.org/> .\n\n{\n  :a :p1 :b .\n  :a :p2 :c .\n  :a :p3 :d .\n}\n"
+   },
+   "query": "  PREFIX : <http://example.org/>   SELECT * WHERE {     ?s :p1 ?v1 .     OPTIONAL {?s :p2 ?v2 } .     ?s :p3 ?v2 .   } ",
+   "expect": {
+    "kind": "count",
+    "n": 0
+   }
+  },
+  {
+   "id": "OptionalTest#SES1121VarNamesInOptionals#1",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/OptionalTest.java",
+   "line": 68,
+   "sparql12": false,
+   "data": {
+    "format": "trig",
+    "text": "@prefix ex: <http://example.org/> .\n\nex:graph1 {\n\tex:a ex:p ex:b . \n\tex:b ex:q ex:c .\n\t\n\tex:i ex:p ex:j .\n\t\n\tex:w ex:q ex:z .\n\t\n\tex:foo ex:q ex:bar .\n}\n"
+   },
+   "query": "PREFIX dc: <http://purl.org/dc/terms/> \nPREFIX foaf: <http://xmlns.com/foaf/0.1/> \nPREFIX ex: <http://example.org/> \n\n SELECT DISTINCT *\n WHERE { GRAPH ?g { \n          OPTIONAL { ?var35 ex:p ?b . } \n           OPTIONAL { ?b ex:q ?c . } \n        } \n } \n",
+   "expect": {
+    "kind": "count",
+    "n": 2
+   },
+   "note": "upstream asserts that query1 and query2 give the same number of rows; the port pins each to the count the specification gives (2)"
+  },
+  {
+   "id": "OptionalTest#SES1121VarNamesInOptionals#2",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/OptionalTest.java",
+   "line": 68,
+   "sparql12": false,
+   "data": {
+    "format": "trig",
+    "text": "@prefix ex: <http://example.org/> .\n\nex:graph1 {\n\tex:a ex:p ex:b . \n\tex:b ex:q ex:c .\n\t\n\tex:i ex:p ex:j .\n\t\n\tex:w ex:q ex:z .\n\t\n\tex:foo ex:q ex:bar .\n}\n"
+   },
+   "query": "PREFIX dc: <http://purl.org/dc/terms/> \nPREFIX foaf: <http://xmlns.com/foaf/0.1/> \nPREFIX ex: <http://example.org/> \n\n SELECT DISTINCT *\n WHERE { GRAPH ?g { \n          OPTIONAL { ?var35 ex:p ?b . } \n           OPTIONAL { ?b ex:q ?var2 . } \n        } \n } \n",
+   "expect": {
+    "kind": "count",
+    "n": 2
+   },
+   "note": "query2; see #1"
+  },
+  {
+   "id": "OptionalTest#SameTermRepeatInOptional",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/OptionalTest.java",
+   "line": 114,
+   "sparql12": false,
+   "data": {
+    "format": "trig",
+    "text": "@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n@prefix dc: <http://purl.org/dc/elements/1.1/> .\n@prefix foaf: <http://xmlns.com/foaf/0.1/> .\n@prefix ex: <http://example.org/> .\n\n{\n    ex:graph1 dc:publisher \"Bob\" ;\n\t      ex:containsPerson ex:bob .\n\n    ex:graph2 dc:publisher \"Alice\" ;\n\t      ex:containsPerson ex:alice .\n\n    ex:graph3 dc:publisher \"William\" ;\n\t      ex:containsPerson ex:william .\n\n    ex:groupconcat-test \n         ex:p \"a\";\n         ex:p \"b\"; \n\t ex:p \"c\";\n\t ex:p \"d\";\n\t ex:q \"b\";\n\t ex:q \"c\".\n}\n\nex:graph1 {\n    ex:bob foaf:name \"Bob\" ;\n       foaf:mbox \"bob@example.org\" ;\n       foaf:knows ex:alice .\n\n    ex:bob foaf:knows ex:alice .\n    ex:bob foaf:knows ex:william .\n\n    ex:alice foaf:knows ex:bob .\n}\n\nex:graph2 {\n    ex:alice foaf:name \"Alice\" ;\n\tfoaf:mbox \"alice@example.org\" .\n\n    ex:alice foaf:knows ex:william .\n}\n\nex:graph3 {\n    ex:william foaf:name \"William\" ;\n\tfoaf:mbox \"william@example.org\" .\n}\n\nex:tree-graph {\n    ex:a ex:name \"aa\" .\n    ex:b ex:name \"bb\" .\n    ex:c ex:name \"cc\" .\n    ex:d ex:name \"dd\" .\n    ex:e ex:name \"ee\" .\n    ex:f ex:name \"ff\" .\n    ex:g ex:name \"gg\" .\n    ex:h ex:name \"hh\" .\n    ex:i ex:name \"ii\" .\n    ex:j ex:name \"jj\" .\n    ex:k ex:name \"kk\" .\n\n    ex:b ex:hasParent ex:a .\n    ex:c ex:hasParent ex:a .\n    ex:d ex:hasParent ex:a .\n\n    ex:g ex:hasParent ex:c .\n    \n    ex:e ex:hasParent ex:b .\n    ex:f ex:hasParent ex:b .\n    \n    ex:i ex:hasParent ex:g .\n    ex:h ex:hasPerent ex:g .\n\n    ex:j ex:hasParent ex:f .\n    ex:k ex:hasParent ex:f .\n}\n\nex:optional-sameterm-graph {\n\tex:a ex:p ex:A ;\n\t\t rdfs:label \"label\" ;\n\t\t ex:prop1 \"prop1\" ;\n\t\t ex:prop2 \"prop2\" .\n}\n"
+   },
+   "query": "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX dc: <http://purl.org/dc/terms/> \nPREFIX foaf: <http://xmlns.com/foaf/0.1/> \nPREFIX ex: <http://example.org/> \n\n SELECT ?l ?opt1 ?opt2  FROM ex:optional-sameterm-graph  WHERE {           ?s ex:p ex:A ;           {               {                  ?s ?p ?l .                 FILTER(?p = rdfs:label)               }               OPTIONAL {                  ?s ?p ?opt1 .                  FILTER (?p = ex:prop1)               }               OPTIONAL {                  ?s ?p ?opt2 .                  FILTER (?p = ex:prop2)               }           } } ",
+   "expect": {
+    "kind": "bindings",
+    "rows": [
+     {
+      "l": {
+       "type": "literal",
+       "value": "label"
+      }
+     }
+    ]
+   },
+   "implicitPrefixes": [
+    "rdfs"
+   ]
+  },
+  {
+   "id": "OptionalTest#ValuesAfterOptional",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/OptionalTest.java",
+   "line": 172,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> . \n@prefix :     <urn:ex:> . \n:r1 a rdfs:Resource . \n:r2 a rdfs:Resource ; rdfs:label \"a label\" . \n"
+   },
+   "query": "prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> \nprefix :     <urn:ex:> \n\nselect ?resource ?label where { \n  ?resource a rdfs:Resource . \n  optional { ?resource rdfs:label ?label } \n  values ?label { undef } \n}",
+   "expect": {
+    "kind": "count",
+    "n": 2
+   }
+  },
+  {
+   "id": "OptionalTest#OptionalFilterCanUseOuterBinding",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/OptionalTest.java",
+   "line": 194,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix x: <http://example.org/ns#> .\n@prefix : <http://example.org/books#> .\n@prefix dc: <http://purl.org/dc/elements/1.1/> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n\n:book1 dc:title \"TITLE 1\" .\n:book1 x:price \"10\"^^xsd:integer .\n\n:book2 dc:title \"TITLE 2\" .\n:book2 x:price \"20\"^^xsd:integer .\n\n:book3 dc:title \"TITLE 3\" .\n"
+   },
+   "query": "PREFIX dc: <http://purl.org/dc/elements/1.1/>\nPREFIX x: <http://example.org/ns#>\n\nSELECT ?title ?price WHERE {\n\t?book dc:title ?title .\n\tOPTIONAL {\n\t\t?book x:price ?price .\n\t\tFILTER (?title = \"TITLE 2\")\n\t}\n}\n",
+   "expect": {
+    "kind": "bindings",
+    "rows": [
+     {
+      "title": {
+       "type": "literal",
+       "value": "TITLE 1"
+      }
+     },
+     {
+      "title": {
+       "type": "literal",
+       "value": "TITLE 2"
+      },
+      "price": {
+       "type": "literal",
+       "value": "20",
+       "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+      }
+     },
+     {
+      "title": {
+       "type": "literal",
+       "value": "TITLE 3"
+      }
+     }
+    ]
+   },
+   "note": "upstream: 3 rows, TITLE 2 with price 20, TITLE 1 and TITLE 3 without price; that is the exact set"
+  },
+  {
+   "id": "UnionTest#EmptyUnion",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/UnionTest.java",
+   "line": 49,
+   "sparql12": false,
+   "data": null,
+   "query": "PREFIX : <http://example.org/> SELECT ?visibility WHERE {OPTIONAL { SELECT ?var WHERE { :s a :MyType . BIND (:s as ?var ) .} } .BIND (IF(BOUND(?var), 'VISIBLE', 'HIDDEN') as ?visibility)}",
+   "expect": {
+    "kind": "bindings",
+    "rows": [
+     {
+      "visibility": {
+       "type": "literal",
+       "value": "HIDDEN"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "UnionTest#SameTermRepeatInUnion",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/UnionTest.java",
+   "line": 65,
+   "sparql12": false,
+   "data": {
+    "format": "trig",
+    "text": "@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n@prefix dc: <http://purl.org/dc/elements/1.1/> .\n@prefix foaf: <http://xmlns.com/foaf/0.1/> .\n@prefix ex: <http://example.org/> .\n\n{\n    ex:graph1 dc:publisher \"Bob\" ;\n\t      ex:containsPerson ex:bob .\n\n    ex:graph2 dc:publisher \"Alice\" ;\n\t      ex:containsPerson ex:alice .\n\n    ex:graph3 dc:publisher \"William\" ;\n\t      ex:containsPerson ex:william .\n\n    ex:groupconcat-test \n         ex:p \"a\";\n         ex:p \"b\"; \n\t ex:p \"c\";\n\t ex:p \"d\";\n\t ex:q \"b\";\n\t ex:q \"c\".\n}\n\nex:graph1 {\n    ex:bob foaf:name \"Bob\" ;\n       foaf:mbox \"bob@example.org\" ;\n       foaf:knows ex:alice .\n\n    ex:bob foaf:knows ex:alice .\n    ex:bob foaf:knows ex:william .\n\n    ex:alice foaf:knows ex:bob .\n}\n\nex:graph2 {\n    ex:alice foaf:name \"Alice\" ;\n\tfoaf:mbox \"alice@example.org\" .\n\n    ex:alice foaf:knows ex:william .\n}\n\nex:graph3 {\n    ex:william foaf:name \"William\" ;\n\tfoaf:mbox \"william@example.org\" .\n}\n\nex:tree-graph {\n    ex:a ex:name \"aa\" .\n    ex:b ex:name \"bb\" .\n    ex:c ex:name \"cc\" .\n    ex:d ex:name \"dd\" .\n    ex:e ex:name \"ee\" .\n    ex:f ex:name \"ff\" .\n    ex:g ex:name \"gg\" .\n    ex:h ex:name \"hh\" .\n    ex:i ex:name \"ii\" .\n    ex:j ex:name \"jj\" .\n    ex:k ex:name \"kk\" .\n\n    ex:b ex:hasParent ex:a .\n    ex:c ex:hasParent ex:a .\n    ex:d ex:hasParent ex:a .\n\n    ex:g ex:hasParent ex:c .\n    \n    ex:e ex:hasParent ex:b .\n    ex:f ex:hasParent ex:b .\n    \n    ex:i ex:hasParent ex:g .\n    ex:h ex:hasPerent ex:g .\n\n    ex:j ex:hasParent ex:f .\n    ex:k ex:hasParent ex:f .\n}\n\nex:optional-sameterm-graph {\n\tex:a ex:p ex:A ;\n\t\t rdfs:label \"label\" ;\n\t\t ex:prop1 \"prop1\" ;\n\t\t ex:prop2 \"prop2\" .\n}\n"
+   },
+   "query": "PREFIX foaf:<http://xmlns.com/foaf/0.1/>\nSELECT * {\n    {\n        ?sameTerm foaf:mbox ?mbox\n        FILTER sameTerm(?sameTerm,<http://example.org/william>)\n    } UNION {\n        ?x foaf:knows ?sameTerm\n        FILTER sameTerm(?sameTerm,<http://example.org/william>)\n    }\n}",
+   "expect": {
+    "kind": "count",
+    "n": 3
+   },
+   "unionDefaultGraph": true,
+   "note": "tq.setBinding(\"william\", ex:william) expressed by substituting the IRI for $william (the query is changed): a trailing VALUES would not reach the FILTERs inside the UNION branches under bottom-up evaluation"
+  },
+  {
+   "id": "UnionTest#SameTermRepeatInUnionAndOptional",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/UnionTest.java",
+   "line": 104,
+   "sparql12": false,
+   "data": {
+    "format": "trig",
+    "text": "@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n@prefix dc: <http://purl.org/dc/elements/1.1/> .\n@prefix foaf: <http://xmlns.com/foaf/0.1/> .\n@prefix ex: <http://example.org/> .\n\n{\n    ex:graph1 dc:publisher \"Bob\" ;\n\t      ex:containsPerson ex:bob .\n\n    ex:graph2 dc:publisher \"Alice\" ;\n\t      ex:containsPerson ex:alice .\n\n    ex:graph3 dc:publisher \"William\" ;\n\t      ex:containsPerson ex:william .\n\n    ex:groupconcat-test \n         ex:p \"a\";\n         ex:p \"b\"; \n\t ex:p \"c\";\n\t ex:p \"d\";\n\t ex:q \"b\";\n\t ex:q \"c\".\n}\n\nex:graph1 {\n    ex:bob foaf:name \"Bob\" ;\n       foaf:mbox \"bob@example.org\" ;\n       foaf:knows ex:alice .\n\n    ex:bob foaf:knows ex:alice .\n    ex:bob foaf:knows ex:william .\n\n    ex:alice foaf:knows ex:bob .\n}\n\nex:graph2 {\n    ex:alice foaf:name \"Alice\" ;\n\tfoaf:mbox \"alice@example.org\" .\n\n    ex:alice foaf:knows ex:william .\n}\n\nex:graph3 {\n    ex:william foaf:name \"William\" ;\n\tfoaf:mbox \"william@example.org\" .\n}\n\nex:tree-graph {\n    ex:a ex:name \"aa\" .\n    ex:b ex:name \"bb\" .\n    ex:c ex:name \"cc\" .\n    ex:d ex:name \"dd\" .\n    ex:e ex:name \"ee\" .\n    ex:f ex:name \"ff\" .\n    ex:g ex:name \"gg\" .\n    ex:h ex:name \"hh\" .\n    ex:i ex:name \"ii\" .\n    ex:j ex:name \"jj\" .\n    ex:k ex:name \"kk\" .\n\n    ex:b ex:hasParent ex:a .\n    ex:c ex:hasParent ex:a .\n    ex:d ex:hasParent ex:a .\n\n    ex:g ex:hasParent ex:c .\n    \n    ex:e ex:hasParent ex:b .\n    ex:f ex:hasParent ex:b .\n    \n    ex:i ex:hasParent ex:g .\n    ex:h ex:hasPerent ex:g .\n\n    ex:j ex:hasParent ex:f .\n    ex:k ex:hasParent ex:f .\n}\n\nex:optional-sameterm-graph {\n\tex:a ex:p ex:A ;\n\t\t rdfs:label \"label\" ;\n\t\t ex:prop1 \"prop1\" ;\n\t\t ex:prop2 \"prop2\" .\n}\n"
+   },
+   "query": "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>\nPREFIX dc: <http://purl.org/dc/terms/> \nPREFIX foaf: <http://xmlns.com/foaf/0.1/> \nPREFIX ex: <http://example.org/> \n\nSELECT * {\n    {\n        ex:a ?p ?prop1\n        FILTER (?p = ex:prop1)\n    } UNION {\n          ?s ex:p ex:A ;           {               {                  ?s ?p ?l .                 FILTER(?p = rdfs:label)               }               OPTIONAL {                  ?s ?p ?opt1 .                  FILTER (?p = ex:prop1)               }               OPTIONAL {                  ?s ?p ?opt2 .                  FILTER (?p = ex:prop2)               }           }    }\n}",
+   "expect": {
+    "kind": "all",
+    "of": [
+     {
+      "kind": "count",
+      "n": 2
+     },
+     {
+      "kind": "unbound",
+      "vars": [
+       "opt1",
+       "opt2"
+      ]
+     }
+    ]
+   },
+   "implicitPrefixes": [
+    "rdfs"
+   ],
+   "unionDefaultGraph": true,
+   "note": "upstream also asserts each row binds ?prop1 or ?l to a literal"
+  },
+  {
+   "id": "ValuesTest#ValuesInOptional",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/ValuesTest.java",
+   "line": 56,
+   "sparql12": false,
+   "data": {
+    "format": "trig",
+    "text": "@prefix : <http://example.org/> .\n\n{\n  :a1 a :X .\n  :a1 :name \"a1\" .\n  :b1 :p1 :a1.\n   \n  :a2 :name \"a2\" .\n  :b2 :p1 :a2.\n   \n}\n"
+   },
+   "query": " PREFIX : <http://example.org/>\n SELECT DISTINCT ?a ?name ?isX WHERE { ?b :p1 ?a . ?a :name ?name. OPTIONAL { ?a a :X . VALUES(?isX) { (:X) } } } ",
+   "expect": {
+    "kind": "bindings",
+    "rows": [
+     {
+      "a": {
+       "type": "uri",
+       "value": "http://example.org/a1"
+      },
+      "name": {
+       "type": "literal",
+       "value": "a1"
+      },
+      "isX": {
+       "type": "uri",
+       "value": "http://example.org/X"
+      }
+     },
+     {
+      "a": {
+       "type": "uri",
+       "value": "http://example.org/a2"
+      },
+      "name": {
+       "type": "literal",
+       "value": "a2"
+      }
+     }
+    ]
+   },
+   "note": "upstream: 2 rows, a1 with ?isX bound, a2 without; that is the exact set"
+  },
+  {
+   "id": "ValuesTest#ValuesClauseNamedGraph",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/ValuesTest.java",
+   "line": 88,
+   "sparql12": false,
+   "data": {
+    "format": "trig",
+    "text": "@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix foaf: <http://xmlns.com/foaf/0.1/> .\n@prefix ex: <http://example.org/> .\nex:graph1 {\n\tex:Person1 rdf:type foaf:Person ;\n\t\tfoaf:name \"Person 1\" .\tex:Person2 rdf:type foaf:Person ;\n\t\tfoaf:name \"Person 2\" .\tex:Person3 rdf:type foaf:Person ;\n\t\tfoaf:name \"Person 3\" .\n}"
+   },
+   "query": "SELECT  ?person ?name ?__index \nWHERE {         VALUES (?person ?name  ?__index) { \n                  (<http://example.org/Person1> UNDEF \"0\") \n                  (<http://example.org/Person3> UNDEF \"2\")  } \n        GRAPH <http://example.org/graph1> { ?person <http://xmlns.com/foaf/0.1/name> ?name .   } }",
+   "expect": {
+    "kind": "count",
+    "n": 2
+   },
+   "note": "the upstream TriG data uses rdf: undeclared (Rio resolves it from its default namespaces); the port declares it"
+  },
+  {
+   "id": "ValuesTest#ValuesCartesianProduct",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/ValuesTest.java",
+   "line": 115,
+   "sparql12": false,
+   "data": null,
+   "query": "select ?x ?y where {   values ?x { undef 67 }   values ?y { undef 42 } }",
+   "expect": {
+    "kind": "count",
+    "n": 4
+   }
+  },
+  {
+   "id": "ValuesTest#SES1081SameTermWithValues",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/ValuesTest.java",
+   "line": 127,
+   "sparql12": false,
+   "data": {
+    "format": "trig",
+    "text": "@prefix ex: <http://example.org/> .\n\n {\n\tex:a ex:p ex:b .\n\tex:c ex:p ex:d . \n}\n"
+   },
+   "query": "PREFIX ex: <http://example.org/>\n SELECT * \n WHERE { \n           ?s ex:p ?a . \n          FILTER sameTerm(?a, ?e) \n           VALUES ?e { ex:b } \n  } ",
+   "expect": {
+    "kind": "all",
+    "of": [
+     {
+      "kind": "count",
+      "n": 1
+     },
+     {
+      "kind": "bindings",
+      "vars": [
+       "s",
+       "a"
+      ],
+      "rows": [
+       {
+        "s": {
+         "type": "uri",
+         "value": "http://example.org/a"
+        },
+        "a": {
+         "type": "uri",
+         "value": "http://example.org/b"
+        }
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "ValuesTest#SES2136",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/ValuesTest.java",
+   "line": 165,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix : <http://example.org/> .\n@prefix foaf:       <http://xmlns.com/foaf/0.1/> .\n\n:a foaf:name \"Alan\" .\n:a foaf:mbox \"alan@example.org\" .\n:b foaf:name \"Bob\" .\n:b foaf:mbox \"bob@example.org\" .\n:a foaf:knows :b .\n"
+   },
+   "query": "PREFIX : <http://example.org/>\nSELECT ?s ?o { \n { SELECT * WHERE { ?s ?p ?o . } }\n\tVALUES (?o) { (:b) }\n}\n",
+   "expect": {
+    "kind": "bindings",
+    "rows": [
+     {
+      "s": {
+       "type": "uri",
+       "value": "http://example.org/a"
+      },
+      "o": {
+       "type": "uri",
+       "value": "http://example.org/b"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "ValuesTest#FilterExistsExternalValuesClause",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/ValuesTest.java",
+   "line": 195,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "<http://subj1> a <http://type> .\n<http://subj2> a <http://type> .\n<http://subj1> <http://predicate> <http://obj1> .\n<http://subj2> <http://predicate> <http://obj2> .\n"
+   },
+   "query": "select ?s  {\n    ?s a* <http://type> .\n    FILTER EXISTS {?s <http://predicate> ?o}\n} limit 100 values ?o {<http://obj1>}",
+   "expect": {
+    "kind": "bindings",
+    "rows": [
+     {
+      "s": {
+       "type": "uri",
+       "value": "http://subj1"
+      }
+     }
+    ]
+   },
+   "note": "INSERT DATA setup given as data"
+  },
+  {
+   "id": "ValuesTest#MultipleValuesClauses",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/ValuesTest.java",
+   "line": 216,
+   "sparql12": false,
+   "data": null,
+   "update": "PREFIX ex: <http://example.org/>\n\nINSERT DATA { ex:sub ex:somePred \"value\" . };\n\nINSERT { ?s ?newPred ?newObj }\nWHERE {\n  # If one combines these into a single VALUES clause then it also works\n  VALUES ?newPred { ex:somePred2 }\n  VALUES ?newObj { \"value2\" }\n  ?s ex:somePred [] .\n}",
+   "expect": {
+    "kind": "asks",
+    "asks": []
+   },
+   "note": "upstream asserts only that the update executes"
+  },
+  {
+   "id": "SubselectTest#SES2373SubselectOptional",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/SubselectTest.java",
+   "line": 42,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "<u:1> <u:r> <u:subject> .\n<u:1> <u:v> 1 .\n<u:1> <u:x> <u:x1> .\n<u:2> <u:r> <u:subject> .\n<u:2> <u:v> 2 .\n<u:2> <u:x> <u:x2> .\n<u:3> <u:r> <u:subject> .\n<u:3> <u:v> 3 .\n<u:3> <u:x> <u:x3> .\n<u:4> <u:r> <u:subject> .\n<u:4> <u:v> 4 .\n<u:4> <u:x> <u:x4> .\n<u:5> <u:r> <u:subject> .\n<u:5> <u:v> 5 .\n<u:5> <u:x> <u:x5> .\n"
+   },
+   "query": "select ?x { \n { select ?v { ?v <u:r> <u:subject> filter (?v = <u:1>) } }.\n  optional {  select ?val { ?v <u:v> ?val .} }\n  ?v <u:x> ?x \n}\n",
+   "expect": {
+    "kind": "contains",
+    "rows": [
+     {
+      "x": {
+       "type": "uri",
+       "value": "u:x1"
+      }
+     }
+    ]
+   },
+   "note": "INSERT DATA setup given as data; upstream asserts the first solution binds ?x (the only value the data gives is u:x1)"
+  },
+  {
+   "id": "SubselectTest#SES2154SubselectOptional",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/SubselectTest.java",
+   "line": 65,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "<urn:s1> a <urn:C> .\n<urn:s2> a <urn:C> .\n<urn:s3> a <urn:C> .\n<urn:s4> a <urn:C> .\n<urn:s5> a <urn:C> .\n<urn:s6> a <urn:C> .\n<urn:s7> a <urn:C> .\n<urn:s8> a <urn:C> .\n<urn:s9> a <urn:C> .\n<urn:s10> a <urn:C> .\n<urn:s11> a <urn:C> .\n<urn:s12> a <urn:C> .\n<urn:s1> <urn:p> \"01\" .\n<urn:s2> <urn:p> \"02\" .\n<urn:s3> <urn:p> \"03\" .\n<urn:s4> <urn:p> \"04\" .\n<urn:s5> <urn:p> \"05\" .\n<urn:s6> <urn:p> \"06\" .\n<urn:s7> <urn:p> \"07\" .\n<urn:s8> <urn:p> \"08\" .\n<urn:s9> <urn:p> \"09\" .\n<urn:s10> <urn:p> \"10\" .\n<urn:s11> <urn:p> \"11\" .\n<urn:s12> <urn:p> \"12\" .\n"
+   },
+   "query": "SELECT ?s ?label\nWHERE { \n \t  ?s a <urn:C> \n .\n \t  OPTIONAL  { {SELECT ?label  WHERE { \n                     ?s <urn:p> ?label . \n   \t      } ORDER BY ?label LIMIT 2 \n\t\t    }\n       }\n}\nORDER BY ?s\nLIMIT 10 \n",
+   "expect": {
+    "kind": "all",
+    "of": [
+     {
+      "kind": "count",
+      "n": 10
+     },
+     {
+      "kind": "absent",
+      "rows": [
+       {
+        "label": {
+         "type": "literal",
+         "value": "03"
+        }
+       },
+       {
+        "label": {
+         "type": "literal",
+         "value": "04"
+        }
+       },
+       {
+        "label": {
+         "type": "literal",
+         "value": "05"
+        }
+       },
+       {
+        "label": {
+         "type": "literal",
+         "value": "06"
+        }
+       },
+       {
+        "label": {
+         "type": "literal",
+         "value": "07"
+        }
+       },
+       {
+        "label": {
+         "type": "literal",
+         "value": "08"
+        }
+       },
+       {
+        "label": {
+         "type": "literal",
+         "value": "09"
+        }
+       },
+       {
+        "label": {
+         "type": "literal",
+         "value": "10"
+        }
+       },
+       {
+        "label": {
+         "type": "literal",
+         "value": "11"
+        }
+       },
+       {
+        "label": {
+         "type": "literal",
+         "value": "12"
+        }
+       }
+      ]
+     }
+    ]
+   },
+   "note": "INSERT DATA setup given as data; upstream: 10 rows, each ?label \"01\" or \"02\""
+  }
+ ],
+ "notPorted": []
+}

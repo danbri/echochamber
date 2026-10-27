@@ -1,0 +1,58 @@
+{
+ "cases": {
+  "ArbitraryLengthPathTest#ArbitraryLengthPathWithBinding4#1": {
+   "verdict": "divergence",
+   "group": "union-default-graph",
+   "spec": "SPARQL 1.1 Query \u00a713.2 (https://www.w3.org/TR/sparql11-query/#specifyingDataset): with no FROM/FROM NAMED the dataset is the service's choice; RDF4J's default graph is the union of all contexts, the engine's is the data's default graph",
+   "note": "data only in named graphs; the engine's default graph is empty (0 rows). With the named graphs merged into the default graph the engine gives the RDF4J count (cross-checked)."
+  },
+  "ArbitraryLengthPathTest#ArbitraryLengthPathWithBinding4#2": {
+   "verdict": "divergence",
+   "group": "union-default-graph",
+   "spec": "SPARQL 1.1 Query \u00a713.2 (https://www.w3.org/TR/sparql11-query/#specifyingDataset): with no FROM/FROM NAMED the dataset is the service's choice; RDF4J's default graph is the union of all contexts, the engine's is the data's default graph",
+   "note": "data only in named graphs; the engine's default graph is empty (0 rows). With the named graphs merged into the default graph the engine gives the RDF4J count (cross-checked)."
+  },
+  "ArbitraryLengthPathTest#ArbitraryLengthPathWithBinding5#1": {
+   "verdict": "divergence",
+   "group": "union-default-graph",
+   "spec": "SPARQL 1.1 Query \u00a713.2 (https://www.w3.org/TR/sparql11-query/#specifyingDataset): with no FROM/FROM NAMED the dataset is the service's choice; RDF4J's default graph is the union of all contexts, the engine's is the data's default graph",
+   "note": "data only in named graphs; the engine's default graph is empty (0 rows). With the named graphs merged into the default graph the engine gives the RDF4J count (cross-checked)."
+  },
+  "ArbitraryLengthPathTest#ArbitraryLengthPathWithBinding5#2": {
+   "verdict": "divergence",
+   "group": "union-default-graph",
+   "spec": "SPARQL 1.1 Query \u00a713.2 (https://www.w3.org/TR/sparql11-query/#specifyingDataset): with no FROM/FROM NAMED the dataset is the service's choice; RDF4J's default graph is the union of all contexts, the engine's is the data's default graph",
+   "note": "data only in named graphs; the engine's default graph is empty (0 rows). With the named graphs merged into the default graph the engine gives the RDF4J count (cross-checked)."
+  },
+  "ArbitraryLengthPathTest#ArbitraryLengthPathWithBinding6#1": {
+   "verdict": "divergence",
+   "group": "union-default-graph",
+   "spec": "SPARQL 1.1 Query \u00a713.2 (https://www.w3.org/TR/sparql11-query/#specifyingDataset): with no FROM/FROM NAMED the dataset is the service's choice; RDF4J's default graph is the union of all contexts, the engine's is the data's default graph",
+   "note": "data only in named graphs; the engine's default graph is empty (0 rows). With the named graphs merged into the default graph the engine gives the RDF4J count (cross-checked)."
+  },
+  "ArbitraryLengthPathTest#ArbitraryLengthPathWithBinding6#2": {
+   "verdict": "divergence",
+   "group": "union-default-graph",
+   "spec": "SPARQL 1.1 Query \u00a713.2 (https://www.w3.org/TR/sparql11-query/#specifyingDataset): with no FROM/FROM NAMED the dataset is the service's choice; RDF4J's default graph is the union of all contexts, the engine's is the data's default graph",
+   "note": "data only in named graphs; the engine's default graph is empty (0 rows). With the named graphs merged into the default graph the engine gives the RDF4J count (cross-checked)."
+  },
+  "UnionTest#SameTermRepeatInUnion": {
+   "verdict": "divergence",
+   "group": "union-default-graph",
+   "spec": "SPARQL 1.1 Query \u00a713.2 (https://www.w3.org/TR/sparql11-query/#specifyingDataset): with no FROM/FROM NAMED the dataset is the service's choice; RDF4J's default graph is the union of all contexts, the engine's is the data's default graph",
+   "note": "foaf/ex triples of dataset-query.trig are in named graphs; with them merged into the default graph the engine gives the RDF4J count (cross-checked)."
+  },
+  "UnionTest#SameTermRepeatInUnionAndOptional": {
+   "verdict": "divergence",
+   "group": "union-default-graph",
+   "spec": "SPARQL 1.1 Query \u00a713.2 (https://www.w3.org/TR/sparql11-query/#specifyingDataset): with no FROM/FROM NAMED the dataset is the service's choice; RDF4J's default graph is the union of all contexts, the engine's is the data's default graph",
+   "note": "foaf/ex triples of dataset-query.trig are in named graphs; with them merged into the default graph the engine gives the RDF4J count (cross-checked)."
+  },
+  "ValuesTest#FilterExistsExternalValuesClause": {
+   "verdict": "divergence",
+   "group": "trailing-values-scope",
+   "spec": "SPARQL 1.1 Query \u00a718.2.4.3 (P := Join(P, ToMultiSet(data)) for a trailing VALUES, after the WHERE pattern) and \u00a718.6 (EXISTS substitutes the current solution, which does not bind ?o)",
+   "note": "RDF4J (GH-1026) treats the trailing VALUES as an initial binding of ?o visible inside FILTER EXISTS, giving 1 row; by the algebra ?o is unbound when EXISTS is evaluated, both subjects pass, and the join with ?o=<http://obj1> keeps both: the engine's 2 rows are the specification's answer."
+  }
+ }
+}

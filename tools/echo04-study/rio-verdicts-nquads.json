@@ -1,0 +1,23 @@
+{
+ "cases": {
+  "AbstractNQuadsParserUnitTest#testSparqlVersionDirectiveDoubleQuotes": {
+   "verdict": "defect",
+   "group": "nt-nq12-version-directive",
+   "issue": "https://github.com/danbri/factoidal/issues/1055",
+   "spec": "RDF 1.2 N-Quads section 5.3 Grammar, productions [2] statement ::= directive | quad, [3] directive ::= versionDirective, [4] versionDirective ::= 'VERSION' versionSpecifier, [5] versionSpecifier ::= STRING_LITERAL_QUOTE; section 6.1: the version announcement is only a hint (https://www.w3.org/TR/rdf12-n-quads/#sec-grammar)",
+   "note": "core.parse('VERSION \"1.2--basic\"', {format: 'nquads12'}) rejects with term.invalid-iri 'expected subject (IRIREF or BLANK_NODE_LABEL) at line 1, column 1'; VERSION \"1.2\" is rejected the same way, and so is a VERSION line followed by a quad. turtle12 accepts the same directive. Expected: an empty graph."
+  },
+  "AbstractNQuadsParserUnitTest#testSparqlVersionDirectiveSingleQuotes": {
+   "verdict": "divergence",
+   "group": "nt-nq12-version-single-quotes",
+   "spec": "RDF 1.2 N-Quads section 5.3 Grammar, [5] versionSpecifier ::= STRING_LITERAL_QUOTE (double quotes only; there is no STRING_LITERAL_SINGLE_QUOTE in the N-Quads grammar) (https://www.w3.org/TR/rdf12-n-quads/#sec-grammar)",
+   "note": "RDF4J accepts VERSION '1.2--basic' in N-Quads; the grammar allows only a double-quoted version specifier, so rejection is correct. Factoidal rejects, but for the reason in the nquads12-version-directive defect (no VERSION support at all); when that is fixed this case must still reject."
+  },
+  "AbstractNQuadsParserUnitTest#testDirLangStringNoLanguage": {
+   "verdict": "divergence",
+   "group": "langstring-without-tag",
+   "spec": "RDF 1.2 Concepts section 3.4 Literals: 'If and only if the datatype IRI is http://www.w3.org/1999/02/22-rdf-syntax-ns#langString or http://www.w3.org/1999/02/22-rdf-syntax-ns#dirLangString, there is a non-empty language tag' (https://www.w3.org/TR/rdf12-concepts/#section-Graph-Literal)",
+   "note": "\"Hello\"^^rdf:dirLangString has no language tag and no base direction, so no RDF literal can be built from it. RDF4J (VERIFY_DATATYPE_VALUES=false, its default) silently rewrites it to \"Hello\"^^xsd:string (RDFParserHelper.createLiteral); Factoidal rejects with term.invalid-langtag."
+  }
+ }
+}
