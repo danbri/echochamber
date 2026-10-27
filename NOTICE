@@ -1,0 +1,11 @@
+echochamber
+Copyright 2026 Dan Brickley and contributors.
+Licensed under the Apache License, Version 2.0 (see LICENSE).
+
+This repository contains material derived from other projects. Each
+derived file says so in its header and names what was changed.
+
+- packages/leana, tools/leana-study, docs/leana: test cases and API
+  descriptions derived from Apache Jena. Apache Jena: Copyright The Apache
+  Software Foundation. This product includes software developed at The
+  Apache Software Foundation (https://www.apache.org/). Apache License 2.0.

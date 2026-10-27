@@ -1,0 +1,7 @@
+{
+  "name": "echochamber",
+  "private": true,
+  "description": "Echoes: RDF library APIs and their test suites over @factoidal/core",
+  "license": "Apache-2.0",
+  "workspaces": ["packages/*"]
+}
