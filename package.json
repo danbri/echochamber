@@ -3,8 +3,14 @@
   "private": true,
   "description": "Echoes: RDF library APIs and their test suites over @factoidal/core",
   "license": "Apache-2.0",
-  "workspaces": ["packages/*"],
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
-    "test:echo03": "node --test 'conformance/echo03/**/*.test.mjs'"
+    "test": "node --test --test-concurrency=1 'conformance/*/*.test.mjs' 'packages/*/test/*.test.mjs'",
+    "test:echo03": "node --test --test-concurrency=1 'conformance/echo03/*.test.mjs'"
+  },
+  "devDependencies": {
+    "@factoidal/core": "0.16.0"
   }
 }

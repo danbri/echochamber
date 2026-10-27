@@ -18,11 +18,11 @@ Echoes are an application *of* Factoidal. They add no code to
 | echo | npm name | in the style of | status |
 |---|---|---|---|
 | leana | `@factoidal/leana` | Apache Jena (Java) | feasibility study done; expression tests ported (in core) |
-| leanlib | `@factoidal/leanlib` | RDFLib (Python) | planned |
-| echo03 | `@factoidal/echo03` | N3.js and RDF/JS (JavaScript) | planned |
-| lean4j | `@factoidal/lean4j` | Eclipse RDF4J (Java) | planned |
+| echo02 (name to come) | — (prototype `packages/echo02`, private) | RDFLib (Python) | feasibility study; parser and serializer data tests ported (`conformance/echo02`); prototype |
+| echo03 (name to come) | — (prototype `packages/echo03`, private) | N3.js and RDF/JS (JavaScript) | feasibility study; N3.js parser, writer and store tests and the RDF/JS data model and dataset suites ported (`conformance/echo03`); prototype |
+| echo04 (name to come) | — | Eclipse RDF4J (Java) | planned |
 
-Names are working names and may change. The libraries named above are
+`echo02`–`echo04` are neutral placeholders until the owner names them; `leana` is a working name and may change. The libraries named above are
 trademarks or project names of their owners; an echo is not affiliated with
 or endorsed by them. "In the style of" describes API compatibility only.
 
