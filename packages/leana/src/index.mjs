@@ -28,7 +28,7 @@ export {
 } from './events.mjs';
 export { PrefixMapping, PrefixMappingImpl, IllegalPrefixException } from './prefix.mjs';
 export {
-  Model, ModelFactory, ResourceFactory, Statement, RDFNode, Resource, Property, Literal,
+  UnsupportedPolymorphismException, Model, ModelFactory, ResourceFactory, Statement, RDFNode, Resource, Property, Literal,
   StmtIterator, ResIterator, NodeIterator, AnonId, StatementTerm,
 } from './model.mjs';
 export {

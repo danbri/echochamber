@@ -32,6 +32,13 @@ export class AnonId {
   toString() { return this._label; }
 }
 
+/** Jena UnsupportedPolymorphismException: RDFNode.as(cls) for a class with no implementation for that node. */
+export class UnsupportedPolymorphismException extends JenaException {
+  constructor(node, cls) { super(`${node} cannot be viewed as ${cls && cls.name ? cls.name : cls}`); this._node = node; this._cls = cls; }
+  getBadNode() { return this._node; }
+  getBadClass() { return this._cls; }
+}
+
 export class RDFNode {
   constructor(node, model) {
     if (!(node instanceof Node)) throw new TypeError('RDFNode needs a Node');
@@ -82,7 +89,8 @@ export class RDFNode {
       return this instanceof StatementTerm ? this : new StatementTerm(this._node, this._model);
     }
     if (COLLECTION_CLASSES.includes(cls)) return unsupported('RDFNode.as(RDFList | Container | Seq | Bag | Alt)', 'collections');
-    return unsupported('RDFNode.as(' + (cls && cls.name) + ')', 'echo');
+    // Jena: a class with no implementation for this node is UnsupportedPolymorphismException.
+    throw new UnsupportedPolymorphismException(this, cls);
   }
   canAs(cls) {
     if (cls === RDFNode) return true;
@@ -91,7 +99,7 @@ export class RDFNode {
     if (cls === Resource) return this._node.isURI() || this._node.isBlank();
     if (cls === StatementTerm) return this._node.isTripleTerm();
     if (COLLECTION_CLASSES.includes(cls)) return unsupported('RDFNode.canAs(RDFList | Container | Seq | Bag | Alt)', 'collections');
-    return unsupported('RDFNode.canAs(' + (cls && cls.name) + ')', 'echo');
+    return false;
   }
   /** Jena RDFVisitor dispatch: visitBlank(r, id), visitURI(r, uri), visitLiteral(l), visitStmt(st, statement). */
   visitWith(v) {
