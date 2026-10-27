@@ -1,0 +1,17 @@
+{
+  "resultset_02": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "ResultSetFactory reading a results format (XML, JSON, CSV, TSV, Thrift)."
+  },
+  "resultset_03": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "ResultSetFactory reading a results format (XML, JSON, CSV, TSV, Thrift)."
+  },
+  "resultset_04": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "ResultSetFactory reading a results format (XML, JSON, CSV, TSV, Thrift)."
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "duration_01": {
+    "verdict": "gap",
+    "gap": "literal-value",
+    "note": "Node.getLiteralValue."
+  },
+  "duration_02": {
+    "verdict": "gap",
+    "gap": "literal-value",
+    "note": "Node.getLiteralValue."
+  },
+  "duration_03": {
+    "verdict": "gap",
+    "gap": "literal-value",
+    "note": "Node.getLiteralValue."
+  },
+  "duration_04": {
+    "verdict": "gap",
+    "gap": "literal-value",
+    "note": "Node.getLiteralValue."
+  },
+  "duration_05": {
+    "verdict": "gap",
+    "gap": "literal-value",
+    "note": "Node.getLiteralValue."
+  },
+  "duration_06": {
+    "verdict": "gap",
+    "gap": "literal-value",
+    "note": "Node.getLiteralValue."
+  },
+  "duration_07": {
+    "verdict": "gap",
+    "gap": "literal-value",
+    "note": "Node.getLiteralValue."
+  },
+  "duration_10": {
+    "verdict": "gap",
+    "gap": "literal-value",
+    "note": "Node.getLiteralValue."
+  },
+  "duration_11": {
+    "verdict": "gap",
+    "gap": "literal-value",
+    "note": "Node.getLiteralValue."
+  },
+  "duration_12": {
+    "verdict": "gap",
+    "gap": "literal-value",
+    "note": "Node.getLiteralValue."
+  },
+  "duration_13": {
+    "verdict": "gap",
+    "gap": "literal-value",
+    "note": "Node.getLiteralValue."
+  },
+  "duration_14": {
+    "verdict": "gap",
+    "gap": "literal-value",
+    "note": "Node.getLiteralValue."
+  },
+  "duration_20": {
+    "verdict": "gap",
+    "gap": "literal-value",
+    "note": "Node.getLiteralValue."
+  }
+}

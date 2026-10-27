@@ -1,0 +1,77 @@
+{
+  "test_function_expansion_01": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "Expr (SPARQL expression object model)."
+  },
+  "test_function_expansion_02": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "Expr (SPARQL expression object model)."
+  },
+  "test_function_expansion_03": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "Expr (SPARQL expression object model)."
+  },
+  "test_function_expansion_04": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "Expr (SPARQL expression object model)."
+  },
+  "test_function_expansion_05": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "Expr (SPARQL expression object model)."
+  },
+  "test_function_expansion_06": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "Expr (SPARQL expression object model)."
+  },
+  "test_function_expansion_07": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "Expr (SPARQL expression object model)."
+  },
+  "test_function_expansion_08": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "Expr (SPARQL expression object model)."
+  },
+  "test_function_expansion_09": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "Expr (SPARQL expression object model)."
+  },
+  "test_function_expansion_10": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "Expr (SPARQL expression object model)."
+  },
+  "test_function_expansion_11": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "Expr (SPARQL expression object model)."
+  },
+  "test_function_expansion_12": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "Expr (SPARQL expression object model)."
+  },
+  "test_function_expansion_13": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "Expr (SPARQL expression object model)."
+  },
+  "test_function_expansion_bad_01": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "Expr (SPARQL expression object model)."
+  },
+  "test_function_expansion_bad_02": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "Expr (SPARQL expression object model)."
+  }
+}

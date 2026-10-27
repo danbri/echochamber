@@ -61,8 +61,18 @@ export class Node {
   getNameSpace() { return unsupported('Node.getNameSpace', 'iri-split'); }
   getLocalName() { return unsupported('Node.getLocalName', 'iri-split'); }
 
-  /** Value equality (Jena sameValueAs): engine op needed. */
-  sameValueAs(other) { return unsupported('Node.sameValueAs', 'value-matching'); }
+  /**
+   * Value equality (Jena sameValueAs). For nodes with no literal inside, the
+   * value is the term (RDF 1.1 Concepts section 3.6): term equality. For a
+   * literal, value equality needs an engine op.
+   */
+  sameValueAs(other) {
+    if (!(other instanceof Node)) return false;
+    if (hasLiteral(this) || hasLiteral(other)) return unsupported('Node.sameValueAs', 'value-matching');
+    return this.equals(other);
+  }
+  isNodeGraph() { return false; }
+  getGraph() { throw new UnsupportedOperationException(this.constructor.name + ' is not a graph node'); }
 
   /** Jena sameTermAs: term equality; null is refused (Jena 6: NullPointerException). */
   sameTermAs(other) {
@@ -91,6 +101,7 @@ export class Node {
     if (this.isLiteral()) return v.visitLiteral(this, this.getLiteralLexicalForm(), this.getLiteralLanguage(), this.getLiteralDatatype());
     if (this.isVariable()) return v.visitVariable(this, this.getName());
     if (this.isTripleTerm()) return v.visitTriple(this, this.getTriple());
+    if (this.isNodeGraph()) return v.visitGraph(this, this.getGraph());
     throw new JenaException('no visit for ' + this);
   }
 }
@@ -213,9 +224,34 @@ export class Node_Triple extends Node {
   toString() { return '<<( ' + this._triple.toString() + ' )>>'; }
 }
 
-/** Jena Node_Graph (a graph as a node): not in leana. */
+function hasLiteral(n) {
+  if (n.isLiteral()) return true;
+  if (n.isTripleTerm()) {
+    const t = n.getTriple();
+    return hasLiteral(t.getSubject()) || hasLiteral(t.getPredicate()) || hasLiteral(t.getObject());
+  }
+  return false;
+}
+
+const GRAPH_IDS = new WeakMap();
+let graphIds = 0;
+/**
+ * Jena Node_Graph: a graph as a node (a Jena extension, not an RDF term).
+ * Two are equal when they hold the same graph object. It is not concrete
+ * and has no RDF/JS term, so it cannot be stored in a graph.
+ */
 export class Node_Graph extends Node {
-  constructor() { super(); unsupported('Node_Graph', 'echo'); }
+  constructor(graph) {
+    super();
+    if (graph === null || graph === undefined) throw new TypeError('Node_Graph needs a graph');
+    this._graph = graph;
+    if (!GRAPH_IDS.has(graph)) GRAPH_IDS.set(graph, ++graphIds);
+    Object.freeze(this);
+  }
+  isNodeGraph() { return true; }
+  getGraph() { return this._graph; }
+  hashKey() { return 'G' + GRAPH_IDS.get(this._graph); }
+  toString() { return '{graph ' + GRAPH_IDS.get(this._graph) + '}'; }
 }
 
 Node.ANY = new Node_ANY();
@@ -252,8 +288,11 @@ export function datatypeFor(uri) {
 
 /** A datatype named by IRI. Only the IRI: the datatype's semantics are the engine's. */
 export class BaseDatatype {
-  constructor(uri) { this._uri = String(uri); Object.freeze(this); }
+  /** Jena allows a null IRI (BaseDatatype(null)): equal to another null-IRI datatype. */
+  constructor(uri) { this._uri = uri === null || uri === undefined ? null : String(uri); Object.freeze(this); }
   getURI() { return this._uri; }
+  /** Jena: the hash code of the IRI (Objects.hashCode); leana's hash codes are keys, so the IRI ('' for null). */
+  hashCode() { return this._uri ?? ''; }
   isValid(lex) { return unsupported('RDFDatatype.isValid', 'literal-value'); }
   parse(lex) { return unsupported('RDFDatatype.parse', 'literal-value'); }
   unparse(v) { return unsupported('RDFDatatype.unparse', 'literal-value'); }
@@ -327,6 +366,11 @@ export const NodeFactory = Object.freeze({
    */
   createLiteral(lex, langOrDt, dir, dtype) {
     if (lex instanceof LiteralLabel) return new Node_Literal(lex._term);
+    // Jena createLiteral(lex, lang, RDFDatatype): the three-argument form with a datatype.
+    if (arguments.length === 3 && dir instanceof BaseDatatype) {
+      if (langOrDt) return NodeFactory.createLiteralLang(lex, langOrDt);
+      return NodeFactory.createLiteralDT(lex, dir);
+    }
     if (arguments.length >= 3) {
       if (langOrDt) return NodeFactory.createLiteralDirLang(lex, langOrDt, dir);
       if (dtype !== undefined && dtype !== null) return NodeFactory.createLiteralDT(lex, dtype);
@@ -489,4 +533,12 @@ export const JenaParameters = Object.freeze(Object.defineProperties({}, Object.f
 /** Jena XSDDateTime (a value of the XSD date/time types): made from a Calendar/Date value. */
 export class XSDDateTime {
   constructor() { unsupported('new XSDDateTime(Calendar)', 'js-value-literal'); }
+}
+
+/**
+ * Jena XSDDouble (and the other XSDDatatype subclasses): a datatype object for an
+ * XSD local name. The xsd: namespace and the datatype's value space are the engine's.
+ */
+export class XSDDouble extends BaseDatatype {
+  constructor() { unsupported('new XSDDouble(name, Class)', 'vocabulary'); super(null); }
 }

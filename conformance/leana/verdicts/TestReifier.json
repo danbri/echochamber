@@ -1,0 +1,112 @@
+{
+  "testAllNodes": {
+    "verdict": "gap",
+    "gap": "vocabulary",
+    "note": "ReifierStd.reifyAs."
+  },
+  "testException": {
+    "verdict": "gap",
+    "gap": "vocabulary",
+    "note": "ReifierStd.reifyAs."
+  },
+  "testHiddenVsReification": {
+    "verdict": "gap",
+    "gap": "vocabulary",
+    "note": "ReifierStd.reifyAs."
+  },
+  "testKevinCaseA": {
+    "verdict": "gap",
+    "gap": "vocabulary",
+    "note": "ReifierStd.reifyAs."
+  },
+  "testKevinCaseB": {
+    "verdict": "gap",
+    "gap": "vocabulary",
+    "note": "ReifierStd.reifyAs."
+  },
+  "testManifestQuads": {
+    "verdict": "gap",
+    "gap": "vocabulary",
+    "note": "ReifierStd.reifyAs."
+  },
+  "testOverspecificationSuppressesReification": {
+    "verdict": "gap",
+    "gap": "vocabulary",
+    "note": "ReifierStd.getTriple."
+  },
+  "testReificationObjectClash": {
+    "verdict": "gap",
+    "gap": "vocabulary",
+    "note": "ReifierStd.reifyAs."
+  },
+  "testReificationPredicateClash": {
+    "verdict": "gap",
+    "gap": "vocabulary",
+    "note": "ReifierStd.reifyAs."
+  },
+  "testReificationSubjectClash": {
+    "verdict": "gap",
+    "gap": "vocabulary",
+    "note": "ReifierStd.reifyAs."
+  },
+  "testReifierEmptyFind": {
+    "verdict": "gap",
+    "gap": "vocabulary",
+    "note": "ReifierStd.findExposed."
+  },
+  "testReifierFindComplete": {
+    "verdict": "gap",
+    "gap": "vocabulary",
+    "note": "ReifierStd.findExposed."
+  },
+  "testReifierFindFilter": {
+    "verdict": "gap",
+    "gap": "vocabulary",
+    "note": "ReifierStd.findExposed."
+  },
+  "testReifierFindObject": {
+    "verdict": "gap",
+    "gap": "vocabulary",
+    "note": "ReifierStd.findExposed."
+  },
+  "testReifierFindPredicate": {
+    "verdict": "gap",
+    "gap": "vocabulary",
+    "note": "ReifierStd.findExposed."
+  },
+  "testReifierFindSubject": {
+    "verdict": "gap",
+    "gap": "vocabulary",
+    "note": "ReifierStd.findExposed."
+  },
+  "testReifyAs": {
+    "verdict": "gap",
+    "gap": "vocabulary",
+    "note": "ReifierStd.reifyAs."
+  },
+  "testRemoveByNode": {
+    "verdict": "gap",
+    "gap": "vocabulary",
+    "note": "ReifierStd.reifyAs."
+  },
+  "testRetrieveTriplesByNode": {
+    "verdict": "gap",
+    "gap": "vocabulary",
+    "note": "ReifierStd.reifyAs."
+  },
+  "testRetrieveTriplesByTriple": {
+    "verdict": "gap",
+    "gap": "vocabulary",
+    "note": "ReifierStd.reifyAs."
+  },
+  "testStandard": {
+    "verdict": "gap",
+    "gap": "vocabulary",
+    "note": "ReifierStd.hasTriple."
+  },
+  "testStandardExplode": {
+    "verdict": "gap",
+    "gap": "vocabulary",
+    "note": "ReifierStd.reifyAs."
+  }
+}

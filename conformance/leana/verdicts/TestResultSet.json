@@ -1,0 +1,102 @@
+{
+  "preserve_bnodes_1": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "ResultSetFactory reading a results format (XML, JSON, CSV, TSV, Thrift)."
+  },
+  "preserve_bnodes_2": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "ResultSetFactory reading a results format (XML, JSON, CSV, TSV, Thrift)."
+  },
+  "preserve_bnodes_3": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "ResultsWriter in a result-set syntax the engine does not write (Thrift, Protobuf)."
+  },
+  "rs_datatype_string": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "ResultSetFactory reading a results format (XML, JSON, CSV, TSV, Thrift)."
+  },
+  "rs_xmllang_datatype_1": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "ResultSetFactory reading a results format (XML, JSON, CSV, TSV, Thrift)."
+  },
+  "rs_xmllang_datatype_2": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "ResultSetFactory reading a results format (XML, JSON, CSV, TSV, Thrift)."
+  },
+  "test_RS_1": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "ResultSetFactory reading a results format (XML, JSON, CSV, TSV, Thrift)."
+  },
+  "test_RS_10": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "ResultSetFactory reading a results format (XML, JSON, CSV, TSV, Thrift)."
+  },
+  "test_RS_1_str": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "ResultSetFactory reading a results format (XML, JSON, CSV, TSV, Thrift)."
+  },
+  "test_RS_2": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "ResultSetFactory reading a results format (XML, JSON, CSV, TSV, Thrift)."
+  },
+  "test_RS_2_str": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "ResultSetFactory reading a results format (XML, JSON, CSV, TSV, Thrift)."
+  },
+  "test_RS_3": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "RDFOutput / RDFInput (a result set in the RDF result-set vocabulary)."
+  },
+  "test_RS_4": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "RDFOutput / RDFInput (a result set in the RDF result-set vocabulary)."
+  },
+  "test_RS_5": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "ResultSetFactory reading a results format (XML, JSON, CSV, TSV, Thrift)."
+  },
+  "test_RS_6": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "ResultSetFactory reading a results format (XML, JSON, CSV, TSV, Thrift)."
+  },
+  "test_RS_7": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "ResultSetFactory reading a results format (XML, JSON, CSV, TSV, Thrift)."
+  },
+  "test_RS_8": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "ResultSetFactory reading a results format (XML, JSON, CSV, TSV, Thrift)."
+  },
+  "test_RS_9": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "ResultSetFactory reading a results format (XML, JSON, CSV, TSV, Thrift)."
+  },
+  "test_RS_cmp_value_1": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "ResultsCompare.equalsByValue."
+  },
+  "test_RS_iso_1": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "ResultsCompare.equalsByValue."
+  }
+}

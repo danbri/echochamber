@@ -1,6 +1,17 @@
 {
-  "term_triple_1": {"verdict": "gap", "gap": "value-matching", "note": "Node.sameValueAs; the term-level assertions before it pass."},
-  "term_triple_2": {"verdict": "gap", "gap": "value-matching", "note": "Node.sameValueAs."},
-  "term_triple_4": {"verdict": "gap", "gap": "value-matching", "note": "Node.sameValueAs."},
-  "term_graph_1": {"verdict": "gap", "gap": "echo", "note": "Node_Graph (a graph as a node) is not in leana."}
+  "term_triple_1": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "Node.sameValueAs; the term-level assertions before it pass."
+  },
+  "term_triple_2": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "Node.sameValueAs."
+  },
+  "term_triple_4": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "Node.sameValueAs."
+  }
 }

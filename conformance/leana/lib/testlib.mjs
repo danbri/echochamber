@@ -24,6 +24,8 @@
 //   jena-core/src/test/java/org/apache/jena/graph/GraphTestLib.java
 //   jena-core/src/test/java/org/apache/jena/rdf/model/ModelTestLib.java
 //   jena-core/src/test/java/org/apache/jena/test/JenaTestLib.java
+//   jena-core/src/test/java/org/apache/jena/junit/AbstractRecordingListener.java
+//   jena-core/src/test/java/org/apache/jena/graph/RecordingGraphListener.java
 //   jena-core/src/main/java/org/apache/jena/shared/PrefixMapping.java (the
 //     Standard and Extended tables, as test data)
 // Changed for echochamber: translated from Java to JavaScript over
@@ -34,7 +36,7 @@
 import assert from 'node:assert/strict';
 import {
   Node, NodeFactory, Triple, PrefixMapping, GraphMemFactory, ModelFactory, Property, JenaException,
-  JenaSet, LeanaUnsupportedError,
+  JenaSet, LeanaUnsupportedError, ArrayList, Model, Statement,
 } from '@factoidal/leana';
 
 // --- PrefixMapping.Standard and PrefixMapping.Extended, as test data.
@@ -250,3 +252,133 @@ export function testContains(g, triples) {
 export function testOmits(g, triples) {
   for (const t of triplesOf(triples)) assert.ok(!g.contains(t), 'omits ' + t);
 }
+
+// --- AbstractRecordingListener and RecordingGraphListener.
+// Java equality of history items: identity for arrays (Java arrays), element-wise for Lists.
+function javaEquals(a, b) {
+  if (a === b) return true;
+  if (a instanceof ArrayList) return a.equals(b);
+  if (Array.isArray(a)) return false;
+  if (a && typeof a.equals === 'function') return a.equals(b);
+  return false;
+}
+export function checkEquality(o1, o2) {
+  if (o1 === o2) return true;
+  const listy = (x) => Array.isArray(x) || x instanceof JenaSet;
+  if (listy(o1) && listy(o2)) {
+    const a = [...o1], b = [...o2];
+    return a.length === b.length && a.every((x, i) => checkEquality(x, b[i]));
+  }
+  if (o1 instanceof Model && o2 instanceof Model) return checkEquality(o1.listStatements().toList(), o2.listStatements().toList());
+  if (o1 instanceof Statement && o2 instanceof Statement) return o1.asTriple().equals(o2.asTriple());
+  if (o1 && typeof o1.toList === 'function' && o2 && typeof o2.toList === 'function') return checkEquality(o1.toList(), o2.toList());
+  return javaEquals(o1, o2);
+}
+export class AbstractRecordingListener {
+  constructor() { this.history = []; }
+  record(...xs) { this.history.push(...xs); }
+  has(...things) { return things.length === this.history.length && things.every((x, i) => javaEquals(this.history[i], x)); }
+  assertHas(things) {
+    assert.ok(this.has(...things), `expected [${things.map(String)}] but got [${this.history.map(String)}]`);
+  }
+  assertEmpty() { assert.equal(this.history.length, 0, 'Should be no history but got ' + this.history); }
+  size() { return this.history.length; }
+}
+export class RecordingGraphListener extends AbstractRecordingListener {
+  notifyAddTriple(g, t) { this.record('add', g, t); }
+  notifyAddArray(g, ts) { this.record('add[]', g, ts); }
+  notifyAddList(g, ts) { this.record('addList', g, ts); }
+  notifyAddIterator(g, ts) { this.record('addIterator', g, ts); }
+  notifyAddGraph(g, added) { this.record('addGraph', g, added); }
+  notifyDeleteTriple(g, t) { this.record('delete', g, t); }
+  notifyDeleteArray(g, ts) { this.record('delete[]', g, ts); }
+  notifyDeleteList(g, ts) { this.record('deleteList', g, ts); }
+  notifyDeleteIterator(g, ts) { this.record('deleteIterator', g, ts); }
+  notifyDeleteGraph(g, removed) { this.record('deleteGraph', g, removed); }
+  notifyEvent(source, event) { this.record('someEvent', source, event); }
+}
+/** Arrays.asList(...): a Java List. */
+export const asList = (xs) => ArrayList.from(xs);
+
+// --- Helpers for the compose, events and iterator ports (fork leana2-compose).
+// Derived from Apache Jena (Apache License 2.0) at commit
+// a1164c5dc5c9e1a9c58d94766c13d870e0a8ba98:
+//   jena-core/src/test/java/org/apache/jena/rdf/model/RecordingModelListener.java
+//   jena-core/src/test/java/org/apache/jena/rdf/model/helpers/ModelCreators.java
+//   jena-core/src/test/java/org/apache/jena/util/iterator/LoggingClosableIterator.java
+//   jena-core/src/test/java/org/apache/jena/test/JenaTestLib.java (listOfStrings, iteratorOfStrings)
+//   jena-core/src/main/java/org/apache/jena/graph/Graph.java (Graph.emptyGraph)
+// Changed for echochamber: translated to JavaScript over @factoidal/leana; the
+// ModelChangedListener overloads of addedStatements/removedStatements are one
+// method that looks at its argument (a JS Array is Statement[], an ArrayList a
+// List, a Model a Model, anything else a StmtIterator).
+import {
+  GraphBase as LeanaGraphBase, ExtendedIterator as LeanaExtendedIterator, WrappedIterator as LeanaWrappedIterator,
+  GraphMemFactory as LeanaGraphMemFactory, Union as LeanaUnion, Intersection as LeanaIntersection,
+  Difference as LeanaDifference,
+} from '@factoidal/leana';
+
+/** Jena RecordingModelListener: a ModelChangedListener that records its events as [tag, value...]. */
+export class RecordingModelListener extends AbstractRecordingListener {
+  _bulk(kind, x) {
+    if (x instanceof Model) this.record(kind + 'Model', x);
+    else if (x instanceof ArrayList) this.record(kind + 'List', x);
+    else if (Array.isArray(x)) this.record(kind + '[]', ArrayList.from(x));
+    else this.record(kind + 'Iterator', ArrayList.from(x.toList()));
+  }
+  addedStatement(s) { this.record('add', s); }
+  addedStatements(x) { this._bulk('add', x); }
+  removedStatement(s) { this.record('remove', s); }
+  removedStatements(x) { this._bulk('remove', x); }
+  notifyEvent(m, event) { this.record('someEvent', m, event); }
+  clear() { this.history.length = 0; }
+}
+RecordingModelListener.checkEquality = checkEquality;
+
+/** Jena ModelCreators.creators(): plain, Intersection, Difference, Union. createGraphMemForModel is a same-term GraphMem in leana. */
+const memForModel = () => LeanaGraphMemFactory.createGraphMem();
+export const modelCreators = Object.freeze([
+  ['plain', () => ModelFactory.createDefaultModel()],
+  ['Intersection', () => ModelFactory.createModelForGraph(new LeanaIntersection(memForModel(), memForModel()))],
+  ['Difference', () => ModelFactory.createModelForGraph(new LeanaDifference(memForModel(), memForModel()))],
+  ['Union', () => ModelFactory.createModelForGraph(new LeanaUnion(memForModel(), memForModel()))],
+]);
+
+/** JenaTestLib.listOfStrings: the whitespace-separated words, as a Java List. */
+export const listOfStrings = (s) => ArrayList.from(s.split(/\s+/).filter(Boolean));
+
+/**
+ * A java.util.Iterator over a Java List (an Array) or a Set (a JenaSet): remove()
+ * deletes the last element returned from the collection.
+ */
+export function javaIterator(coll) {
+  const items = [...coll];
+  let i = 0, last, has = false;
+  return {
+    hasNext() { return i < items.length; },
+    next() { if (i >= items.length) throw new Error('NoSuchElementException'); last = items[i++]; has = true; return last; },
+    remove() {
+      if (!has) throw new Error('IllegalStateException');
+      has = false;
+      if (Array.isArray(coll)) coll.splice(coll.indexOf(last), 1);
+      else coll.remove(last);
+    },
+  };
+}
+
+/** JenaTestLib.iteratorOfStrings: WrappedIterator.create(listOfStrings(s).iterator()). */
+export const iteratorOfStrings = (s) => LeanaWrappedIterator.create(javaIterator(listOfStrings(s)));
+
+/** Jena LoggingClosableIterator: a WrappedIterator that records whether it was closed. */
+export class LoggingClosableIterator extends LeanaWrappedIterator {
+  constructor(base) { super(base); this._wasClosed = false; }
+  close() { this._wasClosed = true; super.close(); }
+  isClosed() { return this._wasClosed; }
+}
+
+/** Jena Graph.emptyGraph: a GraphBase with no triples (add is denied). */
+export const Graph = Object.freeze({
+  emptyGraph: new (class EmptyGraph extends LeanaGraphBase {
+    graphBaseFind() { return LeanaExtendedIterator.empty(); }
+  })(),
+});

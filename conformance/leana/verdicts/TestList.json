@@ -1,0 +1,117 @@
+{
+  "testAdd": {
+    "verdict": "gap",
+    "gap": "collections",
+    "note": "RDFNode.as(RDFList | Container | Seq | Bag | Alt)."
+  },
+  "testAppend": {
+    "verdict": "gap",
+    "gap": "syntax-from-name",
+    "note": "Model.read(path) with no lang: RDFParser.source(path) chooses the syntax from the file name; then as(RDFList) (collections)."
+  },
+  "testApply": {
+    "verdict": "gap",
+    "gap": "syntax-from-name",
+    "note": "Model.read(path) with no lang: RDFParser.source(path) chooses the syntax from the file name; then as(RDFList) (collections)."
+  },
+  "testConcatenate": {
+    "verdict": "gap",
+    "gap": "syntax-from-name",
+    "note": "Model.read(path) with no lang: RDFParser.source(path) chooses the syntax from the file name; then as(RDFList) (collections)."
+  },
+  "testConcatenate2": {
+    "verdict": "gap",
+    "gap": "syntax-from-name",
+    "note": "Model.read(path) with no lang: RDFParser.source(path) chooses the syntax from the file name; then as(RDFList) (collections)."
+  },
+  "testCons": {
+    "verdict": "gap",
+    "gap": "collections",
+    "note": "RDFNode.as(RDFList | Container | Seq | Bag | Alt)."
+  },
+  "testCount": {
+    "verdict": "gap",
+    "gap": "syntax-from-name",
+    "note": "Model.read(path) with no lang: RDFParser.source(path) chooses the syntax from the file name; then as(RDFList) (collections)."
+  },
+  "testHead": {
+    "verdict": "gap",
+    "gap": "syntax-from-name",
+    "note": "Model.read(path) with no lang: RDFParser.source(path) chooses the syntax from the file name; then as(RDFList) (collections)."
+  },
+  "testIndex1": {
+    "verdict": "gap",
+    "gap": "syntax-from-name",
+    "note": "Model.read(path) with no lang: RDFParser.source(path) chooses the syntax from the file name; then as(RDFList) (collections)."
+  },
+  "testIndex2": {
+    "verdict": "gap",
+    "gap": "collections",
+    "note": "RDFNode.as(RDFList | Container | Seq | Bag | Alt)."
+  },
+  "testListEquals": {
+    "verdict": "gap",
+    "gap": "collections",
+    "note": "RDFNode.as(RDFList | Container | Seq | Bag | Alt)."
+  },
+  "testListGet": {
+    "verdict": "gap",
+    "gap": "syntax-from-name",
+    "note": "Model.read(path) with no lang: RDFParser.source(path) chooses the syntax from the file name; then as(RDFList) (collections)."
+  },
+  "testMap1": {
+    "verdict": "gap",
+    "gap": "syntax-from-name",
+    "note": "Model.read(path) with no lang: RDFParser.source(path) chooses the syntax from the file name; then as(RDFList) (collections)."
+  },
+  "testModelGetEmptyList": {
+    "verdict": "gap",
+    "gap": "collections",
+    "note": "Model.createList."
+  },
+  "testModelGetList": {
+    "verdict": "gap",
+    "gap": "collections",
+    "note": "Model.createList."
+  },
+  "testReduce": {
+    "verdict": "gap",
+    "gap": "syntax-from-name",
+    "note": "Model.read(path) with no lang: RDFParser.source(path) chooses the syntax from the file name; then as(RDFList) (collections)."
+  },
+  "testRemove": {
+    "verdict": "gap",
+    "gap": "collections",
+    "note": "RDFNode.as(RDFList | Container | Seq | Bag | Alt)."
+  },
+  "testReplace": {
+    "verdict": "gap",
+    "gap": "syntax-from-name",
+    "note": "Model.read(path) with no lang: RDFParser.source(path) chooses the syntax from the file name; then as(RDFList) (collections)."
+  },
+  "testSetHead": {
+    "verdict": "gap",
+    "gap": "collections",
+    "note": "RDFNode.as(RDFList | Container | Seq | Bag | Alt)."
+  },
+  "testSetTail": {
+    "verdict": "gap",
+    "gap": "collections",
+    "note": "RDFNode.as(RDFList | Container | Seq | Bag | Alt)."
+  },
+  "testStmtGetList": {
+    "verdict": "gap",
+    "gap": "collections",
+    "note": "Model.createList."
+  },
+  "testTail": {
+    "verdict": "gap",
+    "gap": "syntax-from-name",
+    "note": "Model.read(path) with no lang: RDFParser.source(path) chooses the syntax from the file name; then as(RDFList) (collections)."
+  },
+  "testValidity": {
+    "verdict": "gap",
+    "gap": "collections",
+    "note": "RDFNode.as(RDFList | Container | Seq | Bag | Alt)."
+  }
+}

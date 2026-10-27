@@ -23,8 +23,9 @@
 //   jena-core/src/test/java/org/apache/jena/graph/BaseTestGraph.java
 //   (abstract; run once here with getNewGraph() = GraphMemFactory.createGraphMem())
 // Changed for echochamber: translated from Java/JUnit 5 to JavaScript/node:test
-// over @factoidal/leana. Java Sets are JenaSet; RecordingListener is not ported
-// (the event tests stop at getEventManager(), gap 'echo'); the
+// over @factoidal/leana. Java Sets are JenaSet; RecordingListener is
+// testlib's RecordingGraphListener; Arrays.asList is testlib's asList (a
+// leana ArrayList, so that GraphUtil sees a List, not an array); the
 // testModelEquals files are read from conformance/leana/fixtures with a
 // StringReader instead of the class loader. failingTestDoubleRemoveAll is not
 // an @Test in Jena and is not ported.
@@ -35,12 +36,13 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import {
   Node, Triple, GraphMemFactory, GraphUtil, ModelFactory, ReifierStd, JenaSet, JenaException,
-  UnsupportedOperationException, StringReader,
+  UnsupportedOperationException, StringReader, GraphEvents,
 } from '@factoidal/leana';
 import { describeJena } from '../../lib/harness.mjs';
 import {
   create, createTriple, node, nodeSet, triple, tripleArray, graphAdd, graphWith, assertContainsAll,
   assertOmitsAll, assertIsomorphic, assertEquals, assertDiffer, testContains, testOmits,
+  RecordingGraphListener, asList,
 } from '../../lib/testlib.mjs';
 
 const FIXTURES = join(dirname(fileURLToPath(import.meta.url)), '..', '..', 'fixtures', 'jena-core', 'regression', 'testModelEquals');
@@ -53,8 +55,9 @@ function getGraphWith(facts) {
 }
 
 const SPO = createTriple('S P O');
-// RecordingListener L: the listener tests stop at getEventManager() (gap 'echo').
-const L = {};
+// Jena makes a new test instance (and a new L) per method: newL() here.
+let L = new RecordingGraphListener();
+const newL = () => { L = new RecordingGraphListener(); return L; };
 
 function getAndRegister(gl) {
   const g = getNewGraph();
@@ -302,17 +305,24 @@ describeJena('BaseTestGraph', 'jena-core/src/test/java/org/apache/jena/graph/Bas
   t('testEventRegister', () => {
     const g = getNewGraph();
     const gem = g.getEventManager();
-    assert.equal(gem.register(L), gem);
+    assert.equal(gem.register(new RecordingGraphListener()), gem);
   });
 
   t('testEventUnregister', () => {
-    getNewGraph().getEventManager().unregister(L);
+    getNewGraph().getEventManager().unregister(newL());
   });
 
-  // The listener tests below need GraphEventManager and RecordingListener:
-  // each stops at getEventManager() (gap 'echo').
-  t('testAddTriple', () => { const g = getAndRegister(L); g.add(SPO); });
-  t('testDeleteTriple', () => { const g = getAndRegister(L); g.delete(SPO); });
+  t('testAddTriple', () => {
+    const g = getAndRegister(newL());
+    g.add(SPO);
+    L.assertHas(['add', g, SPO]);
+  });
+
+  t('testDeleteTriple', () => {
+    const g = getAndRegister(newL());
+    g.delete(SPO);
+    L.assertHas(['delete', g, SPO]);
+  });
 
   const listSubjects = (g) => GraphUtil.listSubjects(g, Node.ANY, Node.ANY).toSet();
   const listPredicates = (g) => GraphUtil.listPredicates(g, Node.ANY, Node.ANY).toSet();
@@ -343,43 +353,103 @@ describeJena('BaseTestGraph', 'jena-core/src/test/java/org/apache/jena/graph/Bas
   });
 
   t('testEventDeleteByFind', () => {
-    const g = getAndRegister(L);
+    const g = getAndRegister(newL());
     const toRemove = triple('remove this triple');
     g.add(toRemove);
-    const rtr = g.find(toRemove);
-    assert.ok(rtr.hasNext(), 'ensure at least one triple');
-    rtr.next();
-    rtr.remove();
-    rtr.close();
+    try {
+      const rtr = g.find(toRemove);
+      assert.ok(rtr.hasNext(), 'ensure at least one triple');
+      rtr.next();
+      rtr.remove();
+      rtr.close();
+      L.assertHas(['add', g, toRemove, 'delete', g, toRemove]);
+    } catch (e) {
+      if (!(e instanceof UnsupportedOperationException)) throw e;
+    }
   });
 
   t('testTwoListeners', () => {
+    const L1 = new RecordingGraphListener();
+    const L2 = new RecordingGraphListener();
     const g = getNewGraph();
     const gem = g.getEventManager();
-    gem.register({}).register({});
+    gem.register(L1).register(L2);
     g.add(SPO);
+    L2.assertHas(['add', g, SPO]);
+    L1.assertHas(['add', g, SPO]);
   });
 
   t('testUnregisterWorks', () => {
     const g = getNewGraph();
     const gem = g.getEventManager();
-    gem.register(L).unregister(L);
+    gem.register(newL()).unregister(L);
     g.add(SPO);
+    L.assertHas([]);
   });
 
-  t('testRegisterTwice', () => { const g = getAndRegister(L); g.getEventManager().register(L); g.add(SPO); });
-  t('testUnregisterOnce', () => { const g = getAndRegister(L); g.getEventManager().register(L).unregister(L); g.delete(SPO); });
-  t('testBulkAddArrayEvent', () => { const g = getAndRegister(L); GraphUtil.add(g, tripleArray('x R y; a P b')); });
-  t('testBulkAddList', () => { const g = getAndRegister(L); GraphUtil.add(g, tripleArray('bells ring loudly; pigs might fly')); });
-  t('testBulkDeleteArray', () => { const g = getAndRegister(L); GraphUtil.delete(g, tripleArray('x R y; a P b')); });
-  t('testBulkDeleteList', () => { const g = getAndRegister(L); GraphUtil.delete(g, tripleArray('bells ring loudly; pigs might fly')); });
-  t('testBulkAddIterator', () => { const g = getAndRegister(L); GraphUtil.add(g, tripleArray('I wrote this; you read that; I wrote this')[Symbol.iterator]()); });
-  t('testBulkDeleteIterator', () => { const g = getAndRegister(L); GraphUtil.delete(g, tripleArray('I wrote this; you read that; I wrote this')[Symbol.iterator]()); });
+  t('testRegisterTwice', () => {
+    const g = getAndRegister(newL());
+    g.getEventManager().register(L);
+    g.add(SPO);
+    L.assertHas(['add', g, SPO, 'add', g, SPO]);
+  });
+
+  t('testUnregisterOnce', () => {
+    const g = getAndRegister(newL());
+    g.getEventManager().register(L).unregister(L);
+    g.delete(SPO);
+    L.assertHas(['delete', g, SPO]);
+  });
+
+  t('testBulkAddArrayEvent', () => {
+    const g = getAndRegister(newL());
+    const triples = tripleArray('x R y; a P b');
+    GraphUtil.add(g, triples);
+    L.assertHas(['add[]', g, triples]);
+  });
+
+  t('testBulkAddList', () => {
+    const g = getAndRegister(newL());
+    const elems = asList(tripleArray('bells ring loudly; pigs might fly'));
+    GraphUtil.add(g, elems);
+    L.assertHas(['addList', g, elems]);
+  });
+
+  t('testBulkDeleteArray', () => {
+    const g = getAndRegister(newL());
+    const triples = tripleArray('x R y; a P b');
+    GraphUtil.delete(g, triples);
+    L.assertHas(['delete[]', g, triples]);
+  });
+
+  t('testBulkDeleteList', () => {
+    const g = getAndRegister(newL());
+    const elems = asList(tripleArray('bells ring loudly; pigs might fly'));
+    GraphUtil.delete(g, elems);
+    L.assertHas(['deleteList', g, elems]);
+  });
+
+  const asIterator = (triples) => triples[Symbol.iterator]();
+
+  t('testBulkAddIterator', () => {
+    const g = getAndRegister(newL());
+    const triples = tripleArray('I wrote this; you read that; I wrote this');
+    GraphUtil.add(g, asIterator(triples));
+    L.assertHas(['addIterator', g, asList(triples)]);
+  });
+
+  t('testBulkDeleteIterator', () => {
+    const g = getAndRegister(newL());
+    const triples = tripleArray('I wrote this; you read that; I wrote this');
+    GraphUtil.delete(g, asIterator(triples));
+    L.assertHas(['deleteIterator', g, asList(triples)]);
+  });
 
   t('testBulkAddGraph', () => {
-    const g = getAndRegister(L);
+    const g = getAndRegister(newL());
     const triples = graphWith('this type graph; I type slowly');
     GraphUtil.addInto(g, triples);
+    L.assertHas(['addGraph', g, triples]);
     testContains(g, triples);
   });
 
@@ -398,9 +468,10 @@ describeJena('BaseTestGraph', 'jena-core/src/test/java/org/apache/jena/graph/Bas
   });
 
   t('testBulkDeleteGraph', () => {
-    const g = getAndRegister(L);
+    const g = getAndRegister(newL());
     const triples = graphWith('this type graph; I type slowly');
     GraphUtil.deleteFrom(g, triples);
+    L.assertHas(['deleteGraph', g, triples]);
     testOmits(g, triples);
   });
 
@@ -418,9 +489,26 @@ describeJena('BaseTestGraph', 'jena-core/src/test/java/org/apache/jena/graph/Bas
     testOmits(g1, g2);
   });
 
-  t('testGeneralEvent', () => { const g = getAndRegister(L); g.getEventManager().notifyEvent(g, []); });
-  t('testRemoveAllEvent', () => { const g = getAndRegister(L); g.clear(); });
-  t('testRemoveSomeEvent', () => { const g = getAndRegister(L); g.remove(node('S'), node('??'), node('??')); });
+  t('testGeneralEvent', () => {
+    const g = getAndRegister(newL());
+    const value = []; // Java: new int[] {} (compared by identity)
+    g.getEventManager().notifyEvent(g, value);
+    L.assertHas(['someEvent', g, value]);
+  });
+
+  t('testRemoveAllEvent', () => {
+    const g = getAndRegister(newL());
+    g.clear();
+    L.assertHas(['someEvent', g, GraphEvents.removeAll]);
+  });
+
+  t('testRemoveSomeEvent', () => {
+    const g = getAndRegister(newL());
+    const S = node('S'), P = node('??'), O = node('??');
+    g.remove(S, P, O);
+    const event = GraphEvents.remove(S, P, O);
+    L.assertHas(['someEvent', g, event]);
+  });
 
   t('testContainsNode', () => {
     const g = getNewGraph();

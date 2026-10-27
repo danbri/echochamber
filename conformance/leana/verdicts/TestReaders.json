@@ -1,0 +1,7 @@
+{
+  "testReadRemoteRDF": {
+    "verdict": "gap",
+    "gap": "syntax-from-name",
+    "note": "Model.read(url) with no lang: the syntax from the name (Jena: RDF/XML hint, then the content type or extension)."
+  }
+}

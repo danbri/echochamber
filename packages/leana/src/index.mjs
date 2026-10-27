@@ -20,10 +20,15 @@ export {
   LiteralLabel, LiteralLabelFactory, BaseDatatype, TextDirection, Util, datatypeFor, fromRDFJS, JenaParameters, XSDDateTime,
 } from './node.mjs';
 export { GraphMem, WrappedGraph, GraphMemFactory, GraphFactory, GraphUtil, ExtendedIterator, JenaSet,
-  GraphBase, GraphPlain, WrappedIterator, ReifierStd } from './graph.mjs';
+  GraphBase, GraphPlain, WrappedIterator, ReifierStd, Capabilities, TransactionHandlerBase, SimpleTransactionHandler,
+} from './graph.mjs';
+export {
+  ArrayList, GraphEvents, GraphEventManager, GraphListenerBase, ModelListenerAdapter, StatementListener, NullListener,
+  ObjectListener, ChangedListener,
+} from './events.mjs';
 export { PrefixMapping, PrefixMappingImpl, IllegalPrefixException } from './prefix.mjs';
 export {
-  Model, ModelFactory, ResourceFactory, Statement, RDFNode, Resource, Property, Literal,
+  UnsupportedPolymorphismException, Model, ModelFactory, ResourceFactory, Statement, RDFNode, Resource, Property, Literal,
   StmtIterator, ResIterator, NodeIterator, AnonId, StatementTerm,
 } from './model.mjs';
 export {
@@ -32,8 +37,24 @@ export {
   FactoryRDFStd, PrefixMapFactory, RDFReaderFactoryRIOT,
 } from './riot.mjs';
 export {
-  QueryExecution, QueryExecutionFactory, QueryFactory, QuerySolutionMap, DatasetFactory, DatasetGraphFactory,
+  Query, QueryFactory, Syntax, QueryExecution, QueryExecutionFactory, QueryExecutionDatasetBuilder, QueryExecutionImpl,
+  QuerySolution, QuerySolutionMap, ResultSet, ResultSetRewindable, ResultSetFactory, ResultSetFormatter, ResultsFormat,
+  QueryException, QueryParseException, QueryExecException, QueryCancelledException, QueryBuildException,
+  UpdateRequest, UpdateFactory, UpdateExecution, UpdateExecutionBuilder, UpdateExecutionFactory, UpdateAction,
+  UpdateException, UpdateParseException, ExprEvalException,
+  NodeValue, FunctionBase, FunctionBase0, FunctionBase1, FunctionBase2, FunctionBase3, FunctionBase4, FunctionRegistry,
+  PropertyFunctionRegistry,
 } from './query.mjs';
+export {
+  Quad, ReadWrite, TxnType, JenaTransactionException, Txn, GraphView, GraphUnionView, DatasetGraph,
+  DatasetGraphInMemory, DatasetGraphMapLink, DatasetGraphOne, Symbol_, Context, Dataset, DatasetFactory,
+  DatasetGraphFactory, DatasetGraphMap, DatasetGraphZero, DatasetGraphSink, Promote, ARQException, AssemblerUtils,
+} from './dataset.mjs';
+export {
+  CompositionBase, Dyadic, Union, Intersection, Difference, DisjointUnion, Delta, Polyadic, MultiUnion,
+  PolyadicPrefixMappingImpl,
+} from './compose.mjs';
+export { InfModel, Rule, GenericRuleReasoner, ReasonerRegistry } from './reasoner.mjs';
 export {
   JenaException, UnsupportedOperationException, LeanaUnsupportedError, NoSuchElementException,
   ClosedException, JenaLockedException, PropertyNotFoundException, LiteralRequiredException,
@@ -42,3 +63,21 @@ export {
 } from './errors.mjs';
 export { GAPS } from './gaps.mjs';
 export { coreVersion } from './engine.mjs';
+export { NiceIterator } from './graph.mjs';
+export {
+  Container, Seq, Bag, Alt, RDFList, SeqIndexBoundsException, ListIndexException, AlreadyReifiedException,
+  CannotReifyException, NTripleReader, RDF, OWL, OWL2,
+} from './model.mjs';
+export { XSDDouble } from './node.mjs';
+export {
+  Table, QueryExec, QueryExecAdapter, QueryExecutionAdapter, QueryExecBuilderAdapter, QueryTransformOps,
+} from './query.mjs';
+export {
+  ResultSetMem, ResultSetPeeking, IllegalStateException, ResultSetUtils, ResultsCompare, RDFOutput, RDFInput,
+  ResultSetLang, ResultsWriter, ResultsReader, ResultSetMgr, Expr, ExprVar, ExprList, E_Function, E_Add, E_Subtract,
+  E_Multiply, NodeValueInteger, NodeValueDouble, NodeValueBoolean, UserDefinedFunctionFactory,
+} from './query.mjs';
+export {
+  UpdateExec, UsingList, UpdateWriter, UpdateCompare, QuadAcc, QuadDataAcc, Update, UpdateDataInsert, UpdateDataDelete,
+  UpdateDeleteWhere, UpdateModify, Target, UpdateCreate, UpdateDrop, UpdateClear, UpdateCopy, UpdateAdd, UpdateMove,
+} from './query.mjs';

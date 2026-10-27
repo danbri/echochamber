@@ -1,0 +1,5 @@
+{
+  "isolation_01": {
+    "reason": "Java threads: AbstractTestTransactionIsolation (jena-arq/src/test/java/org/apache/jena/sparql/transaction/AbstractTestTransactionIsolation.java) starts a read transaction on another thread (ThreadTxn.threadTxnRead) and checks it does not see a write committed meanwhile; leana runs one transaction at a time on one JavaScript thread."
+  }
+}

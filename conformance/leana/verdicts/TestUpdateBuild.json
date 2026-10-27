@@ -1,0 +1,18 @@
+{
+  "update_build_02": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "QueryExecution.substitution (syntax substitution)."
+  },
+  "update_build_03": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "QueryExecution.substitution (syntax substitution)."
+  },
+  "update_build_context_1": {
+    "verdict": "gap",
+    "gap": "query",
+    "noThrow": true,
+    "note": "UpdateAction LOAD (the engine fetches no documents): the failure is a LeanaUnsupportedError, not Jena's UpdateException for this file."
+  }
+}

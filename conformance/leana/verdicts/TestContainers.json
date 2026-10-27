@@ -1,0 +1,7 @@
+{
+  "testCanAsContainer": {
+    "verdict": "gap",
+    "gap": "collections",
+    "note": "Model.createSeq."
+  }
+}

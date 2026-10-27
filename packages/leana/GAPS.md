@@ -22,6 +22,7 @@ Jena's default Model (`createDefaultModel`, over `createDefaultGraphSameValue`) 
 - `Node.getIndexingValue (literal)`
 - `Node.sameValueAs`
 - `RDFDatatype.isEqual`
+- `ResultsCompare.equalsByValue`
 - `Triple.Field.fieldObject.filterOn (sameValueAs)`
 - `Triple.Field.fieldObject.filterOnConcrete (sameValueAs)`
 
@@ -37,10 +38,12 @@ Jena picks the datatype from the Java class (`99` xsd:int, `99L` xsd:long, `14.0
 - `Model.addLiteral(Resource, Property, value)`
 - `Model.containsLiteral(Resource, Property, value)`
 - `Model.createLiteralStatement(Resource, Property, value)`
-- `Model.createTypedLiteral(value)`
 - `Model.createTypedLiteral(value, datatype)`
+- `Model.createTypedLiteral(value)`
 - `Model.listLiteralStatements(Resource, Property, value)`
+- `new XSDDateTime(Calendar)`
 - `NodeFactory.createLiteralByValue`
+- `NodeValue.asNode of a value made from a JavaScript value`
 - `RDFDatatype.getJavaClass`
 - `RDFDatatype.isValidValue`
 - `Resource.addLiteral(Property, value)`
@@ -49,7 +52,6 @@ Jena picks the datatype from the Java class (`99` xsd:int, `99L` xsd:long, `14.0
 - `Statement.changeLiteralObject(value)`
 - `TypeMapper.getTypeByClass`
 - `TypeMapper.getTypeByValue`
-- `new XSDDateTime(Calendar)`
 
 ## literal-value: The value of a literal
 
@@ -124,17 +126,32 @@ Issue: https://github.com/danbri/factoidal/issues/1051 (item 5)
 leana holds no rdf:, rdfs:, xsd:, owl: IRIs (the ported tests hold Jena's `Standard` and `Extended` tables as test data in `conformance/leana/lib/testlib.mjs`).
 
 - `Model.createLiteral(String, true) (rdf:XMLLiteral)`
+- `Model.createReifiedStatement`
 - `Model.createReifier`
 - `Model.createResource(Resource type)`
 - `Model.createResource(String, Resource type)`
+- `Model.getAnyReifiedStatement`
+- `Model.isReified`
+- `Model.listReifiedStatements`
+- `Model.removeAllReifications`
+- `Model.removeReification`
+- `new XSDDouble(name, Class)`
+- `OWL.<term>`
+- `OWL2.<term>`
 - `PrefixMapping.Extended`
 - `PrefixMapping.Standard`
 - `Property.getOrdinal`
+- `RDF.<term>`
 - `ReifierStd.allNodes`
+- `ReifierStd.findEither`
+- `ReifierStd.findExposed`
 - `ReifierStd.getTriple`
 - `ReifierStd.hasTriple`
 - `ReifierStd.reifyAs`
 - `ReifierStd.remove`
+- `Statement.createReifiedStatement`
+- `Statement.getStatementProperty`
+- `Statement.isReified`
 - `Triple.toString(PrefixMapping) (datatype written with PrefixMapping.Standard)`
 
 ## collections: RDF collections and containers
@@ -151,6 +168,10 @@ Issue: https://github.com/danbri/factoidal/issues/1051 (item 6)
 - `Model.getBag`
 - `Model.getList`
 - `Model.getSeq`
+- `new Container`
+- `new RDFList`
+- `RDFNode.as(RDFList | Container | Seq | Bag | Alt)`
+- `RDFNode.canAs(RDFList | Container | Seq | Bag | Alt)`
 - `Statement.getAlt`
 - `Statement.getBag`
 - `Statement.getList`
@@ -164,74 +185,68 @@ Issue: https://github.com/danbri/factoidal/issues/957
 
 - `Graph.isIsomorphicWith (blank nodes and triple terms)`
 
+## syntaxes: RIOT syntaxes and parser/writer options
+
+Issue: https://github.com/danbri/factoidal/issues/1088
+
+`@factoidal/core` reads and writes N-Triples, N-Quads, Turtle, TriG, RDF/XML and JSON-LD (`formats()`). `Lang.RDFJSON`, `TRIX`, `RDFTHRIFT`, `RDFPROTO`, `SHACLC`, `CSV` and `TSV` exist as names (`nameToLang` finds them); reading or writing them is this gap. `Lang.N3` reads with the Turtle reader, as in Jena. Blank node labels as given and relative IRIs on output need parse and write options.
+
+- `LabelToNode.createUseLabelAsGiven`
+- `Model.write(out, lang, base)`
+- `RDFWriter.base`
+- `RIOT read of a syntax the engine does not read (RDF/JSON, TriX, RDF Thrift, RDF Protobuf, SHACLC, CSV)`
+- `RIOT write of a syntax the engine does not write (RDF/JSON, TriX, RDF Thrift, RDF Protobuf, SHACLC, CSV)`
+
+## query: SPARQL object model, substitution, timeouts, property functions
+
+Issue: https://github.com/danbri/factoidal/issues/1089
+
+Queries and updates run in the engine (`Dataset.query`, `Dataset.update`); `execSelect`, `execAsk`, `execConstruct`, `execDescribe`, `UpdateExecution.execute` and the `ResultSetFormatter` writers answer a Promise. `QueryFactory.create` keeps the text, so a syntax error is a `QueryParseException` when the query runs, not when it is created. Initial bindings (`initialBinding`, `QueryExecutionFactory.create(q, m, qsm)`) are a trailing `VALUES` clause. Result sets made in code or from SPARQL 1.2 queries are written by the engine too: the rows become data and an ordered SELECT writes them. Results formats are not read (no results reader in the engine), and Jena's LOAD is not available (the engine fetches no documents).
+
+- `initial binding of a blank node (SPARQL VALUES has no blank nodes)`
+- `PropertyFunctionRegistry (property functions)`
+- `Query.getPrefixMapping (syntax tree)`
+- `Query.getQueryPattern (syntax tree)`
+- `Query.getResultVars / getProjectVars`
+- `Query.isSelectType and the query form`
+- `Query.serialize (query syntax tree)`
+- `Query.setLimit / setOffset / setDistinct (syntax tree)`
+- `QueryExecution.execJson (ARQ JSON query form)`
+- `QueryExecution.substitution (syntax substitution)`
+- `QueryExecution.timeout`
+- `QueryFactory.createElement (query pattern syntax tree)`
+- `ResultSetFormatter.output in an RDF syntax (result set as RDF)`
+- `ResultsWriter in a result-set syntax the engine does not write (Thrift, Protobuf)`
+- `UpdateAction LOAD (the engine fetches no documents)`
+- `UpdateAction.parseExecute with a UsingList (USING added to each operation)`
+- `UpdateModify.setElement (WHERE pattern syntax tree)`
+- `UpdateRequest.getOperations (update syntax tree)`
+- `UpdateWriter / UpdateCompare (update syntax tree)`
+
+## inference: Jena rules and a live inference graph
+
+Issue: https://github.com/danbri/factoidal/issues/1087
+
+Jena's rule language (`Rule.parseRules`, `GenericRuleReasoner`) has no reader or engine in @factoidal/core, and Jena's `InfModel` is live and synchronous, where the core closures (`closure`, `Dataset.closure`) answer a Promise of a snapshot. `InfModel`, `Rule`, `GenericRuleReasoner` and `ReasonerRegistry` exist as names only.
+
+- `GenericRuleReasoner`
+- `ModelFactory.createInfModel`
+- `ModelFactory.createOntologyModel`
+- `ModelFactory.createRDFSModel`
+- `ReasonerRegistry.getOWLMicroReasoner`
+- `ReasonerRegistry.getOWLMiniReasoner`
+- `ReasonerRegistry.getOWLReasoner`
+- `ReasonerRegistry.getRDFSReasoner`
+- `ReasonerRegistry.getTransitiveReasoner`
+- `Rule.parseRule`
+- `Rule.parseRules`
+- `Rule.rulesFromURL`
+
 ## echo: Not done in leana (no engine semantics missing)
 
 Issue: none (echo gap).
 
-API that stage 1 does not cover: listeners and events, transactions, query (stage 2), inference (stage 3), datasets, error handlers, HTTP sources, N3/RDF-JSON/TriX and other syntaxes the engine does not read, Jena 2 reader adapters, `Node_Graph`.
-
-- `DatasetFactory (stage 2)`
-- `DatasetGraphFactory (stage 2)`
-- `ErrorHandlerFactory.getDefaultErrorHandler`
-- `ErrorHandlerFactory.setDefaultErrorHandler`
-- `FactoryRDFStd`
-- `Graph.getCapabilities`
-- `Graph.getEventManager`
-- `Graph.getTransactionHandler`
-- `LabelToNode.createScopeByDocumentHash`
-- `LabelToNode.createUseLabelAsGiven`
-- `Lang.CSV`
-- `Lang.N3`
-- `Lang.RDFJSON`
-- `Lang.RDFPROTO`
-- `Lang.RDFTHRIFT`
-- `Lang.SHACLC`
-- `Lang.TRIX`
-- `LocatorFile`
-- `Model.begin (transactions)`
-- `Model.createReifiedStatement`
-- `Model.getLock`
-- `Model.listReifiedStatements`
-- `Model.listStatements(Selector)`
-- `Model.notifyEvent`
-- `Model.query(Selector)`
-- `Model.register (listeners)`
-- `Model.unregister (listeners)`
-- `Model.write(out, lang, base)`
-- `ModelFactory.createInfModel (stage 3)`
-- `ModelFactory.createMemModelMaker`
-- `ModelFactory.createOntologyModel`
-- `ModelFactory.createRDFSModel (stage 3)`
-- `ModelFactory.createUnion`
-- `Node_Graph`
-- `QueryExecution (stage 2)`
-- `QueryFactory (stage 2)`
-- `QuerySolutionMap (stage 2)`
-- `RDFDataMgr.loadDataset (datasets: stage 2)`
-- `RDFDataMgr.loadDatasetGraph (datasets: stage 2)`
-- `RDFLanguages.N3`
-- `RDFLanguages.RDFJSON`
-- `RDFLanguages.TRIX`
-- `RDFNode.as(<class>) for a class other than RDFNode, Resource, Property, Literal, StatementTerm`
-- `RDFNode.canAs(<class>) for those classes`
-- `RDFParser.checking`
-- `RDFParser.errorHandler`
-- `RDFParser.factory`
-- `RDFParser.labelToNode`
-- `RDFParser.prefixes (initial prefix map)`
-- `RDFParser.source(URL) (HTTP)`
-- `RDFParser.streamManager`
-- `RDFParser.strict`
-- `RDFParser.toDataset (datasets: stage 2)`
-- `RDFParser.toDatasetGraph (datasets: stage 2)`
-- `RDFReaderFactoryRIOT.getReader`
-- `RDFWriter.base`
-- `RDFWriter.output(path)`
-- `ResourceFactory.setInstance`
-- `Statement.createReifiedStatement`
-- `Statement.getStatementProperty`
-- `Statement.isReified`
-- `StreamManager`
+None at present. Stage 2 implemented the stage 1 echo gaps (listeners and events, transactions, capabilities, composition graphs, datasets, RIOT error handlers, stream managers, HTTP sources, parser factories, `Node_Graph`, the Jena 2 reader adapters) and the query and update API. What remains needs the engine and is listed under its key above.
 
 ## Divergences (not gaps)
 

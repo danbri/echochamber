@@ -2,7 +2,16 @@
 
 Jena test methods ported to `node:test`, one file per Jena class, under the
 Jena module and package they come from (`jena-core/graph`,
-`jena-core/rdf-model`, `jena-core/shared`, `jena-arq/riot`, `jena-arq/api`).
+`jena-core/graph-compose`, `jena-core/rdf-model`, `jena-core/shared`,
+`jena-core/util-iterator`, `jena-core/datatypes`, `jena-core/vocabulary`,
+`jena-arq/riot`, `jena-arq/api`, `jena-arq/query`, `jena-arq/sparql-core`,
+`jena-arq/sparql-transaction`, `jena-arq/sparql-exec`,
+`jena-arq/sparql-resultset`, `jena-arq/sparql-modify`,
+`jena-arq/sparql-function`). Abstract Jena test classes run through their
+concrete in-memory subclasses; shared method bodies live in non-test
+modules (`*.mjs` without `.test`) next to them. Jena SSE test data with
+relative IRIs is made absolute against `eh:/` (`jena-arq/sparql-core/sse.mjs`),
+as RDF 1.1 Concepts section 3.2 needs.
 Source: Apache Jena at commit `a1164c5dc5c9e1a9c58d94766c13d870e0a8ba98`
 (Apache License 2.0). Each file names its Jena source and what was changed.
 

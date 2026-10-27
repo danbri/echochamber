@@ -8,7 +8,9 @@
 // 'value-matching').
 
 import { Node, NodeFactory, Triple, BaseDatatype } from './node.mjs';
-import { GraphMem, ExtendedIterator, JenaSet } from './graph.mjs';
+import { GraphMem, ExtendedIterator, JenaSet, GraphUtil } from './graph.mjs';
+import { ModelListenerAdapter, ArrayList, GraphEvents } from './events.mjs';
+import { Union } from './compose.mjs';
 import { XSD_STRING } from '@factoidal/core/rdfjs';
 import {
   JenaException, PropertyNotFoundException, LiteralRequiredException, ResourceRequiredException,
@@ -28,6 +30,13 @@ export class AnonId {
   hashCode() { return this.hashKey(); }
   equals(o) { return o instanceof AnonId && o._label === this._label; }
   toString() { return this._label; }
+}
+
+/** Jena UnsupportedPolymorphismException: RDFNode.as(cls) for a class with no implementation for that node. */
+export class UnsupportedPolymorphismException extends JenaException {
+  constructor(node, cls) { super(`${node} cannot be viewed as ${cls && cls.name ? cls.name : cls}`); this._node = node; this._cls = cls; }
+  getBadNode() { return this._node; }
+  getBadClass() { return this._cls; }
 }
 
 export class RDFNode {
@@ -79,7 +88,9 @@ export class RDFNode {
       if (!this._node.isTripleTerm()) throw new ResourceRequiredException('not a statement term: ' + this._node);
       return this instanceof StatementTerm ? this : new StatementTerm(this._node, this._model);
     }
-    return unsupported('RDFNode.as(' + (cls && cls.name) + ')', 'echo');
+    if (COLLECTION_CLASSES.includes(cls)) return unsupported('RDFNode.as(RDFList | Container | Seq | Bag | Alt)', 'collections');
+    // Jena: a class with no implementation for this node is UnsupportedPolymorphismException.
+    throw new UnsupportedPolymorphismException(this, cls);
   }
   canAs(cls) {
     if (cls === RDFNode) return true;
@@ -87,7 +98,8 @@ export class RDFNode {
     if (cls === Property) return this._node.isURI();
     if (cls === Resource) return this._node.isURI() || this._node.isBlank();
     if (cls === StatementTerm) return this._node.isTripleTerm();
-    return unsupported('RDFNode.canAs(' + (cls && cls.name) + ')', 'echo');
+    if (COLLECTION_CLASSES.includes(cls)) return unsupported('RDFNode.canAs(RDFList | Container | Seq | Bag | Alt)', 'collections');
+    return false;
   }
   /** Jena RDFVisitor dispatch: visitBlank(r, id), visitURI(r, uri), visitLiteral(l), visitStmt(st, statement). */
   visitWith(v) {
@@ -280,7 +292,8 @@ export class Statement {
   getSeq() { return unsupported('Statement.getSeq', 'collections'); }
   getList() { return unsupported('Statement.getList', 'collections'); }
   getProperty(p) { return this.getResource().inModel(this._m()).getProperty(p); }
-  getStatementProperty(p) { return unsupported('Statement.getStatementProperty', 'echo'); }
+  /** Jena getStatementProperty: the property value of the reified statement (rdf:subject ... : vocabulary). */
+  getStatementProperty(p) { return unsupported('Statement.getStatementProperty', 'vocabulary'); }
   _m() {
     if (!this._model) throw new JenaException('statement is not in a model: ' + this);
     return this._model;
@@ -300,8 +313,8 @@ export class Statement {
   }
   remove() { this._m().remove(this); return this; }
   inModel(m) { return new Statement(this._s.inModel(m), this._p.inModel(m), this._o.inModel(m), m); }
-  isReified() { return unsupported('Statement.isReified', 'echo'); }
-  createReifiedStatement() { return unsupported('Statement.createReifiedStatement', 'echo'); }
+  isReified() { return unsupported('Statement.isReified', 'vocabulary'); }
+  createReifiedStatement() { return unsupported('Statement.createReifiedStatement', 'vocabulary'); }
   hashKey() { return this.asTriple().hashKey(); }
   hashCode() { return this.hashKey(); }
   /** Jena: equal when subject, predicate and object are equal (the model is not compared). */
@@ -403,6 +416,8 @@ export class Model {
   createStatementTerm(st) { return new StatementTerm(NodeFactory.createTripleTerm(st.asTriple()), this); }
   /** Jena createReifier: adds (r, rdf:reifies, <<( s p o )>>); rdf:reifies is a vocabulary IRI. */
   createReifier() { return unsupported('Model.createReifier', 'vocabulary'); }
+  /** Jena 2 Model.getReader(lang): an RDFReaderI (a RIOT reader that notifies startRead/finishRead). */
+  getReader(lang) { return new RDFReaderRIOT(lang ?? 'RDF/XML'); }
   /** Jena createLiteralStatement(s, p, value): the datatype of a JavaScript value needs an engine table. */
   createLiteralStatement(s, p, v) {
     if (v instanceof Literal) return this.createStatement(s, p, v);
@@ -433,10 +448,13 @@ export class Model {
   add(a, p, o, langOrDt) {
     this._check();
     if (p === undefined) {
+      // Jena ModelCom: one statement, Statement[] (GraphUtil.add array), List, StmtIterator, Model (addInto).
       if (a instanceof Statement) { this._g.add(a.asTriple()); return this; }
-      if (a instanceof Model) { for (const t of a._g.find().toList()) this._g.add(t); return this; }
-      if (a instanceof ExtendedIterator) { for (const s of a.toList()) this.add(s); return this; }
-      if (a && typeof a[Symbol.iterator] === 'function') { for (const s of a) this.add(s); return this; }
+      if (a instanceof Model) { GraphUtil.addInto(this._g, a._g); return this; }
+      if (a instanceof ArrayList) { GraphUtil.add(this._g, ArrayList.from(a.map((st) => st.asTriple()))); return this; }
+      if (Array.isArray(a)) { GraphUtil.add(this._g, a.map((st) => st.asTriple())); return this; }
+      if (a instanceof ExtendedIterator) { GraphUtil.add(this._g, a.toList().map((st) => st.asTriple())[Symbol.iterator]()); return this; }
+      if (a && typeof a[Symbol.iterator] === 'function') { GraphUtil.add(this._g, [...a].map((st) => st.asTriple())[Symbol.iterator]()); return this; }
       throw new TypeError('Model.add: unexpected argument');
     }
     const st = this.createStatement(a, p, o, langOrDt);
@@ -453,9 +471,11 @@ export class Model {
     this._check();
     if (p === undefined) {
       if (a instanceof Statement) { this._g.delete(a.asTriple()); return this; }
-      if (a instanceof Model) { for (const t of a._g.find().toList()) this._g.delete(t); return this; }
-      if (a instanceof ExtendedIterator) { for (const s of a.toList()) this.remove(s); return this; }
-      if (a && typeof a[Symbol.iterator] === 'function') { for (const s of a) this.remove(s); return this; }
+      if (a instanceof Model) { GraphUtil.deleteFrom(this._g, a._g); return this; }
+      if (a instanceof ArrayList) { GraphUtil.delete(this._g, ArrayList.from(a.map((st) => st.asTriple()))); return this; }
+      if (Array.isArray(a)) { GraphUtil.delete(this._g, a.map((st) => st.asTriple())); return this; }
+      if (a instanceof ExtendedIterator) { GraphUtil.delete(this._g, a.toList().map((st) => st.asTriple())[Symbol.iterator]()); return this; }
+      if (a && typeof a[Symbol.iterator] === 'function') { GraphUtil.delete(this._g, [...a].map((st) => st.asTriple())[Symbol.iterator]()); return this; }
       throw new TypeError('Model.remove: unexpected argument');
     }
     this._g.delete(this.createStatement(a, p, o).asTriple());
@@ -503,7 +523,11 @@ export class Model {
   /** listStatements() | listStatements(s, p, o) with null as wildcard; o may be a string (plain literal). */
   listStatements(s, p, o, lang) {
     this._check();
-    if (s !== undefined && s !== null && !(s instanceof RDFNode)) return unsupported('Model.listStatements(Selector)', 'echo');
+    if (s instanceof SimpleSelector || (s && typeof s.test === 'function' && typeof s.isSimple === 'function')) {
+      const sel = s;
+      const cands = this.listStatements(sel.getSubject() ?? null, sel.getPredicate() ?? null, sel.getObject() ?? null).toList();
+      return new StmtIterator(cands.filter((st) => sel.test(st)), (st) => this.remove(st));
+    }
     if (arguments.length >= 4 && (o === null || typeof o === 'string') && !(lang instanceof BaseDatatype)) {
       // Jena listStatements(S, P, String O, String L): O and L given: that literal;
       // only O: literal objects with lexical form O; only L: literal objects with
@@ -599,14 +623,44 @@ export class Model {
   supportsTransactions() { return false; }
   supportsSetOperations() { return true; }
   independent() { return true; }
-  register() { return unsupported('Model.register (listeners)', 'echo'); }
-  unregister() { return unsupported('Model.unregister (listeners)', 'echo'); }
-  notifyEvent() { return unsupported('Model.notifyEvent', 'echo'); }
-  getLock() { return unsupported('Model.getLock', 'echo'); }
-  begin() { return unsupported('Model.begin (transactions)', 'echo'); }
-  query() { return unsupported('Model.query(Selector)', 'echo'); }
-  listReifiedStatements() { return unsupported('Model.listReifiedStatements', 'echo'); }
-  createReifiedStatement() { return unsupported('Model.createReifiedStatement', 'echo'); }
+  /** Register a ModelChangedListener (as a ModelListenerAdapter on the graph's event manager). */
+  register(listener) { this._g.getEventManager().register(new ModelListenerAdapter(this, listener)); return this; }
+  unregister(listener) { this._g.getEventManager().unregister(new ModelListenerAdapter(this, listener)); return this; }
+  notifyEvent(e) { this._g.getEventManager().notifyEvent(this._g, e); return this; }
+  /** The model's Lock (Jena LockMRSW; single-threaded here, so it only checks nesting). */
+  getLock() { if (!this._lock) this._lock = new LockMRSW(); return this._lock; }
+  enterCriticalSection(readLockRequested) { this.getLock().enterCriticalSection(readLockRequested); }
+  leaveCriticalSection() { this.getLock().leaveCriticalSection(); }
+  /** Transactions are the graph's TransactionHandler (a GraphMem has none: UnsupportedOperationException). */
+  begin() { this._g.getTransactionHandler().begin(); return this; }
+  commit() { this._g.getTransactionHandler().commit(); return this; }
+  abort() { this._g.getTransactionHandler().abort(); return this; }
+  executeInTxn(action) { this._g.getTransactionHandler().execute(action); return this; }
+  calculateInTxn(action) { return this._g.getTransactionHandler().calculate(action); }
+  /** Jena query(Selector): a new model of the selected statements. */
+  query(selector) {
+    const out = createDefaultModel();
+    for (const st of this.listStatements(selector).toList()) out.add(st);
+    return out;
+  }
+  /** Reification writes rdf:subject, rdf:predicate, rdf:object and rdf:Statement: vocabulary IRIs. */
+  listReifiedStatements() { return unsupported('Model.listReifiedStatements', 'vocabulary'); }
+  createReifiedStatement() { return unsupported('Model.createReifiedStatement', 'vocabulary'); }
+  isReified() { return unsupported('Model.isReified', 'vocabulary'); }
+  getAnyReifiedStatement() { return unsupported('Model.getAnyReifiedStatement', 'vocabulary'); }
+  removeAllReifications() { return unsupported('Model.removeAllReifications', 'vocabulary'); }
+  removeReification() { return unsupported('Model.removeReification', 'vocabulary'); }
+  /** Jena asStatements(Triple[] | List | Iterator) and asModel(Graph), for listener adapters. */
+  asStatements(ts) {
+    if (ts instanceof ArrayList) return ArrayList.from(ts.map((t) => this.asStatement(t)));
+    if (Array.isArray(ts)) return ts.map((t) => this.asStatement(t));
+    return this._stmtIterator([...(ts instanceof ExtendedIterator ? ts.toList() : ts)].map((t) => this.asStatement(t)));
+  }
+  _stmtIterator(sts) { return new StmtIterator(sts, (st) => this.remove(st)); }
+  _asModel(g) { return new Model(g); }
+  asModel(g) { return new Model(g); }
+  /** Jena EnhGraph.equals: two models are equal when they are views of the same graph. */
+  equals(o) { return o === this || (o instanceof Model && o._g === this._g); }
   toString() { return '<Model ' + this._g.toString() + '>'; }
 }
 
@@ -619,20 +673,100 @@ function nodeOrAny(x) {
 
 function createDefaultModel() { return new Model(new GraphMem()); }
 
+/**
+ * Jena SimpleSelector: a statement pattern (null = any) plus a selects()
+ * hook that a subclass may override. Matching is by term.
+ */
+export class SimpleSelector {
+  constructor(subject = null, predicate = null, object = null) {
+    this.subject = subject; this.predicate = predicate;
+    this.object = typeof object === 'string' ? new Literal(NodeFactory.createLiteralString(object), null) : object;
+  }
+  getSubject() { return this.subject; }
+  getPredicate() { return this.predicate; }
+  getObject() { return this.object; }
+  /** True when selects() is not overridden: the pattern alone decides. */
+  isSimple() { return this.selects === SimpleSelector.prototype.selects; }
+  selects(_st) { return true; }
+  test(st) {
+    return (this.subject === null || this.subject.equals(st.getSubject())) &&
+      (this.predicate === null || this.predicate.equals(st.getPredicate())) &&
+      (this.object === null || this.object.equals(st.getObject())) && this.selects(st);
+  }
+}
+
+/**
+ * Jena LockMRSW: multiple readers or a single writer. JavaScript has one
+ * thread, so the lock only counts nesting: a write request while holding only
+ * read locks fails (lock promotion), as in Jena.
+ */
+export class LockMRSW {
+  constructor() { this._read = 0; this._write = 0; }
+  enterCriticalSection(readLockRequested) {
+    if (this._read > 0 && this._write === 0 && !readLockRequested) {
+      this._read++;
+      throw new JenaException('enterCriticalSection: Write lock request while holding read lock - potential deadlock');
+    }
+    if (this._write > 0 && readLockRequested) readLockRequested = false;
+    if (readLockRequested) this._read++; else this._write++;
+  }
+  leaveCriticalSection() {
+    if (this._read > 0) { this._read--; return; }
+    if (this._write > 0) { this._write--; return; }
+    throw new JenaException('leaveCriticalSection: No lock held');
+  }
+}
+LockMRSW.READ = true;
+LockMRSW.WRITE = false;
+/** Jena Lock constants. */
+export const Lock = Object.freeze({ READ: true, WRITE: false, MRSW: LockMRSW });
+
+/** Jena ModelMaker (createMemModelMaker): named in-memory models. */
+export class ModelMaker {
+  constructor() { this._models = new Map(); }
+  createModel(name, strict = false) {
+    if (this._models.has(name)) {
+      if (strict) throw new JenaException('AlreadyExists: ' + name);
+      return this._models.get(name);
+    }
+    const m = createDefaultModel();
+    this._models.set(name, m);
+    return m;
+  }
+  createFreshModel() { return createDefaultModel(); }
+  createDefaultModel() { return this.createModel('', false); }
+  openModel(name, strict = false) {
+    if (this._models.has(name)) return this._models.get(name);
+    if (strict) throw new JenaException('DoesNotExist: ' + name);
+    return this.createModel(name);
+  }
+  openModelIfPresent(name) { return this._models.get(name) ?? null; }
+  getModel(name) { return this._models.get(name) ?? null; }
+  hasModel(name) { return this._models.has(name); }
+  removeModel(name) {
+    if (!this._models.has(name)) throw new JenaException('DoesNotExist: ' + name);
+    this._models.delete(name);
+  }
+  listModels() { return new ExtendedIterator([...this._models.keys()]); }
+  close() {}
+}
+
 export const ModelFactory = Object.freeze({
   /** A term-equality model (Jena's default model is value-based: GAPS.md 'value-matching'). */
   createDefaultModel,
   createModelForGraph(g) { return new Model(g); },
   /** Jena: a value-matching model. Needs an engine op. */
   createModelSameValue() { return unsupported('ModelFactory.createModelSameValue', 'value-matching'); },
-  createMemModelMaker() { return unsupported('ModelFactory.createMemModelMaker', 'echo'); },
-  createUnion() { return unsupported('ModelFactory.createUnion', 'echo'); },
-  createRDFSModel() { return unsupported('ModelFactory.createRDFSModel (stage 3)', 'echo'); },
-  createInfModel() { return unsupported('ModelFactory.createInfModel (stage 3)', 'echo'); },
-  createOntologyModel() { return unsupported('ModelFactory.createOntologyModel', 'echo'); },
+  createMemModelMaker() { return new ModelMaker(); },
+  /** A model over the dynamic union of the two models' graphs (Jena graph.compose.Union). */
+  createUnion(m1, m2) { return new Model(new Union(m1.getGraph(), m2.getGraph())); },
+  /** Inference models: a live (synchronous) closure and Jena's rule language need engine ops. */
+  createRDFSModel() { return unsupported('ModelFactory.createRDFSModel', 'inference'); },
+  createInfModel() { return unsupported('ModelFactory.createInfModel', 'inference'); },
+  createOntologyModel() { return unsupported('ModelFactory.createOntologyModel', 'inference'); },
 });
 
-export const ResourceFactory = Object.freeze({
+const RF_IMPL = {
   createResource(uri) {
     return new Resource(uri === undefined || uri === null ? NodeFactory.createBlankNode() : NodeFactory.createURI(uri), null);
   },
@@ -646,7 +780,79 @@ export const ResourceFactory = Object.freeze({
   },
   createStatement(s, p, o) { return new Statement(s, toProperty(p), o, null); },
   createStatementTerm(st) { return new StatementTerm(NodeFactory.createTripleTerm(st.asTriple()), null); },
-  /** Jena ResourceFactory.getInstance(): this factory. setInstance (a pluggable factory) is not in leana. */
-  getInstance() { return ResourceFactory; },
-  setInstance() { return unsupported('ResourceFactory.setInstance', 'echo'); },
+};
+const BASE_FACTORY = Object.freeze({ ...RF_IMPL });
+let currentFactory = BASE_FACTORY;
+
+/** Jena ResourceFactory: static methods that delegate to the current instance (getInstance / setInstance). */
+export const ResourceFactory = Object.freeze({
+  ...Object.fromEntries(Object.keys(RF_IMPL).map((k) => [k, (...a) => currentFactory[k](...a)])),
+  getInstance() { return currentFactory; },
+  setInstance(f) { const old = currentFactory; currentFactory = f; return old; },
 });
+
+// ---------------------------------------------------------------------------
+// RDF collections and containers (Jena RDFList, Container, Seq, Bag, Alt).
+// Their structure is rdf:first/rdf:rest/rdf:nil and rdf:_n/rdf:type rdf:Seq ...
+// (vocabulary and collection semantics: GAPS.md 'collections'). The classes
+// exist so that as(...) and canAs(...) can name them; Model.createList,
+// createSeq, createBag, createAlt and as(RDFList | Container ...) are gaps.
+
+export class Container extends Resource {
+  constructor(node, model) { super(node, model); unsupported('new Container', 'collections'); }
+}
+export class Seq extends Container {}
+export class Bag extends Container {}
+export class Alt extends Container {}
+export class RDFList extends Resource {
+  constructor(node, model) { super(node, model); unsupported('new RDFList', 'collections'); }
+}
+const COLLECTION_CLASSES = [Container, Seq, Bag, Alt, RDFList];
+
+/** Jena SeqIndexBoundsException, ListIndexException (collections). */
+export class SeqIndexBoundsException extends JenaException {}
+export class ListIndexException extends JenaException {}
+/** Jena AlreadyReifiedException, CannotReifyException (reification). */
+export class AlreadyReifiedException extends JenaException {}
+export class CannotReifyException extends JenaException {}
+
+// ---------------------------------------------------------------------------
+// Jena 2 readers (RDFReaderI): Model.getReader(lang) and NTripleReader. API shape
+// over Model.read (RIOT); like Jena's RDFReaderRIOT, read() notifies the model's
+// listeners of GraphEvents.startRead before and GraphEvents.finishRead after.
+// Answers a Promise (Model.read does).
+
+class RDFReaderRIOT {
+  constructor(lang) { this._lang = lang; this._eh = null; }
+  async read(model, input, base = null) {
+    model.notifyEvent(GraphEvents.startRead);
+    try {
+      await model.read(input, base, this._lang);
+    } finally {
+      model.notifyEvent(GraphEvents.finishRead);
+    }
+  }
+  setErrorHandler(h) { const old = this._eh; this._eh = h; return old; }
+  setProperty() { return null; }
+}
+/** Jena NTripleReader: the RDFReaderI for N-Triples. */
+export class NTripleReader extends RDFReaderRIOT {
+  constructor() { super('N-TRIPLE'); }
+}
+
+// ---------------------------------------------------------------------------
+// Vocabulary classes (Jena org.apache.jena.vocabulary RDF, OWL, OWL2). leana does not
+// hold vocabulary IRIs (echochamber CLAUDE.md rule 1): every term is a gap.
+
+function vocabularyClass(gap) {
+  return new Proxy(Object.freeze({}), {
+    get(_, k) {
+      // Not a vocabulary term: what JavaScript itself asks of an object.
+      if (typeof k === 'symbol' || k === 'then' || k === 'toJSON' || k === 'constructor') return undefined;
+      return gap(String(k));
+    },
+  });
+}
+export const RDF = vocabularyClass(() => unsupported('RDF.<term>', 'vocabulary'));
+export const OWL = vocabularyClass(() => unsupported('OWL.<term>', 'vocabulary'));
+export const OWL2 = vocabularyClass(() => unsupported('OWL2.<term>', 'vocabulary'));
