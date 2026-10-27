@@ -28,24 +28,25 @@ or endorsed by them. "In the style of" describes API compatibility only.
 
 ## Status on `@factoidal/core` 0.18.0
 
-Measured on main 5760a33 (2026-10-27), Node 22.22.2. Each ported case is one
+Measured on main d49c5a5 (2026-10-27, after leana stage 2), Node 22.22.2. Each ported case is one
 of: pass (the echo gives the answer the upstream test expects), defect,
 divergence or gap (see above).
 
 | echo | ported | pass | defect | divergence | gap | details |
 |---|---:|---:|---:|---:|---:|---|
-| leana (Jena-style) | 748 | 317 | 1 | 15 | 415 | [feasibility](docs/leana/feasibility.md), [`conformance/leana`](conformance/leana) |
+| leana (Jena-style) | 1,939 | 1,236 | 5 | 89 | 609 | [feasibility](docs/leana/feasibility.md), [`conformance/leana`](conformance/leana) |
 | Hardylib (RDFLib-style) | 1,438 | 511 | 8 | 919 | 0 | [feasibility](docs/hardylib/feasibility.md), [`conformance/hardylib`](conformance/hardylib) |
 | Enthie (N3.js/RDF-JS-style) | 1,460 | 1,071 | 29 | 124 | 236 | [feasibility](docs/enthie/feasibility.md), [`conformance/enthie`](conformance/enthie) |
 | MoonForge (RDF4J-style) | 2,801 | 2,201 | 300 | 300 | 0 | [feasibility](docs/moonforge/feasibility.md), [`conformance/moonforge`](conformance/moonforge) |
 
-Commands: `npm test`: 6,464 tests, 6,464 pass, 0 fail (a case that is not a
+Commands: `npm test`: 7,655 tests, 7,655 pass, 0 fail (a case that is not a
 pass is an expected failure with its verdict). leana: `npm run count:leana`.
 Hardylib, Enthie, MoonForge: the verdicts in each `verdicts.json`, against
 the number of ported cases.
 
 Changes by core version (only MoonForge changed; the other echoes have the
-same counts on 0.16.0, 0.17.0 and 0.18.0):
+same counts on 0.16.0, 0.17.0 and 0.18.0; leana grew from 748 ported, 317
+pass in stage 1 to the counts above in stage 2, https://github.com/danbri/echochamber/pull/9):
 
 | core | MoonForge pass | defect | cause |
 |---|---:|---:|---|
