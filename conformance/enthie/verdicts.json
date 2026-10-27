@@ -1,0 +1,1794 @@
+{
+ "about": "Verdicts for the N3.js-style echo (CLAUDE.md rule 2). Key: case id. verdict: defect (issue), divergence (spec), gap (gap: entry in docs/enthie/feasibility.md section 7).",
+ "core": "0.18.0",
+ "cases": {
+  "n3js-parser > Parser > A Parser instance > should callback comments when a comment callback is set": {
+   "verdict": "gap",
+   "gap": "G3"
+  },
+  "n3js-parser > Parser > A Parser instance > should not allow relative URIs with a colon in the first path segment": {
+   "verdict": "defect",
+   "issue": "https://github.com/danbri/factoidal/issues/1057"
+  },
+  "n3js-parser > Parser > A Parser instance > should not allow relative URIs with a colon in the first path segment as base": {
+   "verdict": "defect",
+   "issue": "https://github.com/danbri/factoidal/issues/1057"
+  },
+  "n3js-parser > Parser > A Parser instance > should not allow unsupported VERSIONs": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 N-Triples section 6.1: \"The version announcement is only a hint; this specification does not mandate any parser behavior\" (N3.js refuses an unknown version by default)"
+  },
+  "n3js-parser > Parser > A Parser instance > should not parse a reified triple using an incomplete annotation syntax after a semicolon": {
+   "verdict": "defect",
+   "issue": "https://github.com/danbri/factoidal/issues/1056"
+  },
+  "n3js-parser > Parser > A Parser instance > should not resolve prefixed names": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Turtle section 6.3 and RFC 3986 section 5.2.2: a reference with a scheme gets T.path = remove_dot_segments(R.path), so PREFIX ex: <http://ex.org/a/bb/ccc/../> is http://ex.org/a/bb/"
+  },
+  "n3js-parser > Parser > A Parser instance > should parse a default graph with a blank node ending with a dot": {
+   "verdict": "defect",
+   "issue": "https://github.com/danbri/factoidal/issues/1058"
+  },
+  "n3js-parser > Parser > A Parser instance > should parse a default graph with a blank node ending without a dot": {
+   "verdict": "defect",
+   "issue": "https://github.com/danbri/factoidal/issues/1058"
+  },
+  "n3js-parser > Parser > A Parser instance > should parse a one-triple anonymous graph ending with a dot": {
+   "verdict": "defect",
+   "issue": "https://github.com/danbri/factoidal/issues/1058"
+  },
+  "n3js-parser > Parser > A Parser instance > should parse a one-triple anonymous graph ending without a dot": {
+   "verdict": "defect",
+   "issue": "https://github.com/danbri/factoidal/issues/1058"
+  },
+  "n3js-parser > Parser > A Parser instance > should parse a one-triple default graph ending with a dot": {
+   "verdict": "defect",
+   "issue": "https://github.com/danbri/factoidal/issues/1058"
+  },
+  "n3js-parser > Parser > A Parser instance > should parse a one-triple default graph ending without a dot": {
+   "verdict": "defect",
+   "issue": "https://github.com/danbri/factoidal/issues/1058"
+  },
+  "n3js-parser > Parser > A Parser instance > should parse a quad with 2 blank nodes and a literal": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Turtle section 6.5 and RDF 1.2 TriG section 5: a statement has three terms; N3.js's default format also reads four-term N-Quads statements mixed with Turtle syntax (prefixed names, relative IRIs), which no one W3C grammar accepts"
+  },
+  "n3js-parser > Parser > A Parser instance > should parse a quad with 3 IRIs and a literal": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Turtle section 6.5 and RDF 1.2 TriG section 5: a statement has three terms; N3.js's default format also reads four-term N-Quads statements mixed with Turtle syntax (prefixed names, relative IRIs), which no one W3C grammar accepts"
+  },
+  "n3js-parser > Parser > A Parser instance > should parse a quad with 4 IRIs": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Turtle section 6.5 and RDF 1.2 TriG section 5: a statement has three terms; N3.js's default format also reads four-term N-Quads statements mixed with Turtle syntax (prefixed names, relative IRIs), which no one W3C grammar accepts"
+  },
+  "n3js-parser > Parser > A Parser instance > should parse a quad with 4 prefixed names": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Turtle section 6.5 and RDF 1.2 TriG section 5: a statement has three terms; N3.js's default format also reads four-term N-Quads statements mixed with Turtle syntax (prefixed names, relative IRIs), which no one W3C grammar accepts"
+  },
+  "n3js-parser > Parser > A Parser instance > should parse a statements with only an anonymous node": {
+   "verdict": "defect",
+   "issue": "https://github.com/danbri/factoidal/issues/1058"
+  },
+  "n3js-parser > Parser > A Parser instance > should parse a three-triple anonymous graph ending with a dot": {
+   "verdict": "defect",
+   "issue": "https://github.com/danbri/factoidal/issues/1058"
+  },
+  "n3js-parser > Parser > A Parser instance > should parse a three-triple anonymous graph ending without a dot": {
+   "verdict": "defect",
+   "issue": "https://github.com/danbri/factoidal/issues/1058"
+  },
+  "n3js-parser > Parser > A Parser instance > should parse a three-triple default graph ending with a dot": {
+   "verdict": "defect",
+   "issue": "https://github.com/danbri/factoidal/issues/1058"
+  },
+  "n3js-parser > Parser > A Parser instance > should parse a three-triple default graph ending with a semicolon": {
+   "verdict": "defect",
+   "issue": "https://github.com/danbri/factoidal/issues/1058"
+  },
+  "n3js-parser > Parser > A Parser instance > should parse a three-triple default graph ending without a dot": {
+   "verdict": "defect",
+   "issue": "https://github.com/danbri/factoidal/issues/1058"
+  },
+  "n3js-parser > Parser > A Parser instance > should parse an annotation inside a blank node property list in subject position": {
+   "verdict": "defect",
+   "issue": "https://github.com/danbri/factoidal/issues/1058"
+  },
+  "n3js-parser > Parser > A Parser instance > should parse an empty anonymous graph": {
+   "verdict": "defect",
+   "issue": "https://github.com/danbri/factoidal/issues/1058"
+  },
+  "n3js-parser > Parser > A Parser instance > should parse diamonds": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Turtle section 6.5 and RDF 1.2 TriG section 5: a statement has three terms; N3.js's default format also reads four-term N-Quads statements mixed with Turtle syntax (prefixed names, relative IRIs), which no one W3C grammar accepts"
+  },
+  "n3js-parser > Parser > A Parser instance > should parse statements with a blank node containing a list": {
+   "verdict": "defect",
+   "issue": "https://github.com/danbri/factoidal/issues/1058"
+  },
+  "n3js-parser > Parser > A Parser instance > should parse statements with empty blank nodes": {
+   "verdict": "defect",
+   "issue": "https://github.com/danbri/factoidal/issues/1058"
+  },
+  "n3js-parser > Parser > A Parser instance > should parse statements with nested blank nodes in the subject": {
+   "verdict": "defect",
+   "issue": "https://github.com/danbri/factoidal/issues/1058"
+  },
+  "n3js-parser > Parser > A Parser instance > should parse statements with unnamed blank nodes in the subject": {
+   "verdict": "defect",
+   "issue": "https://github.com/danbri/factoidal/issues/1058"
+  },
+  "n3js-parser > Parser > A Parser instance > should put nested reified triples in the default graph": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Turtle section 6.5 and RDF 1.2 TriG section 5: a statement has three terms; N3.js's default format also reads four-term N-Quads statements mixed with Turtle syntax (prefixed names, relative IRIs), which no one W3C grammar accepts"
+  },
+  "n3js-parser > Parser > A Parser instance > should still read a language tag after whitespace": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Turtle section 6.5 production 22 RDFLiteral ::= String (LANG_DIR | ...): no white space between String and LANG_DIR is shown; open question (docs/enthie/feasibility.md section 8)"
+  },
+  "n3js-parser > Parser > A Parser instance for the N-Quads format > should parse a version directive": {
+   "verdict": "defect",
+   "issue": "https://github.com/danbri/factoidal/issues/1055"
+  },
+  "n3js-parser > Parser > A Parser instance for the N-Quads format > should parse a version directive without whitespace before the string": {
+   "verdict": "defect",
+   "issue": "https://github.com/danbri/factoidal/issues/1055"
+  },
+  "n3js-parser > Parser > A Parser instance for the N-Triples format > should parse a single triple starting with Bom": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 N-Triples section 5.3: the grammar has no byte order mark (N3.js skips U+FEFF)"
+  },
+  "n3js-parser > Parser > A Parser instance for the N-Triples format > should parse a version directive": {
+   "verdict": "defect",
+   "issue": "https://github.com/danbri/factoidal/issues/1055"
+  },
+  "n3js-parser > Parser > A Parser instance for the N-Triples format > should parse a version directive without whitespace before the string": {
+   "verdict": "defect",
+   "issue": "https://github.com/danbri/factoidal/issues/1055"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > allows a blank node in predicate position": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > allows a blank node label in predicate position": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > allows a blank node with properties in predicate position": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should apply and scope inversion inside formulas": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should apply inversion inside reified triples": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should apply inversion inside triple terms": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should apply inversion to annotated triples without leaking into annotations": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should apply inversion when a blank node property list closes": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should bind the empty prefix to the document local namespace": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should correctly scope @forAll statements": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should correctly scope @forSome statements": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should let an explicit empty prefix override the implicit binding": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should not keep a prefix first declared inside a formula": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should not parse a @forAll statement with a blank node": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should not parse a @forAll statement with a variable": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should not parse a @forAll statement with an invalid prefix": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should not parse a @forSome statement with a blank node": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should not parse a @forSome statement with a variable": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should not parse a @forSome statement with an invalid prefix": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should not parse a default graph": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should not parse a named graph": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should not parse a named graph with the GRAPH keyword": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should not parse a quad": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should not parse a string literal as predicate with an undefined datatype prefix": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should not parse a string literal as subject with an undefined datatype prefix": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should not parse an incomplete statement starting with a literal": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should not parse an invalid ! path": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should not parse an invalid ^ path": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should not reuse identifiers of blank nodes within and outside of blank node property lists by default": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should not reuse identifiers of blank nodes within and outside of formulas": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should not reuse identifiers of blank nodes within and outside of lists by default": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse ! and ^ paths starting with literals inside a list": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a ! path in a blank node as object": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a ! path in a blank node as subject": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a ! path in a list as object": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a ! path in a list as predicate": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a ! path in a list as subject": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a ! path of length 2 as object": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a ! path of length 2 as subject": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a ! path of length 2 starting with a literal as object": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a ! path of length 2 starting with a literal as subject": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a ! path of length 4 as object": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a ! path of length 4 as subject": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a ! path starting with a blank node as subject": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a ! path starting with a blank node inside a list": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a ! path starting with a boolean as subject": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a ! path starting with a datatyped literal as object": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a ! path starting with a datatyped literal as subject": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a ! path starting with a directional language-tagged literal as subject": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a ! path starting with a language-tagged literal as object": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a ! path starting with a language-tagged literal as subject": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a ! path starting with a list as object": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a ! path starting with a list as subject": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a ! path starting with a list inside a list": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a ! path starting with a number as object": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a ! path starting with a number as subject": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a ! path starting with a variable inside a list": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a ! path starting with an empty list as object": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a ! path starting with an empty list as subject": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a ! path starting with an empty list inside a list": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a @forAll statement": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a @forAll statement with multiple entities": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a @forSome statement": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a @forSome statement with multiple entities": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a SPARQL-style base declaration in a formula": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a ^ path in a blank node as object": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a ^ path in a blank node as subject": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a ^ path in a list as object": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a ^ path in a list as subject": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a ^ path of length 2 as object": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a ^ path of length 2 as subject": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a ^ path of length 2 starting with a literal as object": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a ^ path of length 2 starting with a literal as subject": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a ^ path of length 4 as object": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a ^ path of length 4 as subject": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a ^ path starting with a list as subject": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a backward path in predicate position": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a bare IRI property list": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a blank node in a list with formulaScopedBlankNodes": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a datatyped literal inside a list": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a formula as list item": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a formula as only list item": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a formula between other list items": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a formula containing a list of formulas": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a formula in a list as subject": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a formula in a list in a blank node property list": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a formula in predicate position": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a formula inside a nested list": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a forward path in predicate position": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a left implication between one-triple graphs": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a left implication between one-triple graphs with isImpliedBy enabled": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a left implication between two-triple graphs": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a list in the predicate within a formula": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a list inside a formula inside a list": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a literal with datatype as predicate": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a literal with language and direction as predicate": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a literal with language as predicate": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a nested list in the predicate within a formula": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a path after a blank node property list predicate": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a path after a directional language-tagged literal predicate": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a path after a formula predicate": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a path after a list predicate": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a path after a literal predicate": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a right implication between one-triple graphs": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a right implication between one-triple graphs with isImpliedBy enabled": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a right implication between two-triple graphs": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a rule with paths starting with variables and lists inside lists": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a simple equality": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a simple left implication": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a simple left implication with isImpliedBy enabled": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a simple right implication": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a single triple": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a statement consisting of only a ! path": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a statement consisting of only a ! path inside a formula": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a statement consisting of only a ^ path starting with a literal": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a string literal as object": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a string literal as object list element": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a string literal as predicate": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a string literal as subject": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a string literal as subject list element": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a string literal as subject of a formula": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a string literal as subject of a formula in a blank node": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a subject list containing a formula containing a list containing a formula": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a triple term with iris as subject correctly": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a triple-nested list in the predicate": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse a variable": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse adjacent formulas in a nested list": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse alternating list-formula nesting three levels deep": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse an IRI property list in object position": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse an IRI property list in predicate position": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse an empty formula after a list subject without emitting a garbage quad": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse an empty formula in the object position as a blank node graph term": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse an empty formula in the subject position as a blank node graph term": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse an empty formula mid-document without leaking the previous subject into it": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse an equality of one-triple graphs": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse an equality of two-triple graphs": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse an existentially quantified variable inside a formula in a list": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse an integer literal as predicate": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse an integer literal as subject": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse an inverted compound predicate": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse an inverted predicate marker": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse empty formulas in the subject and object positions as distinct blank node graph terms": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse empty lists at each depth and position": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse formulas in subject and object lists of the same triple": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse lists in every position of a statement in a formula": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse literal as subject": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse literals with datatype as subject": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse literals with language and direction as subject": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse literals with language as subject": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse mixed !/^ paths as object": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse mixed !/^ paths as subject": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse nested IRI property lists": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse nested implication graphs": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse nested lists in the subject, predicate, and object simultaneously": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse nested triple terms in object and subject correctly": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse nested triple terms in subject and object correctly": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse nested triple terms in subject correctly": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse statements after a list in the predicate": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse statements with a multi-element list in the predicate": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse statements with a nested list in the predicate": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse statements with a shared triple term subject": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse statements with a shared triple term subject and triple term object": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse statements with a single-element list in the predicate": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse statements with an empty list in the predicate": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse the has verb": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse the is-of verb": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse two formulas in one list": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should parse verb keywords after literal subjects": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should preserve inversion across commas and reset it after a semicolon": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should reject a semicolon after an IRI property list ID": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should reject multiple IRI property list IDs": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should reject the historical @has keyword": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should reject the historical @is and @of keywords": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should replace a document IRI fragment in the implicit binding": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should require an IRI after id": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should require an entity after id": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should require an explicit empty prefix by default": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should require an expression after an inverted predicate marker": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should require an expression after has": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should require of after an is predicate": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should require properties after an IRI property list ID": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should rescope a blank node in a list by default": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should reset inversion after a reifier and semicolon": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should reset inverted predicate markers after a semicolon": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should restore is-of state around a compound predicate": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should restore prefix declarations between sibling formulas": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should reuse identifiers of blank nodes in nested lists and blank node property lists with formulaScopedBlankNodes (#660)": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should reuse identifiers of blank nodes within and outside of blank node property lists with formulaScopedBlankNodes": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should reuse identifiers of blank nodes within and outside of lists with formulaScopedBlankNodes": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should reuse identifiers of blank nodes within and outside of reified triples with formulaScopedBlankNodes": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should reuse identifiers of blank nodes within and outside of triple terms with formulaScopedBlankNodes": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should scope base declarations to their formula": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should scope blank nodes in a list to the enclosing formula by default": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should scope blank nodes in a list to the enclosing formula with formulaScopedBlankNodes": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should scope blank nodes in reified triples and triple terms to the enclosing formula with formulaScopedBlankNodes": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should scope inversion across blank node property-list punctuation": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format > should scope prefix declarations to their formula": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format with the emptyFormulaAsTrue option > should not parse a formula with a trailing dot as the boolean literal true": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format with the emptyFormulaAsTrue option > should not parse a formula with a trailing semicolon as the boolean literal true": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format with the emptyFormulaAsTrue option > should parse a left implication between empty formulas": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format with the emptyFormulaAsTrue option > should parse a left implication with an empty formula as consequent": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format with the emptyFormulaAsTrue option > should parse a right implication with an empty formula as antecedent": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format with the emptyFormulaAsTrue option > should parse an empty formula as the object of a blank node property": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format with the emptyFormulaAsTrue option > should parse an empty formula as the object of an empty list subject": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format with the emptyFormulaAsTrue option > should parse an empty formula in the object position as the boolean literal true": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format with the emptyFormulaAsTrue option > should parse an empty formula in the object position within a formula": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format with the emptyFormulaAsTrue option > should parse an empty formula in the predicate position as the boolean literal true": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format with the emptyFormulaAsTrue option > should parse an empty formula in the subject position as the boolean literal true": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format with the emptyFormulaAsTrue option > should parse an empty formula in the subject position mid-document as the boolean literal true": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format with the emptyFormulaAsTrue option > should parse an empty formula in the subject position within a formula": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format with the emptyFormulaAsTrue option > should parse an empty formula with whitespace in the subject position as the boolean literal true": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format with the emptyFormulaAsTrue option > should parse empty formulas in the subject and object positions as the boolean literal true": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format with the emptyFormulaAsTrue option > should pass the N3 spec test \"Empty Graph Eval\"": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format with the emptyFormulaAsTrue option > should pass the N3 spec test \"Empty Graph Implies Eval\"": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format with the explicitQuantifiers option > should correctly scope @forAll statements": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format with the explicitQuantifiers option > should correctly scope @forSome statements": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format with the explicitQuantifiers option > should parse a @forAll statement": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format with the explicitQuantifiers option > should parse a @forAll statement with multiple entities": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format with the explicitQuantifiers option > should parse a @forSome statement": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3 format with the explicitQuantifiers option > should parse a @forSome statement with multiple entities": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3Star format > should not parse nested quads": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3Star format > should parse a reified triple": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance for the N3Star format > should parse a triple term": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-parser > Parser > A Parser instance with a non-string format > should parse a graph": {
+   "verdict": "defect",
+   "issue": "https://github.com/danbri/factoidal/issues/1058"
+  },
+  "n3js-parser > Parser > An Parser instance with a document IRI > should resolve IRIs against the document IRI": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Turtle section 6.5 and RDF 1.2 TriG section 5: a statement has three terms; N3.js's default format also reads four-term N-Quads statements mixed with Turtle syntax (prefixed names, relative IRIs), which no one W3C grammar accepts"
+  },
+  "n3js-parser > Parser > An Parser instance without document IRI > should keep empty IRIs": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Turtle section 6.3 (relative IRI references are resolved against a base) and RDF 1.2 Concepts section 3.2 (an IRI is absolute; RFC 3987); N3.js keeps relative IRIs when it has no base"
+  },
+  "n3js-parser > Parser > An Parser instance without document IRI > should keep relative IRIs": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Turtle section 6.3 (relative IRI references are resolved against a base) and RDF 1.2 Concepts section 3.2 (an IRI is absolute; RFC 3987); N3.js keeps relative IRIs when it has no base"
+  },
+  "n3js-parser > Parser > IRI resolution > additional cases > resolving <../../abc> against <../../../>": {
+   "verdict": "divergence",
+   "spec": "RFC 3986 section 5.1: the base URI is absolute; N3.js resolves against a relative base IRI (./, //host/...)"
+  },
+  "n3js-parser > Parser > IRI resolution > additional cases > resolving <././abc> against <.../././>": {
+   "verdict": "divergence",
+   "spec": "RFC 3986 section 5.1: the base URI is absolute; N3.js resolves against a relative base IRI (./, //host/...)"
+  },
+  "n3js-parser > Parser > IRI resolution > additional cases > resolving <././abc> against <./././>": {
+   "verdict": "divergence",
+   "spec": "RFC 3986 section 5.1: the base URI is absolute; N3.js resolves against a relative base IRI (./, //host/...)"
+  },
+  "n3js-parser > Parser > IRI resolution > additional cases > resolving <abc> against <../>": {
+   "verdict": "divergence",
+   "spec": "RFC 3986 section 5.1: the base URI is absolute; N3.js resolves against a relative base IRI (./, //host/...)"
+  },
+  "n3js-parser > Parser > IRI resolution > additional cases > resolving <abc> against <./>": {
+   "verdict": "divergence",
+   "spec": "RFC 3986 section 5.1: the base URI is absolute; N3.js resolves against a relative base IRI (./, //host/...)"
+  },
+  "n3js-parser > Parser > IRI resolution > scheme-relative references with dot segments > resolving </../g> against <//base/a/b>": {
+   "verdict": "divergence",
+   "spec": "RFC 3986 section 5.1: the base URI is absolute; N3.js resolves against a relative base IRI (./, //host/...)"
+  },
+  "n3js-parser > Parser > IRI resolution > scheme-relative references with dot segments > resolving <//host/../g> against <//base/a/b>": {
+   "verdict": "divergence",
+   "spec": "RFC 3986 section 5.1: the base URI is absolute; N3.js resolves against a relative base IRI (./, //host/...)"
+  },
+  "n3js-parser > Parser > IRI resolution > scheme-relative references with dot segments > resolving <//host/./g/../h> against <./a/b>": {
+   "verdict": "divergence",
+   "spec": "RFC 3986 section 5.1: the base URI is absolute; N3.js resolves against a relative base IRI (./, //host/...)"
+  },
+  "n3js-parser > Parser > IRI resolution > scheme-relative references with dot segments > resolving <//host> against <//base/a/b>": {
+   "verdict": "divergence",
+   "spec": "RFC 3986 section 5.1: the base URI is absolute; N3.js resolves against a relative base IRI (./, //host/...)"
+  },
+  "n3js-parser > Parser > IRI resolution > scheme-relative references with dot segments > resolving <//host?x/../g> against <//base/a/b>": {
+   "verdict": "divergence",
+   "spec": "RFC 3986 section 5.1: the base URI is absolute; N3.js resolves against a relative base IRI (./, //host/...)"
+  },
+  "n3js-store > Store > A Store with 7 elements > should have size 7": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.1 (a triple term is only an object; the subject is an IRI or a blank node); the N3.js fixture has a quad with a triple term as subject, which the engine refuses, so counts and sizes are one lower"
+  },
+  "n3js-store > Store > A Store with 7 elements > when counted with an existing predicate parameter > should count all items with this predicate in all graphs": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.1 (a triple term is only an object; the subject is an IRI or a blank node); the N3.js fixture has a quad with a triple term as subject, which the engine refuses, so counts and sizes are one lower"
+  },
+  "n3js-store > Store > A Store with 7 elements > when counted with the default graph parameter > should count all items in the default graph": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.1 (a triple term is only an object; the subject is an IRI or a blank node); the N3.js fixture has a quad with a triple term as subject, which the engine refuses, so counts and sizes are one lower"
+  },
+  "n3js-store > Store > A Store with 7 elements > when counted without parameters > should count all items in all graphs": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.1 (a triple term is only an object; the subject is an IRI or a blank node); the N3.js fixture has a quad with a triple term as subject, which the engine refuses, so counts and sizes are one lower"
+  },
+  "n3js-store > Store > A Store with 7 elements > when searched with an existing predicate parameter > should return all items with this predicate in all graphs": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.1 (a triple term is only an object; the subject is an IRI or a blank node); the N3.js fixture has a quad with a triple term as subject, which the engine refuses, so counts and sizes are one lower"
+  },
+  "n3js-store > Store > A Store with 7 elements > when searched with the default graph parameter > should return all items in the default graph": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.1 (a triple term is only an object; the subject is an IRI or a blank node); the N3.js fixture has a quad with a triple term as subject, which the engine refuses, so counts and sizes are one lower"
+  },
+  "n3js-store > Store > A Store with 7 elements > when searched without parameters > should return all items": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.1 (a triple term is only an object; the subject is an IRI or a blank node); the N3.js fixture has a quad with a triple term as subject, which the engine refuses, so counts and sizes are one lower"
+  },
+  "n3js-store > Store > A Store with 7 elements > when trying to remove a triple for which no objects exist > should still have size 7": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.1 (a triple term is only an object; the subject is an IRI or a blank node); the N3.js fixture has a quad with a triple term as subject, which the engine refuses, so counts and sizes are one lower"
+  },
+  "n3js-store > Store > A Store with 7 elements > when trying to remove a triple for which no predicates exist > should still have size 7": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.1 (a triple term is only an object; the subject is an IRI or a blank node); the N3.js fixture has a quad with a triple term as subject, which the engine refuses, so counts and sizes are one lower"
+  },
+  "n3js-store > Store > A Store with 7 elements > when trying to remove a triple for which no subjects exist > should still have size 7": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.1 (a triple term is only an object; the subject is an IRI or a blank node); the N3.js fixture has a quad with a triple term as subject, which the engine refuses, so counts and sizes are one lower"
+  },
+  "n3js-store > Store > A Store with 7 elements > when trying to remove a triple that does not exist > should still have size 7": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.1 (a triple term is only an object; the subject is an IRI or a blank node); the N3.js fixture has a quad with a triple term as subject, which the engine refuses, so counts and sizes are one lower"
+  },
+  "n3js-store > Store > A Store with 7 elements > when trying to remove a triple with a non-existing graph > should still have size 7": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.1 (a triple term is only an object; the subject is an IRI or a blank node); the N3.js fixture has a quad with a triple term as subject, which the engine refuses, so counts and sizes are one lower"
+  },
+  "n3js-store > Store > A Store with 7 elements > when trying to remove a triple with a non-existing object > should still have size 7": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.1 (a triple term is only an object; the subject is an IRI or a blank node); the N3.js fixture has a quad with a triple term as subject, which the engine refuses, so counts and sizes are one lower"
+  },
+  "n3js-store > Store > A Store with 7 elements > when trying to remove a triple with a non-existing predicate > should still have size 7": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.1 (a triple term is only an object; the subject is an IRI or a blank node); the N3.js fixture has a quad with a triple term as subject, which the engine refuses, so counts and sizes are one lower"
+  },
+  "n3js-store > Store > A Store with 7 elements > when trying to remove a triple with a non-existing subject > should still have size 7": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.1 (a triple term is only an object; the subject is an IRI or a blank node); the N3.js fixture has a quad with a triple term as subject, which the engine refuses, so counts and sizes are one lower"
+  },
+  "n3js-store > Store > A Store with 7 elements > when trying to remove an incomplete triple > should still have size 7": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.1 (a triple term is only an object; the subject is an IRI or a blank node); the N3.js fixture has a quad with a triple term as subject, which the engine refuses, so counts and sizes are one lower"
+  },
+  "n3js-store > Store > A Store with initialized with 5 elements > adding a triple that already exists > should not increase the size": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.1 (a triple term is only an object; the subject is an IRI or a blank node); the N3.js fixture has a quad with a triple term as subject, which the engine refuses, so counts and sizes are one lower"
+  },
+  "n3js-store > Store > A Store with initialized with 5 elements > adding a triple that already exists > should not increase the size for a triple with a quad as subject": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.1 (a triple term is only an object; the subject is an IRI or a blank node); the N3.js fixture has a quad with a triple term as subject, which the engine refuses, so counts and sizes are one lower"
+  },
+  "n3js-store > Store > A Store with initialized with 5 elements > adding a triple that already exists > should return false for a triple with a quad as subject": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.1 (a triple term is only an object; the subject is an IRI or a blank node); the N3.js fixture has a quad with a triple term as subject, which the engine refuses, so counts and sizes are one lower"
+  },
+  "n3js-store > Store > A Store with initialized with 5 elements > adding a triple that did not exist yet > should increase the size": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.1 (a triple term is only an object; the subject is an IRI or a blank node); the N3.js fixture has a quad with a triple term as subject, which the engine refuses, so counts and sizes are one lower"
+  },
+  "n3js-store > Store > A Store with initialized with 5 elements > adding a triple that did not exist yet > should increase the size after add": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.1 (a triple term is only an object; the subject is an IRI or a blank node); the N3.js fixture has a quad with a triple term as subject, which the engine refuses, so counts and sizes are one lower"
+  },
+  "n3js-store > Store > A Store with initialized with 5 elements > adding a triple that did not exist yet > should increase the size for a triple with a quad as subject": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.1 (a triple term is only an object; the subject is an IRI or a blank node); the N3.js fixture has a quad with a triple term as subject, which the engine refuses, so counts and sizes are one lower"
+  },
+  "n3js-store > Store > A Store with initialized with 5 elements > adding a triple that did not exist yet > should return true for a triple with a quad as subject": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.1 (a triple term is only an object; the subject is an IRI or a blank node); the N3.js fixture has a quad with a triple term as subject, which the engine refuses, so counts and sizes are one lower"
+  },
+  "n3js-store > Store > A Store with initialized with 5 elements > removing a graph > should decrease the size": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.1 (a triple term is only an object; the subject is an IRI or a blank node); the N3.js fixture has a quad with a triple term as subject, which the engine refuses, so counts and sizes are one lower"
+  },
+  "n3js-store > Store > A Store with initialized with 5 elements > removing a graph > should return the removed quads": {
+   "verdict": "gap",
+   "gap": "G2",
+   "issue": "https://github.com/danbri/factoidal/issues/884"
+  },
+  "n3js-store > Store > A Store with initialized with 5 elements > removing a non-existing triple > should not decrease the size": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.1 (a triple term is only an object; the subject is an IRI or a blank node); the N3.js fixture has a quad with a triple term as subject, which the engine refuses, so counts and sizes are one lower"
+  },
+  "n3js-store > Store > A Store with initialized with 5 elements > removing a non-existing triple > should not decrease the size for a triple with a quad as subject": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.1 (a triple term is only an object; the subject is an IRI or a blank node); the N3.js fixture has a quad with a triple term as subject, which the engine refuses, so counts and sizes are one lower"
+  },
+  "n3js-store > Store > A Store with initialized with 5 elements > removing a non-existing triple > should return false for a triple with a quad as subject": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.1 (a triple term is only an object; the subject is an IRI or a blank node); the N3.js fixture has a quad with a triple term as subject, which the engine refuses, so counts and sizes are one lower"
+  },
+  "n3js-store > Store > A Store with initialized with 5 elements > removing an existing triple > should decrease the size": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.1 (a triple term is only an object; the subject is an IRI or a blank node); the N3.js fixture has a quad with a triple term as subject, which the engine refuses, so counts and sizes are one lower"
+  },
+  "n3js-store > Store > A Store with initialized with 5 elements > removing an existing triple > should decrease the size after delete": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.1 (a triple term is only an object; the subject is an IRI or a blank node); the N3.js fixture has a quad with a triple term as subject, which the engine refuses, so counts and sizes are one lower"
+  },
+  "n3js-store > Store > A Store with initialized with 5 elements > removing an existing triple > should decrease the size for a triple with a quad as subject": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.1 (a triple term is only an object; the subject is an IRI or a blank node); the N3.js fixture has a quad with a triple term as subject, which the engine refuses, so counts and sizes are one lower"
+  },
+  "n3js-store > Store > A Store with initialized with 5 elements > removing an existing triple > should return true for a triple with a quad as subject": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.1 (a triple term is only an object; the subject is an IRI or a blank node); the N3.js fixture has a quad with a triple term as subject, which the engine refuses, so counts and sizes are one lower"
+  },
+  "n3js-store > Store > A Store with initialized with 5 elements > removing matching quads > should decrease the size": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.1 (a triple term is only an object; the subject is an IRI or a blank node); the N3.js fixture has a quad with a triple term as subject, which the engine refuses, so counts and sizes are one lower"
+  },
+  "n3js-store > Store > A Store with initialized with 5 elements > removing matching quads > should return the removed quads": {
+   "verdict": "gap",
+   "gap": "G2",
+   "issue": "https://github.com/danbri/factoidal/issues/884"
+  },
+  "n3js-store > Store > A Store with initialized with 5 elements > should have size 5": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.1 (a triple term is only an object; the subject is an IRI or a blank node); the N3.js fixture has a quad with a triple term as subject, which the engine refuses, so counts and sizes are one lower"
+  },
+  "n3js-store > Store > An empty Store > should be able to generate named blank nodes": {
+   "verdict": "gap",
+   "gap": "G6"
+  },
+  "n3js-store > Store > An empty Store > should be able to generate unnamed blank nodes": {
+   "verdict": "gap",
+   "gap": "G6"
+  },
+  "n3js-store > Store > An empty Store > should be able to store and retrieve triples with Date literals": {
+   "verdict": "gap",
+   "gap": "G4",
+   "issue": "https://github.com/danbri/factoidal/issues/1051"
+  },
+  "n3js-store > Store > An empty Store > should be able to store triples with generated blank nodes": {
+   "verdict": "gap",
+   "gap": "G6"
+  },
+  "n3js-store > Store > An empty Store > when importing a stream of 2 nested quads > should have size 2": {
+   "verdict": "gap",
+   "gap": "G2",
+   "issue": "https://github.com/danbri/factoidal/issues/884"
+  },
+  "n3js-store > Store > An empty Store > when removing a stream of 2 nested quads > should have size 0": {
+   "verdict": "gap",
+   "gap": "G2",
+   "issue": "https://github.com/danbri/factoidal/issues/884"
+  },
+  "n3js-store > Store > An empty Store > when removing a stream of 2 quads > should have size 0": {
+   "verdict": "gap",
+   "gap": "G2",
+   "issue": "https://github.com/danbri/factoidal/issues/884"
+  },
+  "n3js-writer > Writer > A Writer instance > should apply a prefix whose IRI contains a regular expression metacharacter": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Turtle sections 2 and 6: any text the grammar accepts is a serialization; N3.js asserts its own layout. The engine's text parses to a dataset isomorphic to the expected one"
+  },
+  "n3js-writer > Writer > A Writer instance > should apply prefixes whose IRIs contain regular expression metacharacters": {
+   "verdict": "defect",
+   "issue": "https://github.com/danbri/factoidal/issues/1057"
+  },
+  "n3js-writer > Writer > A Writer instance > should escape a literal subject in N3 mode": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-writer > Writer > A Writer instance > should escape control characters in IRIs": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.2 (an IRI is absolute; RFC 3987); N3.js writes names such as <a> and <> that are not IRIs"
+  },
+  "n3js-writer > Writer > A Writer instance > should expand prefixes when possible": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Turtle section 2.4: a prefixed name denotes the prefix IRI followed by the local name; N3.js writes the IRI <a:bc> as the prefixed name a:bc, which denotes http://a.org/bc"
+  },
+  "n3js-writer > Writer > A Writer instance > should keep IRIs that look like prefixed names with any valid local name as prefixed names": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Turtle section 2.4: a prefixed name denotes the prefix IRI followed by the local name; N3.js writes the IRI <a:bc> as the prefixed name a:bc, which denotes http://a.org/bc"
+  },
+  "n3js-writer > Writer > A Writer instance > should not abbreviate a literal predicate whose value is rdf:type": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-writer > Writer > A Writer instance > should not leave leading whitespace if the prefix set is empty": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.2 (an IRI is absolute; RFC 3987); N3.js writes names such as <a> and <> that are not IRIs"
+  },
+  "n3js-writer > Writer > A Writer instance > should not merge an empty named graph into the default graph": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.2 (an IRI is absolute; RFC 3987); N3.js writes names such as <a> and <> that are not IRIs"
+  },
+  "n3js-writer > Writer > A Writer instance > should not repeat the same predicates": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.2 (an IRI is absolute; RFC 3987); N3.js writes names such as <a> and <> that are not IRIs"
+  },
+  "n3js-writer > Writer > A Writer instance > should not repeat the same subjects": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.2 (an IRI is absolute; RFC 3987); N3.js writes names such as <a> and <> that are not IRIs"
+  },
+  "n3js-writer > Writer > A Writer instance > should not use escape sequences in blank nodes": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.1: the predicate of a triple is an IRI (N3.js writes a blank node predicate)"
+  },
+  "n3js-writer > Writer > A Writer instance > should only expand prefixes when the rest is a valid local name": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Turtle section 2.4: a prefixed name denotes the prefix IRI followed by the local name; N3.js writes the IRI <a:bc> as the prefixed name a:bc, which denotes http://a.org/bc"
+  },
+  "n3js-writer > Writer > A Writer instance > should only treat IRIs with an exact prefix name as prefixed names": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Turtle section 2.4: a prefixed name denotes the prefix IRI followed by the local name; N3.js writes the IRI <a:bc> as the prefixed name a:bc, which denotes http://a.org/bc"
+  },
+  "n3js-writer > Writer > A Writer instance > should output 8-bit unicode characters as escape sequences": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.2 (an IRI is absolute; RFC 3987); N3.js writes names such as <a> and <> that are not IRIs"
+  },
+  "n3js-writer > Writer > A Writer instance > should serialize 1 triple": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.2 (an IRI is absolute; RFC 3987); N3.js writes names such as <a> and <> that are not IRIs"
+  },
+  "n3js-writer > Writer > A Writer instance > should serialize 2 triples": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.2 (an IRI is absolute; RFC 3987); N3.js writes names such as <a> and <> that are not IRIs"
+  },
+  "n3js-writer > Writer > A Writer instance > should serialize 3 triples": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.2 (an IRI is absolute; RFC 3987); N3.js writes names such as <a> and <> that are not IRIs"
+  },
+  "n3js-writer > Writer > A Writer instance > should serialize a decimal literal": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.2 (an IRI is absolute; RFC 3987); N3.js writes names such as <a> and <> that are not IRIs"
+  },
+  "n3js-writer > Writer > A Writer instance > should serialize a double literal": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.2 (an IRI is absolute; RFC 3987); N3.js writes names such as <a> and <> that are not IRIs"
+  },
+  "n3js-writer > Writer > A Writer instance > should serialize a false boolean literal": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.2 (an IRI is absolute; RFC 3987); N3.js writes names such as <a> and <> that are not IRIs"
+  },
+  "n3js-writer > Writer > A Writer instance > should serialize a graph with 1 triple": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.2 (an IRI is absolute; RFC 3987); N3.js writes names such as <a> and <> that are not IRIs"
+  },
+  "n3js-writer > Writer > A Writer instance > should serialize a graph with 3 triples": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.2 (an IRI is absolute; RFC 3987); N3.js writes names such as <a> and <> that are not IRIs"
+  },
+  "n3js-writer > Writer > A Writer instance > should serialize a literal": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.2 (an IRI is absolute; RFC 3987); N3.js writes names such as <a> and <> that are not IRIs"
+  },
+  "n3js-writer > Writer > A Writer instance > should serialize a literal containing \"--\" with a language": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.2 (an IRI is absolute; RFC 3987); N3.js writes names such as <a> and <> that are not IRIs"
+  },
+  "n3js-writer > Writer > A Writer instance > should serialize a literal containing a backspace": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.2 (an IRI is absolute; RFC 3987); N3.js writes names such as <a> and <> that are not IRIs"
+  },
+  "n3js-writer > Writer > A Writer instance > should serialize a literal containing a backspace character": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.2 (an IRI is absolute; RFC 3987); N3.js writes names such as <a> and <> that are not IRIs"
+  },
+  "n3js-writer > Writer > A Writer instance > should serialize a literal containing a cariage return character": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.2 (an IRI is absolute; RFC 3987); N3.js writes names such as <a> and <> that are not IRIs"
+  },
+  "n3js-writer > Writer > A Writer instance > should serialize a literal containing a double quote": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.2 (an IRI is absolute; RFC 3987); N3.js writes names such as <a> and <> that are not IRIs"
+  },
+  "n3js-writer > Writer > A Writer instance > should serialize a literal containing a form feed character": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.2 (an IRI is absolute; RFC 3987); N3.js writes names such as <a> and <> that are not IRIs"
+  },
+  "n3js-writer > Writer > A Writer instance > should serialize a literal containing a line separator": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.2 (an IRI is absolute; RFC 3987); N3.js writes names such as <a> and <> that are not IRIs"
+  },
+  "n3js-writer > Writer > A Writer instance > should serialize a literal containing a newline character": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.2 (an IRI is absolute; RFC 3987); N3.js writes names such as <a> and <> that are not IRIs"
+  },
+  "n3js-writer > Writer > A Writer instance > should serialize a literal containing a paragraph separator": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.2 (an IRI is absolute; RFC 3987); N3.js writes names such as <a> and <> that are not IRIs"
+  },
+  "n3js-writer > Writer > A Writer instance > should serialize a literal containing a single quote": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.2 (an IRI is absolute; RFC 3987); N3.js writes names such as <a> and <> that are not IRIs"
+  },
+  "n3js-writer > Writer > A Writer instance > should serialize a literal containing a tab character": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.2 (an IRI is absolute; RFC 3987); N3.js writes names such as <a> and <> that are not IRIs"
+  },
+  "n3js-writer > Writer > A Writer instance > should serialize a literal containing special unicode characters": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.2 (an IRI is absolute; RFC 3987); N3.js writes names such as <a> and <> that are not IRIs"
+  },
+  "n3js-writer > Writer > A Writer instance > should serialize a literal with a language": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.2 (an IRI is absolute; RFC 3987); N3.js writes names such as <a> and <> that are not IRIs"
+  },
+  "n3js-writer > Writer > A Writer instance > should serialize a literal with a language and direction": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.2 (an IRI is absolute; RFC 3987); N3.js writes names such as <a> and <> that are not IRIs"
+  },
+  "n3js-writer > Writer > A Writer instance > should serialize a literal with a type": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.2 (an IRI is absolute; RFC 3987); N3.js writes names such as <a> and <> that are not IRIs"
+  },
+  "n3js-writer > Writer > A Writer instance > should serialize a literal with an artificial language": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.2 (an IRI is absolute; RFC 3987); N3.js writes names such as <a> and <> that are not IRIs"
+  },
+  "n3js-writer > Writer > A Writer instance > should serialize a negative decimal literal": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.2 (an IRI is absolute; RFC 3987); N3.js writes names such as <a> and <> that are not IRIs"
+  },
+  "n3js-writer > Writer > A Writer instance > should serialize a negative double literal": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.2 (an IRI is absolute; RFC 3987); N3.js writes names such as <a> and <> that are not IRIs"
+  },
+  "n3js-writer > Writer > A Writer instance > should serialize a negative integer literal": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.2 (an IRI is absolute; RFC 3987); N3.js writes names such as <a> and <> that are not IRIs"
+  },
+  "n3js-writer > Writer > A Writer instance > should serialize a positive decimal literal": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.2 (an IRI is absolute; RFC 3987); N3.js writes names such as <a> and <> that are not IRIs"
+  },
+  "n3js-writer > Writer > A Writer instance > should serialize a positive double literal": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.2 (an IRI is absolute; RFC 3987); N3.js writes names such as <a> and <> that are not IRIs"
+  },
+  "n3js-writer > Writer > A Writer instance > should serialize a positive integer literal": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.2 (an IRI is absolute; RFC 3987); N3.js writes names such as <a> and <> that are not IRIs"
+  },
+  "n3js-writer > Writer > A Writer instance > should serialize a triple with a language-tagged literal as subject": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.2 (an IRI is absolute; RFC 3987); N3.js writes names such as <a> and <> that are not IRIs"
+  },
+  "n3js-writer > Writer > A Writer instance > should serialize a triple with a literal as predicate": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.2 (an IRI is absolute; RFC 3987); N3.js writes names such as <a> and <> that are not IRIs"
+  },
+  "n3js-writer > Writer > A Writer instance > should serialize a triple with a literal as subject": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.2 (an IRI is absolute; RFC 3987); N3.js writes names such as <a> and <> that are not IRIs"
+  },
+  "n3js-writer > Writer > A Writer instance > should serialize a triple with a literal as subject in N3 mode": {
+   "verdict": "gap",
+   "gap": "G1",
+   "issue": "https://github.com/danbri/factoidal/issues/1059"
+  },
+  "n3js-writer > Writer > A Writer instance > should serialize a true boolean literal": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.2 (an IRI is absolute; RFC 3987); N3.js writes names such as <a> and <> that are not IRIs"
+  },
+  "n3js-writer > Writer > A Writer instance > should serialize an empty named node as graph": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.2 (an IRI is absolute; RFC 3987); N3.js writes names such as <a> and <> that are not IRIs"
+  },
+  "n3js-writer > Writer > A Writer instance > should serialize an empty named node as object": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.2 (an IRI is absolute; RFC 3987); N3.js writes names such as <a> and <> that are not IRIs"
+  },
+  "n3js-writer > Writer > A Writer instance > should serialize an empty named node as predicate": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.2 (an IRI is absolute; RFC 3987); N3.js writes names such as <a> and <> that are not IRIs"
+  },
+  "n3js-writer > Writer > A Writer instance > should serialize an empty named node as subject": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.2 (an IRI is absolute; RFC 3987); N3.js writes names such as <a> and <> that are not IRIs"
+  },
+  "n3js-writer > Writer > A Writer instance > should serialize an integer literal": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.2 (an IRI is absolute; RFC 3987); N3.js writes names such as <a> and <> that are not IRIs"
+  },
+  "n3js-writer > Writer > A Writer instance > should serialize an invalid boolean literal": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.2 (an IRI is absolute; RFC 3987); N3.js writes names such as <a> and <> that are not IRIs"
+  },
+  "n3js-writer > Writer > A Writer instance > should serialize an invalid decimal literal": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.2 (an IRI is absolute; RFC 3987); N3.js writes names such as <a> and <> that are not IRIs"
+  },
+  "n3js-writer > Writer > A Writer instance > should serialize an invalid double literal": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.2 (an IRI is absolute; RFC 3987); N3.js writes names such as <a> and <> that are not IRIs"
+  },
+  "n3js-writer > Writer > A Writer instance > should serialize an invalid integer literal": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.2 (an IRI is absolute; RFC 3987); N3.js writes names such as <a> and <> that are not IRIs"
+  },
+  "n3js-writer > Writer > A Writer instance > should serialize blank nodes": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.2 (an IRI is absolute; RFC 3987); N3.js writes names such as <a> and <> that are not IRIs"
+  },
+  "n3js-writer > Writer > A Writer instance > should serialize prefixes": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Turtle sections 2 and 6: any text the grammar accepts is a serialization; N3.js asserts its own layout. The engine's text parses to a dataset isomorphic to the expected one"
+  },
+  "n3js-writer > Writer > A Writer instance > should serialize three graphs": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.2 (an IRI is absolute; RFC 3987); N3.js writes names such as <a> and <> that are not IRIs"
+  },
+  "n3js-writer > Writer > A Writer instance > should use prefixes for local names with dots": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Turtle sections 2 and 6: any text the grammar accepts is a serialization; N3.js asserts its own layout. The engine's text parses to a dataset isomorphic to the expected one"
+  },
+  "n3js-writer > Writer > A Writer instance > should use prefixes when possible": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Turtle sections 2 and 6: any text the grammar accepts is a serialization; N3.js asserts its own layout. The engine's text parses to a dataset isomorphic to the expected one"
+  },
+  "n3js-writer > Writer > A Writer instance > should write rdf:type as \"a\"": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.2 (an IRI is absolute; RFC 3987); N3.js writes names such as <a> and <> that are not IRIs"
+  },
+  "rdfjs-data-model/core > .fromQuad > should return null if null is given": {
+   "verdict": "divergence",
+   "spec": "RDF/JS Data Model, DataFactory: fromTerm(Term original) and fromQuad(Quad original) take a term (IDL: not nullable); rdfjs-base answers null for null"
+  },
+  "rdfjs-data-model/core > .fromTerm > should return null if null is given": {
+   "verdict": "divergence",
+   "spec": "RDF/JS Data Model, DataFactory: fromTerm(Term original) and fromQuad(Quad original) take a term (IDL: not nullable); rdfjs-base answers null for null"
+  },
+  "rdfjs-data-model/enthie > .fromQuad > should return null if null is given": {
+   "verdict": "divergence",
+   "spec": "RDF/JS Data Model, DataFactory: fromTerm(Term original) and fromQuad(Quad original) take a term (IDL: not nullable); rdfjs-base answers null for null"
+  },
+  "rdfjs-data-model/enthie > .fromTerm > should return null if null is given": {
+   "verdict": "divergence",
+   "spec": "RDF/JS Data Model, DataFactory: fromTerm(Term original) and fromQuad(Quad original) take a term (IDL: not nullable); rdfjs-base answers null for null"
+  },
+  "rdfjs-dataset/core > DatasetCore > add > should support Quads having a Quad as subject": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.1 (a triple term is only an object; the subject is an IRI or a blank node)"
+  },
+  "rdfjs-dataset/enthie > DatasetCore > add > should support Quads having a Quad as subject": {
+   "verdict": "divergence",
+   "spec": "RDF 1.2 Concepts section 3.1 (a triple term is only an object; the subject is an IRI or a blank node)"
+  },
+  "rdfjs-spec/core > Literal.language is lowercase (factory)": {
+   "verdict": "defect",
+   "issue": "https://github.com/danbri/factoidal/issues/1054"
+  },
+  "rdfjs-spec/core > Literal.language is lowercase (factory, DirectionalLanguage)": {
+   "verdict": "defect",
+   "issue": "https://github.com/danbri/factoidal/issues/1054"
+  }
+ }
+}
