@@ -1,0 +1,7 @@
+{
+  "name": "echo03-study",
+  "private": true,
+  "type": "module",
+  "description": "Scripts that read the N3.js and RDF/JS sources and count; they parse upstream files, they never run them",
+  "devDependencies": { "acorn": "8.15.0" }
+}
