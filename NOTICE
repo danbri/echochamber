@@ -9,3 +9,13 @@ derived file says so in its header and names what was changed.
   descriptions derived from Apache Jena. Apache Jena: Copyright The Apache
   Software Foundation. This product includes software developed at The
   Apache Software Foundation (https://www.apache.org/). Apache License 2.0.
+
+- packages/echo02, conformance/echo02, tools/echo02-study, docs/echo02:
+  test cases, test data and API descriptions derived from RDFLib
+  (https://github.com/RDFLib/rdflib, commit
+  58c3700e5e21b5b833d0e31072f930c665059db2). RDFLib: Copyright (c)
+  2002-2026, RDFLib Team. All rights reserved. BSD 3-Clause License; the
+  full text is in conformance/echo02/data/LICENSE-RDFLib. The data files in
+  conformance/echo02/data are unchanged copies (list:
+  conformance/echo02/data/PROVENANCE.md). RDFLib's name is not used to
+  endorse or promote this software.
