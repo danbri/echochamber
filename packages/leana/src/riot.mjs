@@ -12,6 +12,7 @@ import { parse as coreParse } from '@factoidal/core';
 import { readFileSync } from 'node:fs';
 import { GraphMem, tripleOf } from './graph.mjs';
 import { Model } from './model.mjs';
+import { PrefixMappingImpl } from './prefix.mjs';
 import { RiotException, RiotNotFoundException, JenaException, unsupported } from './errors.mjs';
 
 /**
@@ -58,13 +59,25 @@ const ALL_LANGS = [TURTLE, NTRIPLES, NQUADS, TRIG, RDFXML, JSONLD];
 
 /** Jena RDFLanguages: by Jena name (API naming); by file name or media type: gap. */
 export const RDFLanguages = Object.freeze({
+  // Jena RDFLanguages repeats the Lang constants.
+  TURTLE, TTL: TURTLE, NTRIPLES, NT: NTRIPLES, NQUADS, NQ: NQUADS, TRIG, RDFXML, JSONLD,
+  get N3() { return unsupported('RDFLanguages.N3', 'echo'); },
+  get RDFJSON() { return unsupported('RDFLanguages.RDFJSON', 'echo'); },
+  get TRIX() { return unsupported('RDFLanguages.TRIX', 'echo'); },
+  init() {},
   nameToLang(name) {
     // Jena's names and labels (their spelling is API naming, not a syntax decision).
+    // Jena's labels and alternative names (RDFLanguages, compared ignoring case).
     const NAMES = {
-      'turtle': TURTLE, 'ttl': TURTLE, 'n-triples': NTRIPLES, 'ntriples': NTRIPLES, 'nt': NTRIPLES,
-      'n-quads': NQUADS, 'nquads': NQUADS, 'nq': NQUADS, 'trig': TRIG, 'rdf/xml': RDFXML,
-      'rdfxml': RDFXML, 'json-ld': JSONLD, 'jsonld': JSONLD,
+      'turtle': TURTLE, 'ttl': TURTLE,
+      'n-triples': NTRIPLES, 'ntriples': NTRIPLES, 'ntriple': NTRIPLES, 'n-triple': NTRIPLES, 'nt': NTRIPLES,
+      'n-quads': NQUADS, 'nquads': NQUADS, 'nquad': NQUADS, 'n-quad': NQUADS, 'nq': NQUADS,
+      'trig': TRIG,
+      'rdf/xml': RDFXML, 'rdfxml': RDFXML, 'rdf/xml-abbrev': RDFXML, 'rdfxml-abbrev': RDFXML,
+      'json-ld': JSONLD, 'jsonld': JSONLD,
     };
+    // Jena's N3 name: Lang.N3 is not in leana (gap 'echo').
+    if (String(name).toLowerCase() === 'n3') return Lang.N3;
     return NAMES[String(name).toLowerCase()] ?? null;
   },
   filenameToLang() { return unsupported('RDFLanguages.filenameToLang', 'syntax-from-name'); },
@@ -152,13 +165,29 @@ function readSource(path) {
 }
 
 export class RDFParserBuilder {
+  static create() { return new RDFParserBuilder(); }
   constructor() { this._text = null; this._path = null; this._lang = null; this._force = null; this._base = null; }
   fromString(s) { this._text = String(s); this._path = null; return this; }
-  source(path) { this._path = String(path); this._text = null; return this; }
+  /** source(path | 'file:' IRI | StringReader). The last source wins. */
+  source(path) {
+    if (path instanceof StringReader) return this.fromString(path.text);
+    this._path = String(path); this._text = null; return this;
+  }
   lang(l) { this._lang = langOf(l); return this; }
   forceLang(l) { this._force = langOf(l); return this; }
   base(b) { this._base = b; return this; }
   errorHandler() { return unsupported('RDFParser.errorHandler', 'echo'); }
+  streamManager() { return unsupported('RDFParser.streamManager', 'echo'); }
+  labelToNode() { return unsupported('RDFParser.labelToNode', 'echo'); }
+  factory() { return unsupported('RDFParser.factory', 'echo'); }
+  prefixes() { return unsupported('RDFParser.prefixes (initial prefix map)', 'echo'); }
+  /** canonicalValues(false) is the default (lexical forms kept); true needs the engine's canonical forms. */
+  canonicalValues(flag) {
+    if (flag) return unsupported('RDFParser.canonicalValues(true)', 'literal-value');
+    return this;
+  }
+  toDatasetGraph() { return unsupported('RDFParser.toDatasetGraph (datasets: stage 2)', 'echo'); }
+  toDataset() { return unsupported('RDFParser.toDataset (datasets: stage 2)', 'echo'); }
   strict() { return unsupported('RDFParser.strict', 'echo'); }
   checking() { return unsupported('RDFParser.checking', 'echo'); }
   build() { return this; }
@@ -168,8 +197,8 @@ export class RDFParserBuilder {
     let text = this._text;
     if (text === null) {
       if (this._path === null) throw new RiotException('No source specified');
-      if (!lang) return unsupported('RDFParser.source(path) with no lang (syntax from the file name)', 'syntax-from-name');
       text = readSource(this._path);
+      if (!lang) return unsupported('RDFParser.source(path) with no lang (syntax from the file name)', 'syntax-from-name');
     }
     if (!lang) throw new RiotException('No language specified');
     await parseInto(target, text, lang, this._base);
@@ -203,7 +232,10 @@ export class RDFWriterBuilder {
   lang(l) { this._lang = langOf(l); return this; }
   format(f) { this._lang = langOf(f); return this; }
   base() { return unsupported('RDFWriter.base', 'echo'); }
-  build() { return this; }
+  build() {
+    if (!this._src) throw new RiotException('No source to write');
+    return this;
+  }
   asString() {
     if (!this._src) throw new RiotException('No source to write');
     if (!this._lang) throw new RiotException('No syntax to write');
@@ -244,11 +276,16 @@ export const RDFDataMgr = Object.freeze({
     new RDFWriterBuilder().source(src).lang(lang).output(out);
   },
   determineLang() { return unsupported('RDFDataMgr.determineLang', 'syntax-from-name'); },
+  /** Open a file: its text as a StringReader (Jena: a TypedInputStream; the content type is not kept). */
+  open(path) { return new StringReader(readSource(path)); },
+  loadDataset() { return unsupported('RDFDataMgr.loadDataset (datasets: stage 2)', 'echo'); },
+  loadDatasetGraph() { return unsupported('RDFDataMgr.loadDatasetGraph (datasets: stage 2)', 'echo'); },
 });
 
 /** Model.read / Model.write in the Jena style, on strings. */
 export function installModelIO() {
   Model.prototype.read = async function read(input, base, lang) {
+    if (lang === null) lang = undefined; // Jena: a null lang means "choose from the source"
     if (typeof input === 'string' && !(input instanceof StringReader)) {
       // Jena Model.read(String url[, lang]): a file path here.
       if (lang === undefined && base !== undefined && (typeof base === 'string' && RDFLanguages.nameToLang(base))) {
@@ -270,3 +307,36 @@ export function installModelIO() {
 }
 
 export { JenaException };
+
+/** Jena ErrorHandlerFactory: named handlers only; RDFParser.errorHandler is not in leana. */
+export const ErrorHandlerFactory = Object.freeze({
+  errorHandlerStd: Object.freeze({ name: 'errorHandlerStd' }),
+  errorHandlerStrict: Object.freeze({ name: 'errorHandlerStrict' }),
+  errorHandlerWarn: Object.freeze({ name: 'errorHandlerWarn' }),
+  errorHandlerNoLogging: Object.freeze({ name: 'errorHandlerNoLogging' }),
+  getDefaultErrorHandler() { return unsupported('ErrorHandlerFactory.getDefaultErrorHandler', 'echo'); },
+  setDefaultErrorHandler() { return unsupported('ErrorHandlerFactory.setDefaultErrorHandler', 'echo'); },
+});
+
+/** Jena StreamManager / LocatorFile: not in leana. */
+export class StreamManager { constructor() { unsupported('StreamManager', 'echo'); } }
+export class LocatorFile { constructor() { unsupported('LocatorFile', 'echo'); } }
+/** Jena LabelToNode (blank node label policy of a parse): not in leana. */
+export const LabelToNode = Object.freeze({
+  createUseLabelAsGiven() { return unsupported('LabelToNode.createUseLabelAsGiven', 'echo'); },
+  createScopeByDocumentHash() { return unsupported('LabelToNode.createScopeByDocumentHash', 'echo'); },
+});
+/** Jena FactoryRDFStd (term factory of a parse): not in leana. */
+export class FactoryRDFStd { constructor() { unsupported('FactoryRDFStd', 'echo'); } }
+/** Jena RIOT PrefixMapFactory: a leana PrefixMapping with the given entries. */
+export const PrefixMapFactory = Object.freeze({
+  create(entries) {
+    const pm = new PrefixMappingImpl();
+    if (entries) pm.setNsPrefixes(entries);
+    return pm;
+  },
+});
+/** Jena RDFReaderFactoryRIOT (the Jena 2 RDFReaderI adapters): not in leana. */
+export class RDFReaderFactoryRIOT {
+  getReader() { return unsupported('RDFReaderFactoryRIOT.getReader', 'echo'); }
+}

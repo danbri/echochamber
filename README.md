@@ -17,7 +17,7 @@ Echoes are an application *of* Factoidal. They add no code to
 
 | echo | npm name | in the style of | status |
 |---|---|---|---|
-| leana | `@factoidal/leana` | Apache Jena (Java) | feasibility study done; expression tests ported (in core) |
+| leana | `@factoidal/leana` | Apache Jena (Java) | stage 1: Graph, Model, PrefixMapping, RIOT on strings; 748 Jena tests ported (`conformance/leana`) |
 | leanlib | `@factoidal/leanlib` | RDFLib (Python) | planned |
 | leaner | `@factoidal/leaner` | N3.js and RDF/JS (JavaScript) | planned |
 | lean4j | `@factoidal/lean4j` | Eclipse RDF4J (Java) | planned |

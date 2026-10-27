@@ -1,0 +1,247 @@
+{
+  "testUnknownDatatype": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "Literal.sameValueAs"
+  },
+  "testUserDef": {
+    "verdict": "gap",
+    "gap": "literal-value",
+    "note": "TypeMapper.registerDatatype"
+  },
+  "testXSDbasics": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "Model.createTypedLiteral(value)"
+  },
+  "testMiscEquality": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "Literal.sameValueAs"
+  },
+  "testOverloads": {
+    "verdict": "gap",
+    "gap": "literal-value",
+    "note": "JenaParameters.enableEagerLiteralValidation = true"
+  },
+  "testPlainSameValueAs": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "Literal.sameValueAs"
+  },
+  "testNumberSameValueAs": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "Literal.sameValueAs"
+  },
+  "testBigNums": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "Literal.sameValueAs"
+  },
+  "testDecimalFind": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "GraphMemFactory.createDefaultGraphSameValue"
+  },
+  "testDecimalCanonicalize": {
+    "verdict": "gap",
+    "gap": "literal-value",
+    "note": "RDFDatatype.cannonicalise"
+  },
+  "testDateTime_1": {
+    "verdict": "gap",
+    "gap": "literal-value",
+    "note": "Literal.getValue"
+  },
+  "testDateTime_2": {
+    "verdict": "gap",
+    "gap": "literal-value",
+    "note": "Literal.getValue"
+  },
+  "testDateTime_3": {
+    "verdict": "gap",
+    "gap": "literal-value",
+    "note": "Literal.getValue"
+  },
+  "testDateTime_4": {
+    "verdict": "gap",
+    "gap": "literal-value",
+    "note": "Literal.getValue"
+  },
+  "testDateTime_5": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "Literal.sameValueAs"
+  },
+  "testDateTime_6": {
+    "verdict": "gap",
+    "gap": "literal-value",
+    "note": "Literal.getValue"
+  },
+  "testDateTime_7": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "Model.createTypedLiteral(value)"
+  },
+  "testDateTime_8": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "Model.createTypedLiteral(value)"
+  },
+  "testDateTime_9": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "new XSDDateTime(Calendar)"
+  },
+  "testDateTime_10": {
+    "verdict": "gap",
+    "gap": "literal-value",
+    "note": "Literal.getValue"
+  },
+  "testDateTime_11": {
+    "verdict": "gap",
+    "gap": "literal-value",
+    "note": "Literal.getValue"
+  },
+  "testDateTime_12": {
+    "verdict": "gap",
+    "gap": "literal-value",
+    "note": "Literal.getValue"
+  },
+  "testDateTime_13": {
+    "verdict": "gap",
+    "gap": "literal-value",
+    "note": "Literal.getValue"
+  },
+  "testDateTime_14": {
+    "verdict": "gap",
+    "gap": "literal-value",
+    "note": "Literal.getValue"
+  },
+  "testDateTime_15": {
+    "verdict": "gap",
+    "gap": "literal-value",
+    "note": "Literal.getValue"
+  },
+  "testDateTime_16": {
+    "verdict": "gap",
+    "gap": "literal-value",
+    "note": "Literal.getValue"
+  },
+  "testDateTime_17": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "Model.createTypedLiteral(value)"
+  },
+  "testDateTime_18": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "Model.createTypedLiteral(value)"
+  },
+  "testTypedContains": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "ModelFactory.createModelSameValue"
+  },
+  "testIsValidLiteral": {
+    "verdict": "gap",
+    "gap": "literal-value",
+    "note": "RDFDatatype.isValidLiteral"
+  },
+  "testIsValidLiteral1": {
+    "verdict": "gap",
+    "gap": "literal-value",
+    "note": "RDFDatatype.isValidLiteral"
+  },
+  "testIsValidLiteral2": {
+    "verdict": "gap",
+    "gap": "literal-value",
+    "note": "RDFDatatype.isValidLiteral"
+  },
+  "testBinary1": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "Model.createTypedLiteral(value)"
+  },
+  "testBinary2": {
+    "verdict": "gap",
+    "gap": "literal-value",
+    "note": "LiteralLabel.getValue"
+  },
+  "testBinary3": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "Model.createTypedLiteral(value, datatype)"
+  },
+  "testBinary4": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "Literal.sameValueAs"
+  },
+  "testBinaryIndexing1": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "Node.getIndexingValue (literal)"
+  },
+  "testBinaryIndexing2": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "Node.getIndexingValue (literal)"
+  },
+  "testBinaryIndexing3": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "Node.getIndexingValue (literal)"
+  },
+  "testBinaryIndexing4": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "Node.getIndexingValue (literal)"
+  },
+  "testXSDanyURI": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "Node.sameValueAs"
+  },
+  "testDateTimeBug3": {
+    "verdict": "gap",
+    "gap": "literal-value",
+    "note": "Node.getLiteralValue"
+  },
+  "testDateTimeBug": {
+    "verdict": "gap",
+    "gap": "literal-value",
+    "note": "RDFDatatype.parse"
+  },
+  "testDateTimeBug2": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "new XSDDateTime(Calendar)"
+  },
+  "testFlags": {
+    "verdict": "gap",
+    "gap": "literal-value",
+    "note": "JenaParameters.enableEagerLiteralValidation = true"
+  },
+  "testLexicalDistinction": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "Literal.sameValueAs"
+  },
+  "testRoundTrip": {
+    "verdict": "gap",
+    "gap": "literal-value",
+    "note": "LiteralLabel.getValue"
+  },
+  "testDateOverride": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "new XSDDateTime(Calendar)"
+  },
+  "testRDFLangString_2": {
+    "verdict": "divergence",
+    "spec": "RDF 1.1 Concepts section 3.3 (a literal is a language-tagged string, with datatype rdf:langString, if and only if it has a non-empty language tag)",
+    "note": "Jena builds \"abc\"^^rdf:langString with no language; the @factoidal/core DataFactory makes it a plain xsd:string literal, so its datatype is not that of \"xyz\"@en."
+  }
+}

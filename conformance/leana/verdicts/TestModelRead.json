@@ -1,0 +1,6 @@
+{
+  "testDefaultLangXML": {"verdict": "gap", "gap": "syntax-from-name", "note": "Model.read(url, null, null): Jena picks RDF/XML from '.rdf'."},
+  "testLoadsSimpleModel": {"verdict": "gap", "gap": "echo", "note": "Lang \"N3\": Jena reads N3 with its Turtle parser; leana has no N3 Lang."},
+  "testReturnsSelf": {"verdict": "gap", "gap": "echo", "note": "Lang \"N3\"."},
+  "testSimpleLoadExplicitBase": {"verdict": "gap", "gap": "echo", "note": "Lang \"N3\"."}
+}

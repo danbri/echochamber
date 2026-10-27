@@ -1,0 +1,7 @@
+{
+  "testIsAnon": {"verdict": "gap", "gap": "js-value-literal", "note": "Model.createTypedLiteral(17) (Java int)."},
+  "testIsLiteral": {"verdict": "gap", "gap": "js-value-literal", "note": "Model.createTypedLiteral(17)."},
+  "testIsResource": {"verdict": "gap", "gap": "js-value-literal", "note": "Model.createTypedLiteral(17)."},
+  "testIsURIResource": {"verdict": "gap", "gap": "js-value-literal", "note": "Model.createTypedLiteral(17)."},
+  "testIsStatementTerm1": {"verdict": "gap", "gap": "js-value-literal", "note": "Model.createTypedLiteral(17)."}
+}

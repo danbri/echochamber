@@ -206,3 +206,47 @@ export function assertIsoModels(title, wanted, got) {
   if (got === undefined) { got = wanted; wanted = title; title = 'models must be isomorphic'; }
   if (!wanted.isIsomorphicWith(got)) assert.fail(`${title}: expected ${wanted} but had ${got}`);
 }
+
+// --- Vocabulary constants used by the tests (test data; Jena org.apache.jena.vocabulary.RDF).
+// RDF.x is the Property (a Resource) with IRI rdf:x.
+export const RDF = new Proxy({}, { get: (_, k) => new Property(NodeFactory.createURI(NS.rdf + String(k)), null) });
+
+// --- AbstractModelTestBase (jena-core/src/test/java/org/apache/jena/rdf/model/AbstractModelTestBase.java)
+// Java typed test values. A JS number cannot carry byte/short/int/float/double, nor a
+// char apart from a string; long is a BigInt. leana must refuse to guess a datatype.
+export class LitTestObj {
+  constructor(l) { this.content = typeof l === 'string' ? BigInt(l.substring(1, l.length - 1)) : BigInt(l); }
+  equals(o) { return o instanceof LitTestObj && this.content === o.content; }
+  toString() { return '[' + this.content + ']'; }
+}
+export const tv = Object.freeze({
+  tvBoolean: true, tvByte: 1, tvShort: 2, tvInt: -1, tvLong: -2n, tvChar: '!', tvFloat: 123.456,
+  tvDouble: -123.456, tvString: 'test 12 string', tvLitObj: new LitTestObj(1234), tvObject: new LitTestObj(12345),
+  dDelta: 0.000000005, fDelta: 0.000005,
+});
+/** AbstractModelTestBase.createExtendedModel / modelWithStatements over createModel(). */
+export const createExtendedModel = createModel;
+
+// --- Jena XSDDatatype constants (test data): XSDDatatype.XSDint is the datatype object
+// of xsd:int; XSDDatatype.XSD is the namespace without '#'.
+export const XSDDatatype = new Proxy({}, {
+  get: (_, k) => (k === 'XSD' ? NS.xsd.slice(0, -1) : NodeFactory.getType(NS.xsd + String(k).replace(/^XSD/, ''))),
+});
+/** Jena RDF.dtLangString, RDF.dtDirLangString (test data). */
+export const dtLangString = NodeFactory.getType(NS.rdf + 'langString');
+export const dtDirLangString = NodeFactory.getType(NS.rdf + 'dirLangString');
+
+// --- GraphTestLib.testContains / testOmits (fork A1)
+function triplesOf(x) {
+  if (x && typeof x.find === 'function' && typeof x.size === 'function') return x.find().toList();
+  if (x && typeof x.toList === 'function') return x.toList();
+  return [...x];
+}
+/** testContains(g, Triple[] | List | Iterator | Graph). */
+export function testContains(g, triples) {
+  for (const t of triplesOf(triples)) assert.ok(g.contains(t), 'contains ' + t);
+}
+/** testOmits(g, Triple[] | List | Iterator | Graph). */
+export function testOmits(g, triples) {
+  for (const t of triplesOf(triples)) assert.ok(!g.contains(t), 'omits ' + t);
+}

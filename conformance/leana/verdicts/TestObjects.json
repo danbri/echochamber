@@ -1,0 +1,8 @@
+{
+  "testListNamespaces": {"verdict": "gap", "gap": "js-value-literal", "note": "fill: Model.createLiteralStatement(s, p, int); then listNameSpaces (iri-split)."},
+  "testListObjects": {"verdict": "gap", "gap": "js-value-literal", "note": "fill: Model.createLiteralStatement(s, p, int)."},
+  "testListObjectsOfPropertyByProperty": {"verdict": "gap", "gap": "js-value-literal", "note": "fill."},
+  "testListObjectsOfPropertyBySubject": {"verdict": "gap", "gap": "js-value-literal", "note": "Model.addLiteral(s, p, int)."},
+  "testListStatements": {"verdict": "gap", "gap": "js-value-literal", "note": "fill."},
+  "testListSubjects": {"verdict": "gap", "gap": "js-value-literal", "note": "fill."}
+}

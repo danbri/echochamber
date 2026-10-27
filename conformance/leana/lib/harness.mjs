@@ -7,7 +7,8 @@
 //   defect     Factoidal is wrong: `issue` (danbri/factoidal URL) required
 //   divergence Jena extends or differs from the specification: `spec` required
 //   gap        leana does not do it: `gap` (a key of GAPS) required; the failure
-//              must be a LeanaUnsupportedError of that gap
+//              must be a LeanaUnsupportedError of that gap, or, with
+//              "noThrow": true, an assertion failure (the gap gives a different answer)
 // Verdicts live in conformance/leana/verdicts/<Class>.json as
 //   { "<method>": { "verdict": "...", "issue"|"spec"|"gap": "...", "note": "..." } }
 // No skips.
@@ -47,7 +48,7 @@ export function describeJena(cls, source, body) {
       if (v) used.add(name);
       const record = () => {
         if (process.env.LEANA_RESULTS) {
-          appendFileSync(process.env.LEANA_RESULTS, JSON.stringify({ cls, source, method: name, result: v ? v.verdict : 'pass', gap: v && v.gap, issue: v && v.issue }) + '\n');
+          appendFileSync(process.env.LEANA_RESULTS, JSON.stringify({ cls, source, method: name, result: v ? v.verdict : 'pass', gap: v && v.gap, noThrow: !!(v && v.noThrow), issue: v && v.issue }) + '\n');
         }
       };
       test(name, async () => {
@@ -59,7 +60,12 @@ export function describeJena(cls, source, body) {
           assert.fail(`${cls}.${name} now passes: remove its ${v.verdict} verdict from verdicts/${cls}.json`);
         }
         if (v.verdict === 'gap') {
-          assert.ok(err instanceof LeanaUnsupportedError && err.gap === v.gap,
+          // noThrow: the gap shows as a different answer (an assertion failure), not as a
+          // LeanaUnsupportedError; for example a term-matching Model answering false where
+          // Jena's value-matching Model answers true.
+          const ok = (err instanceof LeanaUnsupportedError && err.gap === v.gap) ||
+            (v.noThrow === true && err instanceof assert.AssertionError);
+          assert.ok(ok,
             `${cls}.${name}: gap verdict '${v.gap}' but the failure is: ${err && err.stack}`);
         }
         record();

@@ -1,0 +1,52 @@
+{
+  "testAddContainLiteralByStatement": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "createTypedLiteral(210) (Java int)."
+  },
+  "testAddContainsBoolean": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "addLiteral(Resource, Property, Java boolean)."
+  },
+  "testAddContainsByte": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "addLiteral(Resource, Property, Java byte)."
+  },
+  "testAddContainsChar": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "addLiteral(Resource, Property, Java char)."
+  },
+  "testAddContainsDouble": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "addLiteral(Resource, Property, Java double)."
+  },
+  "testAddContainsFloat": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "addLiteral(Resource, Property, Java float)."
+  },
+  "testAddContainsInt": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "addLiteral(Resource, Property, Java int)."
+  },
+  "testAddContainsLong": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "addLiteral(Resource, Property, Java long)."
+  },
+  "testAddContainsShort": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "addLiteral(Resource, Property, Java short)."
+  },
+  "testEmpty": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "containsLiteral(Resource, Property, Java value)."
+  }
+}

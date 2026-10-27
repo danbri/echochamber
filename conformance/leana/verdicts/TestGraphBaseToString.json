@@ -1,0 +1,17 @@
+{
+  "testEllipsisAbsentForSmallModels": {
+    "verdict": "gap",
+    "gap": "vocabulary",
+    "note": "GraphBase.toString writes each triple with toString(pm); Jena writes the xsd:integer datatype of 's p 1' with PrefixMapping.Standard."
+  },
+  "testEllipsisPresentForLargeModels": {
+    "verdict": "gap",
+    "gap": "vocabulary",
+    "note": "GraphBase.toString writes each triple with toString(pm); Jena writes the xsd:integer datatype of 's p 1' with PrefixMapping.Standard."
+  },
+  "testStringTripleCount": {
+    "verdict": "gap",
+    "gap": "vocabulary",
+    "note": "GraphBase.toString writes each triple with toString(pm); Jena writes the xsd:integer datatype of 's p 1' with PrefixMapping.Standard."
+  }
+}

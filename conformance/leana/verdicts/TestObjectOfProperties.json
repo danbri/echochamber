@@ -1,0 +1,5 @@
+{
+  "testListObjectsOfProperty": {"verdict": "gap", "gap": "js-value-literal", "note": "setUp: Model.addLiteral(s, p, boolean), createTypedLiteral, createLiteralStatement with Java values."},
+  "testListResourcesWIthProperty": {"verdict": "gap", "gap": "js-value-literal", "note": "setUp."},
+  "testListSubjectsWithProperty": {"verdict": "gap", "gap": "js-value-literal", "note": "setUp."}
+}

@@ -1,0 +1,8 @@
+{
+  "testXSDOrder": {"verdict": "gap", "gap": "literal-value", "note": "XSDDatatype.XSDdateTime.parse (RDFDatatype.parse) and XSDDateTime.compare: the xsd:dateTime value and its order."},
+  "testJavaOrder": {"verdict": "gap", "gap": "literal-value", "note": "XSDDatatype.XSDdateTime.parse; XSDDateTime.compareTo."},
+  "testRoundTripping1": {"verdict": "gap", "gap": "js-value-literal", "note": "Model.createTypedLiteral(Calendar)."},
+  "testRoundTripping2": {"verdict": "gap", "gap": "js-value-literal", "note": "ResourceFactory.createTypedLiteral(Calendar)."},
+  "testRoundTripping3": {"verdict": "gap", "gap": "js-value-literal", "note": "ResourceFactory.createTypedLiteral(Calendar)."},
+  "testRoundTripping4": {"verdict": "gap", "gap": "js-value-literal", "note": "ResourceFactory.createTypedLiteral(Calendar)."}
+}

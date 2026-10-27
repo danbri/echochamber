@@ -17,22 +17,28 @@ installModelIO();
 
 export {
   Node, Node_URI, Node_Blank, Node_Literal, Node_Variable, Node_Triple, Node_Graph, NodeFactory, TypeMapper, Triple,
-  LiteralLabel, BaseDatatype, fromRDFJS,
+  LiteralLabel, LiteralLabelFactory, BaseDatatype, TextDirection, Util, datatypeFor, fromRDFJS, JenaParameters, XSDDateTime,
 } from './node.mjs';
-export { GraphMem, GraphMemFactory, GraphFactory, GraphUtil, ExtendedIterator, JenaSet } from './graph.mjs';
-export { PrefixMapping, PrefixMappingImpl } from './prefix.mjs';
+export { GraphMem, WrappedGraph, GraphMemFactory, GraphFactory, GraphUtil, ExtendedIterator, JenaSet,
+  GraphBase, GraphPlain, WrappedIterator, ReifierStd } from './graph.mjs';
+export { PrefixMapping, PrefixMappingImpl, IllegalPrefixException } from './prefix.mjs';
 export {
   Model, ModelFactory, ResourceFactory, Statement, RDFNode, Resource, Property, Literal,
-  StmtIterator, ResIterator, NodeIterator,
+  StmtIterator, ResIterator, NodeIterator, AnonId, StatementTerm,
 } from './model.mjs';
 export {
   Lang, LangImpl, RDFLanguages, RDFFormat, RDFParser, RDFParserBuilder, RDFWriter, RDFWriterBuilder,
-  RDFDataMgr, StringReader, StringWriter,
+  RDFDataMgr, StringReader, StringWriter, ErrorHandlerFactory, StreamManager, LocatorFile, LabelToNode,
+  FactoryRDFStd, PrefixMapFactory, RDFReaderFactoryRIOT,
 } from './riot.mjs';
+export {
+  QueryExecution, QueryExecutionFactory, QueryFactory, QuerySolutionMap, DatasetFactory, DatasetGraphFactory,
+} from './query.mjs';
 export {
   JenaException, UnsupportedOperationException, LeanaUnsupportedError, NoSuchElementException,
   ClosedException, JenaLockedException, PropertyNotFoundException, LiteralRequiredException,
   ResourceRequiredException, AddDeniedException, DeleteDeniedException, RiotException, RiotNotFoundException,
+  InvalidPropertyURIException,
 } from './errors.mjs';
 export { GAPS } from './gaps.mjs';
 export { coreVersion } from './engine.mjs';

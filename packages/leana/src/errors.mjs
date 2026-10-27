@@ -51,6 +51,7 @@ export class JenaLockedException extends JenaException {}
 export class PropertyNotFoundException extends JenaException {}
 export class LiteralRequiredException extends JenaException {}
 export class ResourceRequiredException extends JenaException {}
+export class InvalidPropertyURIException extends JenaException {}
 export class AddDeniedException extends JenaException {}
 export class DeleteDeniedException extends JenaException {}
 export class RiotException extends JenaException {}

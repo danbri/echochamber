@@ -1,0 +1,9 @@
+{
+  "testIteratorRemove": {"verdict": "gap", "gap": "js-value-literal", "note": "setUp: Model.createTypedLiteral(int)."},
+  "testListObjects": {"verdict": "gap", "gap": "js-value-literal", "note": "setUp."},
+  "testNamespaceIterator": {"verdict": "gap", "gap": "js-value-literal", "note": "setUp; then listNameSpaces / getNameSpace (iri-split)."},
+  "testObjectsOfProperty": {"verdict": "gap", "gap": "js-value-literal", "note": "setUp; then Literal.getInt (literal-value)."},
+  "testObjectsOfPropertyAndValue": {"verdict": "gap", "gap": "js-value-literal", "note": "setUp."},
+  "testResourceIterator": {"verdict": "gap", "gap": "js-value-literal", "note": "setUp."},
+  "testStatementIter": {"verdict": "gap", "gap": "js-value-literal", "note": "setUp."}
+}

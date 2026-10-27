@@ -1,0 +1,4 @@
+{
+  "testStatementReifierAnon": {"verdict": "gap", "gap": "vocabulary", "note": "Model.createReifier adds rdf:reifies (a vocabulary IRI)."},
+  "testStatementReifierResource": {"verdict": "gap", "gap": "vocabulary", "note": "Model.createReifier adds rdf:reifies (a vocabulary IRI)."}
+}

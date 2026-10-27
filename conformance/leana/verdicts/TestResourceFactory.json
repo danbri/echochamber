@@ -1,0 +1,5 @@
+{
+  "testCreateTypedLiteralObject": {"verdict": "gap", "gap": "js-value-literal", "note": "createTypedLiteral(Object): Java Integer -> xsd:int."},
+  "testCreateTypedLiteralOverload": {"verdict": "gap", "gap": "js-value-literal", "note": "createTypedLiteral(Calendar) -> xsd:dateTime."},
+  "testSetInstance": {"verdict": "gap", "gap": "echo", "note": "ResourceFactory.setInstance (pluggable factory) is not in leana."}
+}

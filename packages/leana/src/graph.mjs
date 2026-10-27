@@ -248,6 +248,34 @@ function asGraphMem(g) {
   throw new TypeError('not a Graph');
 }
 
+/** Jena WrappedGraph: every Graph method delegates to the base graph (subclass to intercept). */
+export class WrappedGraph {
+  constructor(base) { this._base = base; }
+  getWrapped() { return this._base; }
+  get dataset() { return this._base.dataset; }
+  add(s, p, o) { return this._base.add(s, p, o); }
+  performAdd(t) { this.add(t); }
+  delete(s, p, o) { return this._base.delete(s, p, o); }
+  performDelete(t) { this.delete(t); }
+  remove(s, p, o) { return this._base.remove(s, p, o); }
+  clear() { return this._base.clear(); }
+  find(s, p, o) { return this._base.find(s, p, o); }
+  stream(s, p, o) { return this._base.stream(s, p, o); }
+  contains(s, p, o) { return this._base.contains(s, p, o); }
+  size() { return this._base.size(); }
+  sizeLong() { return this._base.sizeLong(); }
+  isEmpty() { return this._base.isEmpty(); }
+  close() { return this._base.close(); }
+  isClosed() { return this._base.isClosed(); }
+  getPrefixMapping() { return this._base.getPrefixMapping(); }
+  dependsOn(other) { return other === this || this._base.dependsOn(other); }
+  isIsomorphicWith(other) { return this._base.isIsomorphicWith(other); }
+  getCapabilities() { return this._base.getCapabilities(); }
+  getEventManager() { return this._base.getEventManager(); }
+  getTransactionHandler() { return this._base.getTransactionHandler(); }
+  toString() { return this._base.toString(); }
+}
+
 export const GraphMemFactory = Object.freeze({
   /** A term-equality in-memory graph. */
   createGraphMem() { return new GraphMem(); },
@@ -279,11 +307,95 @@ export const GraphUtil = Object.freeze({
   listObjects(g, s, p) { return distinct(g.find(s ?? Node.ANY, p ?? Node.ANY, Node.ANY).toList().map((t) => t.getObject())); },
   listPredicates(g, s, o) { return distinct(g.find(s ?? Node.ANY, Node.ANY, o ?? Node.ANY).toList().map((t) => t.getPredicate())); },
   isomorphic(a, b) { return a.isIsomorphicWith(b); },
+  containsNode(g, n) {
+    return g.contains(n, Node.ANY, Node.ANY) || g.contains(Node.ANY, Node.ANY, n) || g.contains(Node.ANY, n, Node.ANY);
+  },
+  /** -1, 0 or 1 as the graph has fewer, as many or more triples than `size`, by stepping find(). */
+  compareSizeTo(g, size) {
+    const it = g.find();
+    try {
+      let steps = 0;
+      while (steps < size && it.hasNext()) { it.next(); steps++; }
+      if (steps < size) return -1;
+      return it.hasNext() ? 1 : 0;
+    } finally { it.close(); }
+  },
+});
+
+/** Jena WrappedIterator.create: an ExtendedIterator over a JavaScript iterable or iterator. */
+export const WrappedIterator = Object.freeze({
+  create(it) { return new ExtendedIterator(it instanceof ExtendedIterator ? it.toList() : [...{ [Symbol.iterator]: () => (typeof it.next === 'function' && !it[Symbol.iterator] ? it : it[Symbol.iterator]()) }]); },
+});
+
+/**
+ * Jena GraphBase: a Graph whose subclass gives graphBaseFind(Triple) and,
+ * optionally, performAdd / performDelete. Every other method is derived from
+ * those (no engine). toString shows at most TOSTRING_TRIPLE_LIMIT triples.
+ */
+export class GraphBase {
+  constructor() { this._pmBase = new PrefixMappingImpl(); this._closedBase = false; }
+  graphBaseFind(t) { throw new UnsupportedOperationException('graphBaseFind'); }
+  performAdd(t) { throw new AddDeniedException('GraphBase::performAdd'); }
+  performDelete(t) { throw new UnsupportedOperationException('GraphBase::performDelete'); }
+  add(s, p, o) { this._checkOpen(); this.performAdd(s instanceof Triple ? s : Triple.create(s, p, o)); }
+  delete(s, p, o) { this._checkOpen(); this.performDelete(s instanceof Triple ? s : Triple.create(s, p, o)); }
+  find(s, p, o) {
+    this._checkOpen();
+    if (s === undefined && p === undefined && o === undefined) return this.graphBaseFind(Triple.ANY);
+    return this.graphBaseFind(s instanceof Triple ? s : Triple.createMatch(s, p, o));
+  }
+  contains(s, p, o) {
+    const t = s instanceof Triple ? s : Triple.createMatch(s, p, o);
+    const it = this.find(t);
+    try { return it.toList().some((x) => t.matches(x)); } finally { it.close(); }
+  }
+  remove(s, p, o) { for (const t of this.find(s ?? Node.ANY, p ?? Node.ANY, o ?? Node.ANY).toList()) this.delete(t); }
+  clear() { this.remove(Node.ANY, Node.ANY, Node.ANY); }
+  size() { this._checkOpen(); return this.find(Triple.ANY).toList().length; }
+  sizeLong() { return this.size(); }
+  isEmpty() { return this.size() === 0; }
+  close() { this._closedBase = true; }
+  isClosed() { return this._closedBase; }
+  _checkOpen() { if (this._closedBase) throw new ClosedException('graph is closed'); }
+  getPrefixMapping() { return this._pmBase; }
+  dependsOn(other) { return other === this; }
+  isIsomorphicWith(other) { return asGraphMem(this).isIsomorphicWith(other); }
+  getCapabilities() { return unsupported('Graph.getCapabilities', 'echo'); }
+  getEventManager() { return unsupported('Graph.getEventManager', 'echo'); }
+  getTransactionHandler() { return unsupported('Graph.getTransactionHandler', 'echo'); }
+  toString() { return GraphBase.toStringOf(this._closedBase ? 'closed ' : '', this); }
+  static toStringOf(prefix, that) {
+    const pm = that.getPrefixMapping();
+    let b = prefix + ' {', count = 0, gap = '';
+    const it = GraphUtil.findAll(that);
+    while (it.hasNext() && count < GraphBase.TOSTRING_TRIPLE_LIMIT) {
+      b += gap; gap = '; '; count += 1;
+      b += it.next().toString(pm);
+    }
+    if (it.hasNext()) b += '...';
+    it.close();
+    return b + '}';
+  }
+}
+GraphBase.TOSTRING_TRIPLE_BASE = 10;
+GraphBase.TOSTRING_TRIPLE_LIMIT = 17;
+
+/** Jena GraphPlain.plain(g): a same-term view. leana graphs already match by term, so this is g. */
+export const GraphPlain = Object.freeze({ plain(g) { return g; } });
+
+/** Jena ReifierStd: reification writes rdf:subject, rdf:predicate, rdf:object, rdf:Statement (vocabulary IRIs). */
+export const ReifierStd = Object.freeze({
+  reifyAs() { return unsupported('ReifierStd.reifyAs', 'vocabulary'); },
+  getTriple() { return unsupported('ReifierStd.getTriple', 'vocabulary'); },
+  hasTriple() { return unsupported('ReifierStd.hasTriple', 'vocabulary'); },
+  allNodes() { return unsupported('ReifierStd.allNodes', 'vocabulary'); },
+  remove() { return unsupported('ReifierStd.remove', 'vocabulary'); },
 });
 
 function iterOf(x) {
   if (x instanceof ExtendedIterator) return x.toList();
-  if (x && typeof x.find === 'function') return x.find(Triple.ANY).toList();
+  // A Graph (not a JavaScript iterator, which also has find() in Node 22).
+  if (x && typeof x.find === 'function' && typeof x.size === 'function') return x.find(Triple.ANY).toList();
   return x;
 }
 

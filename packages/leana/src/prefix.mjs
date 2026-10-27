@@ -10,7 +10,10 @@
 // the prefix-name legality check (XML 1.1 NCName), and the Standard and
 // Extended tables (vocabulary IRIs). See GAPS.md.
 
-import { JenaLockedException, unsupported } from './errors.mjs';
+import { JenaLockedException, JenaException, unsupported } from './errors.mjs';
+
+/** Jena PrefixMapping.IllegalPrefixException. leana never throws it: it does not check prefix names (gap 'iri-split'). */
+export class IllegalPrefixException extends JenaException {}
 
 export class PrefixMappingImpl {
   constructor() {
@@ -111,6 +114,9 @@ function mapOf(other) {
 
 export const PrefixMapping = {
   Factory: Object.freeze({ create() { return new PrefixMappingImpl(); } }),
+  /** The exception classes Jena nests in PrefixMapping. */
+  IllegalPrefixException,
+  JenaLockedException,
   /** Jena PrefixMapping.Standard holds vocabulary IRIs: gap 'vocabulary'. */
   get Standard() { return unsupported('PrefixMapping.Standard', 'vocabulary'); },
   /** Jena PrefixMapping.Extended holds vocabulary IRIs: gap 'vocabulary'. */

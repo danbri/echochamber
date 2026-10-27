@@ -1,0 +1,82 @@
+{
+  "string01": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "Node.getIndexingValue of a literal; the lexical form, language, direction and datatype checks before it pass."
+  },
+  "string02": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "Node.getIndexingValue of a literal; the lexical form, language, direction and datatype checks before it pass."
+  },
+  "string03": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "Node.getIndexingValue of a literal; the lexical form, language, direction and datatype checks before it pass."
+  },
+  "string04": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "Node.getIndexingValue of a literal; the lexical form, language, direction and datatype checks before it pass."
+  },
+  "strLang01": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "Node.getIndexingValue of a literal; the lexical form, language, direction and datatype checks before it pass."
+  },
+  "strLang02": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "Node.getIndexingValue of a literal; the lexical form, language, direction and datatype checks before it pass."
+  },
+  "strLang03": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "Node.getIndexingValue of a literal; the lexical form, language, direction and datatype checks before it pass."
+  },
+  "strLang04": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "Node.getIndexingValue of a literal; the lexical form, language, direction and datatype checks before it pass."
+  },
+  "strLang05": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "Node.getIndexingValue of a literal; the lexical form, language, direction and datatype checks before it pass."
+  },
+  "strLangTag01": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "Node.getIndexingValue of a literal; the lexical form, language, direction and datatype checks before it pass."
+  },
+  "dirLangString01": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "Node.getIndexingValue of a literal; the lexical form, language, direction and datatype checks before it pass."
+  },
+  "dirLangString04": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "Node.getIndexingValue of a literal; the lexical form, language, direction and datatype checks before it pass."
+  },
+  "dirLangString10": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "Node.getIndexingValue of a literal; the lexical form, language, direction and datatype checks before it pass."
+  },
+  "strLangTag02": {
+    "verdict": "divergence",
+    "spec": "RDF 1.1 Concepts section 3.3 (language tags MAY be converted to lower case); BCP 47 section 2.1.1 (case is a formatting convention)",
+    "note": "Jena formats EN-GB as en-GB; @factoidal/core answers en-gb."
+  },
+  "strLangTag03": {
+    "verdict": "divergence",
+    "spec": "RDF 1.1 Concepts section 3.3 (language tags MAY be converted to lower case); BCP 47 section 2.1.1 (case is a formatting convention)",
+    "note": "Jena formats EN-LATN-GB as en-Latn-GB; @factoidal/core answers en-latn-gb."
+  },
+  "dirLangString11": {
+    "verdict": "defect",
+    "issue": "https://github.com/danbri/factoidal/issues/1077",
+    "note": "createLiteralLang('abc','en--LTR'): termToNQuads accepts the language string en--LTR (not a LANGTAG) and writes @en--ltr, which reads back as a directional literal; Jena throws JenaException."
+  }
+}

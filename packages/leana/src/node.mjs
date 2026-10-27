@@ -48,7 +48,9 @@ export class Node {
   getLiteralLanguage() { return this.getLiteral().language(); }
   getLiteralDatatypeURI() { return this.getLiteral().getDatatypeURI(); }
   /** A datatype object naming the IRI only (BaseDatatype); its value semantics are the engine's. */
-  getLiteralDatatype() { return new BaseDatatype(this.getLiteralDatatypeURI()); }
+  getLiteralDatatype() { return datatypeFor(this.getLiteralDatatypeURI()); }
+  /** Jena getLiteralBaseDirection: a TextDirection, or null (Node.noTextDirection). */
+  getLiteralBaseDirection() { return this.getLiteral().baseDirection(); }
   getLiteralValue() { return unsupported('Node.getLiteralValue', 'literal-value'); }
   /** Jena: the node itself for URIs and blank nodes; for a literal, a value key (engine op needed). */
   getIndexingValue() {
@@ -139,7 +141,9 @@ export class LiteralLabel {
   getValue() { return unsupported('LiteralLabel.getValue', 'literal-value'); }
   getIndexingValue() { return unsupported('LiteralLabel.getIndexingValue', 'value-matching'); }
   isWellFormed() { return unsupported('LiteralLabel.isWellFormed', 'literal-value'); }
-  getDatatype() { return new BaseDatatype(this.getDatatypeURI()); }
+  getDatatype() { return datatypeFor(this.getDatatypeURI()); }
+  /** The base direction (RDF 1.2): a TextDirection, or null. */
+  baseDirection() { return TextDirection.of(this._term.direction || ''); }
   sameValueAs(other) { return unsupported('LiteralLabel.sameValueAs', 'value-matching'); }
   equals(other) { return other instanceof LiteralLabel && termToNQuads(other._term) === termToNQuads(this._term); }
   hashCode() { return termToNQuads(this._term); }
@@ -216,6 +220,35 @@ export class Node_Graph extends Node {
 
 Node.ANY = new Node_ANY();
 Object.freeze(Node.ANY);
+/** Jena Node.noTextDirection and Node.noLangTag. */
+Node.noTextDirection = null;
+Node.noLangTag = '';
+
+/** Jena TextDirection (RDF 1.2 base direction): LTR and RTL. */
+export class TextDirection {
+  constructor(d) { this._d = d; Object.freeze(this); }
+  direction() { return this._d; }
+  /** The TextDirection of an engine direction string; null for ''. */
+  static of(d) {
+    if (d === '') return null;
+    if (d === 'ltr') return TextDirection.LTR;
+    if (d === 'rtl') return TextDirection.RTL;
+    return new TextDirection(d);
+  }
+  equals(o) { return o instanceof TextDirection && o._d === this._d; }
+  toString() { return this._d; }
+}
+TextDirection.LTR = new TextDirection('ltr');
+TextDirection.RTL = new TextDirection('rtl');
+
+const DATATYPES = new Map();
+/** The one BaseDatatype object of an IRI (Jena datatypes are singletons). */
+export function datatypeFor(uri) {
+  const k = String(uri);
+  let dt = DATATYPES.get(k);
+  if (!dt) { dt = new BaseDatatype(k); DATATYPES.set(k, dt); }
+  return dt;
+}
 
 /** A datatype named by IRI. Only the IRI: the datatype's semantics are the engine's. */
 export class BaseDatatype {
@@ -226,6 +259,9 @@ export class BaseDatatype {
   unparse(v) { return unsupported('RDFDatatype.unparse', 'literal-value'); }
   getJavaClass() { return unsupported('RDFDatatype.getJavaClass', 'js-value-literal'); }
   isEqual(a, b) { return unsupported('RDFDatatype.isEqual', 'value-matching'); }
+  isValidLiteral(ll) { return unsupported('RDFDatatype.isValidLiteral', 'literal-value'); }
+  isValidValue(v) { return unsupported('RDFDatatype.isValidValue', 'js-value-literal'); }
+  cannonicalise(v) { return unsupported('RDFDatatype.cannonicalise', 'literal-value'); }
   equals(o) { return o instanceof BaseDatatype && o._uri === this._uri; }
   toString() { return 'Datatype[' + this._uri + ']'; }
 }
@@ -250,13 +286,26 @@ export function fromRDFJS(t) {
 
 /** Jena TypeMapper: by IRI only. Choosing a datatype for a value needs an engine table. */
 const TYPE_MAPPER = Object.freeze({
-  getSafeTypeByName(uri) { return new BaseDatatype(uri); },
-  getTypeByName(uri) { return new BaseDatatype(uri); },
+  getSafeTypeByName(uri) { return datatypeFor(uri); },
+  getTypeByName(uri) { return datatypeFor(uri); },
   getTypeByValue(v) { return unsupported('TypeMapper.getTypeByValue', 'js-value-literal'); },
   getTypeByClass(c) { return unsupported('TypeMapper.getTypeByClass', 'js-value-literal'); },
   registerDatatype() { return unsupported('TypeMapper.registerDatatype', 'literal-value'); },
 });
 export const TypeMapper = Object.freeze({ getInstance() { return TYPE_MAPPER; } });
+
+/**
+ * Jena org.apache.jena.rdf.model.impl.Util string-literal tests. They read the
+ * term's components (datatype IRI as answered by @factoidal/core, language,
+ * direction); no RDF semantics.
+ */
+export const Util = Object.freeze({
+  isSimpleString(n) { return n.isLiteral() && n.getLiteralDatatypeURI() === XSD_STRING; },
+  isLangString(n) { return n.isLiteral() && n.getLiteralDatatypeURI() === RDF_LANGSTRING; },
+  isDirLangString(n) { return n.isLiteral() && n.getLiteralLanguage() !== '' && n.getLiteralBaseDirection() !== null; },
+  hasLang(n) { return n.isLiteral() && n.getLiteralLanguage() !== ''; },
+  hasDirection(n) { return n.isLiteral() && n.getLiteralBaseDirection() !== null; },
+});
 
 export const NodeFactory = Object.freeze({
   createURI(uri) {
@@ -269,23 +318,42 @@ export const NodeFactory = Object.freeze({
   },
   createVariable(name) { return new Node_Variable(name); },
   createLiteralString(lex) {
-    if (lex === null || lex === undefined) throw new JenaException('null lexical form');
+    if (lex === null || lex === undefined) throw new TypeError('null lexical form');
     return new Node_Literal(df.literal(String(lex)));
   },
-  /** Jena 4 createLiteral(String): a string literal. */
-  createLiteral(lex, langOrDt) {
+  /**
+   * Jena 4 createLiteral(String): a string literal. Jena 5
+   * createLiteral(lex, lang, dir, dtype): the four-argument form.
+   */
+  createLiteral(lex, langOrDt, dir, dtype) {
+    if (lex instanceof LiteralLabel) return new Node_Literal(lex._term);
+    if (arguments.length >= 3) {
+      if (langOrDt) return NodeFactory.createLiteralDirLang(lex, langOrDt, dir);
+      if (dtype !== undefined && dtype !== null) return NodeFactory.createLiteralDT(lex, dtype);
+      return NodeFactory.createLiteralString(lex);
+    }
     if (langOrDt === undefined || langOrDt === null || langOrDt === '') return NodeFactory.createLiteralString(lex);
     if (typeof langOrDt === 'string') return NodeFactory.createLiteralLang(lex, langOrDt);
     return NodeFactory.createLiteralDT(lex, langOrDt);
   },
   createLiteralLang(lex, lang) {
-    if (lex === null || lex === undefined) throw new JenaException('null lexical form');
+    if (lex === null || lex === undefined) throw new TypeError('null lexical form');
     if (lang === null || lang === undefined || lang === '') return NodeFactory.createLiteralString(lex);
     // The engine decides the form of the language tag (case).
     return new Node_Literal(engineObjectTerm(df.literal(String(lex), String(lang))));
   },
+  /**
+   * createLiteralDirLang(lex, lang, dir): dir is 'ltr', 'rtl', a TextDirection,
+   * or null/'' (no direction). The engine decides whether the term is well formed.
+   */
+  createLiteralDirLang(lex, lang, dir) {
+    if (lex === null || lex === undefined) throw new TypeError('null lexical form');
+    const d = dir instanceof TextDirection ? dir.direction() : (dir ?? '');
+    if (d === '') return NodeFactory.createLiteralLang(lex, lang);
+    return new Node_Literal(engineObjectTerm(df.literal(String(lex), { language: String(lang ?? ''), direction: String(d) })));
+  },
   createLiteralDT(lex, dtype) {
-    if (lex === null || lex === undefined) throw new JenaException('null lexical form');
+    if (lex === null || lex === undefined) throw new TypeError('null lexical form');
     if (dtype === null || dtype === undefined) return NodeFactory.createLiteralString(lex);
     return new Node_Literal(df.literal(String(lex), df.namedNode(datatypeIri(dtype))));
   },
@@ -297,7 +365,7 @@ export const NodeFactory = Object.freeze({
   /** Jena 4 name of createTripleTerm. */
   createTripleNode(s, p, o) { return NodeFactory.createTripleTerm(s, p, o); },
   /** A datatype object for an IRI (the IRI only; see BaseDatatype). */
-  getType(uri) { return new BaseDatatype(uri); },
+  getType(uri) { return datatypeFor(uri); },
 });
 
 export class Triple {
@@ -330,12 +398,56 @@ export class Triple {
   hashKey() { return this._s.hashKey() + ' ' + this._p.hashKey() + ' ' + this._o.hashKey(); }
   hashCode() { return this.hashKey(); }
   equals(other) { return other instanceof Triple && other.hashKey() === this.hashKey(); }
+  /**
+   * toString() writes <uri>. toString(pm) is Jena's: a URI as pm.shortForm(uri)
+   * (string bookkeeping); a literal with a datatype other than xsd:string is
+   * written by Jena with PrefixMapping.Standard (gap 'vocabulary').
+   */
   toString(pm) {
-    if (pm) return unsupported('Triple.toString(PrefixMapping)', 'iri-split');
+    if (pm) return tripleNodeStringPM(pm, this._s) + ' ' + tripleNodeStringPM(pm, this._p) + ' ' + tripleNodeStringPM(pm, this._o);
     return tripleNodeString(this._s) + ' ' + tripleNodeString(this._p) + ' ' + tripleNodeString(this._o);
   }
 }
 Triple.ANY = new Triple(Node.ANY, Node.ANY, Node.ANY);
+
+function tripleNodeStringPM(pm, n) {
+  if (n.isURI()) return pm.shortForm(n.getURI());
+  if (n.isBlank()) return '_:' + n.getBlankNodeLabel();
+  if (n.isLiteral()) {
+    const lang = n.getLiteralLanguage();
+    if (!lang && n.getLiteralDatatypeURI() !== XSD_STRING) {
+      return unsupported('Triple.toString(PrefixMapping) (datatype written with PrefixMapping.Standard)', 'vocabulary');
+    }
+    // The quoted, escaped lexical form is the engine's (termToNQuads of the plain string).
+    const quoted = engineCall(() => termToNQuads(df.literal(n.getLiteralLexicalForm())));
+    return lang ? quoted + '@' + lang : quoted;
+  }
+  return n.toString();
+}
+
+/** Jena Triple.Field: getField, filterOn, filterOnConcrete. Jena's object field compares by value (sameValueAs). */
+class TripleField {
+  constructor(get, valueBased) { this._get = get; this._value = valueBased; Object.freeze(this); }
+  getField(t) { return this._get(t); }
+  filterOnConcrete(n) {
+    if (this._value) return unsupported('Triple.Field.fieldObject.filterOnConcrete (sameValueAs)', 'value-matching');
+    const pred = (x) => n.equals(this._get(x));
+    pred.test = pred;
+    return pred;
+  }
+  filterOn(n) {
+    if (n instanceof Triple) return this.filterOn(this._get(n));
+    if (!n.isConcrete()) { const any = () => true; any.test = any; return any; }
+    if (this._value) return unsupported('Triple.Field.fieldObject.filterOn (sameValueAs)', 'value-matching');
+    return this.filterOnConcrete(n);
+  }
+}
+Triple.Field = Object.freeze({
+  fieldSubject: new TripleField((t) => t.getSubject(), false),
+  fieldPredicate: new TripleField((t) => t.getPredicate(), false),
+  fieldObject: new TripleField((t) => t.getObject(), true),
+  [Symbol.hasInstance]: (x) => x instanceof TripleField,
+});
 
 function anyToNull(n) { return n === Node.ANY ? null : n; }
 
@@ -345,3 +457,36 @@ function tripleNodeString(n) {
 }
 
 export { XSD_STRING, RDF_LANGSTRING };
+
+/**
+ * Jena LiteralLabelFactory. A LiteralLabel is that of a literal Node made by
+ * NodeFactory; making one from a Java/JavaScript value needs an engine table.
+ */
+export const LiteralLabelFactory = Object.freeze({
+  createString(lex) { return NodeFactory.createLiteralString(lex).getLiteral(); },
+  createLang(lex, lang) { return NodeFactory.createLiteralLang(lex, lang).getLiteral(); },
+  createDirLang(lex, lang, dir) { return NodeFactory.createLiteralDirLang(lex, lang, dir).getLiteral(); },
+  create(lex, dtype) { return NodeFactory.createLiteralDT(lex, dtype).getLiteral(); },
+  createByValue(value, dtype) { return unsupported('LiteralLabelFactory.createByValue', 'js-value-literal'); },
+  createTypedLiteral(value) { return unsupported('LiteralLabelFactory.createTypedLiteral(value)', 'js-value-literal'); },
+});
+
+/**
+ * Jena JenaParameters (global flags). leana never validates literals itself:
+ * it behaves as enableEagerLiteralValidation = false and
+ * enableSilentAcceptanceOfUnknownDatatypes = true. Asking for the other
+ * behaviour needs the engine's datatype checks.
+ */
+const FLAGS = { enableEagerLiteralValidation: false, enableSilentAcceptanceOfUnknownDatatypes: true };
+export const JenaParameters = Object.freeze(Object.defineProperties({}, Object.fromEntries(
+  Object.keys(FLAGS).map((k) => [k, {
+    enumerable: true,
+    get() { return FLAGS[k]; },
+    set(v) { if (v !== FLAGS[k]) unsupported('JenaParameters.' + k + ' = ' + v, 'literal-value'); },
+  }]),
+)));
+
+/** Jena XSDDateTime (a value of the XSD date/time types): made from a Calendar/Date value. */
+export class XSDDateTime {
+  constructor() { unsupported('new XSDDateTime(Calendar)', 'js-value-literal'); }
+}

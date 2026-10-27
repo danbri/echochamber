@@ -1,0 +1,47 @@
+{
+  "testCreateStatementByteMax": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "createLiteralStatement(byte); then the Statement value accessor (literal-value)."
+  },
+  "testCreateStatementChar": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "createLiteralStatement(char); then the Statement value accessor (literal-value)."
+  },
+  "testCreateStatementDouble": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "createTypedLiteral(double); then the Statement value accessor (literal-value)."
+  },
+  "testCreateStatementFactory": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "createLiteralStatement(Object); then the Statement value accessor (literal-value)."
+  },
+  "testCreateStatementFloat": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "createTypedLiteral(float); then the Statement value accessor (literal-value)."
+  },
+  "testCreateStatementIntMax": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "createLiteralStatement(int); then the Statement value accessor (literal-value)."
+  },
+  "testCreateStatementLongMax": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "createLiteralStatement(long); then the Statement value accessor (literal-value)."
+  },
+  "testCreateStatementShortMax": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "createLiteralStatement(short); then the Statement value accessor (literal-value)."
+  },
+  "testCreateStatementTrue": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "createLiteralStatement(boolean); then the Statement value accessor (literal-value)."
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "testAddTypedPropertyBoolean": {"verdict": "gap", "gap": "js-value-literal", "note": "Resource.addLiteral(p, boolean); Model.createTypedLiteral(boolean)."},
+  "testAddTypedPropertyChar": {"verdict": "gap", "gap": "js-value-literal", "note": "Java char: no JS value carries it."},
+  "testAddTypedPropertyDouble": {"verdict": "gap", "gap": "js-value-literal", "note": "Java double."},
+  "testAddTypedPropertyFloat": {"verdict": "gap", "gap": "js-value-literal", "note": "Java float."},
+  "testAddTypedPropertyLong": {"verdict": "gap", "gap": "js-value-literal", "note": "Java long."},
+  "testAddTypedPropertyObject": {"verdict": "gap", "gap": "js-value-literal", "note": "Java Object (Jena invents an ad hoc datatype)."},
+  "testGetLocalNameReturnsLocalName": {"verdict": "gap", "gap": "iri-split", "note": "Resource.getLocalName."},
+  "testHasTypedPropertyBoolean": {"verdict": "gap", "gap": "js-value-literal"},
+  "testHasTypedPropertyChar": {"verdict": "gap", "gap": "js-value-literal"},
+  "testHasTypedPropertyDouble": {"verdict": "gap", "gap": "js-value-literal"},
+  "testHasTypedPropertyFloat": {"verdict": "gap", "gap": "js-value-literal"},
+  "testHasTypedPropertyInt": {"verdict": "gap", "gap": "js-value-literal"},
+  "testHasTypedPropertyLong": {"verdict": "gap", "gap": "js-value-literal"},
+  "testHasTypedPropertyObject": {"verdict": "gap", "gap": "js-value-literal"},
+  "testNameSpace": {"verdict": "gap", "gap": "iri-split", "note": "Resource.getNameSpace."}
+}

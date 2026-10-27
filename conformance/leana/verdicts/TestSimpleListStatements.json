@@ -1,0 +1,12 @@
+{
+  "testAll": {"verdict": "gap", "gap": "js-value-literal", "note": "setUp: Resource.addLiteral(p, boolean / char / long / float / double)."},
+  "testAllString": {"verdict": "gap", "gap": "js-value-literal", "note": "setUp."},
+  "testBoolean": {"verdict": "gap", "gap": "js-value-literal", "note": "setUp; then Model.listLiteralStatements(boolean)."},
+  "testChar": {"verdict": "gap", "gap": "js-value-literal", "note": "setUp."},
+  "testDouble": {"verdict": "gap", "gap": "js-value-literal", "note": "setUp."},
+  "testFloat": {"verdict": "gap", "gap": "js-value-literal", "note": "setUp."},
+  "testLangString": {"verdict": "gap", "gap": "js-value-literal", "note": "setUp."},
+  "testListStatementsSPO": {"verdict": "gap", "gap": "js-value-literal", "note": "setUp."},
+  "testLong": {"verdict": "gap", "gap": "js-value-literal", "note": "setUp."},
+  "testString": {"verdict": "gap", "gap": "js-value-literal", "note": "setUp."}
+}

@@ -1,0 +1,12 @@
+{
+  "testFilterObject": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "Jena's Triple.Field.fieldObject filters with Node.sameValueAs."
+  },
+  "testFilterOnConcreteObject": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "Jena's Triple.Field.fieldObject filters with Node.sameValueAs."
+  }
+}

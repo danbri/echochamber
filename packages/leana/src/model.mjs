@@ -12,11 +12,23 @@ import { GraphMem, ExtendedIterator, JenaSet } from './graph.mjs';
 import { XSD_STRING } from '@factoidal/core/rdfjs';
 import {
   JenaException, PropertyNotFoundException, LiteralRequiredException, ResourceRequiredException,
-  ClosedException, unsupported,
+  ClosedException, UnsupportedOperationException, InvalidPropertyURIException, unsupported,
 } from './errors.mjs';
 
 // ---------------------------------------------------------------------------
 // RDFNode, Resource, Property, Literal
+
+/** Jena AnonId: the label of a blank node. */
+export class AnonId {
+  constructor(label) { this._label = label === undefined ? NodeFactory.createBlankNode().getBlankNodeLabel() : String(label); Object.freeze(this); }
+  /** Jena AnonId.create() (a fresh label from the engine's DataFactory) | AnonId.create(label). */
+  static create(label) { return new AnonId(label); }
+  getLabelString() { return this._label; }
+  hashKey() { return 'A' + this._label; }
+  hashCode() { return this.hashKey(); }
+  equals(o) { return o instanceof AnonId && o._label === this._label; }
+  toString() { return this._label; }
+}
 
 export class RDFNode {
   constructor(node, model) {
@@ -29,8 +41,15 @@ export class RDFNode {
   isAnon() { return this._node.isBlank(); }
   isLiteral() { return this._node.isLiteral(); }
   isURIResource() { return this._node.isURI(); }
-  isResource() { return this._node.isURI() || this._node.isBlank() || this._node.isTripleTerm(); }
+  /** Jena EnhNode.isResource: a URI or a blank node (a triple term is a StatementTerm, not a Resource). */
+  isResource() { return this._node.isURI() || this._node.isBlank(); }
   isStmtResource() { return this._node.isTripleTerm(); }
+  /** Jena RDFNode.isStatementTerm / asStatementTerm (a triple term). */
+  isStatementTerm() { return this._node.isTripleTerm(); }
+  asStatementTerm() {
+    if (!this._node.isTripleTerm()) throw new ResourceRequiredException('not a statement term: ' + this._node);
+    return this;
+  }
   asResource() { throw new ResourceRequiredException(String(this._node)); }
   asLiteral() { throw new LiteralRequiredException(String(this._node)); }
   inModel(m) { return wrapNode(this._node, m); }
@@ -38,9 +57,50 @@ export class RDFNode {
   hashCode() { return this.hashKey(); }
   /** Jena: two RDFNodes are equal when their Nodes are equal (the model is not compared). */
   equals(o) { return o instanceof RDFNode && o._node.equals(this._node); }
-  as(cls) { return unsupported('RDFNode.as', 'echo'); }
-  canAs(cls) { return unsupported('RDFNode.canAs', 'echo'); }
-  visitWith(v) { return unsupported('RDFNode.visitWith', 'echo'); }
+  /**
+   * Jena as(Class): the view of this node as Resource, Property, Literal, StatementTerm or
+   * RDFNode (API shape: a wrapper choice by node kind). Other classes (Bag, Seq, OntClass ...) are not in leana.
+   */
+  as(cls) {
+    if (cls === RDFNode) return this;
+    if (cls === Literal) {
+      if (!this._node.isLiteral()) throw new LiteralRequiredException(String(this._node));
+      return this instanceof Literal ? this : new Literal(this._node, this._model);
+    }
+    if (cls === Property) {
+      if (!this._node.isURI()) throw new ResourceRequiredException(String(this._node));
+      return this instanceof Property ? this : new Property(this._node, this._model);
+    }
+    if (cls === Resource) {
+      if (!(this._node.isURI() || this._node.isBlank())) throw new ResourceRequiredException(String(this._node));
+      return this instanceof Resource ? this : new Resource(this._node, this._model);
+    }
+    if (cls === StatementTerm) {
+      if (!this._node.isTripleTerm()) throw new ResourceRequiredException('not a statement term: ' + this._node);
+      return this instanceof StatementTerm ? this : new StatementTerm(this._node, this._model);
+    }
+    return unsupported('RDFNode.as(' + (cls && cls.name) + ')', 'echo');
+  }
+  canAs(cls) {
+    if (cls === RDFNode) return true;
+    if (cls === Literal) return this._node.isLiteral();
+    if (cls === Property) return this._node.isURI();
+    if (cls === Resource) return this._node.isURI() || this._node.isBlank();
+    if (cls === StatementTerm) return this._node.isTripleTerm();
+    return unsupported('RDFNode.canAs(' + (cls && cls.name) + ')', 'echo');
+  }
+  /** Jena RDFVisitor dispatch: visitBlank(r, id), visitURI(r, uri), visitLiteral(l), visitStmt(st, statement). */
+  visitWith(v) {
+    const n = this._node;
+    if (n.isBlank()) return v.visitBlank(this, new AnonId(n.getBlankNodeLabel()));
+    if (n.isURI()) return v.visitURI(this, n.getURI());
+    if (n.isLiteral()) return v.visitLiteral(this);
+    if (n.isTripleTerm()) {
+      const st = statementOfTriple(n.getTriple(), this._model);
+      return typeof v.visitStmt === 'function' ? v.visitStmt(this, st) : st;
+    }
+    throw new JenaException('no visit for ' + n);
+  }
   toString() { return String(this._node); }
 }
 
@@ -52,14 +112,20 @@ export class Resource extends RDFNode {
   asResource() { return this; }
   getURI() { return this._node.isURI() ? this._node.getURI() : null; }
   hasURI(uri) { return this._node.isURI() && this._node.getURI() === uri; }
-  /** Jena returns an AnonId; leana answers an object with the label. */
-  getId() {
-    const label = this._node.getBlankNodeLabel();
-    return { getLabelString: () => label, toString: () => label, equals: (o) => !!o && o.getLabelString && o.getLabelString() === label };
+  /** Jena AnonId of a blank node. */
+  getId() { return new AnonId(this._node.getBlankNodeLabel()); }
+  /** Jena: null for a resource that is not a URI; a URI needs an IRI split (gap). */
+  getLocalName() {
+    if (!this._node.isURI()) return null;
+    return unsupported('Resource.getLocalName', 'iri-split');
   }
-  getLocalName() { return unsupported('Resource.getLocalName', 'iri-split'); }
-  getNameSpace() { return unsupported('Resource.getNameSpace', 'iri-split'); }
+  getNameSpace() {
+    if (!this._node.isURI()) return null;
+    return unsupported('Resource.getNameSpace', 'iri-split');
+  }
   getStmtTerm() { return statementOfTriple(this._node.getTriple(), this._model); }
+  /** Jena StatementTerm.getStatement (a triple-term resource). */
+  getStatement() { return this.getStmtTerm(); }
   _m() {
     if (!this._model) throw new JenaException('resource is not in a model: ' + this);
     return this._model;
@@ -82,16 +148,27 @@ export class Resource extends RDFNode {
     if (value instanceof Literal) return this._m().contains(this, p, value);
     return unsupported('Resource.hasLiteral(Property, value)', 'js-value-literal');
   }
+  /** getProperty(p) | getProperty(p, lang): Jena listProperties(p, lang), first statement or null. */
   getProperty(p, lang) {
-    if (lang !== undefined) return unsupported('Resource.getProperty(Property, lang)', 'echo');
-    return this._m().getProperty(this, p);
+    if (lang === undefined) return this._m().getProperty(this, p);
+    const it = this.listProperties(p, lang);
+    return it.hasNext() ? it.next() : null;
   }
-  getRequiredProperty(p) { return this._m().getRequiredProperty(this, p); }
+  getRequiredProperty(p, lang) {
+    if (lang === undefined) return this._m().getRequiredProperty(this, p);
+    const st = this.getProperty(p, lang);
+    if (st === null) throw new PropertyNotFoundException(String(p));
+    return st;
+  }
   getPropertyResourceValue(p) {
     for (const s of this._m().listStatements(this, p, null).toList()) if (s.getObject().isResource()) return s.getResource();
     return null;
   }
-  listProperties(p) { return this._m().listStatements(this, p ?? null, null); }
+  /** listProperties() | listProperties(p) | listProperties(p, lang) (Jena: listStatements(this, p, null, lang)). */
+  listProperties(p, lang) {
+    if (lang !== undefined) return this._m().listStatements(this, p ?? null, null, lang);
+    return this._m().listStatements(this, p ?? null, null);
+  }
   removeAll(p) { this._m().removeAll(this, p ?? null, null); return this; }
   removeProperties() { return this.removeAll(null); }
   abort() { return this; }
@@ -139,9 +216,25 @@ export class Literal extends RDFNode {
   }
 }
 
+/** Jena StatementTerm: an RDF 1.2 triple term as an RDFNode (not a Resource: isResource() is false). */
+export class StatementTerm extends RDFNode {
+  constructor(node, model) {
+    super(node, model);
+    if (!node.isTripleTerm()) throw new JenaException('a statement term needs a triple term: ' + node);
+  }
+  getStatement() { return statementOfTriple(this._node.getTriple(), this._model); }
+  asStatementTerm() { return this; }
+  inModel(m) { return m === this._model ? this : new StatementTerm(this._node, m); }
+  toString() {
+    const st = this.getStatement();
+    return '<<( ' + st.getSubject() + ' ' + st.getPredicate() + ' ' + st.getObject() + ' )>>';
+  }
+}
+
 export function wrapNode(node, model) {
   if (node.isLiteral()) return new Literal(node, model);
-  if (node.isURI() || node.isBlank() || node.isTripleTerm()) return new Resource(node, model);
+  if (node.isTripleTerm()) return new StatementTerm(node, model);
+  if (node.isURI() || node.isBlank()) return new Resource(node, model);
   throw new JenaException('no RDFNode for ' + node);
 }
 
@@ -268,6 +361,7 @@ export class Model {
   }
   getResource(uri) { return new Resource(NodeFactory.createURI(uri), this); }
   createProperty(ns, local) {
+    if (ns === null || ns === undefined) throw new InvalidPropertyURIException('null property URI');
     return new Property(NodeFactory.createURI(local === undefined ? ns : ns + local), this);
   }
   createLiteral(lex, langOrXml) {
@@ -279,6 +373,8 @@ export class Model {
   }
   /** createTypedLiteral(lexicalForm, datatypeIRI | RDFDatatype); a JavaScript value needs an engine table. */
   createTypedLiteral(v, dt) {
+    // Jena createTypedLiteral(lex, (RDFDatatype) null): no datatype given, a plain (xsd:string) literal.
+    if (dt === null && typeof v === 'string') return new Literal(NodeFactory.createLiteralString(v), this);
     if (dt === undefined || dt === null) return unsupported('Model.createTypedLiteral(value)', 'js-value-literal');
     if (typeof v !== 'string') return unsupported('Model.createTypedLiteral(value, datatype)', 'js-value-literal');
     return new Literal(NodeFactory.createLiteralDT(v, dt), this);
@@ -287,8 +383,8 @@ export class Model {
     return new Statement(s.inModel(this), toProperty(p).inModel(this), this._object(o, lang), this);
   }
   createTripleTerm(s, p, o) {
-    if (s instanceof Statement) return new Resource(NodeFactory.createTripleTerm(s.asTriple()), this);
-    return new Resource(NodeFactory.createTripleTerm(s.asNode(), p.asNode(), o.asNode()), this);
+    if (s instanceof Statement) return new StatementTerm(NodeFactory.createTripleTerm(s.asTriple()), this);
+    return new StatementTerm(NodeFactory.createTripleTerm(s.asNode(), p.asNode(), o.asNode()), this);
   }
   createList() { return unsupported('Model.createList', 'collections'); }
   createBag() { return unsupported('Model.createBag', 'collections'); }
@@ -298,7 +394,20 @@ export class Model {
   getSeq() { return unsupported('Model.getSeq', 'collections'); }
   getAlt() { return unsupported('Model.getAlt', 'collections'); }
   getList() { return unsupported('Model.getList', 'collections'); }
-  wrapAsResource(n) { return new Resource(n, this); }
+  /** Jena: UnsupportedOperationException for a literal node. */
+  wrapAsResource(n) {
+    if (n.isLiteral()) throw new UnsupportedOperationException('cannot wrap a literal as a Resource: ' + n);
+    return new Resource(n, this);
+  }
+  /** Jena createStatementTerm(Statement): a triple-term resource; the model is not changed. */
+  createStatementTerm(st) { return new StatementTerm(NodeFactory.createTripleTerm(st.asTriple()), this); }
+  /** Jena createReifier: adds (r, rdf:reifies, <<( s p o )>>); rdf:reifies is a vocabulary IRI. */
+  createReifier() { return unsupported('Model.createReifier', 'vocabulary'); }
+  /** Jena createLiteralStatement(s, p, value): the datatype of a JavaScript value needs an engine table. */
+  createLiteralStatement(s, p, v) {
+    if (v instanceof Literal) return this.createStatement(s, p, v);
+    return unsupported('Model.createLiteralStatement(Resource, Property, value)', 'js-value-literal');
+  }
   asRDFNode(n) { return wrapNode(n, this); }
   asStatement(t) { return statementOfTriple(t, this); }
   getRDFNode(n) { return wrapNode(n, this); }
@@ -364,7 +473,8 @@ export class Model {
   contains(s, p, o, lang) {
     this._check();
     if (s instanceof Statement && p === undefined) return this._g.contains(s.asTriple());
-    if (o === undefined) return this._g.contains(nodeOrAny(s), nodeOrAny(p), Node.ANY);
+    // Jena ModelCom: contains(s, p) is contains(s, p, null).
+    if (o === undefined) return this.contains(s, p, null);
     const on = o === null ? Node.ANY : this._object(o, lang).asNode();
     return this._g.contains(nodeOrAny(s), nodeOrAny(p), on);
   }
@@ -394,6 +504,17 @@ export class Model {
   listStatements(s, p, o, lang) {
     this._check();
     if (s !== undefined && s !== null && !(s instanceof RDFNode)) return unsupported('Model.listStatements(Selector)', 'echo');
+    if (arguments.length >= 4 && (o === null || typeof o === 'string') && !(lang instanceof BaseDatatype)) {
+      // Jena listStatements(S, P, String O, String L): O and L given: that literal;
+      // only O: literal objects with lexical form O; only L: literal objects with
+      // language L ("" = none); neither: every literal object. Components only.
+      if (o !== null && lang !== null && lang !== undefined) return this.listStatements(s, p, this.createLiteral(o, lang));
+      const all = this.listStatements(s, p, null).toList().filter((st) => st.getObject().isLiteral());
+      const keep = o !== null
+        ? all.filter((st) => st.getObject().getString() === o)
+        : (lang === null || lang === undefined ? all : all.filter((st) => st.getObject().getLanguage() === lang));
+      return new StmtIterator(keep, (st) => this.remove(st));
+    }
     let on = Node.ANY;
     if (o !== undefined && o !== null) on = this._object(o, lang).asNode();
     const ts = this._g.find(nodeOrAny(s), nodeOrAny(p), on).toList();
@@ -405,8 +526,10 @@ export class Model {
   listObjects() {
     return new NodeIterator(distinctBy(this._g.find().toList().map((t) => wrapNode(t.getObject(), this))));
   }
+  /** listSubjectsWithProperty(p) | (p, RDFNode) | (p, string) | (p, string, lang): exact object terms. */
   listSubjectsWithProperty(p, o, lang) {
-    const sts = this.listStatements(null, p, o ?? null, lang).toList();
+    const obj = (lang !== undefined && typeof o === 'string') ? this.createLiteral(o, lang) : (o ?? null);
+    const sts = this.listStatements(null, p, obj).toList();
     return new ResIterator(distinctBy(sts.map((st) => st.getSubject())));
   }
   /** Jena: listResourcesWithProperty(p[, o]) is listSubjectsWithProperty. */
@@ -416,9 +539,19 @@ export class Model {
     return new NodeIterator(distinctBy(sts.map((st) => st.getObject())));
   }
   listNameSpaces() { return unsupported('Model.listNameSpaces', 'iri-split'); }
+  /** Jena listLiteralStatements(S, P, value): createTypedLiteral(value) needs an engine datatype table. */
+  listLiteralStatements(s, p, v) {
+    if (v instanceof Literal) return this.listStatements(s, p, v);
+    return unsupported('Model.listLiteralStatements(Resource, Property, value)', 'js-value-literal');
+  }
+  /** getProperty(uri) | getProperty(ns, local) | getProperty(s, p) | getProperty(s, p, lang). */
   getProperty(s, p, lang) {
     if (p === undefined) return this.createProperty(s);
-    if (lang !== undefined) return unsupported('Model.getProperty(Resource, Property, lang)', 'echo');
+    if (typeof s === 'string' && typeof p === 'string') return this.createProperty(s, p);
+    if (lang !== undefined) {
+      const itl = this.listStatements(s, p, null, lang);
+      return itl.hasNext() ? itl.next() : null;
+    }
     const it = this.listStatements(s, p, null);
     return it.hasNext() ? it.next() : null;
   }
@@ -490,6 +623,8 @@ export const ModelFactory = Object.freeze({
   /** A term-equality model (Jena's default model is value-based: GAPS.md 'value-matching'). */
   createDefaultModel,
   createModelForGraph(g) { return new Model(g); },
+  /** Jena: a value-matching model. Needs an engine op. */
+  createModelSameValue() { return unsupported('ModelFactory.createModelSameValue', 'value-matching'); },
   createMemModelMaker() { return unsupported('ModelFactory.createMemModelMaker', 'echo'); },
   createUnion() { return unsupported('ModelFactory.createUnion', 'echo'); },
   createRDFSModel() { return unsupported('ModelFactory.createRDFSModel (stage 3)', 'echo'); },
@@ -510,5 +645,8 @@ export const ResourceFactory = Object.freeze({
     return new Literal(NodeFactory.createLiteralDT(v, dt), null);
   },
   createStatement(s, p, o) { return new Statement(s, toProperty(p), o, null); },
-  createStatementTerm(st) { return new Resource(NodeFactory.createTripleTerm(st.asTriple()), null); },
+  createStatementTerm(st) { return new StatementTerm(NodeFactory.createTripleTerm(st.asTriple()), null); },
+  /** Jena ResourceFactory.getInstance(): this factory. setInstance (a pluggable factory) is not in leana. */
+  getInstance() { return ResourceFactory; },
+  setInstance() { return unsupported('ResourceFactory.setInstance', 'echo'); },
 });

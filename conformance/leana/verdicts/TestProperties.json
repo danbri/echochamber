@@ -1,0 +1,5 @@
+{
+  "testNonOrdinalRDFURIs": {"verdict": "gap", "gap": "vocabulary", "note": "Property.getOrdinal (rdf:_n container membership properties)."},
+  "testNonRDFElementURIsHaveOrdinal0": {"verdict": "gap", "gap": "vocabulary", "note": "Property.getOrdinal."},
+  "testOrdinalValues": {"verdict": "gap", "gap": "vocabulary", "note": "Property.getOrdinal."}
+}

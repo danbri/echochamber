@@ -1,0 +1,62 @@
+{
+  "lang_30": {
+    "verdict": "gap",
+    "gap": "echo",
+    "note": "RDF/JSON is not a syntax of @factoidal/core; leana has no Lang.RDFJSON."
+  },
+  "lang_31": {
+    "verdict": "gap",
+    "gap": "echo",
+    "note": "RDF/JSON is not a syntax of @factoidal/core; leana has no Lang.RDFJSON."
+  },
+  "guess_01": {
+    "verdict": "gap",
+    "gap": "syntax-from-name",
+    "note": "RDFLanguages.filenameToLang."
+  },
+  "guess_02": {
+    "verdict": "gap",
+    "gap": "syntax-from-name",
+    "note": "RDFLanguages.filenameToLang."
+  },
+  "guess_03": {
+    "verdict": "gap",
+    "gap": "syntax-from-name",
+    "note": "RDFLanguages.filenameToLang."
+  },
+  "guess_04": {
+    "verdict": "gap",
+    "gap": "syntax-from-name",
+    "note": "RDFLanguages.filenameToLang."
+  },
+  "guess_08": {
+    "verdict": "gap",
+    "gap": "syntax-from-name",
+    "note": "RDFLanguages.filenameToLang."
+  },
+  "guess_09": {
+    "verdict": "gap",
+    "gap": "syntax-from-name",
+    "note": "RDFLanguages.filenameToLang."
+  },
+  "guess_10": {
+    "verdict": "gap",
+    "gap": "syntax-from-name",
+    "note": "RDFLanguages.filenameToLang."
+  },
+  "guess_11": {
+    "verdict": "gap",
+    "gap": "syntax-from-name",
+    "note": "RDFLanguages.filenameToLang."
+  },
+  "guess_12": {
+    "verdict": "gap",
+    "gap": "syntax-from-name",
+    "note": "RDFLanguages.filenameToLang."
+  },
+  "guess_06": {
+    "verdict": "gap",
+    "gap": "echo",
+    "note": "Lang.RDFJSON (no RDF/JSON in @factoidal/core); then filenameToLang (syntax-from-name)."
+  }
+}
