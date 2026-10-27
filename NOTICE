@@ -19,3 +19,16 @@ derived file says so in its header and names what was changed.
   conformance/echo02/data are unchanged copies (list:
   conformance/echo02/data/PROVENANCE.md). RDFLib's name is not used to
   endorse or promote this software.
+
+- packages/echo03, conformance/echo03, tools/echo03-study, docs/echo03:
+  test cases and API descriptions derived from N3.js
+  (https://github.com/rdfjs/N3.js, commit
+  ce8f71be6af502a7a16193f7fb0fe9ad239f6d8d). N3.js: Copyright ©2012–present
+  N3.js contributors. The MIT License (MIT). The RDF/JS data model test
+  suite (https://github.com/rdfjs-base/data-model, commit
+  66eae148b37e4df11e2a5e445db9fa785546e05b) and the RDF/JS DatasetCore test
+  suite (https://github.com/rdfjs-base/dataset, commit
+  1a62b216c6ce76c809c40e9f1f62126947763808): Copyright (c) 2024 Thomas
+  Bergwinkl, The MIT License. Each derived file in conformance/echo03
+  carries the full MIT notice of its source. packages/echo03 copies no
+  N3.js code; it follows N3.js's API names and argument conventions.
