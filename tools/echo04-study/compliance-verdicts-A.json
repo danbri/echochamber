@@ -1,0 +1,85 @@
+{
+ "cases": {
+  "AggregateTest#SES1970CountDistinctWildcard": {
+   "verdict": "divergence",
+   "group": "union-default-graph",
+   "spec": "SPARQL 1.1 Query §13 and §13.2: with no FROM/FROM NAMED the RDF dataset is chosen by the service; RDF4J queries the union of all graphs, the engine queries the data's default graph",
+   "note": "Engine 2 (default graph :a :p :b, :a :p :c); RDF4J 3 adds :b :q :c from graph :n."
+  },
+  "BuiltinFunctionTest#FilterRegexBoolean": {
+   "verdict": "divergence",
+   "group": "union-default-graph",
+   "spec": "SPARQL 1.1 Query §13 and §13.2: with no FROM/FROM NAMED the RDF dataset is chosen by the service; RDF4J queries the union of all graphs, the engine queries the data's default graph",
+   "note": "foaf:name/foaf:mbox are only in named graph ex:graph1; engine answers 0 rows over the default graph."
+  },
+  "AggregateTest#SES2361UndefCountWildcard": {
+   "verdict": "divergence",
+   "group": "count-star-empty-solution",
+   "spec": "SPARQL 1.1 Query §18.5.1.2 (Count(M) = card[N]) with §11.4 COUNT(*) counting solutions, and §10.2.1: a VALUES row of UNDEF is a solution mapping",
+   "note": "VALUES ?v { 1 2 undef 3 4 } has five solutions; COUNT(*) counts solutions, so 5 (engine). RDF4J answers 4, not counting the empty solution."
+  },
+  "AggregateTest#Sum": {
+   "verdict": "divergence",
+   "group": "lexical-form",
+   "spec": "SPARQL 1.1 Query §17.1 and §17.4 (op:numeric-add): the value is fixed, the lexical form of a computed numeric is not",
+   "note": "Same xsd:double value: engine \"3.01099999999999994315658113919198513031005859375E1\" (exact decimal expansion of the double), RDF4J \"30.11\". Decimal row equal."
+  },
+  "AggregateTest#DistinctSum": {
+   "verdict": "divergence",
+   "group": "lexical-form",
+   "spec": "SPARQL 1.1 Query §17.1 and §17.4 (op:numeric-add): the value is fixed, the lexical form of a computed numeric is not",
+   "note": "As Sum: double lexical form only."
+  },
+  "BuiltinFunctionTest#PlusPreservesDecimalInputRow": {
+   "verdict": "divergence",
+   "group": "lexical-form",
+   "spec": "SPARQL 1.1 Query §17.1 and §17.4 (op:numeric-add): the value is fixed, the lexical form of a computed numeric is not",
+   "note": "1.0 + 2: engine \"3\"^^xsd:decimal (the XSD 1.1 canonical form), RDF4J \"3.0\"^^xsd:decimal (XSD 1.0 canonical form). Same value and datatype."
+  },
+  "BuiltinFunctionTest#PlusPreservesDecimalStoredRow": {
+   "verdict": "divergence",
+   "group": "lexical-form",
+   "spec": "SPARQL 1.1 Query §17.1 and §17.4 (op:numeric-add): the value is fixed, the lexical form of a computed numeric is not",
+   "note": "As PlusPreservesDecimalInputRow."
+  },
+  "AggregateTest#Avg": {
+   "verdict": "divergence",
+   "group": "decimal-precision",
+   "spec": "SPARQL 1.1 Query §18.5.1.4 Avg (Sum(S)/Count(S) with op:numeric-divide) and §17.4; XPath F&O (2007) §6.2: for xs:decimal the number of digits of precision returned is implementation-defined",
+   "note": "Engine 17.8957315296 (decimal division to 10 fractional digits, e.g. 1.0/3 = 0.3333333333), RDF4J 17.89573152964782569447729443134684709566550468. The double row differs in lexical form only (engine 1.5054999...E1, RDF4J 15.055). F&O 3.1 §4.2 says division should be accurate to at least 18 digits (XSD 1.0 minimum); the engine gives 12 significant digits here: a candidate defect if the owner reads that as binding."
+  },
+  "AggregateTest#DistinctAvg": {
+   "verdict": "divergence",
+   "group": "decimal-precision",
+   "spec": "SPARQL 1.1 Query §18.5.1.4 Avg (Sum(S)/Count(S) with op:numeric-divide) and §17.4; XPath F&O (2007) §6.2: for xs:decimal the number of digits of precision returned is implementation-defined",
+   "note": "As Avg: engine 18.4928858827, RDF4J 18.492885882746376157462157."
+  },
+  "BuiltinFunctionTest#DateCastFunction_dateTime_withTimeZone_offset": {
+   "verdict": "divergence",
+   "group": "date-cast-from-datetime-string",
+   "spec": "SPARQL 1.1 Query §17.5 (XPath constructor functions; cast from xsd:string) with XPath F&O §17.1.1: a string cast to xs:date must be in the lexical space of xs:date, else error FORG0001",
+   "note": "RDF4J reads the dateTime-shaped string \"2022-09-09T14:45:13+03:00\" as xsd:date \"2022-09-09+03:00\"; per spec the cast is an error and ?date unbound. The engine is also wrong here: it relabels, giving the ill-typed \"2022-09-09T14:45:13+03:00\"^^xsd:date (https://github.com/danbri/factoidal/issues/1041). After 1041 is fixed this stays a divergence."
+  },
+  "BuiltinFunctionTest#DateCastFunction_invalidInput": {
+   "verdict": "defect",
+   "group": "xsd-cast-relabel",
+   "issue": "https://github.com/danbri/factoidal/issues/1041",
+   "spec": "SPARQL 1.1 Query §17.5; XPath F&O §17.1.1 (cast from xs:string, error FORG0001 when not in the lexical space)",
+   "note": "xsd:date(\"2022-09-xx\") gives the ill-typed \"2022-09-xx\"^^xsd:date; must be an error (?date unbound)."
+  },
+  "BuiltinFunctionTest#RegexCaseNonAscii": {
+   "verdict": "defect",
+   "group": "regex-i-unicode",
+   "issue": "https://github.com/danbri/factoidal/issues/1067",
+   "spec": "SPARQL 1.1 Query §17.4.3.14 REGEX (fn:matches) and XPath F&O §7.6.1.1 flag i: characters match when there is a default case mapping between them (Unicode §3.13)",
+   "note": "regex(\"Валовой\",\"валовой\",\"i\") is false; also regex(\"Ä\",\"ä\",\"i\"), regex(\"é\",\"É\",\"i\") false while regex(\"A\",\"a\",\"i\") is true and LCASE(\"Ä\")=\"ä\" is true. Issue 706 (closed) says the Lean tree fixed the flag i case-variant relation; 0.16.0 still ASCII-only for regex i. Reopen 706 or file new."
+  },
+  "BuiltinFunctionTest#SES1991RANDEvaluation#2": {
+   "verdict": "defect",
+   "group": "rand-constant",
+   "issue": "https://github.com/danbri/factoidal/issues/1068",
+   "spec": "SPARQL 1.1 Query §17.4.4.5 RAND: \"Returns a pseudo-random number between 0 (inclusive) and 1.0e0 (exclusive). Different numbers can be produced every time this function is invoked. Numbers should be produced with approximately equal probability.\"",
+   "note": "RAND() is \"0.5\"^^xsd:double for every solution and every query (SELECT (RAND() AS ?r) WHERE { VALUES ?x {1 2 3} } gives 0.5 three times). Note the spec says \"should\": the owner may judge a deterministic RAND a deliberate choice; UUID()/STRUUID() do vary."
+  }
+ }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "@factoidal/echo02",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Working placeholder name. A Python-RDFLib-style API (Graph, URIRef, Literal, BNode, Namespace) over @factoidal/core. Prototype.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "exports": { ".": "./index.mjs" },
+  "engines": { "node": ">=22.12" },
+  "dependencies": { "@factoidal/core": "0.16.0" },
+  "scripts": { "test": "node --test test/*.test.mjs" }
+}

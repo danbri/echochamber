@@ -1,0 +1,149 @@
+{
+ "cases": {
+  "SPARQLUpdateTest#testInsertWhereInvalidTriple": {
+   "verdict": "divergence",
+   "group": "union-default-graph",
+   "spec": "SPARQL 1.1 Update \u00a73.1.3 (DELETE/INSERT: without USING/WITH the WHERE clause is matched \"against the Graph Store\"; template triples outside GRAPH go to \"the default graph of the Graph Store if no WITH clause is present\"), \u00a73.1.1/\u00a73.1.2 (\"If no graph is described in the QuadData, then the default graph is presumed\"), \u00a72 (Graph Store; its unnamed graph may be \"a representation of a union of other graphs\"); SPARQL 1.1 Query \u00a713.2",
+   "note": "RDF4J matches the WHERE clause over the union of all graphs and removes default-graph template/DATA triples from every graph. The engine uses the data's default graph (here: only ex:graph1/ex:graph2 metadata), as SPARQL 1.1 Update allows; the triples the test reads are in ex:graph1/ex:graph2"
+  },
+  "SPARQLUpdateTest#testDeleteWhereInvalidTriple": {
+   "verdict": "divergence",
+   "group": "union-default-graph",
+   "spec": "SPARQL 1.1 Update \u00a73.1.3 (DELETE/INSERT: without USING/WITH the WHERE clause is matched \"against the Graph Store\"; template triples outside GRAPH go to \"the default graph of the Graph Store if no WITH clause is present\"), \u00a73.1.1/\u00a73.1.2 (\"If no graph is described in the QuadData, then the default graph is presumed\"), \u00a72 (Graph Store; its unnamed graph may be \"a representation of a union of other graphs\"); SPARQL 1.1 Query \u00a713.2",
+   "note": "RDF4J matches the WHERE clause over the union of all graphs and removes default-graph template/DATA triples from every graph. The engine uses the data's default graph (here: only ex:graph1/ex:graph2 metadata), as SPARQL 1.1 Update allows; the triples the test reads are in ex:graph1/ex:graph2"
+  },
+  "SPARQLUpdateTest#testInsertWhere": {
+   "verdict": "divergence",
+   "group": "union-default-graph",
+   "spec": "SPARQL 1.1 Update \u00a73.1.3 (DELETE/INSERT: without USING/WITH the WHERE clause is matched \"against the Graph Store\"; template triples outside GRAPH go to \"the default graph of the Graph Store if no WITH clause is present\"), \u00a73.1.1/\u00a73.1.2 (\"If no graph is described in the QuadData, then the default graph is presumed\"), \u00a72 (Graph Store; its unnamed graph may be \"a representation of a union of other graphs\"); SPARQL 1.1 Query \u00a713.2",
+   "note": "RDF4J matches the WHERE clause over the union of all graphs and removes default-graph template/DATA triples from every graph. The engine uses the data's default graph (here: only ex:graph1/ex:graph2 metadata), as SPARQL 1.1 Update allows; the triples the test reads are in ex:graph1/ex:graph2"
+  },
+  "SPARQLUpdateTest#testInsertWhereWithBinding": {
+   "verdict": "divergence",
+   "group": "union-default-graph",
+   "spec": "SPARQL 1.1 Update \u00a73.1.3 (DELETE/INSERT: without USING/WITH the WHERE clause is matched \"against the Graph Store\"; template triples outside GRAPH go to \"the default graph of the Graph Store if no WITH clause is present\"), \u00a73.1.1/\u00a73.1.2 (\"If no graph is described in the QuadData, then the default graph is presumed\"), \u00a72 (Graph Store; its unnamed graph may be \"a representation of a union of other graphs\"); SPARQL 1.1 Query \u00a713.2",
+   "note": "RDF4J matches the WHERE clause over the union of all graphs and removes default-graph template/DATA triples from every graph. The engine uses the data's default graph (here: only ex:graph1/ex:graph2 metadata), as SPARQL 1.1 Update allows; the triples the test reads are in ex:graph1/ex:graph2"
+  },
+  "SPARQLUpdateTest#testInsertWhereWithBindings2": {
+   "verdict": "divergence",
+   "group": "union-default-graph",
+   "spec": "SPARQL 1.1 Update \u00a73.1.3 (DELETE/INSERT: without USING/WITH the WHERE clause is matched \"against the Graph Store\"; template triples outside GRAPH go to \"the default graph of the Graph Store if no WITH clause is present\"), \u00a73.1.1/\u00a73.1.2 (\"If no graph is described in the QuadData, then the default graph is presumed\"), \u00a72 (Graph Store; its unnamed graph may be \"a representation of a union of other graphs\"); SPARQL 1.1 Query \u00a713.2",
+   "note": "RDF4J matches the WHERE clause over the union of all graphs and removes default-graph template/DATA triples from every graph. The engine uses the data's default graph (here: only ex:graph1/ex:graph2 metadata), as SPARQL 1.1 Update allows; the triples the test reads are in ex:graph1/ex:graph2"
+  },
+  "SPARQLUpdateTest#testInsertWhereWithBindings": {
+   "verdict": "divergence",
+   "group": "union-default-graph",
+   "spec": "SPARQL 1.1 Update \u00a73.1.3 (DELETE/INSERT: without USING/WITH the WHERE clause is matched \"against the Graph Store\"; template triples outside GRAPH go to \"the default graph of the Graph Store if no WITH clause is present\"), \u00a73.1.1/\u00a73.1.2 (\"If no graph is described in the QuadData, then the default graph is presumed\"), \u00a72 (Graph Store; its unnamed graph may be \"a representation of a union of other graphs\"); SPARQL 1.1 Query \u00a713.2",
+   "note": "RDF4J matches the WHERE clause over the union of all graphs and removes default-graph template/DATA triples from every graph. The engine uses the data's default graph (here: only ex:graph1/ex:graph2 metadata), as SPARQL 1.1 Update allows; the triples the test reads are in ex:graph1/ex:graph2"
+  },
+  "SPARQLUpdateTest#testInsertWhereWithOptional": {
+   "verdict": "divergence",
+   "group": "union-default-graph",
+   "spec": "SPARQL 1.1 Update \u00a73.1.3 (DELETE/INSERT: without USING/WITH the WHERE clause is matched \"against the Graph Store\"; template triples outside GRAPH go to \"the default graph of the Graph Store if no WITH clause is present\"), \u00a73.1.1/\u00a73.1.2 (\"If no graph is described in the QuadData, then the default graph is presumed\"), \u00a72 (Graph Store; its unnamed graph may be \"a representation of a union of other graphs\"); SPARQL 1.1 Query \u00a713.2",
+   "note": "RDF4J matches the WHERE clause over the union of all graphs and removes default-graph template/DATA triples from every graph. The engine uses the data's default graph (here: only ex:graph1/ex:graph2 metadata), as SPARQL 1.1 Update allows; the triples the test reads are in ex:graph1/ex:graph2"
+  },
+  "SPARQLUpdateTest#testInsertWhereWithBlankNode": {
+   "verdict": "divergence",
+   "group": "union-default-graph",
+   "spec": "SPARQL 1.1 Update \u00a73.1.3 (DELETE/INSERT: without USING/WITH the WHERE clause is matched \"against the Graph Store\"; template triples outside GRAPH go to \"the default graph of the Graph Store if no WITH clause is present\"), \u00a73.1.1/\u00a73.1.2 (\"If no graph is described in the QuadData, then the default graph is presumed\"), \u00a72 (Graph Store; its unnamed graph may be \"a representation of a union of other graphs\"); SPARQL 1.1 Query \u00a713.2",
+   "note": "RDF4J matches the WHERE clause over the union of all graphs and removes default-graph template/DATA triples from every graph. The engine uses the data's default graph (here: only ex:graph1/ex:graph2 metadata), as SPARQL 1.1 Update allows; the triples the test reads are in ex:graph1/ex:graph2"
+  },
+  "SPARQLUpdateTest#testDeleteInsertWhere": {
+   "verdict": "divergence",
+   "group": "union-default-graph",
+   "spec": "SPARQL 1.1 Update \u00a73.1.3 (DELETE/INSERT: without USING/WITH the WHERE clause is matched \"against the Graph Store\"; template triples outside GRAPH go to \"the default graph of the Graph Store if no WITH clause is present\"), \u00a73.1.1/\u00a73.1.2 (\"If no graph is described in the QuadData, then the default graph is presumed\"), \u00a72 (Graph Store; its unnamed graph may be \"a representation of a union of other graphs\"); SPARQL 1.1 Query \u00a713.2",
+   "note": "RDF4J matches the WHERE clause over the union of all graphs and removes default-graph template/DATA triples from every graph. The engine uses the data's default graph (here: only ex:graph1/ex:graph2 metadata), as SPARQL 1.1 Update allows; the triples the test reads are in ex:graph1/ex:graph2"
+  },
+  "SPARQLUpdateTest#testDeleteWhereOptional": {
+   "verdict": "divergence",
+   "group": "union-default-graph",
+   "spec": "SPARQL 1.1 Update \u00a73.1.3 (DELETE/INSERT: without USING/WITH the WHERE clause is matched \"against the Graph Store\"; template triples outside GRAPH go to \"the default graph of the Graph Store if no WITH clause is present\"), \u00a73.1.1/\u00a73.1.2 (\"If no graph is described in the QuadData, then the default graph is presumed\"), \u00a72 (Graph Store; its unnamed graph may be \"a representation of a union of other graphs\"); SPARQL 1.1 Query \u00a713.2",
+   "note": "RDF4J matches the WHERE clause over the union of all graphs and removes default-graph template/DATA triples from every graph. The engine uses the data's default graph (here: only ex:graph1/ex:graph2 metadata), as SPARQL 1.1 Update allows; the triples the test reads are in ex:graph1/ex:graph2"
+  },
+  "SPARQLUpdateTest#testDeleteInsertWhereWithBindings": {
+   "verdict": "divergence",
+   "group": "union-default-graph",
+   "spec": "SPARQL 1.1 Update \u00a73.1.3 (DELETE/INSERT: without USING/WITH the WHERE clause is matched \"against the Graph Store\"; template triples outside GRAPH go to \"the default graph of the Graph Store if no WITH clause is present\"), \u00a73.1.1/\u00a73.1.2 (\"If no graph is described in the QuadData, then the default graph is presumed\"), \u00a72 (Graph Store; its unnamed graph may be \"a representation of a union of other graphs\"); SPARQL 1.1 Query \u00a713.2",
+   "note": "RDF4J matches the WHERE clause over the union of all graphs and removes default-graph template/DATA triples from every graph. The engine uses the data's default graph (here: only ex:graph1/ex:graph2 metadata), as SPARQL 1.1 Update allows; the triples the test reads are in ex:graph1/ex:graph2"
+  },
+  "SPARQLUpdateTest#testDeleteInsertWhereWithBindings2": {
+   "verdict": "divergence",
+   "group": "union-default-graph",
+   "spec": "SPARQL 1.1 Update \u00a73.1.3 (DELETE/INSERT: without USING/WITH the WHERE clause is matched \"against the Graph Store\"; template triples outside GRAPH go to \"the default graph of the Graph Store if no WITH clause is present\"), \u00a73.1.1/\u00a73.1.2 (\"If no graph is described in the QuadData, then the default graph is presumed\"), \u00a72 (Graph Store; its unnamed graph may be \"a representation of a union of other graphs\"); SPARQL 1.1 Query \u00a713.2",
+   "note": "RDF4J matches the WHERE clause over the union of all graphs and removes default-graph template/DATA triples from every graph. The engine uses the data's default graph (here: only ex:graph1/ex:graph2 metadata), as SPARQL 1.1 Update allows; the triples the test reads are in ex:graph1/ex:graph2"
+  },
+  "SPARQLUpdateTest#testDeleteInsertWhereLoopingBehavior": {
+   "verdict": "divergence",
+   "group": "union-default-graph",
+   "spec": "SPARQL 1.1 Update \u00a73.1.3 (DELETE/INSERT: without USING/WITH the WHERE clause is matched \"against the Graph Store\"; template triples outside GRAPH go to \"the default graph of the Graph Store if no WITH clause is present\"), \u00a73.1.1/\u00a73.1.2 (\"If no graph is described in the QuadData, then the default graph is presumed\"), \u00a72 (Graph Store; its unnamed graph may be \"a representation of a union of other graphs\"); SPARQL 1.1 Query \u00a713.2",
+   "note": "RDF4J matches the WHERE clause over the union of all graphs and removes default-graph template/DATA triples from every graph. The engine uses the data's default graph (here: only ex:graph1/ex:graph2 metadata), as SPARQL 1.1 Update allows; the triples the test reads are in ex:graph1/ex:graph2"
+  },
+  "SPARQLUpdateTest#testConsecutiveUpdatesInSameTransaction": {
+   "verdict": "divergence",
+   "group": "union-default-graph",
+   "spec": "SPARQL 1.1 Update \u00a73.1.3 (DELETE/INSERT: without USING/WITH the WHERE clause is matched \"against the Graph Store\"; template triples outside GRAPH go to \"the default graph of the Graph Store if no WITH clause is present\"), \u00a73.1.1/\u00a73.1.2 (\"If no graph is described in the QuadData, then the default graph is presumed\"), \u00a72 (Graph Store; its unnamed graph may be \"a representation of a union of other graphs\"); SPARQL 1.1 Query \u00a713.2",
+   "note": "RDF4J matches the WHERE clause over the union of all graphs and removes default-graph template/DATA triples from every graph. The engine uses the data's default graph (here: only ex:graph1/ex:graph2 metadata), as SPARQL 1.1 Update allows; the triples the test reads are in ex:graph1/ex:graph2"
+  },
+  "SPARQLUpdateTest#testDeleteWhereShortcut": {
+   "verdict": "divergence",
+   "group": "union-default-graph",
+   "spec": "SPARQL 1.1 Update \u00a73.1.3 (DELETE/INSERT: without USING/WITH the WHERE clause is matched \"against the Graph Store\"; template triples outside GRAPH go to \"the default graph of the Graph Store if no WITH clause is present\"), \u00a73.1.1/\u00a73.1.2 (\"If no graph is described in the QuadData, then the default graph is presumed\"), \u00a72 (Graph Store; its unnamed graph may be \"a representation of a union of other graphs\"); SPARQL 1.1 Query \u00a713.2",
+   "note": "RDF4J matches the WHERE clause over the union of all graphs and removes default-graph template/DATA triples from every graph. The engine uses the data's default graph (here: only ex:graph1/ex:graph2 metadata), as SPARQL 1.1 Update allows; the triples the test reads are in ex:graph1/ex:graph2"
+  },
+  "SPARQLUpdateTest#testDeleteWhere": {
+   "verdict": "divergence",
+   "group": "union-default-graph",
+   "spec": "SPARQL 1.1 Update \u00a73.1.3 (DELETE/INSERT: without USING/WITH the WHERE clause is matched \"against the Graph Store\"; template triples outside GRAPH go to \"the default graph of the Graph Store if no WITH clause is present\"), \u00a73.1.1/\u00a73.1.2 (\"If no graph is described in the QuadData, then the default graph is presumed\"), \u00a72 (Graph Store; its unnamed graph may be \"a representation of a union of other graphs\"); SPARQL 1.1 Query \u00a713.2",
+   "note": "RDF4J matches the WHERE clause over the union of all graphs and removes default-graph template/DATA triples from every graph. The engine uses the data's default graph (here: only ex:graph1/ex:graph2 metadata), as SPARQL 1.1 Update allows; the triples the test reads are in ex:graph1/ex:graph2"
+  },
+  "SPARQLUpdateTest#testDeleteTransformedWhere": {
+   "verdict": "divergence",
+   "group": "union-default-graph",
+   "spec": "SPARQL 1.1 Update \u00a73.1.3 (DELETE/INSERT: without USING/WITH the WHERE clause is matched \"against the Graph Store\"; template triples outside GRAPH go to \"the default graph of the Graph Store if no WITH clause is present\"), \u00a73.1.1/\u00a73.1.2 (\"If no graph is described in the QuadData, then the default graph is presumed\"), \u00a72 (Graph Store; its unnamed graph may be \"a representation of a union of other graphs\"); SPARQL 1.1 Query \u00a713.2",
+   "note": "RDF4J matches the WHERE clause over the union of all graphs and removes default-graph template/DATA triples from every graph. The engine uses the data's default graph (here: only ex:graph1/ex:graph2 metadata), as SPARQL 1.1 Update allows; the triples the test reads are in ex:graph1/ex:graph2"
+  },
+  "SPARQLUpdateTest#testDeleteData": {
+   "verdict": "divergence",
+   "group": "union-default-graph",
+   "spec": "SPARQL 1.1 Update \u00a73.1.3 (DELETE/INSERT: without USING/WITH the WHERE clause is matched \"against the Graph Store\"; template triples outside GRAPH go to \"the default graph of the Graph Store if no WITH clause is present\"), \u00a73.1.1/\u00a73.1.2 (\"If no graph is described in the QuadData, then the default graph is presumed\"), \u00a72 (Graph Store; its unnamed graph may be \"a representation of a union of other graphs\"); SPARQL 1.1 Query \u00a713.2",
+   "note": "RDF4J matches the WHERE clause over the union of all graphs and removes default-graph template/DATA triples from every graph. The engine uses the data's default graph (here: only ex:graph1/ex:graph2 metadata), as SPARQL 1.1 Update allows; the triples the test reads are in ex:graph1/ex:graph2"
+  },
+  "SPARQLUpdateTest#testDeleteDataMultiplePatterns": {
+   "verdict": "divergence",
+   "group": "union-default-graph",
+   "spec": "SPARQL 1.1 Update \u00a73.1.3 (DELETE/INSERT: without USING/WITH the WHERE clause is matched \"against the Graph Store\"; template triples outside GRAPH go to \"the default graph of the Graph Store if no WITH clause is present\"), \u00a73.1.1/\u00a73.1.2 (\"If no graph is described in the QuadData, then the default graph is presumed\"), \u00a72 (Graph Store; its unnamed graph may be \"a representation of a union of other graphs\"); SPARQL 1.1 Query \u00a713.2",
+   "note": "RDF4J matches the WHERE clause over the union of all graphs and removes default-graph template/DATA triples from every graph. The engine uses the data's default graph (here: only ex:graph1/ex:graph2 metadata), as SPARQL 1.1 Update allows; the triples the test reads are in ex:graph1/ex:graph2"
+  },
+  "SPARQLUpdateTest#testUpdateSequenceDeleteInsert": {
+   "verdict": "divergence",
+   "group": "union-default-graph",
+   "spec": "SPARQL 1.1 Update \u00a73.1.3 (DELETE/INSERT: without USING/WITH the WHERE clause is matched \"against the Graph Store\"; template triples outside GRAPH go to \"the default graph of the Graph Store if no WITH clause is present\"), \u00a73.1.1/\u00a73.1.2 (\"If no graph is described in the QuadData, then the default graph is presumed\"), \u00a72 (Graph Store; its unnamed graph may be \"a representation of a union of other graphs\"); SPARQL 1.1 Query \u00a713.2",
+   "note": "RDF4J matches the WHERE clause over the union of all graphs and removes default-graph template/DATA triples from every graph. The engine uses the data's default graph (here: only ex:graph1/ex:graph2 metadata), as SPARQL 1.1 Update allows; the triples the test reads are in ex:graph1/ex:graph2"
+  },
+  "SPARQLUpdateTest#testUpdateSequenceInsertDelete": {
+   "verdict": "divergence",
+   "group": "union-default-graph",
+   "spec": "SPARQL 1.1 Update \u00a73.1.3 (DELETE/INSERT: without USING/WITH the WHERE clause is matched \"against the Graph Store\"; template triples outside GRAPH go to \"the default graph of the Graph Store if no WITH clause is present\"), \u00a73.1.1/\u00a73.1.2 (\"If no graph is described in the QuadData, then the default graph is presumed\"), \u00a72 (Graph Store; its unnamed graph may be \"a representation of a union of other graphs\"); SPARQL 1.1 Query \u00a713.2",
+   "note": "RDF4J matches the WHERE clause over the union of all graphs and removes default-graph template/DATA triples from every graph. The engine uses the data's default graph (here: only ex:graph1/ex:graph2 metadata), as SPARQL 1.1 Update allows; the triples the test reads are in ex:graph1/ex:graph2"
+  },
+  "SPARQLUpdateTest#testDeleteFromDefaultGraph": {
+   "verdict": "divergence",
+   "group": "default-graph-name",
+   "spec": "SPARQL 1.1 Update \u00a73.1.3 (GRAPH IRI and WITH IRI name a graph of the Graph Store) and \u00a72 (Graph Store: one unnamed graph and zero or more named graphs identified by IRIs); RDF 1.1 Concepts \u00a74",
+   "note": "RDF4J reserves the IRIs sesame:nil and rdf4j:nil as names of the default graph, so GRAPH sesame:nil / WITH sesame:nil address the default graph. In SPARQL they are ordinary graph IRIs (an empty named graph here), so the default-graph triple stays"
+  },
+  "SPARQLUpdateTest#testDeleteFromDefaultGraphUsingWith": {
+   "verdict": "divergence",
+   "group": "default-graph-name",
+   "spec": "SPARQL 1.1 Update \u00a73.1.3 (GRAPH IRI and WITH IRI name a graph of the Graph Store) and \u00a72 (Graph Store: one unnamed graph and zero or more named graphs identified by IRIs); RDF 1.1 Concepts \u00a74",
+   "note": "RDF4J reserves the IRIs sesame:nil and rdf4j:nil as names of the default graph, so GRAPH sesame:nil / WITH sesame:nil address the default graph. In SPARQL they are ordinary graph IRIs (an empty named graph here), so the default-graph triple stays"
+  },
+  "SPARQLUpdateTest#testUpdateSequenceWithRelativeIRI": {
+   "verdict": "defect",
+   "group": "lt-operator-lexed-as-iriref",
+   "issue": "https://github.com/danbri/factoidal/issues/573",
+   "spec": "SPARQL 1.1 Query \u00a719.8 [139] IRIREF ::= '<' ([^<>\"{}|^`\\]-[#x00-#x20])* '>' and [114] RelationalExpression ('<' NumericExpression); \u00a719.2 longest-match tokenization",
+   "note": "The update fails with update.syntax \"expected rparen\" at filter(str(?company)<str(?other)): the lexer reads \"<\" followed by a letter as the start of an IRIREF although no \">\" follows before a space. Minimal: SELECT * WHERE { BIND(\"a\" AS ?a) FILTER(str(?a)<str(?a)) } and ASK { FILTER(1<str(\"a\")) } give query.syntax; with spaces around < they parse; 1<2 parses. Same lookahead guard (ltCase) as https://github.com/danbri/factoidal/issues/573 (which is the converse: a valid IRIREF lexed as <); its suggested fix (scan for > before a forbidden character) would fix both"
+  }
+ }
+}

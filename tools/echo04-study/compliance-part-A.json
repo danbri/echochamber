@@ -1,0 +1,2205 @@
+{
+ "classes": [
+  "AggregateTest",
+  "BuiltinFunctionTest",
+  "GroupByTest",
+  "InTest",
+  "OrderByTest",
+  "ExistsTest",
+  "MinusTest",
+  "BasicTest"
+ ],
+ "methods": [
+  "AggregateTest#MultipleHavingConstraints",
+  "AggregateTest#MultipleHavingAsk",
+  "AggregateTest#MultipleHavingConstruct",
+  "AggregateTest#DescribeMultipleHaving",
+  "AggregateTest#AskHavingImplicitGroup",
+  "AggregateTest#AskHavingEmptyImplicitGroup",
+  "AggregateTest#AskHavingLaterExplicitGroup",
+  "AggregateTest#AskHavingTrailingValues",
+  "AggregateTest#AskLimitZero",
+  "AggregateTest#AskOffsetZero",
+  "AggregateTest#AskOffsetOne",
+  "AggregateTest#AskOffsetPastOnlyRow",
+  "AggregateTest#AskOffsetBeyondInput",
+  "AggregateTest#MaxAggregateWithGroupEmptyResult",
+  "AggregateTest#MaxAggregateWithoutGroupEmptySolution",
+  "AggregateTest#MinAggregateWithGroupEmptyResult",
+  "AggregateTest#MinAggregateWithoutGroupEmptySolution",
+  "AggregateTest#SampleAggregateWithGroupEmptyResult",
+  "AggregateTest#SampleAggregateWithoutGroupEmptySolution",
+  "AggregateTest#SES2361UndefMin",
+  "AggregateTest#CountOrderBy_ImplicitGroup",
+  "AggregateTest#DistinctMax",
+  "AggregateTest#Max",
+  "AggregateTest#DistinctAvg",
+  "AggregateTest#Avg",
+  "AggregateTest#DistinctSum",
+  "AggregateTest#Sum",
+  "AggregateTest#CountHaving",
+  "AggregateTest#SES1970CountDistinctWildcard",
+  "AggregateTest#GroupConcatNonDistinct",
+  "AggregateTest#GroupConcatDistinct",
+  "AggregateTest#SES1979MinMaxInf",
+  "AggregateTest#SES2361UndefSum",
+  "AggregateTest#SES2361UndefCountWildcard",
+  "AggregateTest#SES2361UndefCount",
+  "AggregateTest#SES2361UndefMax",
+  "BuiltinFunctionTest#Seconds",
+  "BuiltinFunctionTest#EmptyVariadicExpressionsAndNestedErrors",
+  "BuiltinFunctionTest#SecondsMilliseconds",
+  "BuiltinFunctionTest#DateCastFunction_invalidInput",
+  "BuiltinFunctionTest#DateCastFunction_dateTime_withTimeZone_offset",
+  "BuiltinFunctionTest#DateCastFunction_date_withTimeZone_utc",
+  "BuiltinFunctionTest#DateCastFunction_date",
+  "BuiltinFunctionTest#FilterRegexBoolean",
+  "BuiltinFunctionTest#RegexCaseNonAscii",
+  "BuiltinFunctionTest#BNodeFunctionUsesSameBlankNodeForSameLabelInSolution",
+  "BuiltinFunctionTest#BNodeFunctionUsesDistinctBlankNodesForDistinctSolutions",
+  "BuiltinFunctionTest#PlusPreservesDecimalInputRow",
+  "BuiltinFunctionTest#PlusPreservesDecimalStoredRow",
+  "BuiltinFunctionTest#SES2052If2",
+  "BuiltinFunctionTest#SES2052If1",
+  "BuiltinFunctionTest#27NormalizeIRIFunction",
+  "BuiltinFunctionTest#SES2121URIFunction",
+  "BuiltinFunctionTest#SES1991RANDEvaluation",
+  "BuiltinFunctionTest#SES1991STRUUIDEvaluation",
+  "BuiltinFunctionTest#SES1991UUIDEvaluation",
+  "BuiltinFunctionTest#SES869ValueOfNow",
+  "BuiltinFunctionTest#SES1991NOWEvaluation",
+  "GroupByTest#GroupByEmpty",
+  "InTest#InComparison1",
+  "InTest#InComparison2",
+  "InTest#InComparison3",
+  "OrderByTest#DistinctOptionalOrderBy",
+  "OrderByTest#OrderByVariableNotInUse",
+  "OrderByTest#DistinctOptionalOrderByMath",
+  "ExistsTest#FilterNotExistsBindingToCurrentSolutionMapping",
+  "MinusTest#ScopingOfFilterInMinus",
+  "BasicTest#testIdenticalVariablesInStatementPattern",
+  "BasicTest#testIdenticalVariablesSubjectContextInStatementPattern"
+ ],
+ "cases": [
+  {
+   "id": "AggregateTest#MultipleHavingConstraints",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/AggregateTest.java",
+   "line": 98,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix ex: <http://example/> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\nex:shift-1 ex:crew \"amber\" ; ex:amount \"3\"^^xsd:int .\nex:shift-2 ex:crew \"amber\" ; ex:amount \"8\"^^xsd:int .\nex:shift-3 ex:crew \"blue\" ; ex:amount \"9\"^^xsd:int .\nex:shift-4 ex:crew \"violet\" ; ex:amount \"2\"^^xsd:int .\nex:shift-5 ex:crew \"violet\" ; ex:amount \"4\"^^xsd:int .\n"
+   },
+   "query": "PREFIX ex: <http://example/> SELECT ?crew (COUNT(?shift) AS ?shifts) (SUM(?amount) AS ?total) WHERE { ?shift ex:crew ?crew ; ex:amount ?amount } GROUP BY ?crew HAVING (COUNT(?shift) = 2) (SUM(?amount) > 10) (MIN(?amount) < 5)",
+   "expect": {
+    "kind": "bindings",
+    "rows": [
+     {
+      "crew": {
+       "type": "literal",
+       "value": "amber"
+      },
+      "shifts": {
+       "type": "literal",
+       "value": "2",
+       "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+      },
+      "total": {
+       "type": "literal",
+       "value": "11",
+       "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+      }
+     }
+    ]
+   },
+   "note": "Java literal(int) is xsd:int; the test checks intValue() only. Expected datatype xsd:integer: COUNT is xsd:integer (SPARQL 1.1 §18.5.1.2) and op:numeric-add on xsd:int gives xsd:integer (XPath F&O 6.2, type promotion to the base type)."
+  },
+  {
+   "id": "AggregateTest#MultipleHavingConstraints#2",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/AggregateTest.java",
+   "line": 98,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix ex: <http://example/> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\nex:shift-1 ex:crew \"amber\" ; ex:amount \"3\"^^xsd:int .\nex:shift-2 ex:crew \"amber\" ; ex:amount \"8\"^^xsd:int .\nex:shift-3 ex:crew \"blue\" ; ex:amount \"9\"^^xsd:int .\nex:shift-4 ex:crew \"violet\" ; ex:amount \"2\"^^xsd:int .\nex:shift-5 ex:crew \"violet\" ; ex:amount \"4\"^^xsd:int .\n"
+   },
+   "query": "PREFIX ex: <http://example/> SELECT ?crew ?shifts ?total WHERE { { SELECT ?crew (COUNT(?shift) AS ?shifts) (SUM(?amount) AS ?total) WHERE { ?shift ex:crew ?crew ; ex:amount ?amount } GROUP BY ?crew HAVING (COUNT(?shift) = 2) (SUM(?amount) > 10) (MIN(?amount) < 5) } }",
+   "expect": {
+    "kind": "bindings",
+    "rows": [
+     {
+      "crew": {
+       "type": "literal",
+       "value": "amber"
+      },
+      "shifts": {
+       "type": "literal",
+       "value": "2",
+       "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+      },
+      "total": {
+       "type": "literal",
+       "value": "11",
+       "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+      }
+     }
+    ]
+   },
+   "note": "Java literal(int) is xsd:int; the test checks intValue() only. Expected datatype xsd:integer: COUNT is xsd:integer (SPARQL 1.1 §18.5.1.2) and op:numeric-add on xsd:int gives xsd:integer (XPath F&O 6.2, type promotion to the base type)."
+  },
+  {
+   "id": "AggregateTest#MultipleHavingConstraints#3",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/AggregateTest.java",
+   "line": 98,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix ex: <http://example/> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\nex:shift-1 ex:crew \"amber\" ; ex:amount \"3\"^^xsd:int .\nex:shift-2 ex:crew \"amber\" ; ex:amount \"8\"^^xsd:int .\nex:shift-3 ex:crew \"blue\" ; ex:amount \"9\"^^xsd:int .\nex:shift-4 ex:crew \"violet\" ; ex:amount \"2\"^^xsd:int .\nex:shift-5 ex:crew \"violet\" ; ex:amount \"4\"^^xsd:int .\n"
+   },
+   "query": "PREFIX ex: <http://example/> SELECT (COUNT(?score) AS ?count) WHERE { VALUES ?score { 2 5 9 } } HAVING (COUNT(?score) = 3) (MAX(?score) = 9)",
+   "expect": {
+    "kind": "bindings",
+    "rows": [
+     {
+      "count": {
+       "type": "literal",
+       "value": "3",
+       "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "AggregateTest#MultipleHavingConstraints#4",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/AggregateTest.java",
+   "line": 98,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix ex: <http://example/> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\nex:shift-1 ex:crew \"amber\" ; ex:amount \"3\"^^xsd:int .\nex:shift-2 ex:crew \"amber\" ; ex:amount \"8\"^^xsd:int .\nex:shift-3 ex:crew \"blue\" ; ex:amount \"9\"^^xsd:int .\nex:shift-4 ex:crew \"violet\" ; ex:amount \"2\"^^xsd:int .\nex:shift-5 ex:crew \"violet\" ; ex:amount \"4\"^^xsd:int .\n"
+   },
+   "query": "PREFIX ex: <http://example/> SELECT (COUNT(?score) AS ?count) WHERE { VALUES ?score { 2 5 9 } } HAVING (MAX(?score) = 9) (COUNT(?score) = 3)",
+   "expect": {
+    "kind": "bindings",
+    "rows": [
+     {
+      "count": {
+       "type": "literal",
+       "value": "3",
+       "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "AggregateTest#MultipleHavingConstraints#5",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/AggregateTest.java",
+   "line": 98,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix ex: <http://example/> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\nex:shift-1 ex:crew \"amber\" ; ex:amount \"3\"^^xsd:int .\nex:shift-2 ex:crew \"amber\" ; ex:amount \"8\"^^xsd:int .\nex:shift-3 ex:crew \"blue\" ; ex:amount \"9\"^^xsd:int .\nex:shift-4 ex:crew \"violet\" ; ex:amount \"2\"^^xsd:int .\nex:shift-5 ex:crew \"violet\" ; ex:amount \"4\"^^xsd:int .\n"
+   },
+   "query": "PREFIX ex: <http://example/> SELECT (COUNT(?score) AS ?count) WHERE { VALUES ?score { 2 5 9 } } HAVING (false) (COUNT(?score) = 3)",
+   "expect": {
+    "kind": "count",
+    "n": 0
+   }
+  },
+  {
+   "id": "AggregateTest#MultipleHavingConstraints#6",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/AggregateTest.java",
+   "line": 98,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix ex: <http://example/> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\nex:shift-1 ex:crew \"amber\" ; ex:amount \"3\"^^xsd:int .\nex:shift-2 ex:crew \"amber\" ; ex:amount \"8\"^^xsd:int .\nex:shift-3 ex:crew \"blue\" ; ex:amount \"9\"^^xsd:int .\nex:shift-4 ex:crew \"violet\" ; ex:amount \"2\"^^xsd:int .\nex:shift-5 ex:crew \"violet\" ; ex:amount \"4\"^^xsd:int .\n"
+   },
+   "query": "PREFIX ex: <http://example/> SELECT (COUNT(?score) AS ?count) WHERE { VALUES ?score { 2 5 9 } } HAVING (COUNT(?score) = 3) (false)",
+   "expect": {
+    "kind": "count",
+    "n": 0
+   }
+  },
+  {
+   "id": "AggregateTest#MultipleHavingConstraints#7",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/AggregateTest.java",
+   "line": 98,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix ex: <http://example/> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\nex:shift-1 ex:crew \"amber\" ; ex:amount \"3\"^^xsd:int .\nex:shift-2 ex:crew \"amber\" ; ex:amount \"8\"^^xsd:int .\nex:shift-3 ex:crew \"blue\" ; ex:amount \"9\"^^xsd:int .\nex:shift-4 ex:crew \"violet\" ; ex:amount \"2\"^^xsd:int .\nex:shift-5 ex:crew \"violet\" ; ex:amount \"4\"^^xsd:int .\n"
+   },
+   "query": "PREFIX ex: <http://example/> SELECT (COUNT(?score) AS ?count) WHERE { VALUES ?score { 2 5 9 } } HAVING (1 / 0 > 0) (COUNT(?score) = 3)",
+   "expect": {
+    "kind": "count",
+    "n": 0
+   }
+  },
+  {
+   "id": "AggregateTest#MultipleHavingConstraints#8",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/AggregateTest.java",
+   "line": 98,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix ex: <http://example/> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\nex:shift-1 ex:crew \"amber\" ; ex:amount \"3\"^^xsd:int .\nex:shift-2 ex:crew \"amber\" ; ex:amount \"8\"^^xsd:int .\nex:shift-3 ex:crew \"blue\" ; ex:amount \"9\"^^xsd:int .\nex:shift-4 ex:crew \"violet\" ; ex:amount \"2\"^^xsd:int .\nex:shift-5 ex:crew \"violet\" ; ex:amount \"4\"^^xsd:int .\n"
+   },
+   "query": "PREFIX ex: <http://example/> SELECT (COUNT(?score) AS ?count) WHERE { VALUES ?score { 2 5 9 } } HAVING (COUNT(?score) = 3) (1 / 0 > 0)",
+   "expect": {
+    "kind": "count",
+    "n": 0
+   }
+  },
+  {
+   "id": "AggregateTest#MultipleHavingAsk",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/AggregateTest.java",
+   "line": 149,
+   "sparql12": false,
+   "data": null,
+   "query": "ASK WHERE { VALUES (?batch ?score) { (1 2) (1 5) (1 9) } } GROUP BY ?batch HAVING (COUNT(?score) = 3) (SUM(?score) = 16)",
+   "expect": {
+    "kind": "boolean",
+    "value": true
+   }
+  },
+  {
+   "id": "AggregateTest#MultipleHavingAsk#2",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/AggregateTest.java",
+   "line": 149,
+   "sparql12": false,
+   "data": null,
+   "query": "ASK WHERE { VALUES (?batch ?score) { (1 2) (1 5) (1 9) } } GROUP BY ?batch HAVING (SUM(?score) = 16) (COUNT(?score) = 3)",
+   "expect": {
+    "kind": "boolean",
+    "value": true
+   }
+  },
+  {
+   "id": "AggregateTest#MultipleHavingAsk#3",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/AggregateTest.java",
+   "line": 149,
+   "sparql12": false,
+   "data": null,
+   "query": "ASK WHERE { VALUES (?batch ?score) { (1 2) (1 5) (1 9) } } GROUP BY ?batch HAVING (COUNT(?score) = 3) (SUM(?score) = 15)",
+   "expect": {
+    "kind": "boolean",
+    "value": false
+   }
+  },
+  {
+   "id": "AggregateTest#MultipleHavingAsk#4",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/AggregateTest.java",
+   "line": 149,
+   "sparql12": false,
+   "data": null,
+   "query": "ASK WHERE { VALUES (?batch ?score) { (1 2) (1 5) (1 9) } } GROUP BY ?batch HAVING (SUM(?score) = 15) (COUNT(?score) = 3)",
+   "expect": {
+    "kind": "boolean",
+    "value": false
+   }
+  },
+  {
+   "id": "AggregateTest#MultipleHavingAsk#5",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/AggregateTest.java",
+   "line": 149,
+   "sparql12": false,
+   "data": null,
+   "query": "ASK WHERE { VALUES (?batch ?score) { (1 2) (1 5) (1 9) } } GROUP BY ?batch HAVING (1 / 0 > 0) (COUNT(?score) = 3)",
+   "expect": {
+    "kind": "boolean",
+    "value": false
+   }
+  },
+  {
+   "id": "AggregateTest#MultipleHavingAsk#6",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/AggregateTest.java",
+   "line": 149,
+   "sparql12": false,
+   "data": null,
+   "query": "ASK WHERE { VALUES (?batch ?score) { (1 2) (1 5) (1 9) } } GROUP BY ?batch HAVING (COUNT(?score) = 3) (1 / 0 > 0)",
+   "expect": {
+    "kind": "boolean",
+    "value": false
+   }
+  },
+  {
+   "id": "AggregateTest#MultipleHavingConstruct",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/AggregateTest.java",
+   "line": 209,
+   "sparql12": false,
+   "data": null,
+   "query": "CONSTRUCT { <urn:summary> <urn:status> <urn:accepted> } WHERE { VALUES (?batch ?score) { (1 2) (1 5) (1 9) } } GROUP BY ?batch HAVING (COUNT(?score) = 3) (SUM(?score) = 16)",
+   "expect": {
+    "kind": "graph",
+    "format": "turtle",
+    "text": "<urn:summary> <urn:status> <urn:accepted> ."
+   }
+  },
+  {
+   "id": "AggregateTest#MultipleHavingConstruct#2",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/AggregateTest.java",
+   "line": 209,
+   "sparql12": false,
+   "data": null,
+   "query": "CONSTRUCT { <urn:summary> <urn:status> <urn:accepted> } WHERE { VALUES (?batch ?score) { (1 2) (1 5) (1 9) } } GROUP BY ?batch HAVING (COUNT(?score) = 3) (SUM(?score) = 15)",
+   "expect": {
+    "kind": "count",
+    "n": 0
+   }
+  },
+  {
+   "id": "AggregateTest#MultipleHavingConstruct#3",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/AggregateTest.java",
+   "line": 209,
+   "sparql12": false,
+   "data": null,
+   "query": "CONSTRUCT { <urn:summary> <urn:status> <urn:accepted> } WHERE { VALUES (?batch ?score) { (1 2) (1 5) (1 9) } } GROUP BY ?batch HAVING (1 / 0 > 0) (COUNT(?score) = 3)",
+   "expect": {
+    "kind": "count",
+    "n": 0
+   }
+  },
+  {
+   "id": "AggregateTest#DescribeMultipleHaving",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/AggregateTest.java",
+   "line": 225,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "<urn:describe:item> <urn:describe:property> \"the item\" ."
+   },
+   "query": "DESCRIBE ?item WHERE { VALUES (?item ?score) { (<urn:describe:item> 2) (<urn:describe:item> 5) (<urn:describe:item> 9) } } GROUP BY ?item HAVING (COUNT(?score) = 3) (SUM(?score) = 16)",
+   "expect": {
+    "kind": "graph",
+    "format": "turtle",
+    "text": "<urn:describe:item> <urn:describe:property> \"the item\" ."
+   }
+  },
+  {
+   "id": "AggregateTest#DescribeMultipleHaving#2",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/AggregateTest.java",
+   "line": 225,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "<urn:describe:item> <urn:describe:property> \"the item\" ."
+   },
+   "query": "DESCRIBE ?item WHERE { VALUES (?item ?score) { (<urn:describe:item> 2) (<urn:describe:item> 5) (<urn:describe:item> 9) } } GROUP BY ?item HAVING (false) (COUNT(?score) = 3)",
+   "expect": {
+    "kind": "count",
+    "n": 0
+   }
+  },
+  {
+   "id": "AggregateTest#DescribeMultipleHaving#3",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/AggregateTest.java",
+   "line": 225,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "<urn:describe:item> <urn:describe:property> \"the item\" ."
+   },
+   "query": "DESCRIBE ?item WHERE { VALUES (?item ?score) { (<urn:describe:item> 2) (<urn:describe:item> 5) (<urn:describe:item> 9) } } GROUP BY ?item HAVING (COUNT(?score) = 3) (false)",
+   "expect": {
+    "kind": "count",
+    "n": 0
+   }
+  },
+  {
+   "id": "AggregateTest#DescribeMultipleHaving#4",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/AggregateTest.java",
+   "line": 225,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "<urn:describe:item> <urn:describe:property> \"the item\" ."
+   },
+   "query": "DESCRIBE ?item WHERE { VALUES (?item ?score) { (<urn:describe:item> 2) (<urn:describe:item> 5) (<urn:describe:item> 9) } } GROUP BY ?item HAVING (1 / 0 > 0) (COUNT(?score) = 3)",
+   "expect": {
+    "kind": "count",
+    "n": 0
+   }
+  },
+  {
+   "id": "AggregateTest#DescribeMultipleHaving#5",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/AggregateTest.java",
+   "line": 225,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "<urn:describe:item> <urn:describe:property> \"the item\" ."
+   },
+   "query": "DESCRIBE ?item WHERE { VALUES (?item ?score) { (<urn:describe:item> 2) (<urn:describe:item> 5) (<urn:describe:item> 9) } } GROUP BY ?item HAVING (COUNT(?score) = 3) (1 / 0 > 0)",
+   "expect": {
+    "kind": "count",
+    "n": 0
+   }
+  },
+  {
+   "id": "AggregateTest#AskHavingImplicitGroup",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/AggregateTest.java",
+   "line": 166,
+   "sparql12": false,
+   "data": null,
+   "query": "ASK WHERE { VALUES ?score { 2 5 9 } } HAVING (COUNT(?score) = 3) (SUM(?score) = 16)",
+   "expect": {
+    "kind": "boolean",
+    "value": true
+   }
+  },
+  {
+   "id": "AggregateTest#AskHavingEmptyImplicitGroup",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/AggregateTest.java",
+   "line": 172,
+   "sparql12": false,
+   "data": null,
+   "query": "ASK WHERE { VALUES ?score { } } HAVING (COUNT(?score) = 0) (COUNT(*) = 0)",
+   "expect": {
+    "kind": "boolean",
+    "value": true
+   }
+  },
+  {
+   "id": "AggregateTest#AskHavingLaterExplicitGroup",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/AggregateTest.java",
+   "line": 177,
+   "sparql12": false,
+   "data": null,
+   "query": "ASK WHERE { VALUES (?batch ?score) { (1 2) (2 2) (2 5) (2 9) } } GROUP BY ?batch HAVING (COUNT(?score) = 3) (SUM(?score) = 16)",
+   "expect": {
+    "kind": "boolean",
+    "value": true
+   }
+  },
+  {
+   "id": "AggregateTest#AskHavingTrailingValues",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/AggregateTest.java",
+   "line": 183,
+   "sparql12": false,
+   "data": null,
+   "query": "ASK WHERE { VALUES (?batch ?score) { (1 2) (1 5) (1 9) (2 2) (2 5) (2 9) } } GROUP BY ?batch HAVING (COUNT(?score) = 3) (SUM(?score) = 16) VALUES ?batch { 99 2 }",
+   "expect": {
+    "kind": "boolean",
+    "value": true
+   }
+  },
+  {
+   "id": "AggregateTest#AskLimitZero",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/AggregateTest.java",
+   "line": 189,
+   "sparql12": false,
+   "data": null,
+   "query": "ASK WHERE { VALUES ?x { 1 } } LIMIT 0",
+   "expect": {
+    "kind": "boolean",
+    "value": false
+   }
+  },
+  {
+   "id": "AggregateTest#AskOffsetZero",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/AggregateTest.java",
+   "line": 193,
+   "sparql12": false,
+   "data": null,
+   "query": "ASK WHERE { VALUES ?x { 1 } } OFFSET 0",
+   "expect": {
+    "kind": "boolean",
+    "value": true
+   }
+  },
+  {
+   "id": "AggregateTest#AskOffsetOne",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/AggregateTest.java",
+   "line": 197,
+   "sparql12": false,
+   "data": null,
+   "query": "ASK WHERE { VALUES ?x { 1 2 } } OFFSET 1 LIMIT 1",
+   "expect": {
+    "kind": "boolean",
+    "value": true
+   }
+  },
+  {
+   "id": "AggregateTest#AskOffsetPastOnlyRow",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/AggregateTest.java",
+   "line": 201,
+   "sparql12": false,
+   "data": null,
+   "query": "ASK WHERE { VALUES ?x { 1 } } OFFSET 1",
+   "expect": {
+    "kind": "boolean",
+    "value": false
+   }
+  },
+  {
+   "id": "AggregateTest#AskOffsetBeyondInput",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/AggregateTest.java",
+   "line": 205,
+   "sparql12": false,
+   "data": null,
+   "query": "ASK WHERE { VALUES ?x { 1 2 } } OFFSET 3 LIMIT 8",
+   "expect": {
+    "kind": "boolean",
+    "value": false
+   }
+  },
+  {
+   "id": "AggregateTest#MaxAggregateWithGroupEmptyResult",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/AggregateTest.java",
+   "line": 249,
+   "sparql12": false,
+   "data": null,
+   "query": "select ?s (max(?o) as ?omax) {\n   ?s ?p ?o .\n }\n group by ?s\n",
+   "expect": {
+    "kind": "count",
+    "n": 0
+   }
+  },
+  {
+   "id": "AggregateTest#MaxAggregateWithoutGroupEmptySolution",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/AggregateTest.java",
+   "line": 263,
+   "sparql12": false,
+   "data": null,
+   "query": "select (max(?o) as ?omax) {\n   ?s ?p ?o .\n }\n",
+   "expect": {
+    "kind": "bindings",
+    "rows": [
+     {}
+    ]
+   },
+   "note": "Java: result.next() is an empty binding set; extra rows are not checked upstream, the spec answer is exactly one row (SPARQL 1.1 §18.5.1, one group for an empty multiset with no GROUP BY)."
+  },
+  {
+   "id": "AggregateTest#MinAggregateWithGroupEmptyResult",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/AggregateTest.java",
+   "line": 277,
+   "sparql12": false,
+   "data": null,
+   "query": "select ?s (min(?o) as ?omin) {\n   ?s ?p ?o .\n }\n group by ?s\n",
+   "expect": {
+    "kind": "count",
+    "n": 0
+   }
+  },
+  {
+   "id": "AggregateTest#MinAggregateWithoutGroupEmptySolution",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/AggregateTest.java",
+   "line": 291,
+   "sparql12": false,
+   "data": null,
+   "query": "select (min(?o) as ?omin) {\n   ?s ?p ?o .\n }\n",
+   "expect": {
+    "kind": "bindings",
+    "rows": [
+     {}
+    ]
+   },
+   "note": "Java: result.next() is an empty binding set; extra rows are not checked upstream, the spec answer is exactly one row (SPARQL 1.1 §18.5.1, one group for an empty multiset with no GROUP BY)."
+  },
+  {
+   "id": "AggregateTest#SampleAggregateWithGroupEmptyResult",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/AggregateTest.java",
+   "line": 304,
+   "sparql12": false,
+   "data": null,
+   "query": "select ?s (sample(?o) as ?osample) {\n   ?s ?p ?o .\n }\n group by ?s\n",
+   "expect": {
+    "kind": "count",
+    "n": 0
+   }
+  },
+  {
+   "id": "AggregateTest#SampleAggregateWithoutGroupEmptySolution",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/AggregateTest.java",
+   "line": 316,
+   "sparql12": false,
+   "data": null,
+   "query": "select (sample(?o) as ?osample) {\n   ?s ?p ?o .\n }\n",
+   "expect": {
+    "kind": "bindings",
+    "rows": [
+     {}
+    ]
+   },
+   "note": "Java: result.next() is an empty binding set; extra rows are not checked upstream, the spec answer is exactly one row (SPARQL 1.1 §18.5.1, one group for an empty multiset with no GROUP BY)."
+  },
+  {
+   "id": "AggregateTest#SES2361UndefMin",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/AggregateTest.java",
+   "line": 326,
+   "sparql12": false,
+   "data": null,
+   "query": "SELECT (MIN(?v) as ?min) WHERE { VALUES ?v { 1 2 undef 3 4 }}",
+   "expect": {
+    "kind": "bindings",
+    "rows": [
+     {
+      "min": {
+       "type": "literal",
+       "value": "1",
+       "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "AggregateTest#SES2361UndefMax",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/AggregateTest.java",
+   "line": 336,
+   "sparql12": false,
+   "data": null,
+   "query": "SELECT (MAX(?v) as ?max) WHERE { VALUES ?v { 1 2 7 undef 3 4 }}",
+   "expect": {
+    "kind": "bindings",
+    "rows": [
+     {
+      "max": {
+       "type": "literal",
+       "value": "7",
+       "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "AggregateTest#SES2361UndefCount",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/AggregateTest.java",
+   "line": 346,
+   "sparql12": false,
+   "data": null,
+   "query": "SELECT (COUNT(?v) as ?c) WHERE { VALUES ?v { 1 2 undef 3 4 }}",
+   "expect": {
+    "kind": "bindings",
+    "rows": [
+     {
+      "c": {
+       "type": "literal",
+       "value": "4",
+       "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "AggregateTest#SES2361UndefCountWildcard",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/AggregateTest.java",
+   "line": 356,
+   "sparql12": false,
+   "data": null,
+   "query": "SELECT (COUNT(*) as ?c) WHERE { VALUES ?v { 1 2 undef 3 4 }}",
+   "expect": {
+    "kind": "bindings",
+    "rows": [
+     {
+      "c": {
+       "type": "literal",
+       "value": "4",
+       "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+      }
+     }
+    ]
+   },
+   "note": "Upstream expects 4 for COUNT(*) over five VALUES rows, one of them all-unbound."
+  },
+  {
+   "id": "AggregateTest#SES2361UndefSum",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/AggregateTest.java",
+   "line": 366,
+   "sparql12": false,
+   "data": null,
+   "query": "SELECT (SUM(?v) as ?s) WHERE { VALUES ?v { 1 2 undef 3 4 }}",
+   "expect": {
+    "kind": "bindings",
+    "rows": [
+     {
+      "s": {
+       "type": "literal",
+       "value": "10",
+       "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "AggregateTest#SES1979MinMaxInf",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/AggregateTest.java",
+   "line": 376,
+   "sparql12": false,
+   "data": {
+    "format": "trig",
+    "text": "@prefix : <http://example.org/> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n\n{\n:a14 :float \"-3.4428452385e-13\"^^xsd:float .\n:a100 :float \"-INF\"^^xsd:float .\n:a101 :float \"INF\"^^xsd:float .\n}\n"
+   },
+   "query": "prefix : <http://example.org/> select (min(?o) as ?min) (max(?o) as ?max) where { ?s :float ?o }",
+   "expect": {
+    "kind": "bindings",
+    "rows": [
+     {
+      "min": {
+       "type": "literal",
+       "value": "-INF",
+       "datatype": "http://www.w3.org/2001/XMLSchema#float"
+      },
+      "max": {
+       "type": "literal",
+       "value": "INF",
+       "datatype": "http://www.w3.org/2001/XMLSchema#float"
+      }
+     }
+    ]
+   },
+   "note": "Data file dataset-ses1979.trig uses xsd: undeclared (RDF4J Rio supplies default namespaces); the port declares it."
+  },
+  {
+   "id": "AggregateTest#GroupConcatNonDistinct",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/AggregateTest.java",
+   "line": 432,
+   "sparql12": false,
+   "data": {
+    "format": "trig",
+    "text": "@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n@prefix dc: <http://purl.org/dc/elements/1.1/> .\n@prefix foaf: <http://xmlns.com/foaf/0.1/> .\n@prefix ex: <http://example.org/> .\n\n{\n    ex:graph1 dc:publisher \"Bob\" ;\n\t      ex:containsPerson ex:bob .\n\n    ex:graph2 dc:publisher \"Alice\" ;\n\t      ex:containsPerson ex:alice .\n\n    ex:graph3 dc:publisher \"William\" ;\n\t      ex:containsPerson ex:william .\n\n    ex:groupconcat-test \n         ex:p \"a\";\n         ex:p \"b\"; \n\t ex:p \"c\";\n\t ex:p \"d\";\n\t ex:q \"b\";\n\t ex:q \"c\".\n}\n\nex:graph1 {\n    ex:bob foaf:name \"Bob\" ;\n       foaf:mbox \"bob@example.org\" ;\n       foaf:knows ex:alice .\n\n    ex:bob foaf:knows ex:alice .\n    ex:bob foaf:knows ex:william .\n\n    ex:alice foaf:knows ex:bob .\n}\n\nex:graph2 {\n    ex:alice foaf:name \"Alice\" ;\n\tfoaf:mbox \"alice@example.org\" .\n\n    ex:alice foaf:knows ex:william .\n}\n\nex:graph3 {\n    ex:william foaf:name \"William\" ;\n\tfoaf:mbox \"william@example.org\" .\n}\n\nex:tree-graph {\n    ex:a ex:name \"aa\" .\n    ex:b ex:name \"bb\" .\n    ex:c ex:name \"cc\" .\n    ex:d ex:name \"dd\" .\n    ex:e ex:name \"ee\" .\n    ex:f ex:name \"ff\" .\n    ex:g ex:name \"gg\" .\n    ex:h ex:name \"hh\" .\n    ex:i ex:name \"ii\" .\n    ex:j ex:name \"jj\" .\n    ex:k ex:name \"kk\" .\n\n    ex:b ex:hasParent ex:a .\n    ex:c ex:hasParent ex:a .\n    ex:d ex:hasParent ex:a .\n\n    ex:g ex:hasParent ex:c .\n    \n    ex:e ex:hasParent ex:b .\n    ex:f ex:hasParent ex:b .\n    \n    ex:i ex:hasParent ex:g .\n    ex:h ex:hasPerent ex:g .\n\n    ex:j ex:hasParent ex:f .\n    ex:k ex:hasParent ex:f .\n}\n\nex:optional-sameterm-graph {\n\tex:a ex:p ex:A ;\n\t\t rdfs:label \"label\" ;\n\t\t ex:prop1 \"prop1\" ;\n\t\t ex:prop2 \"prop2\" .\n}\n"
+   },
+   "query": "PREFIX dc: <http://purl.org/dc/terms/> \nPREFIX foaf: <http://xmlns.com/foaf/0.1/> \nPREFIX ex: <http://example.org/> \n\nSELECT (GROUP_CONCAT(?l) AS ?concat)WHERE { ex:groupconcat-test ?p ?l . }",
+   "expect": {
+    "kind": "all",
+    "of": [
+     {
+      "kind": "count",
+      "n": 1
+     }
+    ]
+   },
+   "note": "Java counts occurrences of a,b,c,d in the label (1,2,2,1); order is free so no exact value. Weaker check here (one row); the character counts are checked by the #2 case, a reformulated query."
+  },
+  {
+   "id": "AggregateTest#GroupConcatNonDistinct#2",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/AggregateTest.java",
+   "line": 432,
+   "sparql12": false,
+   "data": {
+    "format": "trig",
+    "text": "@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n@prefix dc: <http://purl.org/dc/elements/1.1/> .\n@prefix foaf: <http://xmlns.com/foaf/0.1/> .\n@prefix ex: <http://example.org/> .\n\n{\n    ex:graph1 dc:publisher \"Bob\" ;\n\t      ex:containsPerson ex:bob .\n\n    ex:graph2 dc:publisher \"Alice\" ;\n\t      ex:containsPerson ex:alice .\n\n    ex:graph3 dc:publisher \"William\" ;\n\t      ex:containsPerson ex:william .\n\n    ex:groupconcat-test \n         ex:p \"a\";\n         ex:p \"b\"; \n\t ex:p \"c\";\n\t ex:p \"d\";\n\t ex:q \"b\";\n\t ex:q \"c\".\n}\n\nex:graph1 {\n    ex:bob foaf:name \"Bob\" ;\n       foaf:mbox \"bob@example.org\" ;\n       foaf:knows ex:alice .\n\n    ex:bob foaf:knows ex:alice .\n    ex:bob foaf:knows ex:william .\n\n    ex:alice foaf:knows ex:bob .\n}\n\nex:graph2 {\n    ex:alice foaf:name \"Alice\" ;\n\tfoaf:mbox \"alice@example.org\" .\n\n    ex:alice foaf:knows ex:william .\n}\n\nex:graph3 {\n    ex:william foaf:name \"William\" ;\n\tfoaf:mbox \"william@example.org\" .\n}\n\nex:tree-graph {\n    ex:a ex:name \"aa\" .\n    ex:b ex:name \"bb\" .\n    ex:c ex:name \"cc\" .\n    ex:d ex:name \"dd\" .\n    ex:e ex:name \"ee\" .\n    ex:f ex:name \"ff\" .\n    ex:g ex:name \"gg\" .\n    ex:h ex:name \"hh\" .\n    ex:i ex:name \"ii\" .\n    ex:j ex:name \"jj\" .\n    ex:k ex:name \"kk\" .\n\n    ex:b ex:hasParent ex:a .\n    ex:c ex:hasParent ex:a .\n    ex:d ex:hasParent ex:a .\n\n    ex:g ex:hasParent ex:c .\n    \n    ex:e ex:hasParent ex:b .\n    ex:f ex:hasParent ex:b .\n    \n    ex:i ex:hasParent ex:g .\n    ex:h ex:hasPerent ex:g .\n\n    ex:j ex:hasParent ex:f .\n    ex:k ex:hasParent ex:f .\n}\n\nex:optional-sameterm-graph {\n\tex:a ex:p ex:A ;\n\t\t rdfs:label \"label\" ;\n\t\t ex:prop1 \"prop1\" ;\n\t\t ex:prop2 \"prop2\" .\n}\n"
+   },
+   "query": "PREFIX dc: <http://purl.org/dc/terms/> \nPREFIX foaf: <http://xmlns.com/foaf/0.1/> \nPREFIX ex: <http://example.org/> \n\nASK { { SELECT (GROUP_CONCAT(?l) AS ?concat) WHERE { ex:groupconcat-test ?p ?l . } } FILTER(isLiteral(?concat) && STRLEN(?concat) - STRLEN(REPLACE(?concat, \"a\", \"\")) = 1 && STRLEN(?concat) - STRLEN(REPLACE(?concat, \"b\", \"\")) = 2 && STRLEN(?concat) - STRLEN(REPLACE(?concat, \"c\", \"\")) = 2 && STRLEN(?concat) - STRLEN(REPLACE(?concat, \"d\", \"\")) = 1) }",
+   "expect": {
+    "kind": "boolean",
+    "value": true
+   },
+   "note": "Reformulated: the Java character-count assertions as an ASK over the upstream query."
+  },
+  {
+   "id": "AggregateTest#GroupConcatDistinct",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/AggregateTest.java",
+   "line": 394,
+   "sparql12": false,
+   "data": {
+    "format": "trig",
+    "text": "@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n@prefix dc: <http://purl.org/dc/elements/1.1/> .\n@prefix foaf: <http://xmlns.com/foaf/0.1/> .\n@prefix ex: <http://example.org/> .\n\n{\n    ex:graph1 dc:publisher \"Bob\" ;\n\t      ex:containsPerson ex:bob .\n\n    ex:graph2 dc:publisher \"Alice\" ;\n\t      ex:containsPerson ex:alice .\n\n    ex:graph3 dc:publisher \"William\" ;\n\t      ex:containsPerson ex:william .\n\n    ex:groupconcat-test \n         ex:p \"a\";\n         ex:p \"b\"; \n\t ex:p \"c\";\n\t ex:p \"d\";\n\t ex:q \"b\";\n\t ex:q \"c\".\n}\n\nex:graph1 {\n    ex:bob foaf:name \"Bob\" ;\n       foaf:mbox \"bob@example.org\" ;\n       foaf:knows ex:alice .\n\n    ex:bob foaf:knows ex:alice .\n    ex:bob foaf:knows ex:william .\n\n    ex:alice foaf:knows ex:bob .\n}\n\nex:graph2 {\n    ex:alice foaf:name \"Alice\" ;\n\tfoaf:mbox \"alice@example.org\" .\n\n    ex:alice foaf:knows ex:william .\n}\n\nex:graph3 {\n    ex:william foaf:name \"William\" ;\n\tfoaf:mbox \"william@example.org\" .\n}\n\nex:tree-graph {\n    ex:a ex:name \"aa\" .\n    ex:b ex:name \"bb\" .\n    ex:c ex:name \"cc\" .\n    ex:d ex:name \"dd\" .\n    ex:e ex:name \"ee\" .\n    ex:f ex:name \"ff\" .\n    ex:g ex:name \"gg\" .\n    ex:h ex:name \"hh\" .\n    ex:i ex:name \"ii\" .\n    ex:j ex:name \"jj\" .\n    ex:k ex:name \"kk\" .\n\n    ex:b ex:hasParent ex:a .\n    ex:c ex:hasParent ex:a .\n    ex:d ex:hasParent ex:a .\n\n    ex:g ex:hasParent ex:c .\n    \n    ex:e ex:hasParent ex:b .\n    ex:f ex:hasParent ex:b .\n    \n    ex:i ex:hasParent ex:g .\n    ex:h ex:hasPerent ex:g .\n\n    ex:j ex:hasParent ex:f .\n    ex:k ex:hasParent ex:f .\n}\n\nex:optional-sameterm-graph {\n\tex:a ex:p ex:A ;\n\t\t rdfs:label \"label\" ;\n\t\t ex:prop1 \"prop1\" ;\n\t\t ex:prop2 \"prop2\" .\n}\n"
+   },
+   "query": "PREFIX dc: <http://purl.org/dc/terms/> \nPREFIX foaf: <http://xmlns.com/foaf/0.1/> \nPREFIX ex: <http://example.org/> \n\nSELECT (GROUP_CONCAT(DISTINCT ?l) AS ?concat)WHERE { ex:groupconcat-test ?p ?l . }",
+   "expect": {
+    "kind": "count",
+    "n": 1
+   },
+   "note": "Weaker check (one row); character counts in #2."
+  },
+  {
+   "id": "AggregateTest#GroupConcatDistinct#2",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/AggregateTest.java",
+   "line": 394,
+   "sparql12": false,
+   "data": {
+    "format": "trig",
+    "text": "@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n@prefix dc: <http://purl.org/dc/elements/1.1/> .\n@prefix foaf: <http://xmlns.com/foaf/0.1/> .\n@prefix ex: <http://example.org/> .\n\n{\n    ex:graph1 dc:publisher \"Bob\" ;\n\t      ex:containsPerson ex:bob .\n\n    ex:graph2 dc:publisher \"Alice\" ;\n\t      ex:containsPerson ex:alice .\n\n    ex:graph3 dc:publisher \"William\" ;\n\t      ex:containsPerson ex:william .\n\n    ex:groupconcat-test \n         ex:p \"a\";\n         ex:p \"b\"; \n\t ex:p \"c\";\n\t ex:p \"d\";\n\t ex:q \"b\";\n\t ex:q \"c\".\n}\n\nex:graph1 {\n    ex:bob foaf:name \"Bob\" ;\n       foaf:mbox \"bob@example.org\" ;\n       foaf:knows ex:alice .\n\n    ex:bob foaf:knows ex:alice .\n    ex:bob foaf:knows ex:william .\n\n    ex:alice foaf:knows ex:bob .\n}\n\nex:graph2 {\n    ex:alice foaf:name \"Alice\" ;\n\tfoaf:mbox \"alice@example.org\" .\n\n    ex:alice foaf:knows ex:william .\n}\n\nex:graph3 {\n    ex:william foaf:name \"William\" ;\n\tfoaf:mbox \"william@example.org\" .\n}\n\nex:tree-graph {\n    ex:a ex:name \"aa\" .\n    ex:b ex:name \"bb\" .\n    ex:c ex:name \"cc\" .\n    ex:d ex:name \"dd\" .\n    ex:e ex:name \"ee\" .\n    ex:f ex:name \"ff\" .\n    ex:g ex:name \"gg\" .\n    ex:h ex:name \"hh\" .\n    ex:i ex:name \"ii\" .\n    ex:j ex:name \"jj\" .\n    ex:k ex:name \"kk\" .\n\n    ex:b ex:hasParent ex:a .\n    ex:c ex:hasParent ex:a .\n    ex:d ex:hasParent ex:a .\n\n    ex:g ex:hasParent ex:c .\n    \n    ex:e ex:hasParent ex:b .\n    ex:f ex:hasParent ex:b .\n    \n    ex:i ex:hasParent ex:g .\n    ex:h ex:hasPerent ex:g .\n\n    ex:j ex:hasParent ex:f .\n    ex:k ex:hasParent ex:f .\n}\n\nex:optional-sameterm-graph {\n\tex:a ex:p ex:A ;\n\t\t rdfs:label \"label\" ;\n\t\t ex:prop1 \"prop1\" ;\n\t\t ex:prop2 \"prop2\" .\n}\n"
+   },
+   "query": "PREFIX dc: <http://purl.org/dc/terms/> \nPREFIX foaf: <http://xmlns.com/foaf/0.1/> \nPREFIX ex: <http://example.org/> \n\nASK { { SELECT (GROUP_CONCAT(DISTINCT ?l) AS ?concat) WHERE { ex:groupconcat-test ?p ?l . } } FILTER(isLiteral(?concat) && STRLEN(?concat) - STRLEN(REPLACE(?concat, \"a\", \"\")) = 1 && STRLEN(?concat) - STRLEN(REPLACE(?concat, \"b\", \"\")) = 1 && STRLEN(?concat) - STRLEN(REPLACE(?concat, \"c\", \"\")) = 1 && STRLEN(?concat) - STRLEN(REPLACE(?concat, \"d\", \"\")) = 1) }",
+   "expect": {
+    "kind": "boolean",
+    "value": true
+   },
+   "note": "Reformulated: the Java character-count assertions as an ASK over the upstream query."
+  },
+  {
+   "id": "AggregateTest#SES1970CountDistinctWildcard",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/AggregateTest.java",
+   "line": 469,
+   "sparql12": false,
+   "data": {
+    "format": "trig",
+    "text": "@prefix : <http://example.org/> .\n\n{\n  :a :p :b .\n  :a :p :c .\n}\n\n:n {\n  :a :p :b .\n  :b :q :c . \n}\n"
+   },
+   "query": "SELECT (COUNT(DISTINCT *) AS ?c) {?s ?p ?o }",
+   "expect": {
+    "kind": "bindings",
+    "rows": [
+     {
+      "c": {
+       "type": "literal",
+       "value": "3",
+       "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+      }
+     }
+    ]
+   },
+   "unionDefaultGraph": true,
+   "note": "3 distinct (s,p,o) over the union of the default graph and :n; the default graph alone has 2."
+  },
+  {
+   "id": "AggregateTest#CountHaving",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/AggregateTest.java",
+   "line": 488,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix foaf: <http://xmlns.com/foaf/0.1/> .\n_:b3 foaf:knows _:k1 . _:b1 foaf:knows _:k2 . _:b1 foaf:knows _:k3 . _:b2 foaf:knows _:k4 .\n_:b3 foaf:knows _:k5 . _:b3 foaf:knows _:k6 . _:b1 foaf:knows _:k7 ."
+   },
+   "query": "SELECT ?a WHERE { ?a ?b ?c } GROUP BY ?a HAVING( (COUNT(?c) > 1 ) && ( COUNT(?c)  != 0 ) ) ",
+   "expect": {
+    "kind": "count",
+    "n": 2
+   }
+  },
+  {
+   "id": "AggregateTest#Sum",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/AggregateTest.java",
+   "line": 508,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix foaf: <http://xmlns.com/foaf/0.1/> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n@prefix n: <http://example.com/> .\nn:3 foaf:age [] .\nn:1 foaf:age \"3\" .\nn:1 foaf:age \"5\"^^xsd:int .\nn:2 foaf:age \"7.11\"^^xsd:double .\nn:3 foaf:age \"13\"^^xsd:int .\nn:3 foaf:age \"17\"^^xsd:int .\nn:1 foaf:age \"19\"^^xsd:int .\nn:2 foaf:age \"23\"^^xsd:int .\nn:4 foaf:age \"19\"^^xsd:int .\nn:4 foaf:age \"2022-01-01T01:01:01.000000001Z\"^^xsd:dateTime .\nn:1 foaf:age \"23\"^^xsd:int .\nn:2 foaf:age \"23\"^^xsd:int .\nn:3 foaf:age \"23\"^^xsd:int .\nn:4 foaf:age \"23\"^^xsd:int .\nn:3 foaf:knows n:1 .\nn:5 foaf:age \"17\"^^xsd:int .\nn:5 foaf:phone \"17\"^^xsd:int .\nn:5 foaf:dnaChecksum \"17\"^^xsd:int .\nn:5 foaf:dnaChecksum \"19\"^^xsd:int .\nn:5 foaf:phone \"19.4786576482391284723864721567342354783275234\"^^xsd:decimal .\n"
+   },
+   "query": "SELECT ?a (SUM(?c) as ?aggregate) WHERE { ?a ?b ?c } GROUP BY ?a ORDER BY ?aggregate ",
+   "expect": {
+    "kind": "bindings",
+    "vars": [
+     "aggregate"
+    ],
+    "ordered": true,
+    "rows": [
+     {},
+     {},
+     {},
+     {
+      "aggregate": {
+       "type": "literal",
+       "value": "30.11",
+       "datatype": "http://www.w3.org/2001/XMLSchema#double"
+      }
+     },
+     {
+      "aggregate": {
+       "type": "literal",
+       "value": "89.4786576482391284723864721567342354783275234",
+       "datatype": "http://www.w3.org/2001/XMLSchema#decimal"
+      }
+     }
+    ]
+   },
+   "note": "Data mixedDataForNumericAggregates: Java literal(int) is xsd:int, literal(double) xsd:double, literal(BigDecimal) xsd:decimal, literal(ZonedDateTime) xsd:dateTime. Assertion is positional on ?aggregate only (vars restricts the comparison)."
+  },
+  {
+   "id": "AggregateTest#DistinctSum",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/AggregateTest.java",
+   "line": 525,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix foaf: <http://xmlns.com/foaf/0.1/> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n@prefix n: <http://example.com/> .\nn:3 foaf:age [] .\nn:1 foaf:age \"3\" .\nn:1 foaf:age \"5\"^^xsd:int .\nn:2 foaf:age \"7.11\"^^xsd:double .\nn:3 foaf:age \"13\"^^xsd:int .\nn:3 foaf:age \"17\"^^xsd:int .\nn:1 foaf:age \"19\"^^xsd:int .\nn:2 foaf:age \"23\"^^xsd:int .\nn:4 foaf:age \"19\"^^xsd:int .\nn:4 foaf:age \"2022-01-01T01:01:01.000000001Z\"^^xsd:dateTime .\nn:1 foaf:age \"23\"^^xsd:int .\nn:2 foaf:age \"23\"^^xsd:int .\nn:3 foaf:age \"23\"^^xsd:int .\nn:4 foaf:age \"23\"^^xsd:int .\nn:3 foaf:knows n:1 .\nn:5 foaf:age \"17\"^^xsd:int .\nn:5 foaf:phone \"17\"^^xsd:int .\nn:5 foaf:dnaChecksum \"17\"^^xsd:int .\nn:5 foaf:dnaChecksum \"19\"^^xsd:int .\nn:5 foaf:phone \"19.4786576482391284723864721567342354783275234\"^^xsd:decimal .\n"
+   },
+   "query": "SELECT ?a (SUM(DISTINCT ?c) as ?aggregate) WHERE { ?a ?b ?c } GROUP BY ?a ORDER BY ?aggregate ",
+   "expect": {
+    "kind": "bindings",
+    "vars": [
+     "aggregate"
+    ],
+    "ordered": true,
+    "rows": [
+     {},
+     {},
+     {},
+     {
+      "aggregate": {
+       "type": "literal",
+       "value": "30.11",
+       "datatype": "http://www.w3.org/2001/XMLSchema#double"
+      }
+     },
+     {
+      "aggregate": {
+       "type": "literal",
+       "value": "55.4786576482391284723864721567342354783275234",
+       "datatype": "http://www.w3.org/2001/XMLSchema#decimal"
+      }
+     }
+    ]
+   },
+   "note": "Data mixedDataForNumericAggregates: Java literal(int) is xsd:int, literal(double) xsd:double, literal(BigDecimal) xsd:decimal, literal(ZonedDateTime) xsd:dateTime. Assertion is positional on ?aggregate only (vars restricts the comparison)."
+  },
+  {
+   "id": "AggregateTest#Avg",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/AggregateTest.java",
+   "line": 541,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix foaf: <http://xmlns.com/foaf/0.1/> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n@prefix n: <http://example.com/> .\nn:3 foaf:age [] .\nn:1 foaf:age \"3\" .\nn:1 foaf:age \"5\"^^xsd:int .\nn:2 foaf:age \"7.11\"^^xsd:double .\nn:3 foaf:age \"13\"^^xsd:int .\nn:3 foaf:age \"17\"^^xsd:int .\nn:1 foaf:age \"19\"^^xsd:int .\nn:2 foaf:age \"23\"^^xsd:int .\nn:4 foaf:age \"19\"^^xsd:int .\nn:4 foaf:age \"2022-01-01T01:01:01.000000001Z\"^^xsd:dateTime .\nn:1 foaf:age \"23\"^^xsd:int .\nn:2 foaf:age \"23\"^^xsd:int .\nn:3 foaf:age \"23\"^^xsd:int .\nn:4 foaf:age \"23\"^^xsd:int .\nn:3 foaf:knows n:1 .\nn:5 foaf:age \"17\"^^xsd:int .\nn:5 foaf:phone \"17\"^^xsd:int .\nn:5 foaf:dnaChecksum \"17\"^^xsd:int .\nn:5 foaf:dnaChecksum \"19\"^^xsd:int .\nn:5 foaf:phone \"19.4786576482391284723864721567342354783275234\"^^xsd:decimal .\n"
+   },
+   "query": "SELECT ?a (AVG(?c) as ?aggregate) WHERE { ?a ?b ?c } GROUP BY ?a ORDER BY ?aggregate ",
+   "expect": {
+    "kind": "bindings",
+    "vars": [
+     "aggregate"
+    ],
+    "ordered": true,
+    "rows": [
+     {},
+     {},
+     {},
+     {
+      "aggregate": {
+       "type": "literal",
+       "value": "15.055",
+       "datatype": "http://www.w3.org/2001/XMLSchema#double"
+      }
+     },
+     {
+      "aggregate": {
+       "type": "literal",
+       "value": "17.89573152964782569447729443134684709566550468",
+       "datatype": "http://www.w3.org/2001/XMLSchema#decimal"
+      }
+     }
+    ]
+   },
+   "note": "Data mixedDataForNumericAggregates: Java literal(int) is xsd:int, literal(double) xsd:double, literal(BigDecimal) xsd:decimal, literal(ZonedDateTime) xsd:dateTime. Assertion is positional on ?aggregate only (vars restricts the comparison)."
+  },
+  {
+   "id": "AggregateTest#DistinctAvg",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/AggregateTest.java",
+   "line": 557,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix foaf: <http://xmlns.com/foaf/0.1/> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n@prefix n: <http://example.com/> .\nn:3 foaf:age [] .\nn:1 foaf:age \"3\" .\nn:1 foaf:age \"5\"^^xsd:int .\nn:2 foaf:age \"7.11\"^^xsd:double .\nn:3 foaf:age \"13\"^^xsd:int .\nn:3 foaf:age \"17\"^^xsd:int .\nn:1 foaf:age \"19\"^^xsd:int .\nn:2 foaf:age \"23\"^^xsd:int .\nn:4 foaf:age \"19\"^^xsd:int .\nn:4 foaf:age \"2022-01-01T01:01:01.000000001Z\"^^xsd:dateTime .\nn:1 foaf:age \"23\"^^xsd:int .\nn:2 foaf:age \"23\"^^xsd:int .\nn:3 foaf:age \"23\"^^xsd:int .\nn:4 foaf:age \"23\"^^xsd:int .\nn:3 foaf:knows n:1 .\nn:5 foaf:age \"17\"^^xsd:int .\nn:5 foaf:phone \"17\"^^xsd:int .\nn:5 foaf:dnaChecksum \"17\"^^xsd:int .\nn:5 foaf:dnaChecksum \"19\"^^xsd:int .\nn:5 foaf:phone \"19.4786576482391284723864721567342354783275234\"^^xsd:decimal .\n"
+   },
+   "query": "SELECT ?a (AVG(DISTINCT ?c) as ?aggregate) WHERE { ?a ?b ?c } GROUP BY ?a ORDER BY ?aggregate ",
+   "expect": {
+    "kind": "bindings",
+    "vars": [
+     "aggregate"
+    ],
+    "ordered": true,
+    "rows": [
+     {},
+     {},
+     {},
+     {
+      "aggregate": {
+       "type": "literal",
+       "value": "15.055",
+       "datatype": "http://www.w3.org/2001/XMLSchema#double"
+      }
+     },
+     {
+      "aggregate": {
+       "type": "literal",
+       "value": "18.492885882746376157462157",
+       "datatype": "http://www.w3.org/2001/XMLSchema#decimal"
+      }
+     }
+    ]
+   },
+   "note": "Data mixedDataForNumericAggregates: Java literal(int) is xsd:int, literal(double) xsd:double, literal(BigDecimal) xsd:decimal, literal(ZonedDateTime) xsd:dateTime. Assertion is positional on ?aggregate only (vars restricts the comparison)."
+  },
+  {
+   "id": "AggregateTest#Max",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/AggregateTest.java",
+   "line": 574,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix foaf: <http://xmlns.com/foaf/0.1/> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n@prefix n: <http://example.com/> .\nn:3 foaf:age [] .\nn:1 foaf:age \"3\" .\nn:1 foaf:age \"5\"^^xsd:int .\nn:2 foaf:age \"7.11\"^^xsd:double .\nn:3 foaf:age \"13\"^^xsd:int .\nn:3 foaf:age \"17\"^^xsd:int .\nn:1 foaf:age \"19\"^^xsd:int .\nn:2 foaf:age \"23\"^^xsd:int .\nn:4 foaf:age \"19\"^^xsd:int .\nn:4 foaf:age \"2022-01-01T01:01:01.000000001Z\"^^xsd:dateTime .\nn:1 foaf:age \"23\"^^xsd:int .\nn:2 foaf:age \"23\"^^xsd:int .\nn:3 foaf:age \"23\"^^xsd:int .\nn:4 foaf:age \"23\"^^xsd:int .\nn:3 foaf:knows n:1 .\nn:5 foaf:age \"17\"^^xsd:int .\nn:5 foaf:phone \"17\"^^xsd:int .\nn:5 foaf:dnaChecksum \"17\"^^xsd:int .\nn:5 foaf:dnaChecksum \"19\"^^xsd:int .\nn:5 foaf:phone \"19.4786576482391284723864721567342354783275234\"^^xsd:decimal .\n"
+   },
+   "query": "SELECT ?a (MAX(?c) as ?aggregate) WHERE { ?a ?b ?c } GROUP BY ?a ORDER BY ?aggregate ",
+   "expect": {
+    "kind": "bindings",
+    "vars": [
+     "aggregate"
+    ],
+    "ordered": true,
+    "rows": [
+     {
+      "aggregate": {
+       "type": "literal",
+       "value": "19.4786576482391284723864721567342354783275234",
+       "datatype": "http://www.w3.org/2001/XMLSchema#decimal"
+      }
+     },
+     {
+      "aggregate": {
+       "type": "literal",
+       "value": "23",
+       "datatype": "http://www.w3.org/2001/XMLSchema#int"
+      }
+     },
+     {
+      "aggregate": {
+       "type": "literal",
+       "value": "23",
+       "datatype": "http://www.w3.org/2001/XMLSchema#int"
+      }
+     },
+     {
+      "aggregate": {
+       "type": "literal",
+       "value": "2022-01-01T01:01:01.000000001Z",
+       "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+      }
+     },
+     {
+      "aggregate": {
+       "type": "literal",
+       "value": "3"
+      }
+     }
+    ]
+   },
+   "note": "Data mixedDataForNumericAggregates: Java literal(int) is xsd:int, literal(double) xsd:double, literal(BigDecimal) xsd:decimal, literal(ZonedDateTime) xsd:dateTime. Assertion is positional on ?aggregate only (vars restricts the comparison)."
+  },
+  {
+   "id": "AggregateTest#DistinctMax",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/AggregateTest.java",
+   "line": 591,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix foaf: <http://xmlns.com/foaf/0.1/> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n@prefix n: <http://example.com/> .\nn:3 foaf:age [] .\nn:1 foaf:age \"3\" .\nn:1 foaf:age \"5\"^^xsd:int .\nn:2 foaf:age \"7.11\"^^xsd:double .\nn:3 foaf:age \"13\"^^xsd:int .\nn:3 foaf:age \"17\"^^xsd:int .\nn:1 foaf:age \"19\"^^xsd:int .\nn:2 foaf:age \"23\"^^xsd:int .\nn:4 foaf:age \"19\"^^xsd:int .\nn:4 foaf:age \"2022-01-01T01:01:01.000000001Z\"^^xsd:dateTime .\nn:1 foaf:age \"23\"^^xsd:int .\nn:2 foaf:age \"23\"^^xsd:int .\nn:3 foaf:age \"23\"^^xsd:int .\nn:4 foaf:age \"23\"^^xsd:int .\nn:3 foaf:knows n:1 .\nn:5 foaf:age \"17\"^^xsd:int .\nn:5 foaf:phone \"17\"^^xsd:int .\nn:5 foaf:dnaChecksum \"17\"^^xsd:int .\nn:5 foaf:dnaChecksum \"19\"^^xsd:int .\nn:5 foaf:phone \"19.4786576482391284723864721567342354783275234\"^^xsd:decimal .\n"
+   },
+   "query": "SELECT ?a (MAX(DISTINCT ?c) as ?aggregate) WHERE { ?a ?b ?c } GROUP BY ?a ORDER BY ?aggregate ",
+   "expect": {
+    "kind": "bindings",
+    "vars": [
+     "aggregate"
+    ],
+    "ordered": true,
+    "rows": [
+     {
+      "aggregate": {
+       "type": "literal",
+       "value": "19.4786576482391284723864721567342354783275234",
+       "datatype": "http://www.w3.org/2001/XMLSchema#decimal"
+      }
+     },
+     {
+      "aggregate": {
+       "type": "literal",
+       "value": "23",
+       "datatype": "http://www.w3.org/2001/XMLSchema#int"
+      }
+     },
+     {
+      "aggregate": {
+       "type": "literal",
+       "value": "23",
+       "datatype": "http://www.w3.org/2001/XMLSchema#int"
+      }
+     },
+     {
+      "aggregate": {
+       "type": "literal",
+       "value": "2022-01-01T01:01:01.000000001Z",
+       "datatype": "http://www.w3.org/2001/XMLSchema#dateTime"
+      }
+     },
+     {
+      "aggregate": {
+       "type": "literal",
+       "value": "3"
+      }
+     }
+    ]
+   },
+   "note": "Data mixedDataForNumericAggregates: Java literal(int) is xsd:int, literal(double) xsd:double, literal(BigDecimal) xsd:decimal, literal(ZonedDateTime) xsd:dateTime. Assertion is positional on ?aggregate only (vars restricts the comparison)."
+  },
+  {
+   "id": "AggregateTest#CountOrderBy_ImplicitGroup",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/AggregateTest.java",
+   "line": 611,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix foaf: <http://xmlns.com/foaf/0.1/> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n@prefix n: <http://example.com/> .\nn:3 foaf:age [] .\nn:1 foaf:age \"3\" .\nn:1 foaf:age \"5\"^^xsd:int .\nn:2 foaf:age \"7.11\"^^xsd:double .\nn:3 foaf:age \"13\"^^xsd:int .\nn:3 foaf:age \"17\"^^xsd:int .\nn:1 foaf:age \"19\"^^xsd:int .\nn:2 foaf:age \"23\"^^xsd:int .\nn:4 foaf:age \"19\"^^xsd:int .\nn:4 foaf:age \"2022-01-01T01:01:01.000000001Z\"^^xsd:dateTime .\nn:1 foaf:age \"23\"^^xsd:int .\nn:2 foaf:age \"23\"^^xsd:int .\nn:3 foaf:age \"23\"^^xsd:int .\nn:4 foaf:age \"23\"^^xsd:int .\nn:3 foaf:knows n:1 .\nn:5 foaf:age \"17\"^^xsd:int .\nn:5 foaf:phone \"17\"^^xsd:int .\nn:5 foaf:dnaChecksum \"17\"^^xsd:int .\nn:5 foaf:dnaChecksum \"19\"^^xsd:int .\nn:5 foaf:phone \"19.4786576482391284723864721567342354783275234\"^^xsd:decimal .\n"
+   },
+   "query": "select (count(*) as ?c) where { \n\t?s ?p ?o .\n} \norder by (?s)",
+   "expect": {
+    "kind": "bindings",
+    "rows": [
+     {
+      "c": {
+       "type": "literal",
+       "value": "19",
+       "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+      }
+     }
+    ]
+   },
+   "note": "Data mixedDataForNumericAggregates: Java literal(int) is xsd:int, literal(double) xsd:double, literal(BigDecimal) xsd:decimal, literal(ZonedDateTime) xsd:dateTime."
+  },
+  {
+   "id": "BuiltinFunctionTest#EmptyVariadicExpressionsAndNestedErrors",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/BuiltinFunctionTest.java",
+   "line": 57,
+   "sparql12": false,
+   "data": null,
+   "query": "SELECT (CONCAT() AS ?x) WHERE {}",
+   "expect": {
+    "kind": "bindings",
+    "rows": [
+     {
+      "x": {
+       "type": "literal",
+       "value": ""
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "BuiltinFunctionTest#EmptyVariadicExpressionsAndNestedErrors#2",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/BuiltinFunctionTest.java",
+   "line": 57,
+   "sparql12": false,
+   "data": null,
+   "query": "SELECT ?x WHERE { BIND(CONCAT() AS ?x) }",
+   "expect": {
+    "kind": "bindings",
+    "rows": [
+     {
+      "x": {
+       "type": "literal",
+       "value": ""
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "BuiltinFunctionTest#EmptyVariadicExpressionsAndNestedErrors#3",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/BuiltinFunctionTest.java",
+   "line": 57,
+   "sparql12": false,
+   "data": null,
+   "query": "SELECT (COALESCE(COALESCE(), CONCAT()) AS ?x) WHERE {}",
+   "expect": {
+    "kind": "bindings",
+    "rows": [
+     {
+      "x": {
+       "type": "literal",
+       "value": ""
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "BuiltinFunctionTest#EmptyVariadicExpressionsAndNestedErrors#4",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/BuiltinFunctionTest.java",
+   "line": 57,
+   "sparql12": false,
+   "data": null,
+   "query": "SELECT ?x WHERE { BIND(COALESCE(COALESCE(), CONCAT()) AS ?x) }",
+   "expect": {
+    "kind": "bindings",
+    "rows": [
+     {
+      "x": {
+       "type": "literal",
+       "value": ""
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "BuiltinFunctionTest#EmptyVariadicExpressionsAndNestedErrors#5",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/BuiltinFunctionTest.java",
+   "line": 57,
+   "sparql12": false,
+   "data": null,
+   "query": "SELECT (IF(true, CONCAT(), 1 / 0) AS ?x) WHERE {}",
+   "expect": {
+    "kind": "bindings",
+    "rows": [
+     {
+      "x": {
+       "type": "literal",
+       "value": ""
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "BuiltinFunctionTest#EmptyVariadicExpressionsAndNestedErrors#6",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/BuiltinFunctionTest.java",
+   "line": 57,
+   "sparql12": false,
+   "data": null,
+   "query": "SELECT ?x WHERE { BIND(IF(true, CONCAT(), 1 / 0) AS ?x) }",
+   "expect": {
+    "kind": "bindings",
+    "rows": [
+     {
+      "x": {
+       "type": "literal",
+       "value": ""
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "BuiltinFunctionTest#EmptyVariadicExpressionsAndNestedErrors#7",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/BuiltinFunctionTest.java",
+   "line": 57,
+   "sparql12": false,
+   "data": null,
+   "query": "SELECT (CONCAT(CONCAT(), CONCAT()) AS ?x) WHERE {}",
+   "expect": {
+    "kind": "bindings",
+    "rows": [
+     {
+      "x": {
+       "type": "literal",
+       "value": ""
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "BuiltinFunctionTest#EmptyVariadicExpressionsAndNestedErrors#8",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/BuiltinFunctionTest.java",
+   "line": 57,
+   "sparql12": false,
+   "data": null,
+   "query": "SELECT ?x WHERE { BIND(CONCAT(CONCAT(), CONCAT()) AS ?x) }",
+   "expect": {
+    "kind": "bindings",
+    "rows": [
+     {
+      "x": {
+       "type": "literal",
+       "value": ""
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "BuiltinFunctionTest#EmptyVariadicExpressionsAndNestedErrors#9",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/BuiltinFunctionTest.java",
+   "line": 57,
+   "sparql12": false,
+   "data": null,
+   "query": "BASE <https://example.org/> SELECT ?x WHERE { BIND(COALESCE() AS ?x) }",
+   "expect": {
+    "kind": "bindings",
+    "rows": [
+     {}
+    ]
+   }
+  },
+  {
+   "id": "BuiltinFunctionTest#EmptyVariadicExpressionsAndNestedErrors#10",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/BuiltinFunctionTest.java",
+   "line": 57,
+   "sparql12": false,
+   "data": null,
+   "query": "BASE <https://example.org/> SELECT ?x WHERE { BIND(IF(COALESCE(), true, false) AS ?x) }",
+   "expect": {
+    "kind": "bindings",
+    "rows": [
+     {}
+    ]
+   }
+  },
+  {
+   "id": "BuiltinFunctionTest#EmptyVariadicExpressionsAndNestedErrors#11",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/BuiltinFunctionTest.java",
+   "line": 57,
+   "sparql12": false,
+   "data": null,
+   "query": "BASE <https://example.org/> SELECT ?x WHERE { BIND(IF(IF(?unbound, 'yes', 'no') = 'no', true, false) AS ?x) }",
+   "expect": {
+    "kind": "bindings",
+    "rows": [
+     {}
+    ]
+   }
+  },
+  {
+   "id": "BuiltinFunctionTest#EmptyVariadicExpressionsAndNestedErrors#12",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/BuiltinFunctionTest.java",
+   "line": 57,
+   "sparql12": false,
+   "data": null,
+   "query": "BASE <https://example.org/> SELECT ?x WHERE { BIND(IF(IF(!?unbound, 'yes', 'no') = 'no', true, false) AS ?x) }",
+   "expect": {
+    "kind": "bindings",
+    "rows": [
+     {}
+    ]
+   }
+  },
+  {
+   "id": "BuiltinFunctionTest#EmptyVariadicExpressionsAndNestedErrors#13",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/BuiltinFunctionTest.java",
+   "line": 57,
+   "sparql12": false,
+   "data": null,
+   "query": "BASE <https://example.org/> SELECT ?x WHERE { BIND(IF(IF(1 / 0, 'yes', 'no') = 'no', true, false) AS ?x) }",
+   "expect": {
+    "kind": "bindings",
+    "rows": [
+     {}
+    ]
+   }
+  },
+  {
+   "id": "BuiltinFunctionTest#EmptyVariadicExpressionsAndNestedErrors#14",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/BuiltinFunctionTest.java",
+   "line": 57,
+   "sparql12": false,
+   "data": null,
+   "query": "BASE <https://example.org/> SELECT ?x WHERE { BIND(IF(IRI(123), true, false) AS ?x) }",
+   "expect": {
+    "kind": "bindings",
+    "rows": [
+     {}
+    ]
+   }
+  },
+  {
+   "id": "BuiltinFunctionTest#EmptyVariadicExpressionsAndNestedErrors#15",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/BuiltinFunctionTest.java",
+   "line": 57,
+   "sparql12": false,
+   "data": null,
+   "query": "BASE <https://example.org/> SELECT ?x WHERE { BIND(IF(IRI('relative'@en), true, false) AS ?x) }",
+   "expect": {
+    "kind": "bindings",
+    "rows": [
+     {}
+    ]
+   }
+  },
+  {
+   "id": "BuiltinFunctionTest#Seconds",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/BuiltinFunctionTest.java",
+   "line": 87,
+   "sparql12": false,
+   "data": null,
+   "query": "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> SELECT (SECONDS(\"2011-01-10T14:45:13\"^^xsd:dateTime) AS ?sec) { }",
+   "expect": {
+    "kind": "bindings",
+    "rows": [
+     {
+      "sec": {
+       "type": "literal",
+       "value": "13",
+       "datatype": "http://www.w3.org/2001/XMLSchema#decimal"
+      }
+     }
+    ]
+   },
+   "note": "Java checks stringValue() \"13\"; SECONDS returns xsd:decimal (SPARQL 1.1 §17.4.5.7); the lexical form \"13\" is RDF4J's."
+  },
+  {
+   "id": "BuiltinFunctionTest#SecondsMilliseconds",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/BuiltinFunctionTest.java",
+   "line": 103,
+   "sparql12": false,
+   "data": null,
+   "query": "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> SELECT (SECONDS(\"2011-01-10T14:45:13.815-05:00\"^^xsd:dateTime) AS ?sec) { }",
+   "expect": {
+    "kind": "bindings",
+    "rows": [
+     {
+      "sec": {
+       "type": "literal",
+       "value": "13.815",
+       "datatype": "http://www.w3.org/2001/XMLSchema#decimal"
+      }
+     }
+    ]
+   },
+   "note": "Java checks stringValue() \"13.815\"; SECONDS returns xsd:decimal (SPARQL 1.1 §17.4.5.7)."
+  },
+  {
+   "id": "BuiltinFunctionTest#SES1991NOWEvaluation",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/BuiltinFunctionTest.java",
+   "line": 115,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n@prefix dc: <http://purl.org/dc/elements/1.1/> .\n@prefix foaf: <http://xmlns.com/foaf/0.1/> .\n@prefix ex: <http://example.org/> .\n\n    ex:graph1 dc:publisher \"Bob\" ;\n\t      ex:containsPerson ex:bob .\n\n    ex:graph2 dc:publisher \"Alice\" ;\n\t      ex:containsPerson ex:alice .\n\n    ex:graph3 dc:publisher \"William\" ;\n\t      ex:containsPerson ex:william .\n\n\t ex:bob a foaf:Person .\n\t ex:alice a foaf:Person .\n\t \n\t ex:wiliam a foaf:Person .\n\t ex:william foaf:name \"William\" .\n"
+   },
+   "query": "SELECT ?d WHERE {?s ?p ?o . BIND(NOW() as ?d) } LIMIT 2",
+   "expect": {
+    "kind": "count",
+    "n": 2
+   },
+   "note": "Weaker check (two rows); equality of the two NOW() values is #2."
+  },
+  {
+   "id": "BuiltinFunctionTest#SES1991NOWEvaluation#2",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/BuiltinFunctionTest.java",
+   "line": 115,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n@prefix dc: <http://purl.org/dc/elements/1.1/> .\n@prefix foaf: <http://xmlns.com/foaf/0.1/> .\n@prefix ex: <http://example.org/> .\n\n    ex:graph1 dc:publisher \"Bob\" ;\n\t      ex:containsPerson ex:bob .\n\n    ex:graph2 dc:publisher \"Alice\" ;\n\t      ex:containsPerson ex:alice .\n\n    ex:graph3 dc:publisher \"William\" ;\n\t      ex:containsPerson ex:william .\n\n\t ex:bob a foaf:Person .\n\t ex:alice a foaf:Person .\n\t \n\t ex:wiliam a foaf:Person .\n\t ex:william foaf:name \"William\" .\n"
+   },
+   "query": "SELECT (COUNT(DISTINCT ?d) AS ?n) (SAMPLE(isLiteral(?d)) AS ?lit) WHERE { { SELECT ?d WHERE {?s ?p ?o . BIND(NOW() as ?d) } LIMIT 2 } }",
+   "expect": {
+    "kind": "bindings",
+    "rows": [
+     {
+      "n": {
+       "type": "literal",
+       "value": "1",
+       "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+      },
+      "lit": {
+       "type": "literal",
+       "value": "true",
+       "datatype": "http://www.w3.org/2001/XMLSchema#boolean"
+      }
+     }
+    ]
+   },
+   "note": "Reformulated: the upstream query as a subquery; Java asserts the two ?d are one literal."
+  },
+  {
+   "id": "BuiltinFunctionTest#SES1991UUIDEvaluation",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/BuiltinFunctionTest.java",
+   "line": 155,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n@prefix dc: <http://purl.org/dc/elements/1.1/> .\n@prefix foaf: <http://xmlns.com/foaf/0.1/> .\n@prefix ex: <http://example.org/> .\n\n    ex:graph1 dc:publisher \"Bob\" ;\n\t      ex:containsPerson ex:bob .\n\n    ex:graph2 dc:publisher \"Alice\" ;\n\t      ex:containsPerson ex:alice .\n\n    ex:graph3 dc:publisher \"William\" ;\n\t      ex:containsPerson ex:william .\n\n\t ex:bob a foaf:Person .\n\t ex:alice a foaf:Person .\n\t \n\t ex:wiliam a foaf:Person .\n\t ex:william foaf:name \"William\" .\n"
+   },
+   "query": "SELECT ?uid WHERE {?s ?p ?o . BIND(UUID() as ?uid) } LIMIT 2",
+   "expect": {
+    "kind": "count",
+    "n": 2
+   },
+   "note": "Weaker check; distinctness in #2."
+  },
+  {
+   "id": "BuiltinFunctionTest#SES1991UUIDEvaluation#2",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/BuiltinFunctionTest.java",
+   "line": 155,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n@prefix dc: <http://purl.org/dc/elements/1.1/> .\n@prefix foaf: <http://xmlns.com/foaf/0.1/> .\n@prefix ex: <http://example.org/> .\n\n    ex:graph1 dc:publisher \"Bob\" ;\n\t      ex:containsPerson ex:bob .\n\n    ex:graph2 dc:publisher \"Alice\" ;\n\t      ex:containsPerson ex:alice .\n\n    ex:graph3 dc:publisher \"William\" ;\n\t      ex:containsPerson ex:william .\n\n\t ex:bob a foaf:Person .\n\t ex:alice a foaf:Person .\n\t \n\t ex:wiliam a foaf:Person .\n\t ex:william foaf:name \"William\" .\n"
+   },
+   "query": "ASK { { SELECT (COUNT(DISTINCT ?uid) AS ?n) (MIN(isIRI(?uid)) AS ?iri) WHERE { { SELECT ?uid WHERE {?s ?p ?o . BIND(UUID() as ?uid) } LIMIT 2 } } } FILTER(?n = 2 && ?iri) }",
+   "expect": {
+    "kind": "boolean",
+    "value": true
+   },
+   "note": "Reformulated: Java asserts two distinct IRIs."
+  },
+  {
+   "id": "BuiltinFunctionTest#SES1991STRUUIDEvaluation",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/BuiltinFunctionTest.java",
+   "line": 176,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n@prefix dc: <http://purl.org/dc/elements/1.1/> .\n@prefix foaf: <http://xmlns.com/foaf/0.1/> .\n@prefix ex: <http://example.org/> .\n\n    ex:graph1 dc:publisher \"Bob\" ;\n\t      ex:containsPerson ex:bob .\n\n    ex:graph2 dc:publisher \"Alice\" ;\n\t      ex:containsPerson ex:alice .\n\n    ex:graph3 dc:publisher \"William\" ;\n\t      ex:containsPerson ex:william .\n\n\t ex:bob a foaf:Person .\n\t ex:alice a foaf:Person .\n\t \n\t ex:wiliam a foaf:Person .\n\t ex:william foaf:name \"William\" .\n"
+   },
+   "query": "SELECT ?uid WHERE {?s ?p ?o . BIND(STRUUID() as ?uid) } LIMIT 2",
+   "expect": {
+    "kind": "count",
+    "n": 2
+   },
+   "note": "Weaker check; distinctness in #2."
+  },
+  {
+   "id": "BuiltinFunctionTest#SES1991STRUUIDEvaluation#2",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/BuiltinFunctionTest.java",
+   "line": 176,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n@prefix dc: <http://purl.org/dc/elements/1.1/> .\n@prefix foaf: <http://xmlns.com/foaf/0.1/> .\n@prefix ex: <http://example.org/> .\n\n    ex:graph1 dc:publisher \"Bob\" ;\n\t      ex:containsPerson ex:bob .\n\n    ex:graph2 dc:publisher \"Alice\" ;\n\t      ex:containsPerson ex:alice .\n\n    ex:graph3 dc:publisher \"William\" ;\n\t      ex:containsPerson ex:william .\n\n\t ex:bob a foaf:Person .\n\t ex:alice a foaf:Person .\n\t \n\t ex:wiliam a foaf:Person .\n\t ex:william foaf:name \"William\" .\n"
+   },
+   "query": "ASK { { SELECT (COUNT(DISTINCT ?uid) AS ?n) (MIN(isLiteral(?uid)) AS ?lit) WHERE { { SELECT ?uid WHERE {?s ?p ?o . BIND(STRUUID() as ?uid) } LIMIT 2 } } } FILTER(?n = 2 && ?lit) }",
+   "expect": {
+    "kind": "boolean",
+    "value": true
+   },
+   "note": "Reformulated: Java asserts two distinct literals."
+  },
+  {
+   "id": "BuiltinFunctionTest#SES1991RANDEvaluation",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/BuiltinFunctionTest.java",
+   "line": 196,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n@prefix dc: <http://purl.org/dc/elements/1.1/> .\n@prefix foaf: <http://xmlns.com/foaf/0.1/> .\n@prefix ex: <http://example.org/> .\n\n    ex:graph1 dc:publisher \"Bob\" ;\n\t      ex:containsPerson ex:bob .\n\n    ex:graph2 dc:publisher \"Alice\" ;\n\t      ex:containsPerson ex:alice .\n\n    ex:graph3 dc:publisher \"William\" ;\n\t      ex:containsPerson ex:william .\n\n\t ex:bob a foaf:Person .\n\t ex:alice a foaf:Person .\n\t \n\t ex:wiliam a foaf:Person .\n\t ex:william foaf:name \"William\" .\n"
+   },
+   "query": "SELECT ?r WHERE {?s ?p ?o . BIND(RAND() as ?r) } LIMIT 3",
+   "expect": {
+    "kind": "count",
+    "n": 3
+   },
+   "note": "Weaker check; not-all-equal in #2."
+  },
+  {
+   "id": "BuiltinFunctionTest#SES1991RANDEvaluation#2",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/BuiltinFunctionTest.java",
+   "line": 196,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n@prefix dc: <http://purl.org/dc/elements/1.1/> .\n@prefix foaf: <http://xmlns.com/foaf/0.1/> .\n@prefix ex: <http://example.org/> .\n\n    ex:graph1 dc:publisher \"Bob\" ;\n\t      ex:containsPerson ex:bob .\n\n    ex:graph2 dc:publisher \"Alice\" ;\n\t      ex:containsPerson ex:alice .\n\n    ex:graph3 dc:publisher \"William\" ;\n\t      ex:containsPerson ex:william .\n\n\t ex:bob a foaf:Person .\n\t ex:alice a foaf:Person .\n\t \n\t ex:wiliam a foaf:Person .\n\t ex:william foaf:name \"William\" .\n"
+   },
+   "query": "ASK { { SELECT (COUNT(DISTINCT ?r) AS ?n) WHERE { { SELECT ?r WHERE {?s ?p ?o . BIND(RAND() as ?r) } LIMIT 3 } } } FILTER(?n > 1) }",
+   "expect": {
+    "kind": "boolean",
+    "value": true
+   },
+   "note": "Reformulated: Java asserts the three RAND() values are not all equal."
+  },
+  {
+   "id": "BuiltinFunctionTest#SES869ValueOfNow",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/BuiltinFunctionTest.java",
+   "line": 136,
+   "sparql12": false,
+   "data": null,
+   "query": "SELECT ?p ( NOW() as ?n ) { BIND (NOW() as ?p ) }",
+   "expect": {
+    "kind": "count",
+    "n": 1
+   },
+   "note": "Weaker check; equality of ?p and ?n in #2. (Java also asserts object identity p == n, not observable.)"
+  },
+  {
+   "id": "BuiltinFunctionTest#SES869ValueOfNow#2",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/BuiltinFunctionTest.java",
+   "line": 136,
+   "sparql12": false,
+   "data": null,
+   "query": "ASK { { SELECT ?p ( NOW() as ?n ) { BIND (NOW() as ?p ) } } FILTER(sameTerm(?p, ?n)) }",
+   "expect": {
+    "kind": "boolean",
+    "value": true
+   },
+   "note": "Reformulated: Java asserts ?p equals ?n."
+  },
+  {
+   "id": "BuiltinFunctionTest#SES2121URIFunction",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/BuiltinFunctionTest.java",
+   "line": 223,
+   "sparql12": false,
+   "data": null,
+   "query": "SELECT (URI(\"foo bar\") as ?uri) WHERE {}",
+   "expect": {
+    "kind": "bindings",
+    "rows": [
+     {}
+    ]
+   },
+   "note": "Java: one row (hasNext), ?uri unbound."
+  },
+  {
+   "id": "BuiltinFunctionTest#SES2121URIFunction#2",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/BuiltinFunctionTest.java",
+   "line": 223,
+   "sparql12": false,
+   "data": null,
+   "query": "BASE <http://example.org/> SELECT (URI(\"foo bar\") as ?uri) WHERE {}",
+   "expect": {
+    "kind": "count",
+    "n": 1
+   },
+   "note": "Java asserts ?uri is bound (to an IRI, cast in Java) for \"foo bar\" resolved against the BASE; exact IRI not asserted. Checked here with the #3 reformulation."
+  },
+  {
+   "id": "BuiltinFunctionTest#SES2121URIFunction#3",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/BuiltinFunctionTest.java",
+   "line": 223,
+   "sparql12": false,
+   "data": null,
+   "query": "BASE <http://example.org/> ASK { { SELECT (URI(\"foo bar\") as ?uri) WHERE {} } FILTER(isIRI(?uri)) }",
+   "expect": {
+    "kind": "boolean",
+    "value": true
+   },
+   "note": "Reformulated: Java asserts ?uri is a bound IRI."
+  },
+  {
+   "id": "BuiltinFunctionTest#27NormalizeIRIFunction",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/BuiltinFunctionTest.java",
+   "line": 245,
+   "sparql12": false,
+   "data": null,
+   "query": "BASE <http://example.com/foo/>\nSELECT (IRI(\"../bar\") as ?Iri) WHERE {}",
+   "expect": {
+    "kind": "bindings",
+    "rows": [
+     {
+      "Iri": {
+       "type": "uri",
+       "value": "http://example.com/bar"
+      }
+     }
+    ]
+   },
+   "note": "Java passes base URI http://example.com/foo/ to prepareTupleQuery; expressed as BASE."
+  },
+  {
+   "id": "BuiltinFunctionTest#SES2052If1",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/BuiltinFunctionTest.java",
+   "line": 259,
+   "sparql12": false,
+   "data": {
+    "format": "trig",
+    "text": "@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n@prefix dc: <http://purl.org/dc/elements/1.1/> .\n@prefix foaf: <http://xmlns.com/foaf/0.1/> .\n@prefix ex: <http://example.org/> .\n\n{\n    ex:graph1 dc:publisher \"Bob\" ;\n\t      ex:containsPerson ex:bob .\n\n    ex:graph2 dc:publisher \"Alice\" ;\n\t      ex:containsPerson ex:alice .\n\n    ex:graph3 dc:publisher \"William\" ;\n\t      ex:containsPerson ex:william .\n\n    ex:groupconcat-test \n         ex:p \"a\";\n         ex:p \"b\"; \n\t ex:p \"c\";\n\t ex:p \"d\";\n\t ex:q \"b\";\n\t ex:q \"c\".\n}\n\nex:graph1 {\n    ex:bob foaf:name \"Bob\" ;\n       foaf:mbox \"bob@example.org\" ;\n       foaf:knows ex:alice .\n\n    ex:bob foaf:knows ex:alice .\n    ex:bob foaf:knows ex:william .\n\n    ex:alice foaf:knows ex:bob .\n}\n\nex:graph2 {\n    ex:alice foaf:name \"Alice\" ;\n\tfoaf:mbox \"alice@example.org\" .\n\n    ex:alice foaf:knows ex:william .\n}\n\nex:graph3 {\n    ex:william foaf:name \"William\" ;\n\tfoaf:mbox \"william@example.org\" .\n}\n\nex:tree-graph {\n    ex:a ex:name \"aa\" .\n    ex:b ex:name \"bb\" .\n    ex:c ex:name \"cc\" .\n    ex:d ex:name \"dd\" .\n    ex:e ex:name \"ee\" .\n    ex:f ex:name \"ff\" .\n    ex:g ex:name \"gg\" .\n    ex:h ex:name \"hh\" .\n    ex:i ex:name \"ii\" .\n    ex:j ex:name \"jj\" .\n    ex:k ex:name \"kk\" .\n\n    ex:b ex:hasParent ex:a .\n    ex:c ex:hasParent ex:a .\n    ex:d ex:hasParent ex:a .\n\n    ex:g ex:hasParent ex:c .\n    \n    ex:e ex:hasParent ex:b .\n    ex:f ex:hasParent ex:b .\n    \n    ex:i ex:hasParent ex:g .\n    ex:h ex:hasPerent ex:g .\n\n    ex:j ex:hasParent ex:f .\n    ex:k ex:hasParent ex:f .\n}\n\nex:optional-sameterm-graph {\n\tex:a ex:p ex:A ;\n\t\t rdfs:label \"label\" ;\n\t\t ex:prop1 \"prop1\" ;\n\t\t ex:prop2 \"prop2\" .\n}\n"
+   },
+   "query": "SELECT ?p \nWHERE { \n         ?s ?p ?o . \n        FILTER(IF(BOUND(?p), ?p = <http://www.w3.org/1999/02/22-rdf-syntax-ns#type>, false)) \n}",
+   "expect": {
+    "kind": "count",
+    "n": 0
+   },
+   "note": "Java asserts every ?p is rdf:type; the data has no rdf:type triple in any graph, so the answer is empty (count 0 is equivalent here)."
+  },
+  {
+   "id": "BuiltinFunctionTest#SES2052If2",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/BuiltinFunctionTest.java",
+   "line": 280,
+   "sparql12": false,
+   "data": {
+    "format": "trig",
+    "text": "@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n@prefix dc: <http://purl.org/dc/elements/1.1/> .\n@prefix foaf: <http://xmlns.com/foaf/0.1/> .\n@prefix ex: <http://example.org/> .\n\n{\n    ex:graph1 dc:publisher \"Bob\" ;\n\t      ex:containsPerson ex:bob .\n\n    ex:graph2 dc:publisher \"Alice\" ;\n\t      ex:containsPerson ex:alice .\n\n    ex:graph3 dc:publisher \"William\" ;\n\t      ex:containsPerson ex:william .\n\n    ex:groupconcat-test \n         ex:p \"a\";\n         ex:p \"b\"; \n\t ex:p \"c\";\n\t ex:p \"d\";\n\t ex:q \"b\";\n\t ex:q \"c\".\n}\n\nex:graph1 {\n    ex:bob foaf:name \"Bob\" ;\n       foaf:mbox \"bob@example.org\" ;\n       foaf:knows ex:alice .\n\n    ex:bob foaf:knows ex:alice .\n    ex:bob foaf:knows ex:william .\n\n    ex:alice foaf:knows ex:bob .\n}\n\nex:graph2 {\n    ex:alice foaf:name \"Alice\" ;\n\tfoaf:mbox \"alice@example.org\" .\n\n    ex:alice foaf:knows ex:william .\n}\n\nex:graph3 {\n    ex:william foaf:name \"William\" ;\n\tfoaf:mbox \"william@example.org\" .\n}\n\nex:tree-graph {\n    ex:a ex:name \"aa\" .\n    ex:b ex:name \"bb\" .\n    ex:c ex:name \"cc\" .\n    ex:d ex:name \"dd\" .\n    ex:e ex:name \"ee\" .\n    ex:f ex:name \"ff\" .\n    ex:g ex:name \"gg\" .\n    ex:h ex:name \"hh\" .\n    ex:i ex:name \"ii\" .\n    ex:j ex:name \"jj\" .\n    ex:k ex:name \"kk\" .\n\n    ex:b ex:hasParent ex:a .\n    ex:c ex:hasParent ex:a .\n    ex:d ex:hasParent ex:a .\n\n    ex:g ex:hasParent ex:c .\n    \n    ex:e ex:hasParent ex:b .\n    ex:f ex:hasParent ex:b .\n    \n    ex:i ex:hasParent ex:g .\n    ex:h ex:hasPerent ex:g .\n\n    ex:j ex:hasParent ex:f .\n    ex:k ex:hasParent ex:f .\n}\n\nex:optional-sameterm-graph {\n\tex:a ex:p ex:A ;\n\t\t rdfs:label \"label\" ;\n\t\t ex:prop1 \"prop1\" ;\n\t\t ex:prop2 \"prop2\" .\n}\n"
+   },
+   "query": "SELECT ?p \nWHERE { \n         ?s ?p ?o . \n        FILTER(IF(!BOUND(?p), false , ?p = <http://www.w3.org/1999/02/22-rdf-syntax-ns#type>)) \n}",
+   "expect": {
+    "kind": "count",
+    "n": 0
+   },
+   "note": "Java asserts every ?p is rdf:type; the data has no rdf:type triple in any graph, so the answer is empty (count 0 is equivalent here)."
+  },
+  {
+   "id": "BuiltinFunctionTest#FilterRegexBoolean",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/BuiltinFunctionTest.java",
+   "line": 379,
+   "sparql12": false,
+   "data": {
+    "format": "trig",
+    "text": "@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n@prefix dc: <http://purl.org/dc/elements/1.1/> .\n@prefix foaf: <http://xmlns.com/foaf/0.1/> .\n@prefix ex: <http://example.org/> .\n\n{\n    ex:graph1 dc:publisher \"Bob\" ;\n\t      ex:containsPerson ex:bob .\n\n    ex:graph2 dc:publisher \"Alice\" ;\n\t      ex:containsPerson ex:alice .\n\n    ex:graph3 dc:publisher \"William\" ;\n\t      ex:containsPerson ex:william .\n\n    ex:groupconcat-test \n         ex:p \"a\";\n         ex:p \"b\"; \n\t ex:p \"c\";\n\t ex:p \"d\";\n\t ex:q \"b\";\n\t ex:q \"c\".\n}\n\nex:graph1 {\n    ex:bob foaf:name \"Bob\" ;\n       foaf:mbox \"bob@example.org\" ;\n       foaf:knows ex:alice .\n\n    ex:bob foaf:knows ex:alice .\n    ex:bob foaf:knows ex:william .\n\n    ex:alice foaf:knows ex:bob .\n}\n\nex:graph2 {\n    ex:alice foaf:name \"Alice\" ;\n\tfoaf:mbox \"alice@example.org\" .\n\n    ex:alice foaf:knows ex:william .\n}\n\nex:graph3 {\n    ex:william foaf:name \"William\" ;\n\tfoaf:mbox \"william@example.org\" .\n}\n\nex:tree-graph {\n    ex:a ex:name \"aa\" .\n    ex:b ex:name \"bb\" .\n    ex:c ex:name \"cc\" .\n    ex:d ex:name \"dd\" .\n    ex:e ex:name \"ee\" .\n    ex:f ex:name \"ff\" .\n    ex:g ex:name \"gg\" .\n    ex:h ex:name \"hh\" .\n    ex:i ex:name \"ii\" .\n    ex:j ex:name \"jj\" .\n    ex:k ex:name \"kk\" .\n\n    ex:b ex:hasParent ex:a .\n    ex:c ex:hasParent ex:a .\n    ex:d ex:hasParent ex:a .\n\n    ex:g ex:hasParent ex:c .\n    \n    ex:e ex:hasParent ex:b .\n    ex:f ex:hasParent ex:b .\n    \n    ex:i ex:hasParent ex:g .\n    ex:h ex:hasPerent ex:g .\n\n    ex:j ex:hasParent ex:f .\n    ex:k ex:hasParent ex:f .\n}\n\nex:optional-sameterm-graph {\n\tex:a ex:p ex:A ;\n\t\t rdfs:label \"label\" ;\n\t\t ex:prop1 \"prop1\" ;\n\t\t ex:prop2 \"prop2\" .\n}\n"
+   },
+   "query": "PREFIX dc: <http://purl.org/dc/terms/> \nPREFIX foaf: <http://xmlns.com/foaf/0.1/> \nPREFIX ex: <http://example.org/> \n\n SELECT * WHERE {        ?x foaf:name ?name ;           foaf:mbox ?mbox .        FILTER(EXISTS {             FILTER(REGEX(?name, \"Bo\") && REGEX(?mbox, \"bob\"))             } ) } ",
+   "expect": {
+    "kind": "count",
+    "n": 1
+   },
+   "unionDefaultGraph": true,
+   "note": "foaf:name/foaf:mbox are only in named graph ex:graph1; RDF4J queries the union."
+  },
+  {
+   "id": "BuiltinFunctionTest#RegexCaseNonAscii",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/BuiltinFunctionTest.java",
+   "line": 301,
+   "sparql12": false,
+   "data": null,
+   "query": "ask {filter (regex(\"Валовой\", \"валовой\", \"i\")) }",
+   "expect": {
+    "kind": "boolean",
+    "value": true
+   }
+  },
+  {
+   "id": "BuiltinFunctionTest#RegexCaseNonAscii#2",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/BuiltinFunctionTest.java",
+   "line": 301,
+   "sparql12": false,
+   "data": null,
+   "query": "ask {filter (regex(\"Валовой\", \"валовой\")) }",
+   "expect": {
+    "kind": "boolean",
+    "value": false
+   }
+  },
+  {
+   "id": "BuiltinFunctionTest#BNodeFunctionUsesSameBlankNodeForSameLabelInSolution",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/BuiltinFunctionTest.java",
+   "line": 312,
+   "sparql12": false,
+   "data": null,
+   "query": "SELECT (BNODE(?label) AS ?b1) (BNODE(?label) AS ?b2) WHERE { BIND(\"foo\" AS ?label) }",
+   "expect": {
+    "kind": "bindings",
+    "rows": [
+     {
+      "b1": {
+       "type": "bnode",
+       "value": "x"
+      },
+      "b2": {
+       "type": "bnode",
+       "value": "x"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "BuiltinFunctionTest#BNodeFunctionUsesDistinctBlankNodesForDistinctSolutions",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/BuiltinFunctionTest.java",
+   "line": 323,
+   "sparql12": false,
+   "data": null,
+   "query": "SELECT (BNODE(\"foo\") AS ?b) WHERE { VALUES ?x { 1 1 } }",
+   "expect": {
+    "kind": "bindings",
+    "rows": [
+     {
+      "b": {
+       "type": "bnode",
+       "value": "x"
+      }
+     },
+     {
+      "b": {
+       "type": "bnode",
+       "value": "y"
+      }
+     }
+    ]
+   },
+   "note": "Two rows, distinct blank nodes (engine isomorphism keeps distinct labels distinct)."
+  },
+  {
+   "id": "BuiltinFunctionTest#PlusPreservesDecimalInputRow",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/BuiltinFunctionTest.java",
+   "line": 336,
+   "sparql12": false,
+   "data": null,
+   "query": "SELECT ?x (?x + 2 AS ?sum) WHERE { VALUES ?x { 1 1.0 } }",
+   "expect": {
+    "kind": "all",
+    "of": [
+     {
+      "kind": "count",
+      "n": 2
+     },
+     {
+      "kind": "contains",
+      "rows": [
+       {
+        "x": {
+         "type": "literal",
+         "value": "1",
+         "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+        },
+        "sum": {
+         "type": "literal",
+         "value": "3",
+         "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+        }
+       },
+       {
+        "x": {
+         "type": "literal",
+         "value": "1.0",
+         "datatype": "http://www.w3.org/2001/XMLSchema#decimal"
+        },
+        "sum": {
+         "type": "literal",
+         "value": "3.0",
+         "datatype": "http://www.w3.org/2001/XMLSchema#decimal"
+        }
+       }
+      ],
+      "exact": true
+     }
+    ]
+   }
+  },
+  {
+   "id": "BuiltinFunctionTest#PlusPreservesDecimalStoredRow",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/BuiltinFunctionTest.java",
+   "line": 351,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix : <http://example/> .\n:x4 :p 1 ; :q 2 .\n:x5 :p 1.0 ; :q 2 .\n"
+   },
+   "query": "PREFIX : <http://example/> SELECT ?x (?x + 2 AS ?sum) WHERE { ?s :p ?x ; :q ?y . } ORDER BY ?x ?sum",
+   "expect": {
+    "kind": "all",
+    "of": [
+     {
+      "kind": "count",
+      "n": 2
+     },
+     {
+      "kind": "contains",
+      "rows": [
+       {
+        "x": {
+         "type": "literal",
+         "value": "1",
+         "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+        },
+        "sum": {
+         "type": "literal",
+         "value": "3",
+         "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+        }
+       },
+       {
+        "x": {
+         "type": "literal",
+         "value": "1.0",
+         "datatype": "http://www.w3.org/2001/XMLSchema#decimal"
+        },
+        "sum": {
+         "type": "literal",
+         "value": "3.0",
+         "datatype": "http://www.w3.org/2001/XMLSchema#decimal"
+        }
+       }
+      ],
+      "exact": true
+     }
+    ]
+   }
+  },
+  {
+   "id": "BuiltinFunctionTest#DateCastFunction_date",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/BuiltinFunctionTest.java",
+   "line": 403,
+   "sparql12": false,
+   "data": null,
+   "query": "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> SELECT (xsd:date(\"2022-09-09\") AS ?date) { }",
+   "expect": {
+    "kind": "bindings",
+    "rows": [
+     {
+      "date": {
+       "type": "literal",
+       "value": "2022-09-09",
+       "datatype": "http://www.w3.org/2001/XMLSchema#date"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "BuiltinFunctionTest#DateCastFunction_date_withTimeZone_utc",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/BuiltinFunctionTest.java",
+   "line": 415,
+   "sparql12": false,
+   "data": null,
+   "query": "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> SELECT (xsd:date(\"2022-09-09Z\") AS ?date) { }",
+   "expect": {
+    "kind": "bindings",
+    "rows": [
+     {
+      "date": {
+       "type": "literal",
+       "value": "2022-09-09Z",
+       "datatype": "http://www.w3.org/2001/XMLSchema#date"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "BuiltinFunctionTest#DateCastFunction_dateTime_withTimeZone_offset",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/BuiltinFunctionTest.java",
+   "line": 427,
+   "sparql12": false,
+   "data": null,
+   "query": "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> SELECT (xsd:date(\"2022-09-09T14:45:13+03:00\") AS ?date) { }",
+   "expect": {
+    "kind": "bindings",
+    "rows": [
+     {
+      "date": {
+       "type": "literal",
+       "value": "2022-09-09+03:00",
+       "datatype": "http://www.w3.org/2001/XMLSchema#date"
+      }
+     }
+    ]
+   },
+   "note": "Upstream casts a dateTime-shaped xsd:string to xsd:date."
+  },
+  {
+   "id": "BuiltinFunctionTest#DateCastFunction_invalidInput",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/BuiltinFunctionTest.java",
+   "line": 439,
+   "sparql12": false,
+   "data": null,
+   "query": "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#> SELECT (xsd:date(\"2022-09-xx\") AS ?date) { }",
+   "expect": {
+    "kind": "bindings",
+    "rows": [
+     {}
+    ]
+   }
+  },
+  {
+   "id": "GroupByTest#GroupByEmpty",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/GroupByTest.java",
+   "line": 37,
+   "sparql12": false,
+   "data": null,
+   "query": "select ?x where {?x ?p ?o} group by ?x",
+   "expect": {
+    "kind": "count",
+    "n": 0
+   }
+  },
+  {
+   "id": "InTest#InComparison1",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/InTest.java",
+   "line": 47,
+   "sparql12": false,
+   "data": {
+    "format": "trig",
+    "text": "@prefix : <http://example.org/> .\n\n{\n  :a :p 1 .\n  :a :p 2 .\n  :a :p \"foo\" .\n  :a :p :b .\n}\n"
+   },
+   "query": " PREFIX : <http://example.org/>\n SELECT ?y WHERE { :a :p ?y. FILTER(?y in (:c, :d, 1/0 , 1)) } ",
+   "expect": {
+    "kind": "contains",
+    "rows": [
+     {
+      "y": {
+       "type": "literal",
+       "value": "1",
+       "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+      }
+     }
+    ]
+   },
+   "note": "Java checks the first row is 1; with this data the spec answer is exactly that row."
+  },
+  {
+   "id": "InTest#InComparison2",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/InTest.java",
+   "line": 66,
+   "sparql12": false,
+   "data": {
+    "format": "trig",
+    "text": "@prefix : <http://example.org/> .\n\n{\n  :a :p 1 .\n  :a :p 2 .\n  :a :p \"foo\" .\n  :a :p :b .\n}\n"
+   },
+   "query": " PREFIX : <http://example.org/>\n SELECT ?y WHERE { :a :p ?y. FILTER(?y in (:c, :d, 1/0)) } ",
+   "expect": {
+    "kind": "count",
+    "n": 0
+   }
+  },
+  {
+   "id": "InTest#InComparison3",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/InTest.java",
+   "line": 79,
+   "sparql12": false,
+   "data": {
+    "format": "trig",
+    "text": "@prefix : <http://example.org/> .\n\n{\n  :a :p 1 .\n  :a :p 2 .\n  :a :p \"foo\" .\n  :a :p :b .\n}\n"
+   },
+   "query": " PREFIX : <http://example.org/>\n SELECT ?y WHERE { :a :p ?y. FILTER(?y in (:c, :d, 1, 1/0)) } ",
+   "expect": {
+    "kind": "contains",
+    "rows": [
+     {
+      "y": {
+       "type": "literal",
+       "value": "1",
+       "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+      }
+     }
+    ]
+   },
+   "note": "Java checks the first row is 1."
+  },
+  {
+   "id": "OrderByTest#DistinctOptionalOrderBy",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/OrderByTest.java",
+   "line": 34,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "[] a <test:Class>.\n[] a <test:Class>; <test:nr> 123 ."
+   },
+   "query": "select distinct ?o ?nr { ?o a <test:Class> optional { ?o <test:nr> ?nr } } order by ?nr",
+   "expect": {
+    "kind": "count",
+    "n": 2
+   }
+  },
+  {
+   "id": "OrderByTest#OrderByVariableNotInUse",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/OrderByTest.java",
+   "line": 48,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n_:bob1 a <foaf:Person> ; rdfs:label \"Bob1\" .\n_:bob2 a <foaf:Person> ; rdfs:label \"Bob2\" ."
+   },
+   "query": "SELECT * WHERE { ?person a <foaf:Person> } ORDER BY ?score\n",
+   "expect": {
+    "kind": "bindings",
+    "rows": [
+     {
+      "person": {
+       "type": "bnode",
+       "value": "bob1"
+      }
+     },
+     {
+      "person": {
+       "type": "bnode",
+       "value": "bob2"
+      }
+     }
+    ]
+   },
+   "note": "Data uses rdfs: undeclared (RDF4J Rio default namespaces); the port declares it. Java counts distinct rows (2); the port checks the exact answer (2 rows, the two blank nodes), which the spec fixes."
+  },
+  {
+   "id": "OrderByTest#DistinctOptionalOrderByMath",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/OrderByTest.java",
+   "line": 63,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "[] a <test:Class>.\n[] a <test:Class>; <test:nr> 123 ."
+   },
+   "query": "select distinct ?o ?nr { ?o a <test:Class> optional { ?o <test:nr> ?nr } } order by (?nr + STRLEN(?o))",
+   "expect": {
+    "kind": "count",
+    "n": 2
+   }
+  },
+  {
+   "id": "ExistsTest#FilterNotExistsBindingToCurrentSolutionMapping",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/ExistsTest.java",
+   "line": 40,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix : <http://example/> .\n:a1 :predicate1 :both .\n:a1 :predicate2 :both .\n:a2 :predicate1 :both .\n:a2 :predicate2 [] .\n"
+   },
+   "query": "PREFIX : <http://example/>\nSELECT * WHERE {\n  ?a :predicate1 ?p1\n  FILTER NOT EXISTS {\n    ?a :predicate2 ?p2 .\n    FILTER(?p2 = ?p1)\n  }\n}\n",
+   "expect": {
+    "kind": "all",
+    "of": [
+     {
+      "kind": "count",
+      "n": 1
+     },
+     {
+      "kind": "contains",
+      "rows": [
+       {
+        "a": {
+         "type": "uri",
+         "value": "http://example/a2"
+        }
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "MinusTest#ScopingOfFilterInMinus",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/MinusTest.java",
+   "line": 41,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "@prefix : <http://example/> .\n:a1 :predicate1 :both .\n:a1 :predicate2 :both .\n:a2 :predicate1 :both .\n:a2 :predicate2 [] .\n"
+   },
+   "query": "PREFIX : <http://example/>\nSELECT * WHERE {\n  ?a :predicate1 ?p1\n  MINUS {\n    ?a :predicate2 ?p2 .\n    FILTER(?p2 = ?p1)\n  }\n} ORDER BY ?a\n",
+   "expect": {
+    "kind": "bindings",
+    "vars": [
+     "a"
+    ],
+    "ordered": true,
+    "rows": [
+     {
+      "a": {
+       "type": "uri",
+       "value": "http://example/a1"
+      }
+     },
+     {
+      "a": {
+       "type": "uri",
+       "value": "http://example/a2"
+      }
+     }
+    ]
+   }
+  },
+  {
+   "id": "BasicTest#testIdenticalVariablesInStatementPattern",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/BasicTest.java",
+   "line": 47,
+   "sparql12": false,
+   "data": {
+    "format": "turtle",
+    "text": "<http://example.org/alice> <http://purl.org/dc/elements/1.1/publisher> <http://example.org/bob> ."
+   },
+   "query": "SELECT ?publisher { ?publisher <http://purl.org/dc/elements/1.1/publisher> ?publisher }",
+   "expect": {
+    "kind": "count",
+    "n": 0
+   }
+  },
+  {
+   "id": "BasicTest#testIdenticalVariablesSubjectContextInStatementPattern",
+   "file": "testsuites/sparql/src/main/java/org/eclipse/rdf4j/testsuite/sparql/tests/BasicTest.java",
+   "line": 70,
+   "sparql12": false,
+   "data": {
+    "format": "trig",
+    "text": "@prefix ex: <http://example.org/> .\n@prefix foaf: <http://xmlns.com/foaf/0.1/> .\nex:alice { ex:alice foaf:knows ex:bob . ex:alice a foaf:Person . }\nex:bob { ex:alice foaf:knows ex:A , ex:B , ex:C , ex:mary . }"
+   },
+   "query": "SELECT ?knows { \tgraph ?alice {\t\t?alice a <http://xmlns.com/foaf/0.1/Person>; \t\t\t<http://xmlns.com/foaf/0.1/knows> ?knows .\t\t}}",
+   "expect": {
+    "kind": "bindings",
+    "rows": [
+     {
+      "knows": {
+       "type": "uri",
+       "value": "http://example.org/bob"
+      }
+     }
+    ]
+   }
+  }
+ ],
+ "notPorted": []
+}

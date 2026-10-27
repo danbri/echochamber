@@ -1,0 +1,58 @@
+{
+ "cases": {
+  "CustomTurtleParserTest#testSES2165LiteralSpaceDatatypeNewline": {
+   "verdict": "defect",
+   "group": "turtle-datatype-ws",
+   "issue": "https://github.com/danbri/factoidal/issues/1063",
+   "spec": "RDF 1.2 Turtle section 6.5 [22] RDFLiteral ::= String (LANG_DIR | ('^^' iri))?; section 6.1 white space separates terminals; section 6.2 comments are treated as white space (RDF 1.1 Turtle section 6.5 [128s] same)",
+   "note": "core rejects white space or a comment between ^^ and the datatype IRI (\"expected prefixed name\"); '^^' and iri are separate terminals, so WS/comment between them is allowed. Same in turtle12 and trig."
+  },
+  "CustomTurtleParserTest#testSES2165LiteralSpaceDatatypeTab": {
+   "verdict": "defect",
+   "group": "turtle-datatype-ws",
+   "issue": "https://github.com/danbri/factoidal/issues/1063",
+   "spec": "RDF 1.2 Turtle section 6.5 [22] RDFLiteral ::= String (LANG_DIR | ('^^' iri))?; section 6.1 white space separates terminals; section 6.2 comments are treated as white space (RDF 1.1 Turtle section 6.5 [128s] same)",
+   "note": "core rejects white space or a comment between ^^ and the datatype IRI (\"expected prefixed name\"); '^^' and iri are separate terminals, so WS/comment between them is allowed. Same in turtle12 and trig."
+  },
+  "CustomTurtleParserTest#testSES2165LiteralSpaceDatatypeCarriageReturn": {
+   "verdict": "defect",
+   "group": "turtle-datatype-ws",
+   "issue": "https://github.com/danbri/factoidal/issues/1063",
+   "spec": "RDF 1.2 Turtle section 6.5 [22] RDFLiteral ::= String (LANG_DIR | ('^^' iri))?; section 6.1 white space separates terminals; section 6.2 comments are treated as white space (RDF 1.1 Turtle section 6.5 [128s] same)",
+   "note": "core rejects white space or a comment between ^^ and the datatype IRI (\"expected prefixed name\"); '^^' and iri are separate terminals, so WS/comment between them is allowed. Same in turtle12 and trig."
+  },
+  "CustomTurtleParserTest#testSES2165LiteralSpaceDatatypeSpace": {
+   "verdict": "defect",
+   "group": "turtle-datatype-ws",
+   "issue": "https://github.com/danbri/factoidal/issues/1063",
+   "spec": "RDF 1.2 Turtle section 6.5 [22] RDFLiteral ::= String (LANG_DIR | ('^^' iri))?; section 6.1 white space separates terminals; section 6.2 comments are treated as white space (RDF 1.1 Turtle section 6.5 [128s] same)",
+   "note": "core rejects white space or a comment between ^^ and the datatype IRI (\"expected prefixed name\"); '^^' and iri are separate terminals, so WS/comment between them is allowed. Same in turtle12 and trig."
+  },
+  "CustomTurtleParserTest#testSES2165LiteralSpaceDatatypeComment": {
+   "verdict": "defect",
+   "group": "turtle-datatype-ws",
+   "issue": "https://github.com/danbri/factoidal/issues/1063",
+   "spec": "RDF 1.2 Turtle section 6.5 [22] RDFLiteral ::= String (LANG_DIR | ('^^' iri))?; section 6.1 white space separates terminals; section 6.2 comments are treated as white space (RDF 1.1 Turtle section 6.5 [128s] same)",
+   "note": "core rejects white space or a comment between ^^ and the datatype IRI (\"expected prefixed name\"); '^^' and iri are separate terminals, so WS/comment between them is allowed. Same in turtle12 and trig."
+  },
+  "CustomTurtleParserTest#testParseTruePrefix": {
+   "verdict": "defect",
+   "group": "turtle-keyword-prefix",
+   "issue": "https://github.com/danbri/factoidal/issues/1063",
+   "spec": "RDF 1.2 Turtle section 6.5 [39] PNAME_NS ::= PN_PREFIX? ':', [58] PN_PREFIX, and Note 3: \"When tokenizing the input and choosing grammar rules, the longest match is chosen.\" (RDF 1.1 Turtle section 6.3 same)",
+   "note": "after @prefix true: ..., the object true:o is read as the keyword true followed by :o (\"expected . after triple\"); longest match makes true:o a PNAME_LN. Subject/predicate position works; object position fails; false: too; turtle12 and trig too."
+  },
+  "CustomTurtleParserTest#testSES1988BlankNodePeriodBNode": {
+   "verdict": "divergence",
+   "group": "bnode-label-dot",
+   "spec": "RDF 1.2 Turtle section 6.5 [41] BLANK_NODE_LABEL ::= '_:' (PN_CHARS_U | [0-9]) ((PN_CHARS | '.')* PN_CHARS)? and Note 3 (longest match)",
+   "note": "in _:blank._:blank the longest BLANK_NODE_LABEL is _:blank._ ('_' is PN_CHARS), leaving :blank with an undeclared empty prefix; RDF4J ends the label before the dot. core rejects, as the grammar requires."
+  },
+  "CustomTurtleParserTest#testParsingDefaultNamespaces": {
+   "verdict": "divergence",
+   "group": "predeclared-prefixes",
+   "spec": "RDF 1.2 Turtle section 7.2 RDF Term Constructors, PNAME_LN: \"The namespaces map MUST have a corresponding namespace\" (RDF 1.1 Turtle section 7.2 same)",
+   "note": "RDF4J pre-binds Namespaces.DEFAULT_RDF4J (skos:, rdf:, owl:, ...) by default (BasicParserSettings.NAMESPACES); a document using skos: without @prefix is accepted. core rejects: undefined prefix."
+  }
+ }
+}

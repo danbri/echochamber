@@ -21,3 +21,69 @@ derived file says so in its header and names what was changed.
   (Copyright World Wide Web Consortium; W3C Software and Document License,
   https://www.w3.org/Consortium/Legal/copyright-software), as Jena
   distributes it.
+
+- packages/echo02, conformance/echo02, tools/echo02-study, docs/echo02:
+  test cases, test data and API descriptions derived from RDFLib
+  (https://github.com/RDFLib/rdflib, commit
+  58c3700e5e21b5b833d0e31072f930c665059db2). RDFLib: Copyright (c)
+  2002-2026, RDFLib Team. All rights reserved. BSD 3-Clause License; the
+  full text is in conformance/echo02/data/LICENSE-RDFLib. The data files in
+  conformance/echo02/data are unchanged copies (list:
+  conformance/echo02/data/PROVENANCE.md). RDFLib's name is not used to
+  endorse or promote this software.
+
+- packages/echo03, conformance/echo03, tools/echo03-study, docs/echo03:
+  test cases and API descriptions derived from N3.js
+  (https://github.com/rdfjs/N3.js, commit
+  ce8f71be6af502a7a16193f7fb0fe9ad239f6d8d). N3.js: Copyright ©2012–present
+  N3.js contributors. The MIT License (MIT). The RDF/JS data model test
+  suite (https://github.com/rdfjs-base/data-model, commit
+  66eae148b37e4df11e2a5e445db9fa785546e05b) and the RDF/JS DatasetCore test
+  suite (https://github.com/rdfjs-base/dataset, commit
+  1a62b216c6ce76c809c40e9f1f62126947763808): Copyright (c) 2024 Thomas
+  Bergwinkl, The MIT License. Each derived file in conformance/echo03
+  carries the full MIT notice of its source. packages/echo03 copies no
+  N3.js code; it follows N3.js's API names and argument conventions.
+
+- conformance/echo04, tools/echo04-study, docs/echo04 (the RDF4J-style
+  echo, working name echo04): test cases (queries, data, expected results,
+  parser inputs, SHACL shapes) and API descriptions derived from Eclipse
+  RDF4J (https://github.com/eclipse-rdf4j/rdf4j, commit
+  fe7a441aa3f80f09993178b35f9f1e7a252932cc). Eclipse RDF4J is distributed
+  under the Eclipse Distribution License 1.0 (SPDX: BSD-3-Clause), whose
+  text follows. Only RDF4J-authored test material is used; RDF4J's copies
+  of the W3C test suites are not copied. Eclipse RDF4J's site templates
+  (EPL-2.0) are not used.
+
+  Copyright (c) 2007, Eclipse Foundation, Inc. and its licensors.
+  Copyright Aduna (http://www.aduna-software.com/) 2001-2013
+  Copyright (c) Eclipse RDF4J contributors, Aduna, and others.
+
+  All rights reserved.
+
+  Redistribution and use in source and binary forms, with or without
+  modification, are permitted provided that the following conditions are met:
+
+  * Redistributions of source code must retain the above copyright notice, this
+    list of conditions and the following disclaimer.
+  * Redistributions in binary form must reproduce the above copyright notice,
+    this list of conditions and the following disclaimer in the documentation
+    and/or other materials provided with the distribution.
+  * Neither the name of the Eclipse Foundation, Inc. nor the names of its
+    contributors may be used to endorse or promote products derived from this
+    software without specific prior written permission.
+
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+  WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+  DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+  ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+  (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+  ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+  Eclipse RDF4J is a project of the Eclipse Foundation. "Eclipse" and
+  "RDF4J" are names of their owners; this repository is not affiliated
+  with or endorsed by them.

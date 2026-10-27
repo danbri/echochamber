@@ -1,0 +1,17 @@
+{
+ "cases": {
+  "TriGParserCustomTest#testParseTruePrefix": {
+   "verdict": "defect",
+   "group": "turtle-keyword-prefix",
+   "issue": "https://github.com/danbri/factoidal/issues/1063",
+   "spec": "RDF 1.2 TriG section 4.5 (grammar [PNAME_LN], [PN_PREFIX]) and RDF 1.2 Turtle section 6 note 3: \"When tokenizing the input and choosing grammar rules, the longest match is chosen.\"",
+   "note": "In object position the lexer reads 'true'/'false' as BooleanLiteral even when ':' follows, so true:o (a PNAME_LN, the longest match) is refused with 'expected . after triple'. Subject and predicate positions accept true:s / true:p; truex:o is accepted. Same in turtle, trig, trig12."
+  },
+  "TriGParserCustomTest#testDirLangStringNoLanguage": {
+   "verdict": "divergence",
+   "group": "langstring-without-tag",
+   "spec": "RDF 1.2 Concepts section 3.3 (Literals: the datatype IRI is rdf:dirLangString if and only if the literal has a language tag and a base direction); W3C rdf-tests rdf12 ntriples-langdir-bad-5 is a negative syntax test of the same literal",
+   "note": "RDF4J (VERIFY_DATATYPE_VALUES=false, its default) rewrites \"Hello\"^^rdf:dirLangString with no language tag to the xsd:string literal \"Hello\"; Factoidal refuses it (term.invalid-langtag)."
+  }
+ }
+}

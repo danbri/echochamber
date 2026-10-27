@@ -1,0 +1,10 @@
+{
+  "cases": {
+    "RDFXMLParserTest#testFatalErrorDoctypeDecl": {
+      "verdict": "divergence",
+      "group": "xml-doctype-disallowed",
+      "spec": "XML 1.0 (Fifth Edition) section 2.8 [22] prolog ::= XMLDecl? Misc* (doctypedecl Misc*)? and section 5.1 (a non-validating processor need not read external parameter entities); RDF 1.2 XML Syntax section 2 (an RDF/XML document is an XML document)",
+      "note": "RDF4J refuses any DOCTYPE by default (XMLParserSettings.DISALLOW_DOCTYPE_DECL=true, an XXE hardening choice). The document is well-formed XML; Factoidal skips the unread external parameter entity and gives the one triple <http://example.org/foo/bar> rdfs:label \"Foo Bar\"."
+    }
+  }
+}

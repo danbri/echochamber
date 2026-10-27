@@ -1,0 +1,84 @@
+{
+ "cases": {
+  "FilterScopeTest#testScope1": {
+   "verdict": "defect",
+   "group": "in-not-in-error",
+   "issue": "https://github.com/danbri/factoidal/issues/1049",
+   "spec": "SPARQL 1.1 Query §17.4.1.10 (NOT IN), §17.3 (an error in FILTER rejects the solution), §18.2.1 (FILTER scope)",
+   "note": "The inner group's FILTER(?v NOT IN (...)) sees ?v unbound (bottom-up evaluation), so the comparison is an error and the inner group is empty. The engine answers true for NOT IN with an unbound operand (SELECT (?u NOT IN (<urn:x>) AS ?r) {} gives true; FILTER(?u != <urn:x>) in the same place correctly gives no rows), so 4 rows survive. Scoping itself is right: the same query with != gives 0 rows."
+  },
+  "FilterScopeTest#testScope2": {
+   "verdict": "defect",
+   "group": "in-not-in-error",
+   "issue": "https://github.com/danbri/factoidal/issues/1049",
+   "spec": "SPARQL 1.1 Query §17.4.1.10 (NOT IN), §17.3 (an error in FILTER rejects the solution), §18.2.1 (FILTER scope)",
+   "note": "The inner group's FILTER(?v NOT IN (...)) sees ?v unbound (bottom-up evaluation), so the comparison is an error and the inner group is empty. The engine answers true for NOT IN with an unbound operand (SELECT (?u NOT IN (<urn:x>) AS ?r) {} gives true; FILTER(?u != <urn:x>) in the same place correctly gives no rows), so 4 rows survive. Scoping itself is right: the same query with != gives 0 rows."
+  },
+  "FilterScopeTest#testScope3": {
+   "verdict": "defect",
+   "group": "in-not-in-error",
+   "issue": "https://github.com/danbri/factoidal/issues/1049",
+   "spec": "SPARQL 1.1 Query §17.4.1.10 (NOT IN), §17.3 (an error in FILTER rejects the solution), §18.2.1 (FILTER scope)",
+   "note": "The inner group's FILTER(?v NOT IN (...)) sees ?v unbound (bottom-up evaluation), so the comparison is an error and the inner group is empty. The engine answers true for NOT IN with an unbound operand (SELECT (?u NOT IN (<urn:x>) AS ?r) {} gives true; FILTER(?u != <urn:x>) in the same place correctly gives no rows), so 4 rows survive. Scoping itself is right: the same query with != gives 0 rows."
+  },
+  "FilterScopeTest#testScope4": {
+   "verdict": "defect",
+   "group": "in-not-in-error",
+   "issue": "https://github.com/danbri/factoidal/issues/1049",
+   "spec": "SPARQL 1.1 Query §17.4.1.10 (NOT IN), §17.3 (an error in FILTER rejects the solution), §18.2.1 (FILTER scope)",
+   "note": "The inner group's FILTER(?v NOT IN (...)) sees ?v unbound (bottom-up evaluation), so the comparison is an error and the inner group is empty. The engine answers true for NOT IN with an unbound operand (SELECT (?u NOT IN (<urn:x>) AS ?r) {} gives true; FILTER(?u != <urn:x>) in the same place correctly gives no rows), so 4 rows survive. Scoping itself is right: the same query with != gives 0 rows."
+  },
+  "SparqlMinusScopingTests#T8_projectionExprOnLeftDoesNotAffectMinusOverlap_NoEffect": {
+   "verdict": "defect",
+   "group": "minus-rhs-in-scope",
+   "issue": "https://github.com/danbri/factoidal/issues/1069",
+   "spec": "SPARQL 1.1 Query §18.2.1: 'use of a variable in FILTER, or in MINUS does not cause a variable to be in-scope outside of those forms'; 'In SELECT, the variable v must not be in-scope in the graph pattern of the SELECT clause'",
+   "note": "The engine refuses SELECT ?s (1 AS ?z) { ?s <urn:p> ?o MINUS { ?x <urn:q> ?z } } with query.syntax 'SELECT expression aliases variable already in scope'; a variable that occurs only in the right side of MINUS is not in-scope. FILTER NOT EXISTS in the same place is accepted."
+  },
+  "DescribeTest#DescribeMultipleB": {
+   "verdict": "defect",
+   "group": "update-anon-bnode-label",
+   "issue": "https://github.com/danbri/factoidal/issues/1074",
+   "spec": "SPARQL 1.1 Update §3.1.1 (INSERT DATA may contain blank nodes); SPARQL 1.1 Query §16.4 (DESCRIBE answers an RDF graph); RDF 1.2 N-Quads §BLANK_NODE_LABEL",
+   "note": "After INSERT DATA { <urn:1> <urn:blank> [] }, the anonymous blank node has the label 'b_d__:bnode_N' (with a colon); any CONSTRUCT or DESCRIBE whose answer holds it fails with parse.syntax \"expected '.' terminator\" (the answer graph crosses as N-Quads). A labelled _:x in INSERT DATA works. Related to closed-in-effect issue 696 (BNODE() labels), which no longer reproduces."
+  },
+  "DescribeTest#DescribeMultipleC": {
+   "verdict": "defect",
+   "group": "update-anon-bnode-label",
+   "issue": "https://github.com/danbri/factoidal/issues/1074",
+   "spec": "SPARQL 1.1 Update §3.1.1 (INSERT DATA may contain blank nodes); SPARQL 1.1 Query §16.4 (DESCRIBE answers an RDF graph); RDF 1.2 N-Quads §BLANK_NODE_LABEL",
+   "note": "After INSERT DATA { <urn:1> <urn:blank> [] }, the anonymous blank node has the label 'b_d__:bnode_N' (with a colon); any CONSTRUCT or DESCRIBE whose answer holds it fails with parse.syntax \"expected '.' terminator\" (the answer graph crosses as N-Quads). A labelled _:x in INSERT DATA works. Related to closed-in-effect issue 696 (BNODE() labels), which no longer reproduces. After a fix this case still needs the incoming statement ? urn:blank urn:1 (RDF4J's symmetric CBD): re-triage as divergence describe-cbd (§16.4)."
+  },
+  "DescribeTest#DescribeMultipleD": {
+   "verdict": "defect",
+   "group": "update-anon-bnode-label",
+   "issue": "https://github.com/danbri/factoidal/issues/1074",
+   "spec": "SPARQL 1.1 Update §3.1.1 (INSERT DATA may contain blank nodes); SPARQL 1.1 Query §16.4 (DESCRIBE answers an RDF graph); RDF 1.2 N-Quads §BLANK_NODE_LABEL",
+   "note": "After INSERT DATA { <urn:1> <urn:blank> [] }, the anonymous blank node has the label 'b_d__:bnode_N' (with a colon); any CONSTRUCT or DESCRIBE whose answer holds it fails with parse.syntax \"expected '.' terminator\" (the answer graph crosses as N-Quads). A labelled _:x in INSERT DATA works. Related to closed-in-effect issue 696 (BNODE() labels), which no longer reproduces. After a fix this case still needs the incoming statement ? urn:blank urn:1 (RDF4J's symmetric CBD): re-triage as divergence describe-cbd (§16.4)."
+  },
+  "DescribeTest#DescribeWhere": {
+   "verdict": "divergence",
+   "group": "describe-cbd",
+   "spec": "SPARQL 1.1 Query §16.4: 'The RDF returned is determined by the information publishing policy of the SPARQL processor'; the description is implementation-defined",
+   "note": "RDF4J answers the symmetric concise bounded description (incoming statements too, recursing through blank nodes); the engine answers the outgoing description only, so the upstream assertion of an incoming statement (? ex:p ex:e) fails."
+  },
+  "DescribeTest#DescribeMultipleA": {
+   "verdict": "divergence",
+   "group": "describe-cbd",
+   "spec": "SPARQL 1.1 Query §16.4: 'The RDF returned is determined by the information publishing policy of the SPARQL processor'; the description is implementation-defined",
+   "note": "RDF4J answers the symmetric concise bounded description (incoming statements too, recursing through blank nodes); the engine answers the outgoing description only, so the upstream assertion of an incoming statement (? urn:blank urn:1) fails."
+  },
+  "DefaultGraphTest#SesameNilAsGraph": {
+   "verdict": "divergence",
+   "group": "rdf4j-nil-default-graph",
+   "spec": "SPARQL 1.1 Query §13.3 (GRAPH matches the named graphs of the dataset; the default graph has no name) and §18.5 eval(D, Graph(IRI, P))",
+   "note": "RDF4J names the default graph rdf4j:nil and lets GRAPH rdf4j:nil match it. Under the spec rdf4j:nil is an ordinary IRI that names no graph in the data, so the answer is empty."
+  },
+  "DefaultGraphTest#NullContext1": {
+   "verdict": "divergence",
+   "group": "rdf4j-extension-syntax",
+   "spec": "SPARQL 1.1 Query §19.8 grammar [13] DatasetClause ::= 'FROM' ( DefaultGraphClause | NamedGraphClause ), [14] DefaultGraphClause ::= SourceSelector, [16] SourceSelector ::= iri",
+   "note": "FROM DEFAULT is RDF4J syntax; the engine refuses it with query.syntax 'expected IRI or NAMED after FROM'."
+  }
+ }
+}
