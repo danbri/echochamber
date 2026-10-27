@@ -1,0 +1,12 @@
+{
+  "test_function_non_expansion_01": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "Expr (SPARQL expression object model)."
+  },
+  "test_function_non_expansion_02": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "Expr (SPARQL expression object model)."
+  }
+}

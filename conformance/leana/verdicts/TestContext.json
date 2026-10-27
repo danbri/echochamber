@@ -1,0 +1,17 @@
+{
+  "testCxtAssemblerInvalid": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "Resource.addLiteral(Property, value)."
+  },
+  "testCxtAssemblerLiteral": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "Resource.addLiteral(Property, value)."
+  },
+  "testCxtAssemblerURI": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "Resource.addLiteral(Property, value)."
+  }
+}

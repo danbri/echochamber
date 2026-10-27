@@ -34,6 +34,7 @@ import { Dataset, DatasetGraph, DatasetFactory, Context, Quad } from './dataset.
 import { newDataset } from './engine.mjs';
 import { readFileSync } from 'node:fs';
 import { JenaException, NoSuchElementException, unsupported } from './errors.mjs';
+import { LangImpl, RDFFormat } from './riot.mjs';
 
 // ---------------------------------------------------------------------------
 // Exceptions (Jena org.apache.jena.query / org.apache.jena.update)
@@ -127,6 +128,8 @@ export class Query {
   getProjectVars() { return unsupported('Query.getResultVars / getProjectVars', 'query'); }
   getQueryPattern() { return unsupported('Query.getQueryPattern (syntax tree)', 'query'); }
   setQueryPattern() { return unsupported('Query.getQueryPattern (syntax tree)', 'query'); }
+  getValuesData() { return unsupported('Query.getQueryPattern (syntax tree)', 'query'); }
+  setValuesDataBlock() { return unsupported('Query.getQueryPattern (syntax tree)', 'query'); }
   getPrefixMapping() { return unsupported('Query.getPrefixMapping (syntax tree)', 'query'); }
   setLimit() { return unsupported('Query.setLimit / setOffset / setDistinct (syntax tree)', 'query'); }
   setOffset() { return unsupported('Query.setLimit / setOffset / setDistinct (syntax tree)', 'query'); }
@@ -147,6 +150,8 @@ export const QueryFactory = Object.freeze({
     return new Query(text, base, syntax);
   },
   make() { return new Query(); },
+  /** Jena createElement: a group graph pattern as a syntax tree (gap 'query'). */
+  createElement() { return unsupported('QueryFactory.createElement (query pattern syntax tree)', 'query'); },
   parse(query, text, base, syntax) {
     query._text = String(text); if (base) query._base = base; if (syntax) query._syntax = syntax;
     return query;
@@ -330,6 +335,8 @@ export class QuerySolutionMap {
   contains(name) { return this._m.has(stripQ(name)); }
   varNames() { return new ExtendedIterator([...this._m.keys()]); }
   asMap() { return new Map(this._m); }
+  /** Jena asVarNodeMap: variable name to Node. */
+  asVarNodeMap() { return new Map([...this._m].map(([k, v]) => [k, asNode(v)])); }
   addAll(other) {
     if (other instanceof QuerySolutionMap) for (const [k, v] of other._m) this._m.set(k, v);
     else if (other instanceof QuerySolution) for (const k of other._row.keys()) this._m.set(k, other.get(k));
@@ -370,16 +377,80 @@ export class ResultSet {
   forEachRemaining(fn) { while (this.hasNext()) fn(this.next()); }
   close() { this._closed = true; }
   materialise() { return ResultSetFactory.copyResults(this); }
+  /** Jena ResultSet.rewindable(): a rewindable copy of the rest (this is consumed). */
+  rewindable() { return ResultSetFactory.copyResults(this); }
   [Symbol.iterator]() { const rs = this; return { next: () => (rs.hasNext() ? { value: rs.next(), done: false } : { value: undefined, done: true }) }; }
   /** The remaining rows, consumed. */
   _remaining() { const r = this._rows.slice(this._i); this._i = this._rows.length; return r; }
 }
 
-/** Jena ResultSetRewindable: a ResultSet that can be reset. */
+/** Jena ResultSetRewindable: a ResultSet that can be reset. It is also peekable (Jena ResultSetPeekable). */
 export class ResultSetRewindable extends ResultSet {
   reset() { this._i = 0; this._closed = false; }
   size() { return this._rows.length; }
+  rewindable() { return this; }
+  peek() {
+    if (!this.hasNext()) throw new NoSuchElementException('ResultSet.peek');
+    return new QuerySolution(this._rows[this._i], this._model);
+  }
+  peekBinding() {
+    if (!this.hasNext()) throw new NoSuchElementException('ResultSet.peek');
+    return new Map(this._rows[this._i]);
+  }
 }
+
+/** Jena ResultSetMem: an in-memory rewindable result set; new ResultSetMem() is empty (no variables, no rows). */
+export class ResultSetMem extends ResultSetRewindable {
+  constructor(rs = null) {
+    if (rs === null) super([], [], new Model(), null);
+    else super(rs.getResultVars(), rs._remaining(), rs.getResourceModel(), rs._rerun);
+  }
+}
+
+/** java.lang.IllegalStateException. */
+export class IllegalStateException extends JenaException {}
+
+/**
+ * Jena ResultSetPeeking: a peekable view of another result set, which
+ * notices when the inner result set is moved independently.
+ */
+export class ResultSetPeeking {
+  constructor(results) {
+    if (!results) throw new TypeError('Inner result set cannot be null');
+    this._rs = results; this._model = results.getResourceModel(); this._peeked = null; this._row = 0;
+  }
+  _hasPeeked() {
+    const diff = this._rs.getRowNumber() - this._row;
+    if (diff === 0) return false;
+    if (diff === 1 && this._peeked !== null) return true;
+    if (diff >= 1) { this._row = this._rs.getRowNumber(); this._peeked = null; return false; }
+    throw new IllegalStateException('Underlying result set position has moved backwards, this result set is no longer usable');
+  }
+  hasNext() { return this._hasPeeked() ? true : this._rs.hasNext(); }
+  next() { return new QuerySolution(this.nextBinding(), this._model); }
+  nextSolution() { return this.next(); }
+  nextBinding() {
+    if (this._hasPeeked()) { const b = this._peeked; this._peeked = null; this._row++; return b; }
+    if (this._rs.hasNext()) { const b = this.peekBinding(); this._peeked = null; this._row++; return b; }
+    throw new NoSuchElementException('ResultSet.next');
+  }
+  peek() { return new QuerySolution(this.peekBinding(), this._model); }
+  peekBinding() {
+    if (this._hasPeeked()) return this._peeked;
+    if (this._rs.hasNext()) { this._peeked = this._rs.nextBinding(); return this._peeked; }
+    throw new NoSuchElementException('ResultSet.peek');
+  }
+  getRowNumber() { return this._hasPeeked() ? this._rs.getRowNumber() - 1 : this._rs.getRowNumber(); }
+  getResultVars() { return this._rs.getResultVars(); }
+  getResourceModel() { return this._model; }
+  forEachRemaining(fn) { while (this.hasNext()) fn(this.next()); }
+  close() { this._rs.close(); }
+  _remaining() { const r = []; while (this.hasNext()) r.push(this.nextBinding()); return r; }
+  get _vars() { return this._rs.getResultVars(); }
+  get _rerun() { return null; }
+}
+
+const READ_RS = 'ResultSetFactory reading a results format (XML, JSON, CSV, TSV, Thrift)';
 
 export const ResultSetFactory = Object.freeze({
   /** A rewindable copy of the rest of `rs` (rs is consumed). */
@@ -388,17 +459,129 @@ export const ResultSetFactory = Object.freeze({
     return new ResultSetRewindable(rs.getResultVars(), rows, rs.getResourceModel(), rs._rerun);
   },
   makeRewindable(rs) { return ResultSetFactory.copyResults(rs); },
-  /** A result set from rows (Maps or objects of name to Node or RDFNode). It has no query, so the engine cannot write it (gap 'query'). */
+  makePeekable(rs) { return new ResultSetPeeking(rs); },
+  /** Reading a results document: @factoidal/core has no results reader (gap 'query'). */
+  fromXML() { return unsupported(READ_RS, 'query'); },
+  fromJSON() { return unsupported(READ_RS, 'query'); },
+  fromTSV() { return unsupported(READ_RS, 'query'); },
+  load() { return unsupported(READ_RS, 'query'); },
+  parse() { return unsupported(READ_RS, 'query'); },
+  /** Jena closeableResultSet(qExec): run the SELECT (a Promise); close() closes the execution too. A non-SELECT is a QueryException. */
+  async closeableResultSet(qe) {
+    const rs = await qe.execSelect();
+    const close = rs.close.bind(rs);
+    rs.close = () => { close(); qe.close(); };
+    return rs;
+  },
+  /** A result set from rows (Maps or objects of name to Node or RDFNode). */
   create(vars, rows, model = null) {
     const rs = rows.map((r) => new Map([...(r instanceof Map ? r : Object.entries(r))].map(([k, v]) => [stripQ(k), asNode(v)])));
     return new ResultSetRewindable(vars.map(stripQ), rs, model ?? new Model(), null);
   },
 });
 
-/** Engine output of a result set, in one of the core results formats. */
-async function formatted(rs, output) {
-  if (!rs._rerun) return unsupported('ResultSetFormatter output of a result set not made by a SPARQL 1.1 query', 'query');
-  return rs._rerun(output);
+/** Jena ResultSetUtils.merge: the rows of rs1 then rs2 (both consumed); the variables must be the same. */
+export const ResultSetUtils = Object.freeze({
+  merge(rs1, rs2) {
+    const v1 = rs1.getResultVars(), v2 = rs2.getResultVars();
+    if (v1.length !== v2.length || !v1.every((v) => v2.includes(v))) throw new QueryException('Variables are not compatible');
+    return new ResultSetRewindable(v1, [...rs1._remaining(), ...rs2._remaining()], rs1.getResourceModel(), null);
+  },
+});
+
+const RS = 'urn:x-leana:rs:';
+
+/**
+ * The rows of a result set as a graph: one blank node per row, an arc per
+ * binding (predicate: the variable), and with `ordered` the row index. Two
+ * result sets match by term (blank nodes mapped consistently) exactly when
+ * their graphs are isomorphic, which the engine decides.
+ */
+function rowsGraph(rows, ordered) {
+  const g = new GraphMem();
+  const top = NodeFactory.createURI(RS + 'results');
+  rows.forEach((row, i) => {
+    const r = NodeFactory.createBlankNode();
+    g.add(Triple.create(top, NodeFactory.createURI(RS + 'row'), r));
+    if (ordered) g.add(Triple.create(r, NodeFactory.createURI(RS + 'index'), NodeFactory.createLiteralString(String(i))));
+    for (const [k, v] of row) g.add(Triple.create(r, NodeFactory.createURI(RS + 'v:' + encodeURIComponent(k)), v));
+  });
+  return g;
+}
+
+function sameHeader(rs1, rs2) {
+  const a = rs1.getResultVars(), b = rs2.getResultVars();
+  return a.length === b.length && a.every((v) => b.includes(v));
+}
+
+function rowKey(row) { return [...row].map(([k, v]) => k + '=' + v.toString()).sort().join('\u0000'); }
+
+/**
+ * Jena ResultsCompare. Destructive: both result sets are read to the end.
+ * By term: blank nodes map one to one (graph isomorphism, decided by the
+ * engine). By value: gap 'value-matching'.
+ */
+export const ResultsCompare = Object.freeze({
+  equalsByTerm(rs1, rs2) {
+    if (rs1 === rs2) return true;
+    if (!sameHeader(rs1, rs2)) return false;
+    const a = rs1._remaining(), b = rs2._remaining();
+    return a.length === b.length && rowsGraph(a, false).isIsomorphicWith(rowsGraph(b, false));
+  },
+  equalsByTermAndOrder(rs1, rs2) {
+    if (!sameHeader(rs1, rs2)) return false;
+    const a = rs1._remaining(), b = rs2._remaining();
+    return a.length === b.length && rowsGraph(a, true).isIsomorphicWith(rowsGraph(b, true));
+  },
+  /** Exact: blank nodes must have the same labels. */
+  equalsExact(rs1, rs2) {
+    if (!sameHeader(rs1, rs2)) return false;
+    const a = rs1._remaining().map(rowKey).sort(), b = rs2._remaining().map(rowKey).sort();
+    return a.length === b.length && a.every((k, i) => k === b[i]);
+  },
+  equalsByValue() { return unsupported('ResultsCompare.equalsByValue', 'value-matching'); },
+  equalsByValueAndOrder() { return unsupported('ResultsCompare.equalsByValue', 'value-matching'); },
+});
+
+const RDF_RS = 'RDFOutput / RDFInput (a result set in the RDF result-set vocabulary)';
+/** Jena RDFOutput and RDFInput (the DAWG result-set vocabulary): gap 'query'. */
+export const RDFOutput = Object.freeze({ encodeAsModel() { return unsupported(RDF_RS, 'query'); }, encodeAsRDF() { return unsupported(RDF_RS, 'query'); } });
+export const RDFInput = Object.freeze({ fromRDF() { return unsupported(RDF_RS, 'query'); } });
+
+/**
+ * The engine writes given rows: they become data (a blank node per row, an
+ * index, an arc per binding) and a SELECT over that data reads them back in
+ * order, written in `output` by the engine.
+ */
+async function writeRows(vars, rows, output) {
+  const ds = newDataset();
+  try {
+    let q;
+    if (vars.length === 0) {
+      q = `SELECT * WHERE { VALUES () { ${'() '.repeat(rows.length)}} }`;
+    } else {
+      const pv = (k) => `<${RS}v:${encodeURIComponent(k)}>`;
+      rows.forEach((row, i) => {
+        const r = df.blankNode('x-leana-row-' + i);
+        ds.add(df.quad(r, df.namedNode(RS + 'index'), df.literal(String(i).padStart(12, '0')), DEFAULT_GRAPH));
+        for (const [k, v] of row) ds.add(df.quad(r, df.namedNode(RS + 'v:' + encodeURIComponent(k)), v.toRDFJS(), DEFAULT_GRAPH));
+      });
+      q = `SELECT ${vars.map((v) => '?' + v).join(' ')} WHERE { ?__r <${RS}index> ?__i ${vars.map((v) => `OPTIONAL { ?__r ${pv(v)} ?${v} }`).join(' ')} } ORDER BY ?__i`;
+    }
+    try { return await ds.query(q, { output }); } catch (e) { throw queryError(e); }
+  } finally {
+    ds.dispose();
+  }
+}
+
+/**
+ * Engine output of a result set, in one of the core results formats: a
+ * result set from a SPARQL 1.1 query runs again on its snapshot; any other
+ * (SPARQL 1.2 queries, rows made in code) is written from `rows`.
+ */
+async function formatted(rs, output, rows) {
+  if (rs._rerun) return rs._rerun(output);
+  return writeRows(rs._vars, rows, output);
 }
 
 function writeTo(out, text) {
@@ -414,38 +597,124 @@ function writeTo(out, text) {
 export const ResultSetFormatter = Object.freeze({
   consume(rs) { let n = 0; while (rs.hasNext()) { rs.next(); n++; } return n; },
   toList(rs) { const xs = []; while (rs.hasNext()) xs.push(rs.next()); return xs; },
-  async asText(rs) { rs._remaining(); return formatted(rs, 'table'); },
+  async asText(rs) { return formatted(rs, 'table', rs._remaining()); },
   async out(out, rs) {
     if (rs === undefined) { rs = out; out = null; }
     if (typeof rs === 'boolean') { writeTo(out, (rs ? 'yes' : 'no') + '\n'); return; }
     writeTo(out, await ResultSetFormatter.asText(rs));
   },
-  async asXMLString(rs) { rs._remaining(); return formatted(rs, 'xml'); },
+  async asXMLString(rs) { return formatted(rs, 'xml', rs._remaining()); },
   async outputAsXML(out, rs) { if (rs === undefined) { rs = out; out = null; } writeTo(out, await ResultSetFormatter.asXMLString(rs)); },
   async outputAsJSON(out, rs) {
     if (rs === undefined) { rs = out; out = null; }
-    rs._remaining();
-    const j = await formatted(rs, 'json');
+    const j = await formatted(rs, 'json', rs._remaining());
     writeTo(out, typeof j === 'string' ? j : JSON.stringify(j, null, 2));
   },
-  async outputAsCSV(out, rs) { if (rs === undefined) { rs = out; out = null; } rs._remaining(); writeTo(out, await formatted(rs, 'csv')); },
-  async outputAsTSV(out, rs) { if (rs === undefined) { rs = out; out = null; } rs._remaining(); writeTo(out, await formatted(rs, 'tsv')); },
-  /** Jena output(out, rs, ResultsFormat). */
+  async outputAsCSV(out, rs) { if (rs === undefined) { rs = out; out = null; } writeTo(out, await formatted(rs, 'csv', rs._remaining())); },
+  async outputAsTSV(out, rs) { if (rs === undefined) { rs = out; out = null; } writeTo(out, await formatted(rs, 'tsv', rs._remaining())); },
+  /** Jena output(out, rs, ResultsFormat): the result-set formats XML, JSON, CSV, TSV and text. */
   async output(out, rs, fmt) {
-    const f = String(fmt && fmt.name ? fmt.name : fmt).toLowerCase();
-    rs._remaining();
-    const text = await formatted(rs, f === 'text' ? 'table' : f);
+    if (rs && typeof rs.hasNext === 'function' && typeof rs.getResultVars !== 'function') {
+      return unsupported('QueryExecution.execJson (ARQ JSON query form)', 'query');
+    }
+    const name = fmt instanceof ResultsFormatImpl ? fmt._engine : String(fmt && fmt.name ? fmt.name : fmt).toLowerCase();
+    if (!name) return unsupported('ResultSetFormatter.output in an RDF syntax (result set as RDF)', 'query');
+    const text = await formatted(rs, name === 'text' ? 'table' : name, rs._remaining());
     writeTo(out, typeof text === 'string' ? text : JSON.stringify(text, null, 2));
   },
 });
 
-/** Jena ResultsFormat names, mapped to the engine's results formats. */
+/** Jena ResultSetLang: the result-set syntaxes (names only; the engine writes XML, JSON, CSV, TSV and text). */
+export const ResultSetLang = Object.freeze({
+  RS_XML: new LangImpl('SPARQL-Results-XML', 'SPARQL-Results-XML', null, null, ['SRX']),
+  RS_JSON: new LangImpl('SPARQL-Results-JSON', 'SPARQL-Results-JSON', null, null, ['SRJ']),
+  RS_CSV: new LangImpl('CSV', 'CSV', null, null),
+  RS_TSV: new LangImpl('TSV', 'TSV', null, null),
+  RS_Text: new LangImpl('SPARQL-Results-Text', 'SPARQL-Results-Text', null, null, ['TEXT']),
+  RS_Thrift: new LangImpl('SPARQL-Results-Thrift', 'SPARQL-Results-Thrift', null, null, ['SRT']),
+  RS_Protobuf: new LangImpl('SPARQL-Results-Protobuf', 'SPARQL-Results-Protobuf', null, null, ['SRP']),
+  RS_None: new LangImpl('SPARQL-Results-None', 'SPARQL-Results-None', null, null),
+});
+
+const ENGINE_RS = new Map([[ResultSetLang.RS_XML, 'xml'], [ResultSetLang.RS_JSON, 'json'], [ResultSetLang.RS_CSV, 'csv'],
+  [ResultSetLang.RS_TSV, 'tsv'], [ResultSetLang.RS_Text, 'table']]);
+
+class ResultsFormatImpl {
+  constructor(name, rsLang, triples, quads) {
+    this.name = name; this._rs = rsLang; this._t = triples; this._q = quads;
+    this._engine = rsLang ? (ENGINE_RS.get(rsLang) ?? null) : null;
+    Object.freeze(this);
+  }
+  resultSetLang() { return this._rs; }
+  triplesFormat() { return this._t; }
+  quadsFormat() { return this._q; }
+  isResultSet() { return this._rs !== null; }
+  toString() { return this.name; }
+}
+
+const RF = {
+  XML: new ResultsFormatImpl('XML', ResultSetLang.RS_XML, RDFFormat.RDFXML, null),
+  JSON: new ResultsFormatImpl('JSON', ResultSetLang.RS_JSON, RDFFormat.JSONLD, RDFFormat.JSONLD),
+  TEXT: new ResultsFormatImpl('TEXT', ResultSetLang.RS_Text, RDFFormat.TURTLE, RDFFormat.TRIG),
+  CSV: new ResultsFormatImpl('CSV', ResultSetLang.RS_CSV, null, null),
+  TSV: new ResultsFormatImpl('TSV', ResultSetLang.RS_TSV, null, null),
+  THRIFT: new ResultsFormatImpl('THRIFT', ResultSetLang.RS_Thrift, null, null),
+  PROTOBUF: new ResultsFormatImpl('PROTOBUF', ResultSetLang.RS_Protobuf, null, null),
+  TTL: new ResultsFormatImpl('TTL', null, RDFFormat.TURTLE, null),
+  NT: new ResultsFormatImpl('NT', null, RDFFormat.NTRIPLES, null),
+  TRIG: new ResultsFormatImpl('TRIG', null, RDFFormat.TRIG, RDFFormat.TRIG),
+  NQ: new ResultsFormatImpl('NQ', null, RDFFormat.NQUADS, RDFFormat.NQUADS),
+  RDFXML: new ResultsFormatImpl('RDFXML', null, RDFFormat.RDFXML, null),
+  JSONLD: new ResultsFormatImpl('JSONLD', null, RDFFormat.JSONLD, RDFFormat.JSONLD),
+  COUNT: new ResultsFormatImpl('COUNT', null, null, null),
+  NONE: new ResultsFormatImpl('NONE', ResultSetLang.RS_None, null, null),
+  SSE: new ResultsFormatImpl('SSE', null, null, null),
+};
+// Jena's short names (ResultsFormat.lookup), compared ignoring case.
+const RF_NAMES = new Map(Object.entries({
+  srx: 'XML', srj: 'JSON', srt: 'THRIFT', srp: 'PROTOBUF', srpb: 'PROTOBUF', rt: 'THRIFT', trdf: 'THRIFT', rpb: 'PROTOBUF',
+  pbrdf: 'PROTOBUF', rdfxml: 'RDFXML', xml: 'XML', json: 'JSON', rdf: 'TTL', ttl: 'TTL', turtle: 'TTL', trig: 'TRIG',
+  'n-triples': 'NT', ntriples: 'NT', nt: 'NT', 'n-quads': 'NQ', nquads: 'NQ', nq: 'NQ', jsonld: 'JSONLD', 'json-ld': 'JSONLD',
+  sse: 'SSE', csv: 'CSV', tsv: 'TSV', text: 'TEXT', txt: 'TEXT', count: 'COUNT', none: 'NONE',
+}).map(([k, v]) => [k, RF[v]]));
+
+/** Jena ResultsFormat: XML, JSON, ... and lookup(shortName). The FMT_* names are kept. */
 export const ResultsFormat = Object.freeze({
-  FMT_RS_XML: Object.freeze({ name: 'xml' }),
-  FMT_RS_JSON: Object.freeze({ name: 'json' }),
-  FMT_RS_CSV: Object.freeze({ name: 'csv' }),
-  FMT_RS_TSV: Object.freeze({ name: 'tsv' }),
-  FMT_TEXT: Object.freeze({ name: 'text' }),
+  ...RF,
+  FMT_RS_XML: RF.XML, FMT_RS_JSON: RF.JSON, FMT_RS_CSV: RF.CSV, FMT_RS_TSV: RF.TSV, FMT_TEXT: RF.TEXT,
+  lookup(name) { return name === null || name === undefined ? null : RF_NAMES.get(String(name).toLowerCase()) ?? null; },
+  values() { return Object.values(RF); },
+  guessSyntax() { return unsupported('RDFLanguages.pathnameToLang', 'syntax-from-name'); },
+});
+
+/** Jena ResultsWriter (builder): the engine writes XML, JSON, CSV, TSV and text. Blank node label options are not kept. */
+export const ResultsWriter = Object.freeze({
+  create() {
+    const b = { _lang: null, _cxt: null,
+      lang(l) { b._lang = l; return b; },
+      context(c) { b._cxt = c; return b; },
+      build() { return b; },
+      async write(out, rs) {
+        const name = ENGINE_RS.get(b._lang);
+        if (!name) return unsupported('ResultsWriter in a result-set syntax the engine does not write (Thrift, Protobuf)', 'query');
+        const text = await formatted(rs, name, rs._remaining());
+        writeTo(out, typeof text === 'string' ? text : JSON.stringify(text, null, 2));
+      },
+    };
+    return b;
+  },
+});
+
+/** Jena ResultsReader and ResultSetMgr reading: @factoidal/core has no results reader (gap 'query'). */
+export const ResultsReader = Object.freeze({
+  create() {
+    const b = { lang() { return b; }, context() { return b; }, build() { return b; }, read() { return unsupported(READ_RS, 'query'); } };
+    return b;
+  },
+});
+export const ResultSetMgr = Object.freeze({
+  read() { return unsupported(READ_RS, 'query'); },
+  async write(out, rs, lang) { return ResultsWriter.create().lang(lang).write(out, rs); },
 });
 
 // ---------------------------------------------------------------------------
@@ -556,8 +825,9 @@ export class QueryExecutionImpl {
     return new ExtendedIterator(m.getGraph().find().toList().map((t) => Quad.create(Quad.defaultGraphIRI, t)));
   }
   async execConstructDataset() { const m = await this._graphForm(); return DatasetFactory.create(m); }
-  execJson() { return unsupported('QueryExecution.execJson (ARQ JSON query form)', 'query'); }
-  execJsonItems() { return unsupported('QueryExecution.execJson (ARQ JSON query form)', 'query'); }
+  /** ARQ's JSON query form is not SPARQL (SPARQL 1.1 Query section 16): the engine refuses it (QueryParseException). */
+  async execJson() { await this._run(false); throw new QueryExecException('Not a JSON query'); }
+  async execJsonItems() { return this.execJson(); }
   // QueryExec-style names.
   select() { return this.execSelect(); }
   ask() { return this.execAsk(); }
@@ -593,10 +863,13 @@ export class QueryExecutionDatasetBuilder {
   set(symbol, value) { this._cxt.set(symbol, value); return this; }
   build() {
     if (!this._query) throw new QueryException('No query for QueryExecution');
-    if (this._remote) return new QueryExecutionImpl(this._query, null, this._binding, this._cxt, this._remote);
+    // The execution has its own copy of the context: later builder settings do not change it (as in Jena).
+    if (this._remote) return new QueryExecutionImpl(this._query, null, this._binding, this._cxt.copy(), this._remote);
     if (this._src === null) throw new QueryException('No dataset for QueryExecution');
-    return new QueryExecutionImpl(this._query, sourceOf(this._src), this._binding, this._cxt);
+    return new QueryExecutionImpl(this._query, sourceOf(this._src), this._binding, this._cxt.copy());
   }
+  /** Jena QueryExecBuilder.table(): build, run a SELECT and answer its rows as a Table (a Promise). */
+  async table() { return Table.fromResultSet(await this.select()); }
   /** Build and run (Jena 5 shortcuts). */
   select() { return this.build().execSelect(); }
   ask() { return this.build().execAsk(); }
@@ -639,6 +912,32 @@ class RemoteExec {
   }
 }
 
+/**
+ * Jena Table (org.apache.jena.sparql.algebra.table): variables and rows (Maps
+ * from variable name to Node). equals() compares the rows as a multiset, term by term.
+ */
+export class Table {
+  constructor(vars = [], rows = []) { this._vars = vars.map(stripQ); this._rows = rows.map((r) => new Map([...(r instanceof Map ? r : Object.entries(r))].map(([k, v]) => [stripQ(k), asNode(v)]))); }
+  static create(vars, rows) { return new Table(vars, rows); }
+  static fromResultSet(rs) { const rows = []; while (rs.hasNext()) rows.push(rs.nextBinding()); return new Table(rs.getResultVars(), rows); }
+  getVarNames() { return this._vars.slice(); }
+  size() { return this._rows.length; }
+  isEmpty() { return this._rows.length === 0; }
+  rows() { return this._rows.map((r) => new Map(r)); }
+  equals(o) {
+    if (!(o instanceof Table) || o._rows.length !== this._rows.length) return false;
+    const same = (a, b) => a.size === b.size && [...a].every(([k, v]) => b.has(k) && b.get(k).equals(v));
+    const left = o._rows.slice();
+    for (const r of this._rows) {
+      const i = left.findIndex((x) => same(r, x));
+      if (i < 0) return false;
+      left.splice(i, 1);
+    }
+    return true;
+  }
+  toString() { return '(table ' + this._rows.map((r) => '(row ' + [...r].map(([k, v]) => `(?${k} ${v})`).join(' ') + ')').join(' ') + ')'; }
+}
+
 export const QueryExecution = Object.freeze({
   create(query, src) {
     const b = new QueryExecutionDatasetBuilder();
@@ -650,6 +949,29 @@ export const QueryExecution = Object.freeze({
   dataset(d) { return new QueryExecutionDatasetBuilder().dataset(d); },
   graph(g) { return new QueryExecutionDatasetBuilder().graph(g); },
   service(url) { const b = new QueryExecutionDatasetBuilder(); b._remote = new RemoteExec(String(url)); return b; },
+});
+
+/**
+ * Jena QueryExec (the Graph-level execution): dataset(DatasetGraph) or
+ * graph(Graph), then the same builder as QueryExecution. In leana a QueryExec
+ * and a QueryExecution are the same object.
+ */
+export const QueryExec = Object.freeze({
+  dataset(dsg) { return new QueryExecutionDatasetBuilder().dataset(dsg); },
+  graph(g) { return new QueryExecutionDatasetBuilder().graph(g); },
+  newBuilder() { return new QueryExecutionDatasetBuilder(); },
+  service(url) { return QueryExecution.service(url); },
+});
+/** Jena QueryExecAdapter / QueryExecutionAdapter: the same object in leana. */
+export const QueryExecAdapter = Object.freeze({ adapt(qe) { return qe; } });
+export const QueryExecutionAdapter = Object.freeze({ adapt(qe) { return qe; } });
+/** Jena QueryExecBuilderAdapter: the same builder in leana. */
+export const QueryExecBuilderAdapter = Object.freeze({ adapt(b) { return b; } });
+
+/** Jena QueryTransformOps: rewriting a query needs its syntax tree (gap 'query'). */
+export const QueryTransformOps = Object.freeze({
+  syntaxSubstitute() { return unsupported('QueryExecution.substitution (syntax substitution)', 'query'); },
+  transform() { return unsupported('Query.getQueryPattern (syntax tree)', 'query'); },
 });
 
 /** Jena QueryExecutionFactory.create(query, Model | Dataset [, QuerySolution]). */
@@ -681,6 +1003,8 @@ export class UpdateRequest {
   isEmpty() { return this._parts.length === 0; }
   getOperations() { return unsupported('UpdateRequest.getOperations (update syntax tree)', 'query'); }
   iterator() { return unsupported('UpdateRequest.getOperations (update syntax tree)', 'query'); }
+  /** Jena equalTo compares the operations' syntax trees (gap 'query'). */
+  equalTo() { return unsupported('UpdateWriter / UpdateCompare (update syntax tree)', 'query'); }
   /** The text: the requests joined with ';' (SPARQL 1.1 Update section 3.1, grammar rule [29] Update). */
   toString() { return this._parts.join(' ;\n'); }
   _runText() {
@@ -700,13 +1024,26 @@ export const UpdateFactory = Object.freeze({
   read(path, base) { return UpdateFactory.create(readText(path), base); },
 });
 
+/**
+ * An engine update failure as Jena reports it: a syntax error is a
+ * QueryParseException (Jena's update parser throws it); LOAD, which the
+ * engine cannot perform (it fetches no documents), is gap 'query'; any other
+ * failure is an UpdateException.
+ */
+function updateFailure(e) {
+  if (!(e instanceof FactoidalError)) return e;
+  if (e.code === 'update.syntax' || e.code === 'query.syntax') return new QueryParseException(e.message, { cause: e });
+  if (/no document fetch/.test(String(e.message))) return unsupported('UpdateAction LOAD (the engine fetches no documents)', 'query');
+  return updateError(e);
+}
+
 async function runUpdate(request, target) {
   const src = sourceOf(target);
   const text = request instanceof UpdateRequest ? request._runText() : String(request);
   await functionsReady();
   const { ds, temp } = src.core();
   try {
-    try { await ds.update(text); } catch (e) { throw updateError(e); }
+    try { await ds.update(text); } catch (e) { throw updateFailure(e); }
     src.writeBack(ds);
   } finally {
     if (temp) ds.dispose();
@@ -761,9 +1098,164 @@ export const UpdateExecutionFactory = Object.freeze({
 /** Jena UpdateAction: run an update on a Model, Graph, Dataset or DatasetGraph. Answers a Promise. */
 export const UpdateAction = Object.freeze({
   execute(request, target) { return runUpdate(request, target); },
-  parseExecute(text, target) { return runUpdate(UpdateFactory.create(text), target); },
+  /** parseExecute(text, target) | parseExecute(UsingList, target, text | bytes). */
+  parseExecute(a, target, input) {
+    if (a instanceof UsingList) {
+      if (!a.isEmpty()) return unsupported('UpdateAction.parseExecute with a UsingList (USING added to each operation)', 'query');
+      const text = typeof input === 'string' ? input : new TextDecoder().decode(input);
+      return runUpdate(UpdateFactory.create(text), target);
+    }
+    return runUpdate(UpdateFactory.create(a), target);
+  },
   readExecute(path, target) { return runUpdate(UpdateFactory.read(path), target); },
 });
+
+/** Jena UpdateExec (the DatasetGraph-level builder): dataset(dsg).update(...).build().execute(), or newBuilder(). */
+export const UpdateExec = Object.freeze({
+  dataset(d) { return new UpdateExecutionBuilder().dataset(d); },
+  newBuilder() { return new UpdateExecutionBuilder(); },
+  graph(g) { return new UpdateExecutionBuilder().graph(g); },
+});
+
+/** Jena UsingList: USING / USING NAMED graphs added to an update (adding them needs the update syntax tree: gap 'query'). */
+export class UsingList {
+  constructor() { this._using = []; this._named = []; }
+  addUsing(n) { this._using.push(n); }
+  addUsingNamed(n) { this._named.push(n); }
+  getUsing() { return this._using.slice(); }
+  getUsingNamed() { return this._named.slice(); }
+  isEmpty() { return this._using.length === 0 && this._named.length === 0; }
+}
+
+/** Jena UpdateWriter and UpdateCompare work on the update syntax tree (gap 'query'). */
+export const UpdateWriter = Object.freeze({
+  output() { return unsupported('UpdateWriter / UpdateCompare (update syntax tree)', 'query'); },
+});
+export const UpdateCompare = Object.freeze({
+  isomorphic() { return unsupported('UpdateWriter / UpdateCompare (update syntax tree)', 'query'); },
+});
+
+// Update operations built in code (Jena org.apache.jena.sparql.modify.request):
+// each is written as SPARQL Update text, its terms written by the engine
+// (sparqlTerm), and the engine runs that text. A WHERE pattern (an Element)
+// is a syntax tree: gap 'query'.
+
+function updTerm(n) {
+  if (n.isVariable()) return '?' + n.getName();
+  return sparqlTerm(n);
+}
+function updNode(x) { return typeof x === 'string' ? NodeFactory.createURI(x) : asNode(x); }
+function updTriple(t) { return `${updTerm(t.getSubject())} ${updTerm(t.getPredicate())} ${updTerm(t.getObject())} .`; }
+function updQuads(quads) {
+  const dft = [], named = new Map();
+  for (const q of quads) {
+    const g = q.getGraph();
+    if (g === null || Quad.isDefaultGraph(g)) { dft.push(updTriple(q.asTriple())); continue; }
+    const k = updTerm(g);
+    if (!named.has(k)) named.set(k, []);
+    named.get(k).push(updTriple(q.asTriple()));
+  }
+  return [...dft, ...[...named].map(([g, ts]) => `GRAPH ${g} { ${ts.join(' ')} }`)].join(' ');
+}
+
+/** Jena QuadAcc / QuadDataAcc: the quads of a template or of INSERT DATA / DELETE DATA. */
+export class QuadAcc {
+  constructor(quads = []) { this._quads = []; this._graph = null; for (const q of quads) this.addQuad(q); }
+  setGraph(g) { this._graph = g === null ? null : updNode(g); }
+  getGraph() { return this._graph; }
+  addTriple(t) { this._quads.push(Quad.create(this._graph ?? Quad.defaultGraphNodeGenerated, t)); }
+  addQuad(q) { this._quads.push(q); }
+  getQuads() { return this._quads.slice(); }
+  _text() { return updQuads(this._quads); }
+}
+export class QuadDataAcc extends QuadAcc {}
+
+/** Jena Update: one operation of an UpdateRequest; toString() is its SPARQL Update text. */
+export class Update {
+  toString() { return this._text(); }
+}
+export class UpdateDataInsert extends Update {
+  constructor(acc) { super(); this._acc = acc; }
+  getQuads() { return this._acc.getQuads(); }
+  _text() { return `INSERT DATA { ${this._acc._text()} }`; }
+}
+export class UpdateDataDelete extends Update {
+  constructor(acc) { super(); this._acc = acc; }
+  getQuads() { return this._acc.getQuads(); }
+  _text() { return `DELETE DATA { ${this._acc._text()} }`; }
+}
+export class UpdateDeleteWhere extends Update {
+  constructor(acc) { super(); this._acc = acc; }
+  getQuads() { return this._acc.getQuads(); }
+  _text() { return `DELETE WHERE { ${this._acc._text()} }`; }
+}
+/** Jena UpdateModify (DELETE/INSERT ... WHERE): templates in code; a WHERE pattern is gap 'query' (WHERE {} when none is set). */
+export class UpdateModify extends Update {
+  constructor() { super(); this._ins = new QuadAcc(); this._del = new QuadAcc(); this._withIRI = null; }
+  getInsertAcc() { return this._ins; }
+  getDeleteAcc() { return this._del; }
+  hasInsertClause() { return this._ins._quads.length > 0; }
+  hasDeleteClause() { return this._del._quads.length > 0; }
+  setWithIRI(g) { this._withIRI = updNode(g); }
+  getWithIRI() { return this._withIRI; }
+  setElement() { return unsupported('UpdateModify.setElement (WHERE pattern syntax tree)', 'query'); }
+  getWherePattern() { return null; }
+  _text() {
+    const w = this._withIRI ? `WITH ${updTerm(this._withIRI)} ` : '';
+    const d = this.hasDeleteClause() ? `DELETE { ${this._del._text()} } ` : '';
+    const i = this.hasInsertClause() || !this.hasDeleteClause() ? `INSERT { ${this._ins._text()} } ` : '';
+    return `${w}${d}${i}WHERE { }`;
+  }
+}
+
+/** Jena Target: DEFAULT, NAMED, ALL or one graph. */
+export class Target {
+  constructor(kind, node = null) { this._kind = kind; this._node = node; Object.freeze(this); }
+  static create(g) { return new Target('GRAPH', updNode(g)); }
+  isDefault() { return this._kind === 'DEFAULT'; }
+  isAll() { return this._kind === 'ALL'; }
+  isAllNamed() { return this._kind === 'NAMED'; }
+  isOneNamedGraph() { return this._kind === 'GRAPH'; }
+  getGraph() { return this._node; }
+  /** GraphRefAll / GraphOrDefault text (SPARQL 1.1 Update grammar rules [45], [46]). */
+  _text() { return this._kind === 'GRAPH' ? `GRAPH ${updTerm(this._node)}` : this._kind; }
+  toString() { return this._text(); }
+}
+Target.DEFAULT = new Target('DEFAULT');
+Target.NAMED = new Target('NAMED');
+Target.ALL = new Target('ALL');
+
+const asTarget = (x) => (x instanceof Target ? x : Target.create(x));
+const silentText = (s) => (s ? ' SILENT' : '');
+
+export class UpdateCreate extends Update {
+  constructor(g, silent = false) { super(); this._g = updNode(g); this._silent = !!silent; }
+  getGraph() { return this._g; }
+  isSilent() { return this._silent; }
+  _text() { return `CREATE${silentText(this._silent)} GRAPH ${updTerm(this._g)}`; }
+}
+export class UpdateDrop extends Update {
+  constructor(g, silent = false) { super(); this._t = asTarget(g); this._silent = !!silent; }
+  getTarget() { return this._t; }
+  isSilent() { return this._silent; }
+  _text() { return `DROP${silentText(this._silent)} ${this._t._text()}`; }
+}
+export class UpdateClear extends Update {
+  constructor(g, silent = false) { super(); this._t = asTarget(g); this._silent = !!silent; }
+  getTarget() { return this._t; }
+  isSilent() { return this._silent; }
+  _text() { return `CLEAR${silentText(this._silent)} ${this._t._text()}`; }
+}
+class UpdateBinaryOp extends Update {
+  constructor(op, src, dest, silent = false) { super(); this._op = op; this._src = asTarget(src); this._dest = asTarget(dest); this._silent = !!silent; }
+  getSrc() { return this._src; }
+  getDest() { return this._dest; }
+  isSilent() { return this._silent; }
+  _text() { return `${this._op}${silentText(this._silent)} ${this._src._text()} TO ${this._dest._text()}`; }
+}
+export class UpdateCopy extends UpdateBinaryOp { constructor(src, dest, silent) { super('COPY', src, dest, silent); } }
+export class UpdateAdd extends UpdateBinaryOp { constructor(src, dest, silent) { super('ADD', src, dest, silent); } }
+export class UpdateMove extends UpdateBinaryOp { constructor(src, dest, silent) { super('MOVE', src, dest, silent); } }
 
 // ---------------------------------------------------------------------------
 // Functions: NodeValue, FunctionBase, FunctionRegistry
@@ -888,5 +1380,39 @@ export const PropertyFunctionRegistry = Object.freeze({
   get() { return unsupported('PropertyFunctionRegistry (property functions)', 'query'); },
   set() { return unsupported('PropertyFunctionRegistry (property functions)', 'query'); },
 });
+
+// Jena's expression object model (org.apache.jena.sparql.expr: Expr, ExprVar,
+// E_Function, E_Add, ...) is a syntax tree of SPARQL expressions: gap 'query'.
+const EXPR = 'Expr (SPARQL expression object model)';
+export class Expr { constructor() { unsupported(EXPR, 'query'); } }
+export class ExprVar extends Expr {}
+export class ExprList extends Expr {}
+export class E_Function extends Expr {}
+export class E_Add extends Expr {}
+export class E_Subtract extends Expr {}
+export class E_Multiply extends Expr {}
+export class NodeValueInteger extends Expr {}
+export class NodeValueDouble extends Expr {}
+export class NodeValueBoolean extends Expr {}
+
+const UDF = 'UserDefinedFunctionFactory.add (a function defined by a SPARQL expression)';
+/**
+ * Jena UserDefinedFunctionFactory: functions defined by SPARQL expressions
+ * need the expression object model (gap 'query'). The registry itself is
+ * API shape.
+ */
+export class UserDefinedFunctionFactory {
+  constructor() { this._m = new Map(); this._preserve = false; }
+  static getFactory() { return GLOBAL_UDF; }
+  clear() { this._m.clear(); }
+  setPreserveDependencies(b) { this._preserve = !!b; }
+  getPreserveDependencies() { return this._preserve; }
+  isRegistered(uri) { return this._m.has(String(uri)); }
+  get(uri) { return this._m.get(String(uri)) ?? null; }
+  add() { return unsupported(UDF, 'query'); }
+  create() { return unsupported(UDF, 'query'); }
+  remove(uri) { this._m.delete(String(uri)); }
+}
+const GLOBAL_UDF = new UserDefinedFunctionFactory();
 
 export { Triple };

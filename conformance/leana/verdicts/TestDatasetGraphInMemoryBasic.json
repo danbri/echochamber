@@ -1,0 +1,7 @@
+{
+  "unionGraphWorksProperly": {
+    "verdict": "divergence",
+    "spec": "RDF 1.1 Concepts and Abstract Syntax section 3.1 (the predicate of an RDF triple is an IRI)",
+    "note": "Jena adds Quad.create(_:b, _:b, _:b, _:b), a quad whose predicate is a blank node (generalized RDF); @factoidal/core refuses it (term.invalid: not a quad). The quad's graph name is also a blank node, which RDF allows but Dataset.add refuses (see TestDatasetGraphInMemoryLock dataset_11)."
+  }
+}

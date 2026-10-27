@@ -102,8 +102,14 @@ export const TxnType = Object.freeze({
   initial(t) { return t === 'WRITE' ? ReadWrite.WRITE : ReadWrite.READ; },
 });
 
+/** Jena Transactional.Promote: the promotion a promote(mode) call asks for. */
+export const Promote = Object.freeze({ ISOLATED: 'ISOLATED', READ_COMMITTED: 'READ_COMMITTED' });
+
 /** Jena JenaTransactionException. */
 export class JenaTransactionException extends JenaException {}
+
+/** Jena ARQException (org.apache.jena.sparql.ARQException). */
+export class ARQException extends JenaException {}
 
 /**
  * Jena Txn: executeRead / executeWrite / calculateRead / calculateWrite over
@@ -141,9 +147,23 @@ function txnRun(t, mode, fn) {
 // Graph views
 
 /**
- * One graph of a DatasetGraphInMemory: the quads with one graph name (the
- * core default graph for the default graph). It reads the DatasetGraph's
- * current Dataset, so a transaction's snapshot and abort are seen.
+ * Jena TransactionHandlerView: a graph view's transactions are its dataset's.
+ * Jena answers transactionsSupported() with the dataset's supportsTransactionAbort().
+ */
+class TransactionHandlerView extends TransactionHandlerBase {
+  constructor(dsg) { super(); this._dsg = dsg; }
+  transactionsSupported() { return this._dsg.supportsTransactionAbort(); }
+  begin() { this._dsg.begin(ReadWrite.WRITE); }
+  commit() { this._dsg.commit(); }
+  abort() { if (this._dsg.isInTransaction()) this._dsg.abort(); this._dsg.end(); }
+}
+
+/**
+ * Jena GraphView: one graph of a DatasetGraph, read and written through the
+ * dataset (the default graph, a named graph, or the union of the named graphs,
+ * which is read only). Over a DatasetGraphInMemory the view reads the
+ * dataset's current core Dataset (so a transaction's snapshot and abort are
+ * seen); over any other DatasetGraph it goes through the DatasetGraph API.
  */
 export class GraphView extends GraphMem {
   constructor(dsg, gname) {
@@ -151,21 +171,76 @@ export class GraphView extends GraphMem {
     this._ds.dispose();
     this._ds = null;
     this._dsg = dsg;
-    this._gname = isDefaultName(gname) ? null : gname;
-    this._gn = this._gname === null ? DEFAULT_GRAPH : this._gname.toRDFJS();
+    this._union = gname instanceof Node && Quad.isUnionGraph(gname);
+    this._gname = this._union ? Quad.unionGraph : (isDefaultName(gname) ? null : gname);
+    this._mem = !this._union && typeof dsg._store === 'function';
+    this._gn = this._gname === null || this._union ? DEFAULT_GRAPH : this._gname.toRDFJS();
     this._pm = dsg.getPrefixMapping();
   }
-  _d() { return this._dsg._store(); }
-  get dataset() { return this._d(); }
+  /** Jena GraphView.createDefaultGraph(dsg). */
+  static createDefaultGraph(dsg) { return new GraphView(dsg, null); }
+  /** Jena GraphView.createNamedGraph(dsg, graphName). */
+  static createNamedGraph(dsg, gn) { return new GraphView(dsg, gn); }
+  /** Jena GraphView.createUnionGraph(dsg): the union of the named graphs, read only. */
+  static createUnionGraph(dsg) { return new GraphView(dsg, Quad.unionGraph); }
+  _d() {
+    if (!this._mem) throw new UnsupportedOperationException('GraphView: no core Dataset of its own');
+    return this._dsg._store();
+  }
+  get dataset() { return this._mem ? this._d() : this._dsg._coreDatasetSync().ds; }
   getGraphName() { return this._gname; }
   getDataset() { return this._dsg; }
-  getTransactionHandler() { return this._dsg._graphTxnHandler(); }
+  isUnionGraph() { return this._union; }
+  getTransactionHandler() { return new TransactionHandlerView(this._dsg); }
+  getCapabilities() { return this._union ? new Capabilities({ _add: false, _del: false }) : super.getCapabilities(); }
+
+  performAdd(t) {
+    if (this._union) throw new AddDeniedException('the union graph is read only');
+    this._dsg._mutate();
+    if (this._mem) { super.performAdd(t); return; }
+    this._dsg.add(this._gname, t.getSubject(), t.getPredicate(), t.getObject());
+  }
+  performDelete(t) {
+    if (this._union) throw new DeleteDeniedException('the union graph is read only');
+    this._dsg._mutate();
+    if (this._mem) { super.performDelete(t); return; }
+    if (t.isConcrete()) this._dsg.delete(this._gname, t.getSubject(), t.getPredicate(), t.getObject());
+  }
+  remove(s, p, o) {
+    if (this._union) throw new DeleteDeniedException('the union graph is read only');
+    this._dsg._mutate();
+    for (const t of this._findArray(s, p, o)) this.performDelete(t);
+    if (this._listening()) this._gem.notifyEvent(this, GraphEvents.remove(s ?? Node.ANY, p ?? Node.ANY, o ?? Node.ANY));
+  }
+  _findArray(s, p, o) {
+    if (s instanceof Triple) return this._findArray(s.getSubject(), s.getPredicate(), s.getObject());
+    s = s ?? Node.ANY; p = p ?? Node.ANY; o = o ?? Node.ANY;
+    if (this._mem) return super._findArray(s, p, o);
+    if (this._union) {
+      const out = new JenaSet();
+      for (const q of this._dsg._findNamed(s, p, o)) out.add(q.asTriple());
+      return out.toArray();
+    }
+    const quads = this._gname === null ? this._dsg._findDefault(s, p, o) : this._dsg._findIn(this._gname, s, p, o);
+    return quads.map((q) => q.asTriple());
+  }
+  contains(s, p, o) {
+    if (this._mem) return super.contains(s, p, o);
+    const t = s instanceof Triple ? s : Triple.createMatch(s, p, o);
+    return this._findArray(t).length > 0;
+  }
   size() {
-    this._check();
+    if (!this._mem) return this._findArray(Node.ANY, Node.ANY, Node.ANY).length;
     const m = this._d().match(null, null, null, this._gn);
     try { return m.size; } finally { m.dispose(); }
   }
   _clearStore() {
+    if (this._union) throw new DeleteDeniedException('the union graph is read only');
+    this._dsg._mutate();
+    if (!this._mem) {
+      for (const t of this._findArray(Node.ANY, Node.ANY, Node.ANY)) this.performDelete(t);
+      return;
+    }
     const m = this._d().match(null, null, null, this._gn);
     let qs;
     try { qs = m.toArray(); } finally { m.dispose(); }
@@ -178,48 +253,15 @@ export class GraphView extends GraphMem {
     for (const t of this._findArray(Node.ANY, Node.ANY, Node.ANY)) ds.add(df.quad(t.getSubject().toRDFJS(), t.getPredicate().toRDFJS(), t.getObject().toRDFJS(), DEFAULT_GRAPH));
     return { ds, temp: true };
   }
-  equals(o) { return o instanceof GraphView && o._dsg === this._dsg && (o._gname === null ? this._gname === null : o._gname.equals(this._gname)); }
+  equals(o) {
+    return o instanceof GraphView && o._dsg === this._dsg && o._union === this._union &&
+      (o._gname === null ? this._gname === null : o._gname.equals(this._gname));
+  }
 }
 
-/** The union of the named graphs of a DatasetGraph, read only (Jena GraphUnionRead). */
-export class GraphUnionView {
-  constructor(dsg) { this._dsg = dsg; this._pm = dsg.getPrefixMapping(); this._gem = null; }
-  _triples(s, p, o) {
-    const out = new JenaSet();
-    for (const q of this._dsg._findNamed(s ?? Node.ANY, p ?? Node.ANY, o ?? Node.ANY)) out.add(q.asTriple());
-    return out.toArray();
-  }
-  find(s, p, o) {
-    if (s instanceof Triple) return this.find(s.getSubject(), s.getPredicate(), s.getObject());
-    return new ExtendedIterator(this._triples(s, p, o));
-  }
-  stream(s, p, o) { return this.find(s, p, o).toList()[Symbol.iterator](); }
-  contains(s, p, o) {
-    if (s instanceof Triple) return this.contains(s.getSubject(), s.getPredicate(), s.getObject());
-    return this._triples(s, p, o).length > 0;
-  }
-  size() { return this._triples().length; }
-  sizeLong() { return this.size(); }
-  isEmpty() { return this.size() === 0; }
-  add() { throw new AddDeniedException('the union graph is read only'); }
-  delete() { throw new DeleteDeniedException('the union graph is read only'); }
-  performAdd() { this.add(); }
-  performDelete() { this.delete(); }
-  remove() { throw new DeleteDeniedException('the union graph is read only'); }
-  clear() { throw new DeleteDeniedException('the union graph is read only'); }
-  getPrefixMapping() { return this._pm; }
-  getCapabilities() { return new Capabilities({ _add: false, _del: false }); }
-  getEventManager() { return null; }
-  getTransactionHandler() { return this._dsg._graphTxnHandler(); }
-  close() {}
-  isClosed() { return false; }
-  dependsOn(o) { return o === this; }
-  isIsomorphicWith(other) {
-    const g = new GraphMem();
-    for (const t of this._triples()) g.add(t);
-    return g.isIsomorphicWith(other);
-  }
-  toString() { return '{' + this._triples().map(String).join('; ') + '}'; }
+/** The union of the named graphs of a DatasetGraph, read only (Jena GraphUnionRead; a GraphView of Quad.unionGraph). */
+export class GraphUnionView extends GraphView {
+  constructor(dsg) { super(dsg, Quad.unionGraph); }
 }
 
 // ---------------------------------------------------------------------------
@@ -243,6 +285,7 @@ class DatasetGraphBase {
   prefixes() { return this._pm; }
   getContext() { return this._context; }
   getUnionGraph() { return new GraphUnionView(this); }
+  /** Jena DatasetGraph.getGraph(Quad.unionGraph) is the union graph; any other name is that graph (or the default graph). */
   getGraph(gn) {
     if (gn instanceof Node && Quad.isUnionGraph(gn)) return this.getUnionGraph();
     return this._graph(gn);
@@ -252,15 +295,22 @@ class DatasetGraphBase {
   add(a, s, p, o) {
     const [g, s1, p1, o1] = quadArgs(a, s, p, o);
     if (g instanceof Node && Quad.isUnionGraph(g)) throw new AddDeniedException("Can't add to the union graph");
+    this._mutate();
     this._add(isDefaultName(g) ? null : g, Triple.create(s1, p1, o1));
   }
   delete(a, s, p, o) {
     const [g, s1, p1, o1] = quadArgs(a, s, p, o);
     if (g instanceof Node && Quad.isUnionGraph(g)) throw new DeleteDeniedException("Can't delete from the union graph");
+    this._mutate();
     this._delete(isDefaultName(g) ? null : g, Triple.create(s1, p1, o1));
   }
   deleteAny(g, s, p, o) {
+    if (g instanceof Node && Quad.isUnionGraph(g)) throw new DeleteDeniedException("Can't delete from the union graph");
     for (const q of this.find(g ?? Node.ANY, s, p, o).toList()) this.delete(q);
+  }
+  /** Jena DatasetGraph.addAll(DatasetGraph): add every quad of `src`. */
+  addAll(src) {
+    for (const q of src.find().toList()) this.add(q);
   }
   /** find() | find(Quad) | find(g, s, p, o): null or ANY is a wildcard; default-graph quads carry Quad.defaultGraphIRI. */
   find(a, s, p, o) {
@@ -285,7 +335,20 @@ class DatasetGraphBase {
     if (Quad.isDefaultGraph(g)) return ExtendedIterator.empty();
     return this.find(g, s, p, o);
   }
+  /** Jena stream(...): a JavaScript iterator (with the Iterator helpers) over find(...). */
   stream(a, s, p, o) { return this.find(a, s, p, o).toList()[Symbol.iterator](); }
+  /** Jena streamNG(...): stream over the named graphs only. */
+  streamNG(a, s, p, o) { return this.findNG(a, s, p, o).toList()[Symbol.iterator](); }
+  /** Jena DatasetGraphBaseFind.findInUnionGraph(s, p, o): the distinct triples of the named graphs. */
+  findInUnionGraph(s, p, o) {
+    const out = new JenaSet();
+    for (const q of this._findNamed(s ?? Node.ANY, p ?? Node.ANY, o ?? Node.ANY)) out.add(q.asTriple());
+    return new ExtendedIterator(out.toArray());
+  }
+  /** Jena DatasetGraphBaseFind.streamQuadsInUnionGraph(s, p, o): those triples as quads of Quad.unionGraph. */
+  streamQuadsInUnionGraph(s, p, o) {
+    return this.findInUnionGraph(s, p, o).toList().map((t) => Quad.create(Quad.unionGraph, t))[Symbol.iterator]();
+  }
   contains(a, s, p, o) { return this.find(a, s, p, o).hasNext(); }
   containsGraph(gn) {
     if (isDefaultName(gn) || Quad.isUnionGraph(gn)) return true;
@@ -296,10 +359,12 @@ class DatasetGraphBase {
   isEmpty() { return !this.find().hasNext(); }
   /** Jena: remove every quad (and every named graph). */
   clear() {
+    this._mutate();
     for (const gn of this.listGraphNodes().toList()) this.removeGraph(gn);
     this.getDefaultGraph().clear();
   }
   setDefaultGraph(g) {
+    this._mutate();
     const d = this.getDefaultGraph();
     d.clear();
     for (const t of g.find().toList()) d.add(t);
@@ -308,6 +373,12 @@ class DatasetGraphBase {
   isClosed() { return this._closed; }
 
   // --- transactions (Jena Transactional)
+  // One transaction at a time (JavaScript has one thread). begin(TxnType |
+  // ReadWrite) takes a snapshot; abort() restores it. A write in a READ
+  // transaction is a JenaTransactionException; in READ_PROMOTE or
+  // READ_COMMITTED_PROMOTE it promotes the transaction to WRITE. end() of a
+  // WRITE transaction that was neither committed nor aborted aborts it and
+  // throws, as Jena does.
   supportsTransactions() { return true; }
   supportsTransactionAbort() { return true; }
   isInTransaction() { return this._txn !== null; }
@@ -315,10 +386,27 @@ class DatasetGraphBase {
   transactionType() { return this._txn ? this._txn.type : null; }
   begin(mode = TxnType.READ_PROMOTE) {
     if (this._txn) throw new JenaTransactionException('Already in a transaction');
-    const type = mode === ReadWrite.WRITE || mode === 'WRITE' ? 'WRITE' : (mode === ReadWrite.READ || mode === 'READ' ? 'READ' : String(mode));
+    const m = String(mode);
+    const type = m === 'WRITE' ? 'WRITE' : m === 'READ' ? 'READ'
+      : (m === 'READ_PROMOTE' || m === 'READ_COMMITTED_PROMOTE') ? m : null;
+    if (type === null) throw new JenaTransactionException('Unknown transaction type: ' + m);
     this._txn = { type, mode: type === 'WRITE' ? ReadWrite.WRITE : ReadWrite.READ, snapshot: this._snapshot() };
   }
-  promote() { if (!this._txn) throw new JenaTransactionException('Not in a transaction'); this._txn.mode = ReadWrite.WRITE; return true; }
+  /** Jena promote() | promote(Promote): false for a READ transaction; true (and WRITE mode) otherwise. */
+  promote(_how) {
+    if (!this._txn) throw new JenaTransactionException('Not in a transaction');
+    if (this._txn.mode === ReadWrite.WRITE) return true;
+    if (this._txn.type === 'READ') return false;
+    this._txn.mode = ReadWrite.WRITE;
+    return true;
+  }
+  /** Called before every change: a write must be in a WRITE (or promotable) transaction, or in none. */
+  _mutate() {
+    const t = this._txn;
+    if (t === null || t.mode === ReadWrite.WRITE) return;
+    if (t.type === 'READ') throw new JenaTransactionException('Tried to write inside a READ transaction');
+    t.mode = ReadWrite.WRITE;
+  }
   commit() {
     if (!this._txn) throw new JenaTransactionException('Not in a transaction');
     this._dropSnapshot(this._txn.snapshot);
@@ -329,11 +417,15 @@ class DatasetGraphBase {
     this._restore(this._txn.snapshot);
     this._txn = null;
   }
-  /** Jena end(): finish a read transaction; a write transaction that was not committed is aborted. */
+  /** Jena end(): finish a read transaction; a write transaction that was not committed or aborted is aborted, and end() throws. */
   end() {
     if (!this._txn) return;
-    if (this._txn.mode === ReadWrite.WRITE) this.abort();
-    else { this._dropSnapshot(this._txn.snapshot); this._txn = null; }
+    if (this._txn.mode === ReadWrite.WRITE) {
+      this.abort();
+      throw new JenaTransactionException('end() called for a WRITE transaction without commit or abort having been called');
+    }
+    this._dropSnapshot(this._txn.snapshot);
+    this._txn = null;
   }
   executeRead(fn) { return Txn.executeRead(this, fn); }
   executeWrite(fn) { return Txn.executeWrite(this, fn); }
@@ -341,16 +433,8 @@ class DatasetGraphBase {
   calculateWrite(fn) { return Txn.calculateWrite(this, fn); }
   exec(type, fn) { return Txn.exec(this, type, fn); }
   calc(type, fn) { return Txn.calc(this, type, fn); }
-  /** The TransactionHandler of a graph of this dataset: the dataset's transactions. */
-  _graphTxnHandler() {
-    const dsg = this;
-    return new (class extends TransactionHandlerBase {
-      transactionsSupported() { return dsg.supportsTransactions(); }
-      begin() { dsg.begin(ReadWrite.WRITE); }
-      commit() { dsg.commit(); }
-      abort() { dsg.abort(); dsg.end(); }
-    })();
-  }
+  /** The TransactionHandler of a graph of this dataset: the dataset's transactions (Jena TransactionHandlerView). */
+  _graphTxnHandler() { return new TransactionHandlerView(this); }
 
   /** A core Dataset with this dataset's quads (for query and update); `temp` when it is a copy. */
   async _coreDataset() { return this._coreDatasetSync(); }
@@ -371,7 +455,7 @@ class DatasetGraphBase {
   }
 }
 
-/** Jena DatasetGraphInMemory (createTxnMem) and DatasetGraphMap (create): one core Dataset holds every quad. */
+/** Jena DatasetGraphInMemory (createTxnMem): one core Dataset holds every quad. */
 export class DatasetGraphInMemory extends DatasetGraphBase {
   constructor() { super(); this._ds = newDataset(); }
   _store() { return this._ds; }
@@ -410,16 +494,19 @@ export class DatasetGraphInMemory extends DatasetGraphBase {
   }
   /** Jena addGraph: replace the graph's triples with a copy of `graph`'s. */
   addGraph(gn, graph) {
+    this._mutate();
     if (isDefaultName(gn)) { this.setDefaultGraph(graph); return; }
     const v = this._graph(gn);
     v._clearStore();
     for (const t of graph.find().toList()) v.performAdd(t);
   }
   removeGraph(gn) {
+    this._mutate();
     if (isDefaultName(gn)) { this.getDefaultGraph().clear(); return; }
     this._graph(gn)._clearStore();
   }
   clear() {
+    this._mutate();
     const old = this._ds;
     this._ds = newDataset();
     if (!this._txn || this._txn.snapshot !== old) old.dispose();
@@ -474,16 +561,20 @@ export class DatasetGraphMapLink extends DatasetGraphBase {
     return this._graphs.has(gn.hashKey());
   }
   addGraph(gn, graph) {
+    this._mutate();
     if (isDefaultName(gn)) { this._dft = graph; return; }
     this._graphs.set(gn.hashKey(), [gn, graph]);
   }
   removeGraph(gn) {
+    this._mutate();
     if (isDefaultName(gn)) { this._dft = this._maker(); return; }
     this._graphs.delete(gn.hashKey());
   }
   /** Jena DatasetGraphMapLink.setDefaultGraph links the graph. */
-  setDefaultGraph(g) { this._dft = g; }
-  clear() { this._graphs.clear(); this._dft.clear(); }
+  setDefaultGraph(g) { this._mutate(); this._dft = g; }
+  clear() { this._mutate(); this._graphs.clear(); this._dft.clear(); }
+  /** Jena: DatasetGraphMapLink does not promise abort (leana's restores a snapshot of the linked graphs). */
+  supportsTransactionAbort() { return false; }
   _snapshot() {
     const copy = (g) => { const c = new GraphMem(); for (const t of g.find().toList()) c.add(t); return c; };
     return { dft: [this._dft, copy(this._dft)], graphs: [...this._graphs.entries()].map(([k, [n, g]]) => [k, n, g, copy(g)]) };
@@ -528,6 +619,47 @@ export class DatasetGraphOne extends DatasetGraphMapLink {
   addGraph() { throw new UnsupportedOperationException("Can't add a graph to a DatasetGraphOne"); }
 }
 
+/**
+ * Jena DatasetGraphMap (DatasetGraphFactory.create()): graphs are copied in
+ * (addGraph copies). leana keeps the quads in one core Dataset, as
+ * DatasetGraphInMemory does; like Jena's, it does not promise abort.
+ */
+export class DatasetGraphMap extends DatasetGraphInMemory {
+  supportsTransactionAbort() { return false; }
+}
+
+/** Jena DatasetGraphZero: always empty, no change allowed; it keeps transaction state. */
+export class DatasetGraphZero extends DatasetGraphInMemory {
+  static create() { return new DatasetGraphZero(); }
+  _mutate() { throw new UnsupportedOperationException('DatasetGraphZero: no change allowed'); }
+  add() { this._mutate(); }
+  delete() { this._mutate(); }
+  deleteAny() { this._mutate(); }
+  addGraph() { this._mutate(); }
+  removeGraph() { this._mutate(); }
+  setDefaultGraph() { this._mutate(); }
+  clear() { this._mutate(); }
+}
+
+/** Jena DatasetGraphSink: every change is accepted and dropped; always empty. */
+export class DatasetGraphSink extends DatasetGraphInMemory {
+  static create() { return new DatasetGraphSink(); }
+  _mutate() {}
+  _add() {}
+  _delete() {}
+  deleteAny() {}
+  addGraph() {}
+  removeGraph() {}
+  setDefaultGraph() {}
+  clear() {}
+  _graph(gn) { return new SinkGraphView(this, gn); }
+}
+class SinkGraphView extends GraphView {
+  performAdd() {}
+  performDelete() {}
+  _clearStore() {}
+}
+
 // ---------------------------------------------------------------------------
 // Context (Jena sparql.util.Context): symbol -> value.
 
@@ -556,6 +688,26 @@ export class Context {
   setTrue(k) { return this.set(k, true); }
   setFalse(k) { return this.set(k, false); }
   setIfUndef(k, v) { if (this.isUndef(k)) this.set(k, v); return this; }
+  /**
+   * Jena getInt(symbol, dft): a string is parsed; a JavaScript number that is
+   * an integer is an int. A BigInt (leana's Java long) is not an int: ARQException.
+   */
+  getInt(k, dft) {
+    if (this.isUndef(k)) return dft;
+    const v = this.get(k);
+    if (typeof v === 'string') return Number.parseInt(v, 10);
+    if (typeof v === 'number' && Number.isInteger(v)) return v;
+    throw new ARQException('Value for ' + Context._key(k) + ' is not a recognized class: ' + typeof v);
+  }
+  /** Jena getLong(symbol, dft): a BigInt (Java long), an integer number or a string, answered as a BigInt. */
+  getLong(k, dft) {
+    if (this.isUndef(k)) return dft;
+    const v = this.get(k);
+    if (typeof v === 'bigint') return v;
+    if (typeof v === 'string') return BigInt(v);
+    if (typeof v === 'number' && Number.isInteger(v)) return BigInt(v);
+    throw new ARQException('Value for ' + Context._key(k) + ' is not a recognized class: ' + typeof v);
+  }
   remove(k) { this._m.delete(Context._key(k)); return this; }
   unset(k) { return this.remove(k); }
   clear() { this._m.clear(); return this; }
@@ -565,6 +717,42 @@ export class Context {
   putAll(other) { if (other) for (const [k, v] of other._m) this._m.set(k, v); return this; }
   toString() { return [...this._m].map(([k, v]) => k + ' = ' + v).join('\n'); }
 }
+
+/**
+ * Jena AssemblerUtils.parseContext(Resource): the Context of the
+ * `ja:context [ ja:cxtName name ; ja:cxtValue value ]` settings of `r`, or
+ * null when it has none. The ja: names are Jena's assembler vocabulary (API
+ * names). A name is a string literal or an IRI; a value is its lexical form
+ * (or IRI); the value "undef" removes the setting.
+ */
+const JA_NS = 'http://jena.hpl.hp.com/2005/11/Assembler#';
+const JA_CONTEXT = NodeFactory.createURI(JA_NS + 'context');
+const JA_CXT_NAME = NodeFactory.createURI(JA_NS + 'cxtName');
+const JA_CXT_VALUE = NodeFactory.createURI(JA_NS + 'cxtValue');
+export const AssemblerUtils = Object.freeze({
+  parseContext(r) {
+    const g = r.getModel().getGraph();
+    const settings = g.find(r.asNode(), JA_CONTEXT, Node.ANY).toList();
+    if (settings.length === 0) return null;
+    const cxt = new Context();
+    const str = (n, what) => {
+      if (n.isLiteral()) return n.getLiteralLexicalForm();
+      if (n.isURI()) return n.getURI();
+      throw new ARQException('Context ' + what + ' must be a literal or an IRI: ' + n);
+    };
+    for (const t of settings) {
+      const c = t.getObject();
+      for (const tn of g.find(c, JA_CXT_NAME, Node.ANY).toList()) {
+        const name = str(tn.getObject(), 'name');
+        for (const tv of g.find(c, JA_CXT_VALUE, Node.ANY).toList()) {
+          const v = str(tv.getObject(), 'value');
+          if (v === 'undef') cxt.remove(name); else cxt.set(name, v);
+        }
+      }
+    }
+    return cxt;
+  },
+});
 
 // ---------------------------------------------------------------------------
 // Dataset (Model level)
@@ -585,12 +773,8 @@ export class Dataset {
   addNamedModel(uri, m) { this._dsg.addGraph(nameNode(uri), m.getGraph()); return this; }
   removeNamedModel(uri) { this._dsg.removeGraph(nameNode(uri)); return this; }
   replaceNamedModel(uri, m) { this._dsg.removeGraph(nameNode(uri)); this._dsg.addGraph(nameNode(uri), m.getGraph()); return this; }
-  containsNamedModel(uri) {
-    const n = nameNode(uri);
-    // Jena: the union graph and the default graph names are not named models.
-    if (Quad.isDefaultGraph(n) || Quad.isUnionGraph(n)) return false;
-    return this._dsg.containsGraph(n);
-  }
+  /** Jena containsNamedModel: the union graph and the default graph names are always there (AbstractTestDataset dataset_08, dataset_09). */
+  containsNamedModel(uri) { return this._dsg.containsGraph(nameNode(uri)); }
   /** The names of the named models, as strings (Jena listNames). */
   listNames() { return new ExtendedIterator(this._dsg.listGraphNodes().toList().map((n) => (n.isURI() ? n.getURI() : n.getBlankNodeLabel()))); }
   listModelNames() { const m = this.getDefaultModel(); return new ExtendedIterator(this._dsg.listGraphNodes().toList().map((n) => m.wrapAsResource(n))); }
@@ -606,7 +790,7 @@ export class Dataset {
   commit() { this._dsg.commit(); }
   abort() { this._dsg.abort(); }
   end() { this._dsg.end(); }
-  promote() { return this._dsg.promote(); }
+  promote(how) { return this._dsg.promote(how); }
   isInTransaction() { return this._dsg.isInTransaction(); }
   transactionMode() { return this._dsg.transactionMode(); }
   transactionType() { return this._dsg.transactionType(); }
@@ -637,14 +821,16 @@ export class Dataset {
 export const DatasetGraphFactory = Object.freeze({
   /** Jena create(): an in-memory dataset (graphs are copied in). */
   create(graph) {
-    const dsg = new DatasetGraphInMemory();
+    const dsg = new DatasetGraphMap();
     if (graph) dsg.setDefaultGraph(graph);
     return dsg;
   },
   createTxnMem() { return new DatasetGraphInMemory(); },
   createGeneral() { return new DatasetGraphMapLink(); },
+  /** Jena DatasetGraphFactory.graphMakerMem: a GraphMaker of in-memory graphs. */
+  graphMakerMem: Object.freeze({ create() { return new GraphMem(); } }),
   createWithGraphMaker(maker) { return new DatasetGraphMapLink(null, typeof maker === 'function' ? maker : (n) => maker.create(n)); },
-  createGraphMem() { return new DatasetGraphInMemory(); },
+  createGraphMem() { return new DatasetGraphMap(); },
   /** A dataset whose default graph is `graph` (linked). */
   wrap(graph) { return new DatasetGraphOne(graph); },
   createOneGraph(graph) { return new DatasetGraphOne(graph); },

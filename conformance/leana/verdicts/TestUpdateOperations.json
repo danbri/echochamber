@@ -1,0 +1,131 @@
+{
+  "delete_insert_where_01": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query section 4.1.1.1 and RFC 3986 section 5.1 (with no BASE the base IRI is set by the application)",
+    "note": "The update uses relative IRIs (<x>, <p>) with no BASE; Jena resolves them against its system base, the engine refuses them (parse error). Jena's DatasetGraphWrapper counts add() calls; an update reaches the dataset through the engine, so the count would not match either."
+  },
+  "insert_data_02": {
+    "verdict": "gap",
+    "gap": "query",
+    "noThrow": true,
+    "note": "UpdateFactory.create keeps the text; the engine parses it when the update runs, so there is no QueryParseException at create time."
+  },
+  "insert_data_03": {
+    "verdict": "gap",
+    "gap": "query",
+    "noThrow": true,
+    "note": "UpdateFactory.create keeps the text; the engine parses it when the update runs, so there is no QueryParseException at create time."
+  },
+  "insert_data_04": {
+    "verdict": "gap",
+    "gap": "query",
+    "noThrow": true,
+    "note": "UpdateFactory.create keeps the text; the engine parses it when the update runs, so there is no QueryParseException at create time."
+  },
+  "insert_data_10": {
+    "verdict": "gap",
+    "gap": "query",
+    "noThrow": true,
+    "note": "UpdateFactory.create keeps the text; the engine parses it when the update runs, so there is no QueryParseException at create time."
+  },
+  "insert_data_11": {
+    "verdict": "gap",
+    "gap": "query",
+    "noThrow": true,
+    "note": "UpdateFactory.create keeps the text; the engine parses it when the update runs, so there is no QueryParseException at create time."
+  },
+  "insert_data_12": {
+    "verdict": "gap",
+    "gap": "query",
+    "noThrow": true,
+    "note": "UpdateFactory.create keeps the text; the engine parses it when the update runs, so there is no QueryParseException at create time."
+  },
+  "insert_data_13": {
+    "verdict": "gap",
+    "gap": "query",
+    "noThrow": true,
+    "note": "UpdateFactory.create keeps the text; the engine parses it when the update runs, so there is no QueryParseException at create time."
+  },
+  "insert_data_14": {
+    "verdict": "gap",
+    "gap": "query",
+    "noThrow": true,
+    "note": "UpdateFactory.create keeps the text; the engine parses it when the update runs, so there is no QueryParseException at create time."
+  },
+  "insert_with_iri_function_resolution_against_base_01": {
+    "verdict": "defect",
+    "issue": "https://github.com/danbri/factoidal/issues/1095",
+    "note": "In Dataset.update, IRI('s') after BASE gives no IRI (the BIND is unbound, nothing is inserted); in Dataset.query the same BIND resolves against BASE. SPARQL 1.1 Query section 17.4.2.8. Candidate defect: issue to be filed."
+  },
+  "insert_with_iri_function_resolution_against_base_02": {
+    "verdict": "defect",
+    "issue": "https://github.com/danbri/factoidal/issues/1095",
+    "note": "In Dataset.update, IRI('s') after BASE gives no IRI (the BIND is unbound, nothing is inserted); in Dataset.query the same BIND resolves against BASE. SPARQL 1.1 Query section 17.4.2.8. Candidate defect: issue to be filed."
+  },
+  "insert_with_iri_function_resolution_against_base_03": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query section 17.4.2.8 (IRI takes one argument)",
+    "note": "IRI(base, relative) is an ARQ extension; the engine refuses it (parse error)."
+  },
+  "insert_with_iri_function_resolution_against_base_04": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query section 17.4.2.8 (IRI takes one argument)",
+    "note": "IRI(base, relative) is an ARQ extension; the engine refuses it (parse error)."
+  },
+  "insert_with_iri_function_resolution_against_base_05": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query section 17.4.2.8 (IRI takes one argument)",
+    "note": "IRI(base, relative) is an ARQ extension; the engine refuses it (parse error)."
+  },
+  "loadBadQuads": {
+    "verdict": "gap",
+    "gap": "query",
+    "noThrow": true,
+    "note": "UpdateAction LOAD (the engine fetches no documents): the failure is a LeanaUnsupportedError, not Jena's UpdateException for this file."
+  },
+  "loadNotFound": {
+    "verdict": "gap",
+    "gap": "query",
+    "noThrow": true,
+    "note": "UpdateAction LOAD (the engine fetches no documents): the failure is a LeanaUnsupportedError, not Jena's UpdateException for this file."
+  },
+  "loadNotFoundInto": {
+    "verdict": "gap",
+    "gap": "query",
+    "noThrow": true,
+    "note": "UpdateAction LOAD (the engine fetches no documents): the failure is a LeanaUnsupportedError, not Jena's UpdateException for this file."
+  },
+  "loadQuads": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "UpdateAction LOAD (the engine fetches no documents)."
+  },
+  "loadQuadsInto": {
+    "verdict": "gap",
+    "gap": "query",
+    "noThrow": true,
+    "note": "UpdateAction LOAD (the engine fetches no documents): the failure is a LeanaUnsupportedError, not Jena's UpdateException for this file."
+  },
+  "loadQuadsNTIntoGraph": {
+    "verdict": "gap",
+    "gap": "query",
+    "noThrow": true,
+    "note": "UpdateAction LOAD (the engine fetches no documents): the failure is a LeanaUnsupportedError, not Jena's UpdateException for this file."
+  },
+  "loadTriples": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "UpdateAction LOAD (the engine fetches no documents)."
+  },
+  "loadTriplesInto": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "UpdateAction LOAD (the engine fetches no documents)."
+  },
+  "loadTriplesIntoBad": {
+    "verdict": "gap",
+    "gap": "query",
+    "noThrow": true,
+    "note": "UpdateAction LOAD (the engine fetches no documents): the failure is a LeanaUnsupportedError, not Jena's UpdateException for this file."
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "updateWrite01": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "UpdateWriter / UpdateCompare (update syntax tree)."
+  },
+  "updateWrite02": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "UpdateWriter / UpdateCompare (update syntax tree)."
+  },
+  "updateWrite03": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "UpdateWriter / UpdateCompare (update syntax tree)."
+  },
+  "updateWrite04": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "UpdateWriter / UpdateCompare (update syntax tree)."
+  },
+  "updateWrite05": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "UpdateWriter / UpdateCompare (update syntax tree)."
+  },
+  "updateWrite06": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "UpdateWriter / UpdateCompare (update syntax tree)."
+  },
+  "updateWrite07": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "UpdateWriter / UpdateCompare (update syntax tree)."
+  },
+  "updateWrite08": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "UpdateWriter / UpdateCompare (update syntax tree)."
+  },
+  "updateWrite09": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "UpdateWriter / UpdateCompare (update syntax tree)."
+  },
+  "updateWrite10": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "UpdateWriter / UpdateCompare (update syntax tree)."
+  },
+  "updateWrite20": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "UpdateWriter / UpdateCompare (update syntax tree)."
+  },
+  "updateWrite21": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "UpdateWriter / UpdateCompare (update syntax tree)."
+  },
+  "updateWrite22": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "UpdateWriter / UpdateCompare (update syntax tree)."
+  },
+  "updateWrite23": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "UpdateWriter / UpdateCompare (update syntax tree)."
+  }
+}

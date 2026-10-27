@@ -1,0 +1,82 @@
+{
+  "dynamic_dft_1[General]": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query section 13.2 (Specifying RDF Datasets: FROM and FROM NAMED name graphs by IRI; the default graph of the dataset has no IRI)",
+    "note": "Jena's special graph name <urn:x-arq:DefaultGraph> (the dataset's default graph); to the engine it is an ordinary IRI with no graph."
+  },
+  "dynamic_dft_1[TxnMem]": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query section 13.2 (Specifying RDF Datasets: FROM and FROM NAMED name graphs by IRI; the default graph of the dataset has no IRI)",
+    "note": "Jena's special graph name <urn:x-arq:DefaultGraph> (the dataset's default graph); to the engine it is an ordinary IRI with no graph."
+  },
+  "dynamic_dft_3[General]": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query section 13.2 (Specifying RDF Datasets: FROM and FROM NAMED name graphs by IRI; the default graph of the dataset has no IRI)",
+    "note": "Jena's special graph name <urn:x-arq:DefaultGraph> (the dataset's default graph); to the engine it is an ordinary IRI with no graph."
+  },
+  "dynamic_dft_3[TxnMem]": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query section 13.2 (Specifying RDF Datasets: FROM and FROM NAMED name graphs by IRI; the default graph of the dataset has no IRI)",
+    "note": "Jena's special graph name <urn:x-arq:DefaultGraph> (the dataset's default graph); to the engine it is an ordinary IRI with no graph."
+  },
+  "dynamic_dft_6[General]": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query section 13.2 (Specifying RDF Datasets: FROM and FROM NAMED name graphs by IRI; the default graph of the dataset has no IRI)",
+    "note": "Jena's special graph name <urn:x-arq:DefaultGraph> (the dataset's default graph); to the engine it is an ordinary IRI with no graph."
+  },
+  "dynamic_dft_6[TxnMem]": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query section 13.2 (Specifying RDF Datasets: FROM and FROM NAMED name graphs by IRI; the default graph of the dataset has no IRI)",
+    "note": "Jena's special graph name <urn:x-arq:DefaultGraph> (the dataset's default graph); to the engine it is an ordinary IRI with no graph."
+  },
+  "dynamic_dft_7[General]": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query section 13.2 (Specifying RDF Datasets: FROM and FROM NAMED name graphs by IRI; the default graph of the dataset has no IRI)",
+    "note": "Jena's special graph name <urn:x-arq:DefaultGraph> (the dataset's default graph); to the engine it is an ordinary IRI with no graph."
+  },
+  "dynamic_dft_7[TxnMem]": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query section 13.2 (Specifying RDF Datasets: FROM and FROM NAMED name graphs by IRI; the default graph of the dataset has no IRI)",
+    "note": "Jena's special graph name <urn:x-arq:DefaultGraph> (the dataset's default graph); to the engine it is an ordinary IRI with no graph."
+  },
+  "dynamic_union_1[General]": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query section 13.2 (Specifying RDF Datasets: FROM and FROM NAMED name graphs by IRI; no IRI denotes the union of the named graphs)",
+    "note": "Jena's special graph name <urn:x-arq:UnionGraph> (the union of the named graphs); to the engine it is an ordinary IRI with no graph."
+  },
+  "dynamic_union_1[TxnMem]": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query section 13.2 (Specifying RDF Datasets: FROM and FROM NAMED name graphs by IRI; no IRI denotes the union of the named graphs)",
+    "note": "Jena's special graph name <urn:x-arq:UnionGraph> (the union of the named graphs); to the engine it is an ordinary IRI with no graph."
+  },
+  "dynamic_union_2[General]": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query section 13.2 (Specifying RDF Datasets: FROM and FROM NAMED name graphs by IRI; no IRI denotes the union of the named graphs)",
+    "note": "Jena's special graph name <urn:x-arq:UnionGraph> (the union of the named graphs); to the engine it is an ordinary IRI with no graph."
+  },
+  "dynamic_union_2[TxnMem]": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query section 13.2 (Specifying RDF Datasets: FROM and FROM NAMED name graphs by IRI; no IRI denotes the union of the named graphs)",
+    "note": "Jena's special graph name <urn:x-arq:UnionGraph> (the union of the named graphs); to the engine it is an ordinary IRI with no graph."
+  },
+  "dynamic_union_3[General]": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query section 13.2 (Specifying RDF Datasets: FROM and FROM NAMED name graphs by IRI; no IRI denotes the union of the named graphs)",
+    "note": "Jena's special graph name <urn:x-arq:UnionGraph> (the union of the named graphs); to the engine it is an ordinary IRI with no graph."
+  },
+  "dynamic_union_3[TxnMem]": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query section 13.2 (Specifying RDF Datasets: FROM and FROM NAMED name graphs by IRI; no IRI denotes the union of the named graphs)",
+    "note": "Jena's special graph name <urn:x-arq:UnionGraph> (the union of the named graphs); to the engine it is an ordinary IRI with no graph."
+  },
+  "dynamic_union_6[General]": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query section 13.2 (Specifying RDF Datasets: FROM and FROM NAMED name graphs by IRI; no IRI denotes the union of the named graphs)",
+    "note": "Jena's special graph name <urn:x-arq:UnionGraph> (the union of the named graphs); to the engine it is an ordinary IRI with no graph."
+  },
+  "dynamic_union_6[TxnMem]": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query section 13.2 (Specifying RDF Datasets: FROM and FROM NAMED name graphs by IRI; no IRI denotes the union of the named graphs)",
+    "note": "Jena's special graph name <urn:x-arq:UnionGraph> (the union of the named graphs); to the engine it is an ordinary IRI with no graph."
+  }
+}

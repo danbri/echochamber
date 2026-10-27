@@ -1,0 +1,27 @@
+{
+  "testDelete5": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "QueryFactory.createElement (query pattern syntax tree)."
+  },
+  "testInsert4": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "QueryFactory.createElement (query pattern syntax tree)."
+  },
+  "testModify1": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "QueryFactory.createElement (query pattern syntax tree)."
+  },
+  "testModify2": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "QueryFactory.createElement (query pattern syntax tree)."
+  },
+  "testUpdateBad3": {
+    "verdict": "defect",
+    "issue": "https://github.com/danbri/factoidal/issues/1096",
+    "note": "INSERT { GRAPH ?g { ... } } with ?g bound to a literal inserts the triples into the default graph; SPARQL 1.1 Update section 3.1.3 says a template quad with an illegal RDF construct is not included (Jena: 0 quads). Candidate defect: issue to be filed."
+  }
+}

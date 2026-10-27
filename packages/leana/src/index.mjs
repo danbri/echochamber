@@ -48,7 +48,7 @@ export {
 export {
   Quad, ReadWrite, TxnType, JenaTransactionException, Txn, GraphView, GraphUnionView, DatasetGraph,
   DatasetGraphInMemory, DatasetGraphMapLink, DatasetGraphOne, Symbol_, Context, Dataset, DatasetFactory,
-  DatasetGraphFactory,
+  DatasetGraphFactory, DatasetGraphMap, DatasetGraphZero, DatasetGraphSink, Promote, ARQException, AssemblerUtils,
 } from './dataset.mjs';
 export {
   CompositionBase, Dyadic, Union, Intersection, Difference, DisjointUnion, Delta, Polyadic, MultiUnion,
@@ -69,3 +69,15 @@ export {
   CannotReifyException, NTripleReader, RDF, OWL, OWL2,
 } from './model.mjs';
 export { XSDDouble } from './node.mjs';
+export {
+  Table, QueryExec, QueryExecAdapter, QueryExecutionAdapter, QueryExecBuilderAdapter, QueryTransformOps,
+} from './query.mjs';
+export {
+  ResultSetMem, ResultSetPeeking, IllegalStateException, ResultSetUtils, ResultsCompare, RDFOutput, RDFInput,
+  ResultSetLang, ResultsWriter, ResultsReader, ResultSetMgr, Expr, ExprVar, ExprList, E_Function, E_Add, E_Subtract,
+  E_Multiply, NodeValueInteger, NodeValueDouble, NodeValueBoolean, UserDefinedFunctionFactory,
+} from './query.mjs';
+export {
+  UpdateExec, UsingList, UpdateWriter, UpdateCompare, QuadAcc, QuadDataAcc, Update, UpdateDataInsert, UpdateDataDelete,
+  UpdateDeleteWhere, UpdateModify, Target, UpdateCreate, UpdateDrop, UpdateClear, UpdateCopy, UpdateAdd, UpdateMove,
+} from './query.mjs';

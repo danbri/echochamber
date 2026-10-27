@@ -1,0 +1,7 @@
+{
+  "testIterator": {
+    "verdict": "divergence",
+    "spec": "RDF 1.1 Concepts and Abstract Syntax section 3.2 (an IRI in an RDF graph is absolute)",
+    "note": "Model.getProperty('') is the relative IRI <>, which the engine refuses in a triple (AddDeniedException); Jena's memory graph stores it. The JSON query form after it is ARQ-only (gap 'query', QueryExecution.execJson)."
+  }
+}

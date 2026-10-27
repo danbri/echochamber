@@ -1,0 +1,38 @@
+{
+  "promote_snapshot_06": {
+    "reason": "Java threads: a second transaction on another thread (Thread + Semaphore: an async writer after promotion) while this one is open; leana runs one transaction at a time on one JavaScript thread."
+  },
+  "promote_readCommitted_06": {
+    "reason": "Java threads: a second transaction on another thread (Thread + Semaphore: an async writer after promotion) while this one is open; leana runs one transaction at a time on one JavaScript thread."
+  },
+  "promote_snapshot_07": {
+    "reason": "Java threads: a second transaction on another thread (ThreadTxn.threadTxnRead: a long running reader) while this one is open; leana runs one transaction at a time on one JavaScript thread."
+  },
+  "promote_readCommitted_07": {
+    "reason": "Java threads: a second transaction on another thread (ThreadTxn.threadTxnRead: a long running reader) while this one is open; leana runs one transaction at a time on one JavaScript thread."
+  },
+  "promote_10": {
+    "reason": "Java threads: a second transaction on another thread (ThreadTxn.threadTxnWrite: a writer that commits) while this one is open; leana runs one transaction at a time on one JavaScript thread."
+  },
+  "promote_11": {
+    "reason": "Java threads: a second transaction on another thread (ThreadTxn.threadTxnWriteAbort: a writer that aborts) while this one is open; leana runs one transaction at a time on one JavaScript thread."
+  },
+  "promote_12": {
+    "reason": "Java threads: a second transaction on another thread (ThreadTxn.threadTxnWrite: a writer that commits) while this one is open; leana runs one transaction at a time on one JavaScript thread."
+  },
+  "promote_13": {
+    "reason": "Java threads: a second transaction on another thread (ThreadTxn.threadTxnWriteAbort: a writer that aborts) while this one is open; leana runs one transaction at a time on one JavaScript thread."
+  },
+  "promote_active_writer_1": {
+    "reason": "Java threads: a second transaction on another thread (ExecutorService + Semaphore: an active writer that commits) while this one is open; leana runs one transaction at a time on one JavaScript thread."
+  },
+  "promote_active_writer_2": {
+    "reason": "Java threads: a second transaction on another thread (ExecutorService + Semaphore: an active writer that aborts) while this one is open; leana runs one transaction at a time on one JavaScript thread."
+  },
+  "promote_thread_writer_1": {
+    "reason": "Java threads: a second transaction on another thread (ThreadTxn.threadTxnWrite) while this one is open; leana runs one transaction at a time on one JavaScript thread."
+  },
+  "promote_thread_writer_2": {
+    "reason": "Java threads: a second transaction on another thread (ThreadTxn.threadTxnWrite) while this one is open; leana runs one transaction at a time on one JavaScript thread."
+  }
+}

@@ -1,5 +1,106 @@
 {
+  "testARQConstructQuad_Duplicate_1": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query section 19.8 grammar rules [73] ConstructTemplate and [75] ConstructTriples (triples only; no GRAPH in a CONSTRUCT template)",
+    "note": "ARQ construct-quads extension (GRAPH in the template). The engine refuses GRAPH _:a and drops quads of GRAPH ?g / GRAPH <iri> templates (see the parent report: it should refuse them as syntax errors)."
+  },
+  "testARQConstructQuad_Duplicate_2": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query section 19.8 grammar rules [73] ConstructTemplate and [75] ConstructTriples (triples only; no GRAPH in a CONSTRUCT template)",
+    "note": "ARQ construct-quads extension (GRAPH in the template). The engine refuses GRAPH _:a and drops quads of GRAPH ?g / GRAPH <iri> templates (see the parent report: it should refuse them as syntax errors)."
+  },
+  "testARQConstructQuad_Duplicate_3": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query section 19.8 grammar rules [73] ConstructTemplate and [75] ConstructTriples (triples only; no GRAPH in a CONSTRUCT template)",
+    "note": "ARQ construct-quads extension (GRAPH in the template). The engine refuses GRAPH _:a and drops quads of GRAPH ?g / GRAPH <iri> templates (see the parent report: it should refuse them as syntax errors)."
+  },
+  "testARQConstructQuad_Prefix": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query section 19.8 grammar rules [73] ConstructTemplate and [75] ConstructTriples (triples only; no GRAPH in a CONSTRUCT template)",
+    "note": "ARQ construct-quads extension (GRAPH in the template). The engine refuses GRAPH _:a and drops quads of GRAPH ?g / GRAPH <iri> templates (see the parent report: it should refuse them as syntax errors)."
+  },
+  "testARQConstructQuad_ShortForm_2": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query section 16.2.4 (CONSTRUCT WHERE: the template is the basic graph pattern of the WHERE clause; no GRAPH)",
+    "note": "ARQ construct-quads short form; the engine refuses it (QueryParseException)."
+  },
+  "testARQConstructQuad_ShortForm_3": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query section 16.2.4 (CONSTRUCT WHERE: the template is the basic graph pattern of the WHERE clause; no GRAPH)",
+    "note": "ARQ construct-quads short form; the engine refuses it (QueryParseException)."
+  },
+  "testARQConstructQuad_ShortForm_bad": {
+    "verdict": "gap",
+    "gap": "query",
+    "noThrow": true,
+    "note": "QueryFactory.create keeps the text; the engine reports the syntax error when the query runs, not when it is created."
+  },
+  "testARQConstructQuad_b_2": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query section 19.8 grammar rules [73] ConstructTemplate and [75] ConstructTriples (triples only; no GRAPH in a CONSTRUCT template)",
+    "note": "ARQ construct-quads extension (GRAPH in the template). The engine refuses GRAPH _:a and drops quads of GRAPH ?g / GRAPH <iri> templates (see the parent report: it should refuse them as syntax errors)."
+  },
+  "testARQConstructQuad_bnodes": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query section 19.8 grammar rules [73] ConstructTemplate and [75] ConstructTriples (triples only; no GRAPH in a CONSTRUCT template)",
+    "note": "ARQ construct-quads extension (GRAPH in the template). The engine refuses GRAPH _:a and drops quads of GRAPH ?g / GRAPH <iri> templates (see the parent report: it should refuse them as syntax errors)."
+  },
+  "testExecJson": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query section 16 (query forms SELECT, CONSTRUCT, ASK, DESCRIBE); grammar rule [2] Query",
+    "note": "ARQ JSON query form (JENA-632); the engine refuses it. testExecJsonItems also uses the empty IRI <> as a property, which the engine refuses (RDF 1.1 Concepts section 3.2: an IRI is absolute)."
+  },
+  "testExecJsonItems": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query section 16 (query forms SELECT, CONSTRUCT, ASK, DESCRIBE); grammar rule [2] Query",
+    "note": "ARQ JSON query form (JENA-632); the engine refuses it. testExecJsonItems also uses the empty IRI <> as a property, which the engine refuses (RDF 1.1 Concepts section 3.2: an IRI is absolute)."
+  },
+  "testReuseQueryObject2": {
+    "verdict": "gap",
+    "gap": "literal-value",
+    "note": "Literal.getInt."
+  },
+  "testSubstitution1": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "QueryExecution.substitution (syntax substitution)."
+  },
+  "testSubstitution2": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "QueryExecution.substitution (syntax substitution)."
+  },
+  "testSubstitution3": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "QueryExecution.substitution (syntax substitution)."
+  },
+  "testSubstitution4": {
+    "verdict": "gap",
+    "gap": "vocabulary",
+    "note": "OWL.<term>."
+  },
+  "testSubstitution5": {
+    "verdict": "gap",
+    "gap": "vocabulary",
+    "note": "OWL.<term>."
+  },
+  "testSubstitution6": {
+    "verdict": "gap",
+    "gap": "vocabulary",
+    "note": "OWL.<term>."
+  },
+  "testSubstitution7": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "ResourceFactory.createTypedLiteral(value)."
+  },
   "testSubstitutionConstruct1": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "QueryExecution.substitution (syntax substitution)."
+  },
+  "testSubstitutionConstruct2": {
     "verdict": "gap",
     "gap": "query",
     "note": "QueryExecution.substitution (syntax substitution)."

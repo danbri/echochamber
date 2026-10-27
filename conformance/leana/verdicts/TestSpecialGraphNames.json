@@ -1,0 +1,182 @@
+{
+  "union_dft_1t[General]": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query Language section 18.6 (eval(D(G), Graph(IRI, P)) evaluates P over the named graph IRI of the dataset; an IRI that names no graph gives no solution) and section 13.3.1",
+    "note": "Jena reads GRAPH <urn:x-arq:UnionGraph> as the union of the named graphs (4 rows); for SPARQL it is an IRI that names no graph of the dataset (0 rows). The first query (5 rows, default graph) agrees."
+  },
+  "graph_union_1t[General]": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query Language section 18.6 (eval(D(G), Graph(IRI, P)) evaluates P over the named graph IRI of the dataset; an IRI that names no graph gives no solution) and section 13.3.1",
+    "note": "GRAPH <urn:x-arq:UnionGraph> (a Jena extension: the union of the named graphs); SPARQL: no graph of that name, 0 rows (Jena 2)."
+  },
+  "graph_union_2t[General]": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query Language section 18.6 (eval(D(G), Graph(IRI, P)) evaluates P over the named graph IRI of the dataset; an IRI that names no graph gives no solution) and section 13.3.1",
+    "note": "GRAPH <urn:x-arq:UnionGraph> (a Jena extension: the union of the named graphs); SPARQL: no graph of that name, 0 rows (Jena 4)."
+  },
+  "graph_dft_2t[General]": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query Language section 18.6 (eval(D(G), Graph(IRI, P)) evaluates P over the named graph IRI of the dataset; an IRI that names no graph gives no solution) and section 13.3.1",
+    "note": "GRAPH <urn:x-arq:DefaultGraph> (a Jena extension: the default graph); SPARQL: no named graph of that name, 0 rows (Jena 1)."
+  },
+  "graph_dft_3t[General]": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query Language section 18.6 (eval(D(G), Graph(IRI, P)) evaluates P over the named graph IRI of the dataset; an IRI that names no graph gives no solution) and section 13.3.1",
+    "note": "GRAPH <urn:x-arq:DefaultGraph> (a Jena extension: the default graph); SPARQL: no named graph of that name, 0 rows (Jena 1)."
+  },
+  "graph_dftg_2t[General]": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query Language section 18.6 (eval(D(G), Graph(IRI, P)) evaluates P over the named graph IRI of the dataset; an IRI that names no graph gives no solution) and section 13.3.1",
+    "note": "GRAPH <urn:x-arq:DefaultGraphNode> (a Jena extension: the default graph); SPARQL: no named graph of that name, 0 rows (Jena 3)."
+  },
+  "union_dft_1q[General]": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query Language section 18.6 (eval(D(G), Graph(IRI, P)) evaluates P over the named graph IRI of the dataset; an IRI that names no graph gives no solution) and section 13.3.1",
+    "note": "Jena reads GRAPH <urn:x-arq:UnionGraph> as the union of the named graphs (4 rows); for SPARQL it is an IRI that names no graph of the dataset (0 rows). The first query (5 rows, default graph) agrees."
+  },
+  "graph_union_1q[General]": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query Language section 18.6 (eval(D(G), Graph(IRI, P)) evaluates P over the named graph IRI of the dataset; an IRI that names no graph gives no solution) and section 13.3.1",
+    "note": "GRAPH <urn:x-arq:UnionGraph> (a Jena extension: the union of the named graphs); SPARQL: no graph of that name, 0 rows (Jena 2)."
+  },
+  "graph_union_2q[General]": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query Language section 18.6 (eval(D(G), Graph(IRI, P)) evaluates P over the named graph IRI of the dataset; an IRI that names no graph gives no solution) and section 13.3.1",
+    "note": "GRAPH <urn:x-arq:UnionGraph> (a Jena extension: the union of the named graphs); SPARQL: no graph of that name, 0 rows (Jena 4)."
+  },
+  "graph_dft_2q[General]": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query Language section 18.6 (eval(D(G), Graph(IRI, P)) evaluates P over the named graph IRI of the dataset; an IRI that names no graph gives no solution) and section 13.3.1",
+    "note": "GRAPH <urn:x-arq:DefaultGraph> (a Jena extension: the default graph); SPARQL: no named graph of that name, 0 rows (Jena 1)."
+  },
+  "graph_dft_3q[General]": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query Language section 18.6 (eval(D(G), Graph(IRI, P)) evaluates P over the named graph IRI of the dataset; an IRI that names no graph gives no solution) and section 13.3.1",
+    "note": "GRAPH <urn:x-arq:DefaultGraph> (a Jena extension: the default graph); SPARQL: no named graph of that name, 0 rows (Jena 1)."
+  },
+  "graph_dftg_2q[General]": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query Language section 18.6 (eval(D(G), Graph(IRI, P)) evaluates P over the named graph IRI of the dataset; an IRI that names no graph gives no solution) and section 13.3.1",
+    "note": "GRAPH <urn:x-arq:DefaultGraphNode> (a Jena extension: the default graph); SPARQL: no named graph of that name, 0 rows (Jena 3)."
+  },
+  "union_dft_1t[Plain]": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query Language section 18.6 (eval(D(G), Graph(IRI, P)) evaluates P over the named graph IRI of the dataset; an IRI that names no graph gives no solution) and section 13.3.1",
+    "note": "Jena reads GRAPH <urn:x-arq:UnionGraph> as the union of the named graphs (4 rows); for SPARQL it is an IRI that names no graph of the dataset (0 rows). The first query (5 rows, default graph) agrees."
+  },
+  "graph_union_1t[Plain]": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query Language section 18.6 (eval(D(G), Graph(IRI, P)) evaluates P over the named graph IRI of the dataset; an IRI that names no graph gives no solution) and section 13.3.1",
+    "note": "GRAPH <urn:x-arq:UnionGraph> (a Jena extension: the union of the named graphs); SPARQL: no graph of that name, 0 rows (Jena 2)."
+  },
+  "graph_union_2t[Plain]": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query Language section 18.6 (eval(D(G), Graph(IRI, P)) evaluates P over the named graph IRI of the dataset; an IRI that names no graph gives no solution) and section 13.3.1",
+    "note": "GRAPH <urn:x-arq:UnionGraph> (a Jena extension: the union of the named graphs); SPARQL: no graph of that name, 0 rows (Jena 4)."
+  },
+  "graph_dft_2t[Plain]": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query Language section 18.6 (eval(D(G), Graph(IRI, P)) evaluates P over the named graph IRI of the dataset; an IRI that names no graph gives no solution) and section 13.3.1",
+    "note": "GRAPH <urn:x-arq:DefaultGraph> (a Jena extension: the default graph); SPARQL: no named graph of that name, 0 rows (Jena 1)."
+  },
+  "graph_dft_3t[Plain]": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query Language section 18.6 (eval(D(G), Graph(IRI, P)) evaluates P over the named graph IRI of the dataset; an IRI that names no graph gives no solution) and section 13.3.1",
+    "note": "GRAPH <urn:x-arq:DefaultGraph> (a Jena extension: the default graph); SPARQL: no named graph of that name, 0 rows (Jena 1)."
+  },
+  "graph_dftg_2t[Plain]": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query Language section 18.6 (eval(D(G), Graph(IRI, P)) evaluates P over the named graph IRI of the dataset; an IRI that names no graph gives no solution) and section 13.3.1",
+    "note": "GRAPH <urn:x-arq:DefaultGraphNode> (a Jena extension: the default graph); SPARQL: no named graph of that name, 0 rows (Jena 3)."
+  },
+  "union_dft_1q[Plain]": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query Language section 18.6 (eval(D(G), Graph(IRI, P)) evaluates P over the named graph IRI of the dataset; an IRI that names no graph gives no solution) and section 13.3.1",
+    "note": "Jena reads GRAPH <urn:x-arq:UnionGraph> as the union of the named graphs (4 rows); for SPARQL it is an IRI that names no graph of the dataset (0 rows). The first query (5 rows, default graph) agrees."
+  },
+  "graph_union_1q[Plain]": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query Language section 18.6 (eval(D(G), Graph(IRI, P)) evaluates P over the named graph IRI of the dataset; an IRI that names no graph gives no solution) and section 13.3.1",
+    "note": "GRAPH <urn:x-arq:UnionGraph> (a Jena extension: the union of the named graphs); SPARQL: no graph of that name, 0 rows (Jena 2)."
+  },
+  "graph_union_2q[Plain]": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query Language section 18.6 (eval(D(G), Graph(IRI, P)) evaluates P over the named graph IRI of the dataset; an IRI that names no graph gives no solution) and section 13.3.1",
+    "note": "GRAPH <urn:x-arq:UnionGraph> (a Jena extension: the union of the named graphs); SPARQL: no graph of that name, 0 rows (Jena 4)."
+  },
+  "graph_dft_2q[Plain]": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query Language section 18.6 (eval(D(G), Graph(IRI, P)) evaluates P over the named graph IRI of the dataset; an IRI that names no graph gives no solution) and section 13.3.1",
+    "note": "GRAPH <urn:x-arq:DefaultGraph> (a Jena extension: the default graph); SPARQL: no named graph of that name, 0 rows (Jena 1)."
+  },
+  "graph_dft_3q[Plain]": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query Language section 18.6 (eval(D(G), Graph(IRI, P)) evaluates P over the named graph IRI of the dataset; an IRI that names no graph gives no solution) and section 13.3.1",
+    "note": "GRAPH <urn:x-arq:DefaultGraph> (a Jena extension: the default graph); SPARQL: no named graph of that name, 0 rows (Jena 1)."
+  },
+  "graph_dftg_2q[Plain]": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query Language section 18.6 (eval(D(G), Graph(IRI, P)) evaluates P over the named graph IRI of the dataset; an IRI that names no graph gives no solution) and section 13.3.1",
+    "note": "GRAPH <urn:x-arq:DefaultGraphNode> (a Jena extension: the default graph); SPARQL: no named graph of that name, 0 rows (Jena 3)."
+  },
+  "union_dft_1t[TxnMem]": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query Language section 18.6 (eval(D(G), Graph(IRI, P)) evaluates P over the named graph IRI of the dataset; an IRI that names no graph gives no solution) and section 13.3.1",
+    "note": "Jena reads GRAPH <urn:x-arq:UnionGraph> as the union of the named graphs (4 rows); for SPARQL it is an IRI that names no graph of the dataset (0 rows). The first query (5 rows, default graph) agrees."
+  },
+  "graph_union_1t[TxnMem]": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query Language section 18.6 (eval(D(G), Graph(IRI, P)) evaluates P over the named graph IRI of the dataset; an IRI that names no graph gives no solution) and section 13.3.1",
+    "note": "GRAPH <urn:x-arq:UnionGraph> (a Jena extension: the union of the named graphs); SPARQL: no graph of that name, 0 rows (Jena 2)."
+  },
+  "graph_union_2t[TxnMem]": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query Language section 18.6 (eval(D(G), Graph(IRI, P)) evaluates P over the named graph IRI of the dataset; an IRI that names no graph gives no solution) and section 13.3.1",
+    "note": "GRAPH <urn:x-arq:UnionGraph> (a Jena extension: the union of the named graphs); SPARQL: no graph of that name, 0 rows (Jena 4)."
+  },
+  "graph_dft_2t[TxnMem]": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query Language section 18.6 (eval(D(G), Graph(IRI, P)) evaluates P over the named graph IRI of the dataset; an IRI that names no graph gives no solution) and section 13.3.1",
+    "note": "GRAPH <urn:x-arq:DefaultGraph> (a Jena extension: the default graph); SPARQL: no named graph of that name, 0 rows (Jena 1)."
+  },
+  "graph_dft_3t[TxnMem]": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query Language section 18.6 (eval(D(G), Graph(IRI, P)) evaluates P over the named graph IRI of the dataset; an IRI that names no graph gives no solution) and section 13.3.1",
+    "note": "GRAPH <urn:x-arq:DefaultGraph> (a Jena extension: the default graph); SPARQL: no named graph of that name, 0 rows (Jena 1)."
+  },
+  "graph_dftg_2t[TxnMem]": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query Language section 18.6 (eval(D(G), Graph(IRI, P)) evaluates P over the named graph IRI of the dataset; an IRI that names no graph gives no solution) and section 13.3.1",
+    "note": "GRAPH <urn:x-arq:DefaultGraphNode> (a Jena extension: the default graph); SPARQL: no named graph of that name, 0 rows (Jena 3)."
+  },
+  "union_dft_1q[TxnMem]": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query Language section 18.6 (eval(D(G), Graph(IRI, P)) evaluates P over the named graph IRI of the dataset; an IRI that names no graph gives no solution) and section 13.3.1",
+    "note": "Jena reads GRAPH <urn:x-arq:UnionGraph> as the union of the named graphs (4 rows); for SPARQL it is an IRI that names no graph of the dataset (0 rows). The first query (5 rows, default graph) agrees."
+  },
+  "graph_union_1q[TxnMem]": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query Language section 18.6 (eval(D(G), Graph(IRI, P)) evaluates P over the named graph IRI of the dataset; an IRI that names no graph gives no solution) and section 13.3.1",
+    "note": "GRAPH <urn:x-arq:UnionGraph> (a Jena extension: the union of the named graphs); SPARQL: no graph of that name, 0 rows (Jena 2)."
+  },
+  "graph_union_2q[TxnMem]": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query Language section 18.6 (eval(D(G), Graph(IRI, P)) evaluates P over the named graph IRI of the dataset; an IRI that names no graph gives no solution) and section 13.3.1",
+    "note": "GRAPH <urn:x-arq:UnionGraph> (a Jena extension: the union of the named graphs); SPARQL: no graph of that name, 0 rows (Jena 4)."
+  },
+  "graph_dft_2q[TxnMem]": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query Language section 18.6 (eval(D(G), Graph(IRI, P)) evaluates P over the named graph IRI of the dataset; an IRI that names no graph gives no solution) and section 13.3.1",
+    "note": "GRAPH <urn:x-arq:DefaultGraph> (a Jena extension: the default graph); SPARQL: no named graph of that name, 0 rows (Jena 1)."
+  },
+  "graph_dft_3q[TxnMem]": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query Language section 18.6 (eval(D(G), Graph(IRI, P)) evaluates P over the named graph IRI of the dataset; an IRI that names no graph gives no solution) and section 13.3.1",
+    "note": "GRAPH <urn:x-arq:DefaultGraph> (a Jena extension: the default graph); SPARQL: no named graph of that name, 0 rows (Jena 1)."
+  },
+  "graph_dftg_2q[TxnMem]": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query Language section 18.6 (eval(D(G), Graph(IRI, P)) evaluates P over the named graph IRI of the dataset; an IRI that names no graph gives no solution) and section 13.3.1",
+    "note": "GRAPH <urn:x-arq:DefaultGraphNode> (a Jena extension: the default graph); SPARQL: no named graph of that name, 0 rows (Jena 3)."
+  }
+}
