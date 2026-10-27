@@ -7,9 +7,9 @@
     "packages/*"
   ],
   "scripts": {
-    "test": "node --test --test-concurrency=1 'conformance/*/*.test.mjs' 'conformance/echo04/*/*.test.mjs' 'conformance/leana/*/*/*.test.mjs' 'packages/*/test/*.test.mjs'",
-    "test:echo03": "node --test --test-concurrency=1 'conformance/echo03/*.test.mjs'",
-    "test:echo04": "node --test --test-concurrency=1 'conformance/echo04/*/*.test.mjs'",
+    "test": "node --test --test-concurrency=1 'conformance/*/*.test.mjs' 'conformance/moonforge/*/*.test.mjs' 'conformance/leana/*/*/*.test.mjs' 'packages/*/test/*.test.mjs'",
+    "test:enthie": "node --test --test-concurrency=1 'conformance/enthie/*.test.mjs'",
+    "test:moonforge": "node --test --test-concurrency=1 'conformance/moonforge/*/*.test.mjs'",
     "test:leana": "node --test 'conformance/leana/**/*.test.mjs'",
     "count:leana": "node conformance/leana/count.mjs"
   },
