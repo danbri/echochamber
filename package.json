@@ -3,5 +3,14 @@
   "private": true,
   "description": "Echoes: RDF library APIs and their test suites over @factoidal/core",
   "license": "Apache-2.0",
-  "workspaces": ["packages/*"]
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "test": "node --test 'conformance/leana/**/*.test.mjs'",
+    "count": "node conformance/leana/count.mjs"
+  },
+  "devDependencies": {
+    "@factoidal/core": "0.16.0"
+  }
 }

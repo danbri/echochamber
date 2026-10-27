@@ -1,0 +1,24 @@
+{
+  "name": "@factoidal/leana",
+  "version": "0.0.1",
+  "private": true,
+  "description": "A Jena-style RDF API in JavaScript over @factoidal/core",
+  "license": "Apache-2.0",
+  "type": "module",
+  "main": "./src/index.mjs",
+  "types": "./src/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.d.ts",
+      "default": "./src/index.mjs"
+    }
+  },
+  "files": ["src", "GAPS.md", "README.md", "NOTICE"],
+  "peerDependencies": {
+    "@factoidal/core": ">=0.16.0"
+  },
+  "devDependencies": {
+    "@factoidal/core": "0.16.0"
+  },
+  "engines": { "node": ">=22" }
+}

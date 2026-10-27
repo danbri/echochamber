@@ -1,0 +1,21 @@
+{
+  "testNodeEquals": {"verdict": "divergence", "spec": "RDF 1.1 Concepts section 3.3 (language tags MAY be converted to lower case)", "note": "Jena's LiteralLabelFactory keeps \"xyz\"@en and \"xyz\"@EN apart at this level; @factoidal/core lowercases the tag, so the two are one term. Jena itself treats them as one Node (testCreateLanguagedLiteralEN2)."},
+  "testCreateLanguagedLiteralEN1": {"verdict": "divergence", "spec": "RDF 1.1 Concepts section 3.3 (language tags MAY be converted to lower case); BCP 47 section 2.1.1 (case is a formatting convention)", "note": "Jena formats the tag as en-UK; @factoidal/core answers en-uk."},
+  "testCreateLanguagedLiteralEN2": {"verdict": "gap", "gap": "value-matching", "note": "Node.sameValueAs. The equals() half passes."},
+  "testCreateLanguagedLiteralXY": {"verdict": "divergence", "spec": "RDF 1.1 Concepts section 3.3 (language tags MAY be converted to lower case); BCP 47 section 2.1.1", "note": "xy-AB is answered as xy-ab."},
+  "testTypesExpandPrefix": {"verdict": "gap", "gap": "vocabulary", "note": "The test reads PrefixMapping.Extended itself."},
+  "testToStringWithPrefixMapping": {"verdict": "gap", "gap": "iri-split", "note": "Node_URI.toString(pm) is pm.qnameFor(uri)."},
+  "testVisitorPatternValue": {"verdict": "gap", "gap": "echo", "note": "Node_Graph (a graph as a node) is not in leana."},
+  "testVisitorPatternCalled": {"verdict": "gap", "gap": "echo", "note": "Node_Graph (a graph as a node) is not in leana."},
+  "testDataSameValue": {"verdict": "gap", "gap": "js-value-literal", "note": "TypeMapper.getTypeByValue(Integer/Short); then sameValueAs (value-matching)."},
+  "testLiteralToString": {"verdict": "gap", "gap": "js-value-literal", "note": "TypeMapper.getTypeByValue(Integer). Also: Jena writes ^^xsd:int with PrefixMapping.Standard and en-UK; leana writes the engine's N-Triples form."},
+  "testGetIndexingValuePlainString": {"verdict": "gap", "gap": "value-matching"},
+  "testGetIndexingValueLanguagedString": {"verdict": "gap", "gap": "value-matching"},
+  "testGetIndexingValueXSDString": {"verdict": "gap", "gap": "value-matching"},
+  "testGetIndexingValueHexBinary1": {"verdict": "gap", "gap": "value-matching"},
+  "testGetIndexingValueHexBinary2": {"verdict": "gap", "gap": "value-matching"},
+  "testGetIndexingValueBase64Binary1": {"verdict": "gap", "gap": "value-matching"},
+  "testGetIndexingValueBase64Binary2": {"verdict": "gap", "gap": "value-matching"},
+  "testGetLiteralValuePlainString": {"verdict": "gap", "gap": "literal-value"},
+  "testNamespace": {"verdict": "gap", "gap": "iri-split", "note": "Node.getNameSpace / getLocalName (Jena SplitIRI.splitXML)."}
+}
