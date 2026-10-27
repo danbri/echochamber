@@ -1,0 +1,4 @@
+{
+  "testGetRequiredProperty": {"verdict": "gap", "gap": "js-value-literal", "note": "setUp (fillModel): Model.createTypedLiteral(boolean / long / char / float / double)."},
+  "testListSubjects": {"verdict": "gap", "gap": "js-value-literal", "note": "setUp (fillModel); also listResourcesWithProperty(p, Java value)."}
+}

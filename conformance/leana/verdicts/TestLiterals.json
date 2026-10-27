@@ -1,0 +1,10 @@
+{
+  "testBooleans": {"verdict": "gap", "gap": "js-value-literal", "note": "Model.createTypedLiteral(boolean); then Literal.getBoolean (literal-value)."},
+  "testByteLiterals": {"verdict": "gap", "gap": "js-value-literal", "note": "createTypedLiteral(byte); then getByte/getShort/getInt/getLong (literal-value)."},
+  "testCharacterLiterals": {"verdict": "gap", "gap": "js-value-literal", "note": "createTypedLiteral(char); then getChar."},
+  "testDoubleLiterals": {"verdict": "gap", "gap": "js-value-literal", "note": "createTypedLiteral(double); then getDouble."},
+  "testFloatLiterals": {"verdict": "gap", "gap": "js-value-literal", "note": "createTypedLiteral(float); then getFloat."},
+  "testIntLiterals": {"verdict": "gap", "gap": "js-value-literal", "note": "createTypedLiteral(int); then the narrowing accessors."},
+  "testLongLiterals": {"verdict": "gap", "gap": "js-value-literal", "note": "createTypedLiteral(long); then the narrowing accessors."},
+  "testShortLiterals": {"verdict": "gap", "gap": "js-value-literal", "note": "createTypedLiteral(short); then the narrowing accessors."}
+}

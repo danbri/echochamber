@@ -1,0 +1,37 @@
+{
+  "contains1": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "The fixture graph is Jena's value-indexed GraphMemValue (leana: createDefaultGraphSameValue)."
+  },
+  "contains2": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "The fixture graph is Jena's value-indexed GraphMemValue (leana: createDefaultGraphSameValue)."
+  },
+  "contains3": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "The fixture graph is Jena's value-indexed GraphMemValue (leana: createDefaultGraphSameValue)."
+  },
+  "contains4": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "The fixture graph is Jena's value-indexed GraphMemValue (leana: createDefaultGraphSameValue)."
+  },
+  "find1": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "The fixture graph is Jena's value-indexed GraphMemValue (leana: createDefaultGraphSameValue)."
+  },
+  "find2": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "The fixture graph is Jena's value-indexed GraphMemValue (leana: createDefaultGraphSameValue)."
+  },
+  "find3": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "The fixture graph is Jena's value-indexed GraphMemValue (leana: createDefaultGraphSameValue)."
+  }
+}

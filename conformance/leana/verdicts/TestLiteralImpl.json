@@ -1,0 +1,7 @@
+{
+  "testAsNumber": {"verdict": "gap", "gap": "literal-value", "note": "Literal.getInt."},
+  "testCannotAsNonNumber": {"verdict": "gap", "gap": "literal-value", "note": "Literal.getInt on xsd:gYear (Jena: DatatypeFormatException)."},
+  "testLiteralHasModel": {"verdict": "gap", "gap": "js-value-literal", "note": "Model.createTypedLiteral(boolean / int / char)."},
+  "testSameAdhocClassUS": {"verdict": "gap", "gap": "js-value-literal", "note": "TypeMapper.getTypeByValue and Jena's ad hoc datatypes for Java classes."},
+  "testTypedLiteralTypesAndValues": {"verdict": "gap", "gap": "js-value-literal", "note": "TypeMapper.getTypeByValue; createTypedLiteral(Object)."}
+}

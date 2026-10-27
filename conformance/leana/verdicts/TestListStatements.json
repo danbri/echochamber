@@ -1,0 +1,8 @@
+{
+  "thereAre2LitsWoLang": {"verdict": "gap", "gap": "js-value-literal", "note": "@BeforeAll: Model.createLiteralStatement(s, p, 1789) (Java int)."},
+  "thereAre4Literals": {"verdict": "gap", "gap": "js-value-literal", "note": "@BeforeAll."},
+  "thereIsOneFrench": {"verdict": "gap", "gap": "js-value-literal", "note": "@BeforeAll."},
+  "theresAreTwoText": {"verdict": "gap", "gap": "js-value-literal", "note": "@BeforeAll."},
+  "theresOneTextEN": {"verdict": "gap", "gap": "js-value-literal", "note": "@BeforeAll."},
+  "theresOneTextWoLang": {"verdict": "gap", "gap": "js-value-literal", "note": "@BeforeAll."}
+}

@@ -1,0 +1,152 @@
+{
+  "read_01": {
+    "verdict": "gap",
+    "gap": "syntax-from-name",
+    "note": "Model.read(url) with no Lang: syntax from the file suffix."
+  },
+  "read_02": {
+    "verdict": "gap",
+    "gap": "syntax-from-name",
+    "note": "Model.read(url) with no Lang: syntax from the file suffix."
+  },
+  "read_03": {
+    "verdict": "gap",
+    "gap": "syntax-from-name",
+    "note": "Model.read(url) with no Lang: syntax from the file suffix."
+  },
+  "read_04": {
+    "verdict": "gap",
+    "gap": "syntax-from-name",
+    "note": "Model.read(url) with no Lang: syntax from the file suffix."
+  },
+  "read_06": {
+    "verdict": "gap",
+    "gap": "syntax-from-name",
+    "note": "Model.read(url) with no Lang: syntax from the file suffix."
+  },
+  "read_05": {
+    "verdict": "gap",
+    "gap": "syntax-from-name",
+    "note": "Model.read(url) with no Lang. The file is RDF/JSON, which @factoidal/core does not read either."
+  },
+  "read_11": {
+    "verdict": "gap",
+    "gap": "echo",
+    "note": "The RDFDataMgr.read part passes; RDFReaderFactoryRIOT (Jena 2 RDFReaderI adapters) is not in leana."
+  },
+  "read_12": {
+    "verdict": "gap",
+    "gap": "echo",
+    "note": "The RDFDataMgr.read part passes; RDFReaderFactoryRIOT (Jena 2 RDFReaderI adapters) is not in leana."
+  },
+  "read_13": {
+    "verdict": "gap",
+    "gap": "echo",
+    "note": "The RDFDataMgr.read part passes; RDFReaderFactoryRIOT (Jena 2 RDFReaderI adapters) is not in leana."
+  },
+  "read_14": {
+    "verdict": "gap",
+    "gap": "echo",
+    "note": "The RDFDataMgr.read part passes; RDFReaderFactoryRIOT (Jena 2 RDFReaderI adapters) is not in leana."
+  },
+  "read_16": {
+    "verdict": "gap",
+    "gap": "echo",
+    "note": "The RDFDataMgr.read part passes; RDFReaderFactoryRIOT (Jena 2 RDFReaderI adapters) is not in leana."
+  },
+  "read_21a": {
+    "verdict": "gap",
+    "gap": "echo",
+    "note": "The RDFDataMgr.read part passes; RDFReaderFactoryRIOT (Jena 2 RDFReaderI adapters) is not in leana."
+  },
+  "read_21b": {
+    "verdict": "gap",
+    "gap": "echo",
+    "note": "The RDFDataMgr.read part passes; RDFReaderFactoryRIOT (Jena 2 RDFReaderI adapters) is not in leana."
+  },
+  "read_21c": {
+    "verdict": "gap",
+    "gap": "echo",
+    "note": "The RDFDataMgr.read part passes; RDFReaderFactoryRIOT (Jena 2 RDFReaderI adapters) is not in leana."
+  },
+  "read_21d": {
+    "verdict": "gap",
+    "gap": "echo",
+    "note": "The RDFDataMgr.read part passes; RDFReaderFactoryRIOT (Jena 2 RDFReaderI adapters) is not in leana."
+  },
+  "read_22a": {
+    "verdict": "gap",
+    "gap": "echo",
+    "note": "The RDFDataMgr.read part passes; RDFReaderFactoryRIOT (Jena 2 RDFReaderI adapters) is not in leana."
+  },
+  "read_22b": {
+    "verdict": "gap",
+    "gap": "echo",
+    "note": "The RDFDataMgr.read part passes; RDFReaderFactoryRIOT (Jena 2 RDFReaderI adapters) is not in leana."
+  },
+  "read_23a": {
+    "verdict": "gap",
+    "gap": "echo",
+    "note": "The RDFDataMgr.read part passes; RDFReaderFactoryRIOT (Jena 2 RDFReaderI adapters) is not in leana."
+  },
+  "read_23b": {
+    "verdict": "gap",
+    "gap": "echo",
+    "note": "The RDFDataMgr.read part passes; RDFReaderFactoryRIOT (Jena 2 RDFReaderI adapters) is not in leana."
+  },
+  "read_15": {
+    "verdict": "gap",
+    "gap": "syntax-from-name",
+    "note": "nameToLang('RDF/JSON') is null in leana (no RDF/JSON syntax in @factoidal/core), so the read has no Lang."
+  },
+  "read_24": {
+    "verdict": "gap",
+    "gap": "syntax-from-name",
+    "note": "nameToLang('RDF/JSON') is null in leana (no RDF/JSON syntax in @factoidal/core), so the read has no Lang."
+  },
+  "read_StringReader_31": {
+    "verdict": "divergence",
+    "spec": "RDF 1.1 N-Triples section 2.3 (IRIs may be written only as absolute IRIs) and grammar rule [8] IRIREF",
+    "note": "Jena reads '<s> <p> <p> .' (relative IRIs); @factoidal/core refuses it."
+  },
+  "read_url_1": {
+    "verdict": "gap",
+    "gap": "syntax-from-name",
+    "note": "Model.read(fileName) with no Lang."
+  },
+  "read_url_1x": {
+    "verdict": "gap",
+    "gap": "syntax-from-name",
+    "note": "Model.read(fileName) with no Lang."
+  },
+  "read_url_2": {
+    "verdict": "gap",
+    "gap": "syntax-from-name",
+    "note": "Model.read(fileName) with no Lang."
+  },
+  "read_url_2x": {
+    "verdict": "gap",
+    "gap": "syntax-from-name",
+    "note": "Model.read(fileName) with no Lang."
+  },
+  "read_url_3": {
+    "verdict": "gap",
+    "gap": "syntax-from-name",
+    "note": "Model.read(fileName) with no Lang."
+  },
+  "read_url_3x": {
+    "verdict": "gap",
+    "gap": "syntax-from-name",
+    "note": "Model.read(fileName) with no Lang."
+  },
+  "read_url_4": {
+    "verdict": "gap",
+    "gap": "syntax-from-name",
+    "note": "Model.read(fileName) with no Lang."
+  },
+  "read_url_4x": {
+    "verdict": "gap",
+    "gap": "syntax-from-name",
+    "note": "Model.read(fileName) with no Lang."
+  }
+}

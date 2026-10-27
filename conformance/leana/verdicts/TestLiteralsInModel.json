@@ -1,0 +1,32 @@
+{
+  "testAddWithBooleanObject": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "addLiteral(Resource, Property, Java boolean)."
+  },
+  "testAddWithCharObject": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "addLiteral(Resource, Property, Java char)."
+  },
+  "testAddWithDoubleObject": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "addLiteral(Resource, Property, Java double)."
+  },
+  "testAddWithFloatObject": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "addLiteral(Resource, Property, Java float)."
+  },
+  "testAddWithIntObject": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "addLiteral(Resource, Property, Java int)."
+  },
+  "testAddWithLongObject": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "addLiteral(Resource, Property, Java long)."
+  }
+}

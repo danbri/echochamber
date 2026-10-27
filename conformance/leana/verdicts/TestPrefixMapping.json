@@ -1,0 +1,4 @@
+{
+  "testStandard": {"verdict": "gap", "gap": "vocabulary", "note": "PrefixMapping.Standard"},
+  "testExtended": {"verdict": "gap", "gap": "vocabulary", "note": "PrefixMapping.Extended"}
+}

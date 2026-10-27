@@ -1,0 +1,92 @@
+{
+  "literalLabel_string_01": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "LiteralLabel.sameValueAs"
+  },
+  "literalLabel_string_02": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "LiteralLabel.sameValueAs"
+  },
+  "literalLabel_string_03": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "LiteralLabel.sameValueAs"
+  },
+  "literalLabel_lang_01": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "LiteralLabel.sameValueAs"
+  },
+  "literalLabel_lang_02": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "LiteralLabel.sameValueAs"
+  },
+  "literalLabel_lang_03": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "LiteralLabel.sameValueAs"
+  },
+  "literalLabel_numeric_01": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "LiteralLabel.sameValueAs"
+  },
+  "literalLabel_numeric_02": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "LiteralLabel.sameValueAs"
+  },
+  "literalLabel_numeric_03": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "LiteralLabel.sameValueAs"
+  },
+  "literalLabel_numeric_04": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "LiteralLabel.sameValueAs"
+  },
+  "literalLabel_numeric_05": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "LiteralLabel.sameValueAs"
+  },
+  "literalLabel_numeric_06": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "LiteralLabel.sameValueAs"
+  },
+  "literalLabel_numeric_10": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "LiteralLabel.sameValueAs"
+  },
+  "literalLabel_unknown_01": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "LiteralLabel.sameValueAs"
+  },
+  "literalLabel_unknown_02": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "LiteralLabel.sameValueAs"
+  },
+  "literalLabel_unknown_03": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "LiteralLabel.sameValueAs"
+  },
+  "literalLabel_bad_01": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "LiteralLabel.sameValueAs"
+  },
+  "literalLabel_bad_03": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "LiteralLabel.sameValueAs"
+  }
+}

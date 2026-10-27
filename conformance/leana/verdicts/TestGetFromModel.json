@@ -1,0 +1,5 @@
+{
+  "testGetAlt": {"verdict": "gap", "gap": "collections", "note": "Model.createAlt / getAlt."},
+  "testGetBag": {"verdict": "gap", "gap": "collections", "note": "Model.createBag / getBag."},
+  "testGetSeq": {"verdict": "gap", "gap": "collections", "note": "Model.createSeq / getSeq."}
+}

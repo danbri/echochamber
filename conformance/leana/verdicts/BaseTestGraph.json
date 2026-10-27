@@ -1,0 +1,142 @@
+{
+  "testContainsConcrete": {
+    "verdict": "divergence",
+    "spec": "RDF 1.1 Concepts section 3.1 (the predicate of a triple is an IRI)",
+    "note": "Jena's in-memory graph stores generalized triples; @factoidal/core refuses a triple with a blank-node predicate (_x _R _y)."
+  },
+  "testContainsNode": {
+    "verdict": "divergence",
+    "spec": "RDF 1.1 Concepts section 3.1 (the predicate of a triple is an IRI)",
+    "note": "The data has _c _Q _d (blank-node predicate) and a 11 12 (literal predicate); @factoidal/core refuses both."
+  },
+  "testMatchLanguagedLiteralCaseInsensitive": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "Node.sameValueAs. The term-equality half (the two nodes are one term) passes."
+  },
+  "testMatchBothLanguagedLiteralsCaseInsensitive": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "Node.sameValueAs. The term-equality half (the two nodes are one term) passes."
+  },
+  "testHasTransactions": {
+    "verdict": "gap",
+    "gap": "echo",
+    "note": "Graph.getTransactionHandler is not in leana."
+  },
+  "testExecuteInTransactionCatchesThrowable": {
+    "verdict": "gap",
+    "gap": "echo",
+    "note": "Graph.getTransactionHandler is not in leana."
+  },
+  "testCalculateInTransactionCatchesThrowable": {
+    "verdict": "gap",
+    "gap": "echo",
+    "note": "Graph.getTransactionHandler is not in leana."
+  },
+  "testAddWithReificationPreamble": {
+    "verdict": "gap",
+    "gap": "vocabulary",
+    "note": "ReifierStd.reifyAs writes rdf:subject/predicate/object/Statement."
+  },
+  "testEventRegister": {
+    "verdict": "gap",
+    "gap": "echo",
+    "note": "Graph.getEventManager (graph listeners) is not in leana."
+  },
+  "testEventUnregister": {
+    "verdict": "gap",
+    "gap": "echo",
+    "note": "Graph.getEventManager (graph listeners) is not in leana."
+  },
+  "testAddTriple": {
+    "verdict": "gap",
+    "gap": "echo",
+    "note": "Graph.getEventManager (graph listeners) is not in leana."
+  },
+  "testDeleteTriple": {
+    "verdict": "gap",
+    "gap": "echo",
+    "note": "Graph.getEventManager (graph listeners) is not in leana."
+  },
+  "testEventDeleteByFind": {
+    "verdict": "gap",
+    "gap": "echo",
+    "note": "Graph.getEventManager (graph listeners) is not in leana."
+  },
+  "testTwoListeners": {
+    "verdict": "gap",
+    "gap": "echo",
+    "note": "Graph.getEventManager (graph listeners) is not in leana."
+  },
+  "testUnregisterWorks": {
+    "verdict": "gap",
+    "gap": "echo",
+    "note": "Graph.getEventManager (graph listeners) is not in leana."
+  },
+  "testRegisterTwice": {
+    "verdict": "gap",
+    "gap": "echo",
+    "note": "Graph.getEventManager (graph listeners) is not in leana."
+  },
+  "testUnregisterOnce": {
+    "verdict": "gap",
+    "gap": "echo",
+    "note": "Graph.getEventManager (graph listeners) is not in leana."
+  },
+  "testBulkAddArrayEvent": {
+    "verdict": "gap",
+    "gap": "echo",
+    "note": "Graph.getEventManager (graph listeners) is not in leana."
+  },
+  "testBulkAddList": {
+    "verdict": "gap",
+    "gap": "echo",
+    "note": "Graph.getEventManager (graph listeners) is not in leana."
+  },
+  "testBulkDeleteArray": {
+    "verdict": "gap",
+    "gap": "echo",
+    "note": "Graph.getEventManager (graph listeners) is not in leana."
+  },
+  "testBulkDeleteList": {
+    "verdict": "gap",
+    "gap": "echo",
+    "note": "Graph.getEventManager (graph listeners) is not in leana."
+  },
+  "testBulkAddIterator": {
+    "verdict": "gap",
+    "gap": "echo",
+    "note": "Graph.getEventManager (graph listeners) is not in leana."
+  },
+  "testBulkDeleteIterator": {
+    "verdict": "gap",
+    "gap": "echo",
+    "note": "Graph.getEventManager (graph listeners) is not in leana."
+  },
+  "testBulkAddGraph": {
+    "verdict": "gap",
+    "gap": "echo",
+    "note": "Graph.getEventManager (graph listeners) is not in leana."
+  },
+  "testBulkDeleteGraph": {
+    "verdict": "gap",
+    "gap": "echo",
+    "note": "Graph.getEventManager (graph listeners) is not in leana."
+  },
+  "testGeneralEvent": {
+    "verdict": "gap",
+    "gap": "echo",
+    "note": "Graph.getEventManager (graph listeners) is not in leana."
+  },
+  "testRemoveAllEvent": {
+    "verdict": "gap",
+    "gap": "echo",
+    "note": "Graph.getEventManager (graph listeners) is not in leana."
+  },
+  "testRemoveSomeEvent": {
+    "verdict": "gap",
+    "gap": "echo",
+    "note": "Graph.getEventManager (graph listeners) is not in leana."
+  }
+}

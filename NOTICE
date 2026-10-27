@@ -10,6 +10,18 @@ derived file says so in its header and names what was changed.
   Software Foundation. This product includes software developed at The
   Apache Software Foundation (https://www.apache.org/). Apache License 2.0.
 
+- conformance/leana: Apache Jena test methods ported to JavaScript
+  (jena-core graph, rdf/model and shared packages; jena-arq riot and
+  sparql/api), at Apache Jena commit
+  a1164c5dc5c9e1a9c58d94766c13d870e0a8ba98. Each file keeps the ASF licence
+  header and says what was changed. Apache License 2.0.
+- conformance/leana/fixtures: data files copied unchanged from Apache Jena
+  (list in conformance/leana/fixtures/NOTICE). One of them,
+  jena-core/wg/rdf-ns-prefix-confusion/test0014.rdf, is a W3C RDF test case
+  (Copyright World Wide Web Consortium; W3C Software and Document License,
+  https://www.w3.org/Consortium/Legal/copyright-software), as Jena
+  distributes it.
+
 - packages/echo02, conformance/echo02, tools/echo02-study, docs/echo02:
   test cases, test data and API descriptions derived from RDFLib
   (https://github.com/RDFLib/rdflib, commit

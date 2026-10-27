@@ -1,0 +1,5 @@
+{
+  "testCreateListFromEmptyIterator": {"verdict": "gap", "gap": "collections"},
+  "testCreateSingletonListFromIterator": {"verdict": "gap", "gap": "collections"},
+  "testCreateListFromIterator": {"verdict": "gap", "gap": "collections"}
+}

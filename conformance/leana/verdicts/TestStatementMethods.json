@@ -1,0 +1,127 @@
+{
+  "testAlt": {
+    "verdict": "gap",
+    "gap": "collections",
+    "note": "Model.createAlt."
+  },
+  "testBag": {
+    "verdict": "gap",
+    "gap": "collections",
+    "note": "Model.createBag."
+  },
+  "testBoolean": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "Model.createLiteralStatement(Resource, Property, Java value) (in loadInitialStatement for the changeObject tests); then value accessors (literal-value)."
+  },
+  "testByte": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "Model.createLiteralStatement(Resource, Property, Java value) (in loadInitialStatement for the changeObject tests); then value accessors (literal-value)."
+  },
+  "testChangeObjectBoolean": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "Model.createLiteralStatement(Resource, Property, Java value) (in loadInitialStatement for the changeObject tests); then value accessors (literal-value)."
+  },
+  "testChangeObjectByte": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "Model.createLiteralStatement(Resource, Property, Java value) (in loadInitialStatement for the changeObject tests); then value accessors (literal-value)."
+  },
+  "testChangeObjectChar": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "Model.createLiteralStatement(Resource, Property, Java value) (in loadInitialStatement for the changeObject tests); then value accessors (literal-value)."
+  },
+  "testChangeObjectDouble": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "Model.createLiteralStatement(Resource, Property, Java value) (in loadInitialStatement for the changeObject tests); then value accessors (literal-value)."
+  },
+  "testChangeObjectFloat": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "Model.createLiteralStatement(Resource, Property, Java value) (in loadInitialStatement for the changeObject tests); then value accessors (literal-value)."
+  },
+  "testChangeObjectInt": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "Model.createLiteralStatement(Resource, Property, Java value) (in loadInitialStatement for the changeObject tests); then value accessors (literal-value)."
+  },
+  "testChangeObjectLiteral": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "Model.createLiteralStatement(Resource, Property, Java value) (in loadInitialStatement for the changeObject tests); then value accessors (literal-value)."
+  },
+  "testChangeObjectLong": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "Model.createLiteralStatement(Resource, Property, Java value) (in loadInitialStatement for the changeObject tests); then value accessors (literal-value)."
+  },
+  "testChangeObjectShort": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "Model.createLiteralStatement(Resource, Property, Java value) (in loadInitialStatement for the changeObject tests); then value accessors (literal-value)."
+  },
+  "testChangeObjectString": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "Model.createLiteralStatement(Resource, Property, Java value) (in loadInitialStatement for the changeObject tests); then value accessors (literal-value)."
+  },
+  "testChangeObjectStringWithLanguage": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "Model.createLiteralStatement(Resource, Property, Java value) (in loadInitialStatement for the changeObject tests); then value accessors (literal-value)."
+  },
+  "testChangeObjectYByte": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "Model.createLiteralStatement(Resource, Property, Java value) (in loadInitialStatement for the changeObject tests); then value accessors (literal-value)."
+  },
+  "testChar": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "Model.createLiteralStatement(Resource, Property, Java value) (in loadInitialStatement for the changeObject tests); then value accessors (literal-value)."
+  },
+  "testDouble": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "Model.createLiteralStatement(Resource, Property, Java value) (in loadInitialStatement for the changeObject tests); then value accessors (literal-value)."
+  },
+  "testFloat": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "Model.createLiteralStatement(Resource, Property, Java value) (in loadInitialStatement for the changeObject tests); then value accessors (literal-value)."
+  },
+  "testGetResourceFailure": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "Model.createLiteralStatement(Resource, Property, Java value) (in loadInitialStatement for the changeObject tests); then value accessors (literal-value)."
+  },
+  "testGetTrueBoolean": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "Model.createLiteralStatement(Resource, Property, Java value) (in loadInitialStatement for the changeObject tests); then value accessors (literal-value)."
+  },
+  "testInt": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "Model.createLiteralStatement(Resource, Property, Java value) (in loadInitialStatement for the changeObject tests); then value accessors (literal-value)."
+  },
+  "testLong": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "Model.createLiteralStatement(Resource, Property, Java value) (in loadInitialStatement for the changeObject tests); then value accessors (literal-value)."
+  },
+  "testSeq": {
+    "verdict": "gap",
+    "gap": "collections",
+    "note": "Model.createSeq."
+  },
+  "testShort": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "Model.createLiteralStatement(Resource, Property, Java value) (in loadInitialStatement for the changeObject tests); then value accessors (literal-value)."
+  }
+}

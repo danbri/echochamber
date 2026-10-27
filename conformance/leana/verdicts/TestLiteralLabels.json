@@ -1,0 +1,37 @@
+{
+  "testHashCode": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "LiteralLabelFactory.createByValue"
+  },
+  "testHashCode2": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "LiteralLabelFactory.createByValue"
+  },
+  "testDatatypeIsEqualsNotCalledIfSecondOperandIsNotTyped": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "LiteralLabelFactory.createByValue; then sameValueAs (value-matching)"
+  },
+  "testEquality1": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "LiteralLabelFactory.createTypedLiteral(Object)"
+  },
+  "testEquality2": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "LiteralLabelFactory.createTypedLiteral(Object)"
+  },
+  "testEquality3": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "LiteralLabel.sameValueAs; equals() half passes"
+  },
+  "testEquality4": {
+    "verdict": "divergence",
+    "spec": "RDF 1.1 Concepts section 3.3 (language tags MAY be converted to lower case); BCP 47 section 2.1.1 (case is a formatting convention)",
+    "note": "Jena keeps \"xyz\"@en-UK and \"xyz\"@en-uk apart as labels; @factoidal/core lowercases the tag, so equals() is true."
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "testCreatePropertyOneArg": {"verdict": "gap", "gap": "iri-split", "note": "Resource.getNameSpace / getLocalName (Jena SplitIRI.splitXML)."},
+  "testCreatePropertyStrangeURI": {"verdict": "gap", "gap": "iri-split", "note": "Resource.getNameSpace / getLocalName."},
+  "testCreatePropertyStrangeURITwoArgs": {"verdict": "gap", "gap": "iri-split", "note": "Resource.getNameSpace / getLocalName."},
+  "testCreatePropertyTwoArgs": {"verdict": "gap", "gap": "iri-split", "note": "Resource.getNameSpace / getLocalName."},
+  "testCreateTypedAnonResource": {"verdict": "gap", "gap": "vocabulary", "note": "Model.createResource(Resource type) adds an rdf:type triple."},
+  "testCreateTypedNamedresource": {"verdict": "gap", "gap": "vocabulary", "note": "Model.createResource(String, Resource type) adds an rdf:type triple."},
+  "testEnhancedResources": {"verdict": "gap", "gap": "js-value-literal", "note": "Resource.addLiteral(p, boolean) first; then containers (gap 'collections')."}
+}

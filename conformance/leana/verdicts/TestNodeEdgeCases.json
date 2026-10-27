@@ -1,0 +1,3 @@
+{
+  "term_create_02": {"verdict": "divergence", "spec": "RDF 1.2 Concepts, section Literals (a literal has the datatype IRI rdf:dirLangString if and only if it has a language tag and a base direction)", "note": "Jena builds \"abc\"^^rdf:dirLangString with no language or direction; @factoidal/core refuses the term (term.invalid). term_create_01 (rdf:langString with no language) passes because the core DataFactory makes a plain string of it."}
+}

@@ -1,0 +1,21 @@
+{
+  "testAllSubjectsCorrect": {"verdict": "gap", "gap": "js-value-literal", "note": "setUp: Resource.addLiteral(p, boolean) and the other Java typed values."},
+  "testBoolean": {"verdict": "gap", "gap": "js-value-literal", "note": "setUp."},
+  "testByte": {"verdict": "gap", "gap": "js-value-literal", "note": "setUp."},
+  "testChar": {"verdict": "gap", "gap": "js-value-literal", "note": "setUp."},
+  "testCorrectSubject": {"verdict": "gap", "gap": "js-value-literal", "note": "setUp."},
+  "testCountsCorrect": {"verdict": "gap", "gap": "js-value-literal", "note": "setUp."},
+  "testDouble": {"verdict": "gap", "gap": "js-value-literal", "note": "setUp."},
+  "testFloat": {"verdict": "gap", "gap": "js-value-literal", "note": "setUp."},
+  "testInt": {"verdict": "gap", "gap": "js-value-literal", "note": "setUp."},
+  "testLiteral": {"verdict": "gap", "gap": "js-value-literal", "note": "setUp."},
+  "testLong": {"verdict": "gap", "gap": "js-value-literal", "note": "setUp."},
+  "testNoSuchPropertyException": {"verdict": "gap", "gap": "js-value-literal", "note": "setUp."},
+  "testNoSuchPropertyNull": {"verdict": "gap", "gap": "js-value-literal", "note": "setUp."},
+  "testObject": {"verdict": "gap", "gap": "js-value-literal", "note": "setUp."},
+  "testRemoveProperties": {"verdict": "gap", "gap": "js-value-literal", "note": "setUp."},
+  "testResource": {"verdict": "gap", "gap": "js-value-literal", "note": "setUp."},
+  "testShort": {"verdict": "gap", "gap": "js-value-literal", "note": "setUp."},
+  "testString": {"verdict": "gap", "gap": "js-value-literal", "note": "setUp."},
+  "testStringWithLanguage": {"verdict": "gap", "gap": "js-value-literal", "note": "setUp."}
+}

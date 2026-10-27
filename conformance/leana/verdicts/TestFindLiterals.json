@@ -1,0 +1,22 @@
+{
+  "test20": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "'1'xsd:integer finds '1'xsd:short only in Jena's same-value graph (GraphMemFactory.createDefaultGraphSameValue)."
+  },
+  "test21": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "'1'xsd:integer finds '1'xsd:int only in Jena's same-value graph."
+  },
+  "testFloatVsDouble": {
+    "verdict": "gap",
+    "gap": "value-matching",
+    "note": "Node.sameValueAs. The equals() half passes."
+  },
+  "testProgrammaticValues": {
+    "verdict": "gap",
+    "gap": "js-value-literal",
+    "note": "LiteralLabelFactory.createTypedLiteral((byte)42) etc.; the test then needs value matching too."
+  }
+}
