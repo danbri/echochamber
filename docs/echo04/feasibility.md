@@ -222,6 +222,18 @@ runs these suites with the others; `npm run test:echo04` runs only these.
 All on `@factoidal/core` 0.16.0 (npm, the latest published on 2026-10-27),
 Node 22.
 
+On `@factoidal/core` 0.17.0 (published 2026-10-27; now the pinned version)
+26 expr defect cases meet RDF4J's expectation and their verdicts were
+removed: 23 from https://github.com/danbri/factoidal/issues/1036 (string
+function argument types and compatibility: 17 `testCompatibleArguments`
+cases, 6 `MD5`/`SHA*` of `"4"^^xsd:integer`) and 3 from
+https://github.com/danbri/factoidal/issues/1042 (`LCASE`/`UCASE` keep the
+base direction; `STRSTARTS` with a different base direction is an error),
+both fixed by the 0.17.0 string-function change (danbri/factoidal-core PR
+126). expr is now 490 cases, 409 meet RDF4J, 63 defects, 18 divergences; the
+total is 2,801 cases, 2,150 meet RDF4J, 351 defects, 300 divergences, 0 gaps.
+No case regressed. `npm test`: 6,464 tests, 6,464 pass.
+
 ### 5.1 Defects: issues filed by this study (danbri/factoidal, label `echo04`)
 
 | Issue | Cases | What |
