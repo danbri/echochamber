@@ -234,6 +234,22 @@ both fixed by the 0.17.0 string-function change (danbri/factoidal-core PR
 total is 2,801 cases, 2,150 meet RDF4J, 351 defects, 300 divergences, 0 gaps.
 No case regressed. `npm test`: 6,464 tests, 6,464 pass.
 
+On `@factoidal/core` 0.18.0 (published 2026-10-27; now the pinned version)
+51 more defect cases meet RDF4J's expectation and their verdicts were
+removed: 44 from https://github.com/danbri/factoidal/issues/1041 (XSD
+constructor casts: 43 expr `Test*Cast` cases, out-of-range, double with a
+fraction, invalid and dateTime to xsd:date; 1 compliance
+`BuiltinFunctionTest#DateCastFunction_invalidInput`), 6 from
+https://github.com/danbri/factoidal/issues/1042 (`CONTAINS` with different
+base directions is an error; `STRBEFORE`/`STRAFTER` keep the base direction;
+3 `testDirectedLanguageLiteralArgumentCompatibilityRequiresSameBaseDirection`
+cases) and 1 from https://github.com/danbri/factoidal/issues/1064 (JSON-LD
+keyword-form key with a base IRI; rio
+`testNoLanguageWithRDFLangStringNoFailCase1#jsonld`). The total is now 2,801
+cases, 2,201 meet RDF4J, 300 defects, 300 divergences, 0 gaps (expr 458 / 14
+defects; compliance 408 / 35; rio 331 / 13). No case regressed. `npm test`:
+6,464 tests, 6,464 pass.
+
 ### 5.1 Defects: issues filed by this study (danbri/factoidal, label `echo04`)
 
 | Issue | Cases | What |

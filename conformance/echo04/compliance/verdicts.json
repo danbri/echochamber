@@ -60,13 +60,6 @@
    "spec": "SPARQL 1.1 Query §17.5 (XPath constructor functions; cast from xsd:string) with XPath F&O §17.1.1: a string cast to xs:date must be in the lexical space of xs:date, else error FORG0001",
    "note": "RDF4J reads the dateTime-shaped string \"2022-09-09T14:45:13+03:00\" as xsd:date \"2022-09-09+03:00\"; per spec the cast is an error and ?date unbound. The engine is also wrong here: it relabels, giving the ill-typed \"2022-09-09T14:45:13+03:00\"^^xsd:date (https://github.com/danbri/factoidal/issues/1041). After 1041 is fixed this stays a divergence."
   },
-  "BuiltinFunctionTest#DateCastFunction_invalidInput": {
-   "verdict": "defect",
-   "group": "xsd-cast-relabel",
-   "issue": "https://github.com/danbri/factoidal/issues/1041",
-   "spec": "SPARQL 1.1 Query §17.5; XPath F&O §17.1.1 (cast from xs:string, error FORG0001 when not in the lexical space)",
-   "note": "xsd:date(\"2022-09-xx\") gives the ill-typed \"2022-09-xx\"^^xsd:date; must be an error (?date unbound)."
-  },
   "BuiltinFunctionTest#RegexCaseNonAscii": {
    "verdict": "defect",
    "group": "regex-i-unicode",

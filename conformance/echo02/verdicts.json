@@ -1,5 +1,5 @@
 {
- "factoidalCore": "0.17.0",
+ "factoidalCore": "0.18.0",
  "rdflibCommit": "58c3700e5e21b5b833d0e31072f930c665059db2",
  "cases": {
   "roundtrip/nt/anons-01.nt/n3": {

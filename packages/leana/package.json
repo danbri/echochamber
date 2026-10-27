@@ -15,10 +15,10 @@
   },
   "files": ["src", "GAPS.md", "README.md", "NOTICE"],
   "peerDependencies": {
-    "@factoidal/core": ">=0.17.0"
+    "@factoidal/core": ">=0.18.0"
   },
   "devDependencies": {
-    "@factoidal/core": "0.17.0"
+    "@factoidal/core": "0.18.0"
   },
   "engines": { "node": ">=22" }
 }

@@ -35,4 +35,4 @@ for (const [id, { outcome }] of Object.entries(o)) {
   v.outcome = outcome;
   cases[id] = v;
 }
-console.log(JSON.stringify({ factoidalCore: '0.17.0', rdflibCommit: '58c3700e5e21b5b833d0e31072f930c665059db2', cases }, null, 1));
+console.log(JSON.stringify({ factoidalCore: '0.18.0', rdflibCommit: '58c3700e5e21b5b833d0e31072f930c665059db2', cases }, null, 1));

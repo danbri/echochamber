@@ -1,6 +1,6 @@
 {
  "_about": "Verdicts for sparql/cases.json (echochamber CLAUDE.md rule 2). A case listed here must NOT meet the RDF4J expectation; when it does, the suite fails and the verdict must be revised. Original to echochamber, Apache-2.0.",
- "coreVersion": "0.17.0",
+ "coreVersion": "0.18.0",
  "cases": {
   "testcases-sparql-1.1/bindings#sparql11-bindings-01": {"verdict": "divergence", "group": "bindings-keyword", "spec": "SPARQL 1.1 Query §19.8 [7] ValuesClause (REC keyword VALUES; BINDINGS is the working-draft keyword used until 2012)", "note": "RDF4J's parser still accepts BINDINGS; Factoidal answers query.syntax."},
   "testcases-sparql-1.1/bindings#sparql11-bindings-02": {"verdict": "divergence", "group": "bindings-keyword", "spec": "SPARQL 1.1 Query §19.8 [7] ValuesClause"},

@@ -1,6 +1,6 @@
 {
  "about": "Verdicts for the N3.js-style echo (CLAUDE.md rule 2). Key: case id. verdict: defect (issue), divergence (spec), gap (gap: entry in docs/echo03/feasibility.md section 7).",
- "core": "0.17.0",
+ "core": "0.18.0",
  "cases": {
   "n3js-parser > Parser > A Parser instance > should callback comments when a comment callback is set": {
    "verdict": "gap",
