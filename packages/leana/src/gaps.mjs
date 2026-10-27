@@ -38,6 +38,10 @@ export const GAPS = Object.freeze({
     summary: 'isomorphism of graphs with blank nodes and RDF 1.2 triple terms (RDFC-1.0 has no rule for triple terms)',
     issue: 'https://github.com/danbri/factoidal/issues/957',
   },
+  'syntaxes': {
+    summary: 'RDF syntaxes the engine does not read or write (RDF/JSON, TriX, SHACLC, binary RDF), blank node labels as given, and a writer base IRI need engine ops',
+    issue: 'https://github.com/danbri/factoidal/issues/1088',
+  },
   'inference': {
     summary: 'the Jena rule language and a synchronous (live) inference graph need engine ops',
     issue: 'https://github.com/danbri/factoidal/issues/1087',

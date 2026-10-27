@@ -19,90 +19,25 @@
     "gap": "syntax-from-name",
     "note": "Model.read(url) with no Lang: syntax from the file suffix."
   },
-  "read_06": {
-    "verdict": "gap",
-    "gap": "syntax-from-name",
-    "note": "Model.read(url) with no Lang: syntax from the file suffix."
-  },
   "read_05": {
     "verdict": "gap",
     "gap": "syntax-from-name",
     "note": "Model.read(url) with no Lang. The file is RDF/JSON, which @factoidal/core does not read either."
   },
-  "read_11": {
+  "read_06": {
     "verdict": "gap",
-    "gap": "echo",
-    "note": "The RDFDataMgr.read part passes; RDFReaderFactoryRIOT (Jena 2 RDFReaderI adapters) is not in leana."
-  },
-  "read_12": {
-    "verdict": "gap",
-    "gap": "echo",
-    "note": "The RDFDataMgr.read part passes; RDFReaderFactoryRIOT (Jena 2 RDFReaderI adapters) is not in leana."
-  },
-  "read_13": {
-    "verdict": "gap",
-    "gap": "echo",
-    "note": "The RDFDataMgr.read part passes; RDFReaderFactoryRIOT (Jena 2 RDFReaderI adapters) is not in leana."
-  },
-  "read_14": {
-    "verdict": "gap",
-    "gap": "echo",
-    "note": "The RDFDataMgr.read part passes; RDFReaderFactoryRIOT (Jena 2 RDFReaderI adapters) is not in leana."
-  },
-  "read_16": {
-    "verdict": "gap",
-    "gap": "echo",
-    "note": "The RDFDataMgr.read part passes; RDFReaderFactoryRIOT (Jena 2 RDFReaderI adapters) is not in leana."
-  },
-  "read_21a": {
-    "verdict": "gap",
-    "gap": "echo",
-    "note": "The RDFDataMgr.read part passes; RDFReaderFactoryRIOT (Jena 2 RDFReaderI adapters) is not in leana."
-  },
-  "read_21b": {
-    "verdict": "gap",
-    "gap": "echo",
-    "note": "The RDFDataMgr.read part passes; RDFReaderFactoryRIOT (Jena 2 RDFReaderI adapters) is not in leana."
-  },
-  "read_21c": {
-    "verdict": "gap",
-    "gap": "echo",
-    "note": "The RDFDataMgr.read part passes; RDFReaderFactoryRIOT (Jena 2 RDFReaderI adapters) is not in leana."
-  },
-  "read_21d": {
-    "verdict": "gap",
-    "gap": "echo",
-    "note": "The RDFDataMgr.read part passes; RDFReaderFactoryRIOT (Jena 2 RDFReaderI adapters) is not in leana."
-  },
-  "read_22a": {
-    "verdict": "gap",
-    "gap": "echo",
-    "note": "The RDFDataMgr.read part passes; RDFReaderFactoryRIOT (Jena 2 RDFReaderI adapters) is not in leana."
-  },
-  "read_22b": {
-    "verdict": "gap",
-    "gap": "echo",
-    "note": "The RDFDataMgr.read part passes; RDFReaderFactoryRIOT (Jena 2 RDFReaderI adapters) is not in leana."
-  },
-  "read_23a": {
-    "verdict": "gap",
-    "gap": "echo",
-    "note": "The RDFDataMgr.read part passes; RDFReaderFactoryRIOT (Jena 2 RDFReaderI adapters) is not in leana."
-  },
-  "read_23b": {
-    "verdict": "gap",
-    "gap": "echo",
-    "note": "The RDFDataMgr.read part passes; RDFReaderFactoryRIOT (Jena 2 RDFReaderI adapters) is not in leana."
+    "gap": "syntax-from-name",
+    "note": "Model.read(url) with no Lang: syntax from the file suffix."
   },
   "read_15": {
     "verdict": "gap",
-    "gap": "syntax-from-name",
-    "note": "nameToLang('RDF/JSON') is null in leana (no RDF/JSON syntax in @factoidal/core), so the read has no Lang."
+    "gap": "syntaxes",
+    "note": "RIOT read of a syntax the engine does not read (RDF/JSON, TriX, RDF Thrift, RDF Protobuf, SHACLC, CSV)."
   },
   "read_24": {
     "verdict": "gap",
-    "gap": "syntax-from-name",
-    "note": "nameToLang('RDF/JSON') is null in leana (no RDF/JSON syntax in @factoidal/core), so the read has no Lang."
+    "gap": "syntaxes",
+    "note": "RIOT read of a syntax the engine does not read (RDF/JSON, TriX, RDF Thrift, RDF Protobuf, SHACLC, CSV)."
   },
   "read_StringReader_31": {
     "verdict": "divergence",

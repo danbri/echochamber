@@ -1,4 +1,13 @@
 {
-  "testReadPrefixes": {"verdict": "gap", "gap": "syntax-from-name", "note": "Model.read(url) with no lang: Jena picks RDF/XML from '.rdf'. Even with a lang, @factoidal/core 0.16.0 parse() reports no prefixes for RDF/XML (Dataset.prefixes is {} for xmlns declarations)."},
-  "testWritePrefixes": {"verdict": "gap", "gap": "echo", "noThrow": true, "note": "Not a semantic gap: @factoidal/core 0.16.0 writes RDF/XML with its own ns1:, ns2: prefixes (WriteOptions.prefixes is Turtle-only) and its RDF/XML reader reports no xmlns prefixes, so 'spoo' and 'fred' do not survive. Namespace prefixes are not part of the RDF abstract syntax (RDF 1.1 Concepts section 1.4 / 3), so no spec is broken; needs a core option (writer prefixes for rdfxml, reader prefixes from xmlns)."}
+  "testReadPrefixes": {
+    "verdict": "gap",
+    "gap": "syntax-from-name",
+    "note": "Model.read(url) with no lang: Jena picks RDF/XML from '.rdf'. Even with a lang, @factoidal/core 0.16.0 parse() reports no prefixes for RDF/XML (Dataset.prefixes is {} for xmlns declarations)."
+  },
+  "testWritePrefixes": {
+    "verdict": "gap",
+    "gap": "syntaxes",
+    "noThrow": true,
+    "note": "@factoidal/core 0.18.0 writes RDF/XML with its own ns1:, ns2: prefixes (WriteOptions.prefixes is Turtle-only) and its RDF/XML reader reports no xmlns prefixes (Dataset.prefixes is {}), so 'spoo' and 'fred' do not survive. Prefixes are not part of the RDF abstract syntax (RDF 1.1 Concepts section 3), so no specification is broken; danbri/factoidal#1088 item 4 asks for the options."
+  }
 }

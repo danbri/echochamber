@@ -173,6 +173,18 @@ Issue: https://github.com/danbri/factoidal/issues/957
 
 - `Graph.isIsomorphicWith (blank nodes and triple terms)`
 
+## syntaxes: RIOT syntaxes and parser/writer options
+
+Issue: https://github.com/danbri/factoidal/issues/1088
+
+`@factoidal/core` reads and writes N-Triples, N-Quads, Turtle, TriG, RDF/XML and JSON-LD (`formats()`). `Lang.RDFJSON`, `TRIX`, `RDFTHRIFT`, `RDFPROTO`, `SHACLC`, `CSV` and `TSV` exist as names (`nameToLang` finds them); reading or writing them is this gap. `Lang.N3` reads with the Turtle reader, as in Jena. Blank node labels as given and relative IRIs on output need parse and write options.
+
+- `LabelToNode.createUseLabelAsGiven`
+- `Model.write(out, lang, base)`
+- `RDFWriter.base`
+- `RIOT read of a syntax the engine does not read (RDF/JSON, TriX, RDF Thrift, RDF Protobuf, SHACLC, CSV)`
+- `RIOT write of a syntax the engine does not write (RDF/JSON, TriX, RDF Thrift, RDF Protobuf, SHACLC, CSV)`
+
 ## inference: Jena rules and a live inference graph
 
 Issue: https://github.com/danbri/factoidal/issues/1087

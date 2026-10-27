@@ -17,7 +17,7 @@
 // urn:x-arq:UnionGraph) are API names for the default graph and the union of
 // the named graphs; the engine never sees them.
 
-import { dataFactory as df, fromQuads } from '@factoidal/core';
+import { dataFactory as df } from '@factoidal/core';
 import { Node, NodeFactory, Triple, fromRDFJS } from './node.mjs';
 import {
   GraphMem, ExtendedIterator, JenaSet, Capabilities, TransactionHandlerBase, patternTerm, nodeMatches, DEFAULT_GRAPH,
@@ -353,7 +353,16 @@ class DatasetGraphBase {
   }
 
   /** A core Dataset with this dataset's quads (for query and update); `temp` when it is a copy. */
-  async _coreDataset() { throw new JenaException('abstract'); }
+  async _coreDataset() { return this._coreDatasetSync(); }
+  /** The same, synchronously (a copy is built with Dataset.add, which is synchronous). */
+  _coreDatasetSync() {
+    const ds = newDataset();
+    for (const q of this.find().toList()) {
+      const g = q.isDefaultGraph() ? DEFAULT_GRAPH : q.getGraph().toRDFJS();
+      ds.add(df.quad(q.getSubject().toRDFJS(), q.getPredicate().toRDFJS(), q.getObject().toRDFJS(), g));
+    }
+    return { ds, temp: true };
+  }
 
   toString() {
     const lines = [];
@@ -419,6 +428,7 @@ export class DatasetGraphInMemory extends DatasetGraphBase {
   _dropSnapshot(s) { if (s && s !== this._ds) s.dispose(); }
   _restore(s) { const cur = this._ds; this._ds = s; if (cur !== s) cur.dispose(); }
   async _coreDataset() { return { ds: this._ds, temp: false }; }
+  _coreDatasetSync() { return { ds: this._ds, temp: false }; }
   /** After an update on the core Dataset (in place): nothing to copy back. */
   _afterUpdate() {}
 }
@@ -488,14 +498,6 @@ export class DatasetGraphMapLink extends DatasetGraphBase {
     this._dft = s.dft[0];
     refill(this._dft, s.dft[1]);
     this._graphs = new Map(s.graphs.map(([k, n, g, c]) => { refill(g, c); return [k, [n, g]]; }));
-  }
-  async _coreDataset() {
-    const quads = [];
-    for (const t of this._dft.find().toList()) quads.push(df.quad(t.getSubject().toRDFJS(), t.getPredicate().toRDFJS(), t.getObject().toRDFJS(), DEFAULT_GRAPH));
-    for (const [gn, g] of this._graphs.values()) {
-      for (const t of g.find().toList()) quads.push(df.quad(t.getSubject().toRDFJS(), t.getPredicate().toRDFJS(), t.getObject().toRDFJS(), gn.toRDFJS()));
-    }
-    return { ds: await fromQuads(quads), temp: true };
   }
   /** After an update on a copy: write the copy's graphs back into the linked graphs. */
   _afterUpdate(ds) {
