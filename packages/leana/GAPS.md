@@ -42,6 +42,7 @@ Jena picks the datatype from the Java class (`99` xsd:int, `99L` xsd:long, `14.0
 - `Model.listLiteralStatements(Resource, Property, value)`
 - `new XSDDateTime(Calendar)`
 - `NodeFactory.createLiteralByValue`
+- `NodeValue.asNode of a value made from a JavaScript value`
 - `RDFDatatype.getJavaClass`
 - `RDFDatatype.isValidValue`
 - `Resource.addLiteral(Property, value)`
@@ -133,10 +134,16 @@ leana holds no rdf:, rdfs:, xsd:, owl: IRIs (the ported tests hold Jena's `Stand
 - `Model.listReifiedStatements`
 - `Model.removeAllReifications`
 - `Model.removeReification`
+- `new XSDDouble(name, Class)`
+- `OWL.<term>`
+- `OWL2.<term>`
 - `PrefixMapping.Extended`
 - `PrefixMapping.Standard`
 - `Property.getOrdinal`
+- `RDF.<term>`
 - `ReifierStd.allNodes`
+- `ReifierStd.findEither`
+- `ReifierStd.findExposed`
 - `ReifierStd.getTriple`
 - `ReifierStd.hasTriple`
 - `ReifierStd.reifyAs`
@@ -160,6 +167,10 @@ Issue: https://github.com/danbri/factoidal/issues/1051 (item 6)
 - `Model.getBag`
 - `Model.getList`
 - `Model.getSeq`
+- `new Container`
+- `new RDFList`
+- `RDFNode.as(RDFList | Container | Seq | Bag | Alt)`
+- `RDFNode.canAs(RDFList | Container | Seq | Bag | Alt)`
 - `Statement.getAlt`
 - `Statement.getBag`
 - `Statement.getList`

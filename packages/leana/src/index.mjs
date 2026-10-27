@@ -63,3 +63,9 @@ export {
 } from './errors.mjs';
 export { GAPS } from './gaps.mjs';
 export { coreVersion } from './engine.mjs';
+export { NiceIterator } from './graph.mjs';
+export {
+  Container, Seq, Bag, Alt, RDFList, SeqIndexBoundsException, ListIndexException, AlreadyReifiedException,
+  CannotReifyException, NTripleReader, RDF, OWL, OWL2,
+} from './model.mjs';
+export { XSDDouble } from './node.mjs';

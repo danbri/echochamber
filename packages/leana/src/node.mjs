@@ -288,8 +288,11 @@ export function datatypeFor(uri) {
 
 /** A datatype named by IRI. Only the IRI: the datatype's semantics are the engine's. */
 export class BaseDatatype {
-  constructor(uri) { this._uri = String(uri); Object.freeze(this); }
+  /** Jena allows a null IRI (BaseDatatype(null)): equal to another null-IRI datatype. */
+  constructor(uri) { this._uri = uri === null || uri === undefined ? null : String(uri); Object.freeze(this); }
   getURI() { return this._uri; }
+  /** Jena: the hash code of the IRI (Objects.hashCode); leana's hash codes are keys, so the IRI ('' for null). */
+  hashCode() { return this._uri ?? ''; }
   isValid(lex) { return unsupported('RDFDatatype.isValid', 'literal-value'); }
   parse(lex) { return unsupported('RDFDatatype.parse', 'literal-value'); }
   unparse(v) { return unsupported('RDFDatatype.unparse', 'literal-value'); }
@@ -363,6 +366,11 @@ export const NodeFactory = Object.freeze({
    */
   createLiteral(lex, langOrDt, dir, dtype) {
     if (lex instanceof LiteralLabel) return new Node_Literal(lex._term);
+    // Jena createLiteral(lex, lang, RDFDatatype): the three-argument form with a datatype.
+    if (arguments.length === 3 && dir instanceof BaseDatatype) {
+      if (langOrDt) return NodeFactory.createLiteralLang(lex, langOrDt);
+      return NodeFactory.createLiteralDT(lex, dir);
+    }
     if (arguments.length >= 3) {
       if (langOrDt) return NodeFactory.createLiteralDirLang(lex, langOrDt, dir);
       if (dtype !== undefined && dtype !== null) return NodeFactory.createLiteralDT(lex, dtype);
@@ -525,4 +533,12 @@ export const JenaParameters = Object.freeze(Object.defineProperties({}, Object.f
 /** Jena XSDDateTime (a value of the XSD date/time types): made from a Calendar/Date value. */
 export class XSDDateTime {
   constructor() { unsupported('new XSDDateTime(Calendar)', 'js-value-literal'); }
+}
+
+/**
+ * Jena XSDDouble (and the other XSDDatatype subclasses): a datatype object for an
+ * XSD local name. The xsd: namespace and the datatype's value space are the engine's.
+ */
+export class XSDDouble extends BaseDatatype {
+  constructor() { unsupported('new XSDDouble(name, Class)', 'vocabulary'); super(null); }
 }

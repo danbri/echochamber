@@ -1,0 +1,32 @@
+{
+  "testCreateAnonAlt": {
+    "verdict": "gap",
+    "gap": "collections",
+    "note": "Model.createAlt."
+  },
+  "testCreateAnonBag": {
+    "verdict": "gap",
+    "gap": "collections",
+    "note": "Model.createBag."
+  },
+  "testCreateAnonSeq": {
+    "verdict": "gap",
+    "gap": "collections",
+    "note": "Model.createSeq."
+  },
+  "testCreateNamedAlt": {
+    "verdict": "gap",
+    "gap": "collections",
+    "note": "Model.createAlt."
+  },
+  "testCreateNamedBag": {
+    "verdict": "gap",
+    "gap": "collections",
+    "note": "Model.createBag."
+  },
+  "testCreateNamedSeq": {
+    "verdict": "gap",
+    "gap": "collections",
+    "note": "Model.createSeq."
+  }
+}

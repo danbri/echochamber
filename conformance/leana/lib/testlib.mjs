@@ -299,3 +299,86 @@ export class RecordingGraphListener extends AbstractRecordingListener {
 }
 /** Arrays.asList(...): a Java List. */
 export const asList = (xs) => ArrayList.from(xs);
+
+// --- Helpers for the compose, events and iterator ports (fork leana2-compose).
+// Derived from Apache Jena (Apache License 2.0) at commit
+// a1164c5dc5c9e1a9c58d94766c13d870e0a8ba98:
+//   jena-core/src/test/java/org/apache/jena/rdf/model/RecordingModelListener.java
+//   jena-core/src/test/java/org/apache/jena/rdf/model/helpers/ModelCreators.java
+//   jena-core/src/test/java/org/apache/jena/util/iterator/LoggingClosableIterator.java
+//   jena-core/src/test/java/org/apache/jena/test/JenaTestLib.java (listOfStrings, iteratorOfStrings)
+//   jena-core/src/main/java/org/apache/jena/graph/Graph.java (Graph.emptyGraph)
+// Changed for echochamber: translated to JavaScript over @factoidal/leana; the
+// ModelChangedListener overloads of addedStatements/removedStatements are one
+// method that looks at its argument (a JS Array is Statement[], an ArrayList a
+// List, a Model a Model, anything else a StmtIterator).
+import {
+  GraphBase as LeanaGraphBase, ExtendedIterator as LeanaExtendedIterator, WrappedIterator as LeanaWrappedIterator,
+  GraphMemFactory as LeanaGraphMemFactory, Union as LeanaUnion, Intersection as LeanaIntersection,
+  Difference as LeanaDifference,
+} from '@factoidal/leana';
+
+/** Jena RecordingModelListener: a ModelChangedListener that records its events as [tag, value...]. */
+export class RecordingModelListener extends AbstractRecordingListener {
+  _bulk(kind, x) {
+    if (x instanceof Model) this.record(kind + 'Model', x);
+    else if (x instanceof ArrayList) this.record(kind + 'List', x);
+    else if (Array.isArray(x)) this.record(kind + '[]', ArrayList.from(x));
+    else this.record(kind + 'Iterator', ArrayList.from(x.toList()));
+  }
+  addedStatement(s) { this.record('add', s); }
+  addedStatements(x) { this._bulk('add', x); }
+  removedStatement(s) { this.record('remove', s); }
+  removedStatements(x) { this._bulk('remove', x); }
+  notifyEvent(m, event) { this.record('someEvent', m, event); }
+  clear() { this.history.length = 0; }
+}
+RecordingModelListener.checkEquality = checkEquality;
+
+/** Jena ModelCreators.creators(): plain, Intersection, Difference, Union. createGraphMemForModel is a same-term GraphMem in leana. */
+const memForModel = () => LeanaGraphMemFactory.createGraphMem();
+export const modelCreators = Object.freeze([
+  ['plain', () => ModelFactory.createDefaultModel()],
+  ['Intersection', () => ModelFactory.createModelForGraph(new LeanaIntersection(memForModel(), memForModel()))],
+  ['Difference', () => ModelFactory.createModelForGraph(new LeanaDifference(memForModel(), memForModel()))],
+  ['Union', () => ModelFactory.createModelForGraph(new LeanaUnion(memForModel(), memForModel()))],
+]);
+
+/** JenaTestLib.listOfStrings: the whitespace-separated words, as a Java List. */
+export const listOfStrings = (s) => ArrayList.from(s.split(/\s+/).filter(Boolean));
+
+/**
+ * A java.util.Iterator over a Java List (an Array) or a Set (a JenaSet): remove()
+ * deletes the last element returned from the collection.
+ */
+export function javaIterator(coll) {
+  const items = [...coll];
+  let i = 0, last, has = false;
+  return {
+    hasNext() { return i < items.length; },
+    next() { if (i >= items.length) throw new Error('NoSuchElementException'); last = items[i++]; has = true; return last; },
+    remove() {
+      if (!has) throw new Error('IllegalStateException');
+      has = false;
+      if (Array.isArray(coll)) coll.splice(coll.indexOf(last), 1);
+      else coll.remove(last);
+    },
+  };
+}
+
+/** JenaTestLib.iteratorOfStrings: WrappedIterator.create(listOfStrings(s).iterator()). */
+export const iteratorOfStrings = (s) => LeanaWrappedIterator.create(javaIterator(listOfStrings(s)));
+
+/** Jena LoggingClosableIterator: a WrappedIterator that records whether it was closed. */
+export class LoggingClosableIterator extends LeanaWrappedIterator {
+  constructor(base) { super(base); this._wasClosed = false; }
+  close() { this._wasClosed = true; super.close(); }
+  isClosed() { return this._wasClosed; }
+}
+
+/** Jena Graph.emptyGraph: a GraphBase with no triples (add is denied). */
+export const Graph = Object.freeze({
+  emptyGraph: new (class EmptyGraph extends LeanaGraphBase {
+    graphBaseFind() { return LeanaExtendedIterator.empty(); }
+  })(),
+});

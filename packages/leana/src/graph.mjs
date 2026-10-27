@@ -91,10 +91,8 @@ export class ExtendedIterator {
   mapWith(fn) { return new ExtendedIterator(this.toList().map(fn)); }
   filterKeep(pred) { return new ExtendedIterator(this.toList().filter(pred), this._remover); }
   filterDrop(pred) { return new ExtendedIterator(this.toList().filter((x) => !pred(x)), this._remover); }
-  andThen(other) {
-    const rest = other instanceof ExtendedIterator ? other.toList() : [...other];
-    return new ExtendedIterator(this.toList().concat(rest));
-  }
+  /** Jena NiceIterator.andThen: this, then `other` (lazy; remove() and close() reach the component iterators). */
+  andThen(other) { return new AndThenIterator(this, other); }
   [Symbol.iterator]() { return { next: () => (this.hasNext() ? { value: this.next(), done: false } : { value: undefined, done: true }) }; }
 }
 
@@ -438,10 +436,81 @@ export const GraphUtil = Object.freeze({
   },
 });
 
-/** Jena WrappedIterator.create: an ExtendedIterator over a JavaScript iterable or iterator. */
-export const WrappedIterator = Object.freeze({
-  create(it) { return new ExtendedIterator(it instanceof ExtendedIterator ? it.toList() : [...{ [Symbol.iterator]: () => (typeof it.next === 'function' && !it[Symbol.iterator] ? it : it[Symbol.iterator]()) }]); },
-});
+/** A Java-style iterator (hasNext/next[/remove/close]) over a Java-style iterator, a JS iterator or an iterable. */
+function javaStyle(it) {
+  if (it && typeof it.hasNext === 'function') return it;
+  const js = it && typeof it[Symbol.iterator] === 'function' ? it[Symbol.iterator]() : it;
+  let ahead = null;
+  return {
+    hasNext() { if (ahead === null) ahead = js.next(); return !ahead.done; },
+    next() {
+      if (!this.hasNext()) throw new NoSuchElementException('iterator exhausted');
+      const v = ahead.value; ahead = null; return v;
+    },
+    close() { if (typeof js.return === 'function') js.return(); },
+  };
+}
+
+/**
+ * Jena WrappedIterator: an ExtendedIterator over a base iterator (Java-style
+ * hasNext/next, a JavaScript iterator or an iterable). remove() and close()
+ * go to the base when it has them; createNoRemove denies remove().
+ */
+export class WrappedIterator extends ExtendedIterator {
+  constructor(base, removeDenied = false) {
+    super([]);
+    this._base = javaStyle(base);
+    this._removeDenied = removeDenied;
+  }
+  /** WrappedIterator.create(it): `it` itself when it is already an ExtendedIterator. */
+  static create(it) { return it instanceof ExtendedIterator ? it : new WrappedIterator(it, false); }
+  static createNoRemove(it) { return new WrappedIterator(it, true); }
+  hasNext() { return this._base.hasNext(); }
+  next() { return this._base.next(); }
+  remove() {
+    if (this._removeDenied || typeof this._base.remove !== 'function') throw new UnsupportedOperationException('remove() not supported by this iterator');
+    this._base.remove();
+  }
+  close() { if (typeof this._base.close === 'function') this._base.close(); }
+}
+
+/** Jena NiceIterator.andThen(a, b): a concatenation; andThen on it appends (and answers itself). */
+class AndThenIterator extends ExtendedIterator {
+  constructor(a, b) {
+    super([]);
+    this._current = javaStyle(a);
+    this._pending = [b];
+    this._index = 0;
+    this._removeFrom = null;
+  }
+  hasNext() {
+    if (this._current.hasNext()) return true;
+    while (this._index < this._pending.length) {
+      this._current = javaStyle(this._pending[this._index]);
+      this._pending[this._index++] = null;
+      if (this._current.hasNext()) return true;
+    }
+    return false;
+  }
+  next() {
+    if (!this.hasNext()) throw new NoSuchElementException('concatenation');
+    this._removeFrom = this._current;
+    return this._current.next();
+  }
+  remove() {
+    if (this._removeFrom === null) throw new JenaException('no calls to next() since last call to remove()');
+    if (typeof this._removeFrom.remove !== 'function') throw new UnsupportedOperationException('remove() not supported by this iterator');
+    this._removeFrom.remove();
+    this._removeFrom = null;
+  }
+  close() {
+    const shut = (it) => { if (it && typeof it.close === 'function') it.close(); };
+    shut(this._current);
+    for (let i = this._index; i < this._pending.length; i++) shut(this._pending[i]);
+    this._removeFrom = null;
+  }
+  andThen(other) { this._pending.push(other); return this; }
+}
 
 /**
  * Jena GraphBase: a Graph whose subclass gives graphBaseFind(Triple) and,
@@ -522,6 +591,8 @@ export const ReifierStd = Object.freeze({
   hasTriple() { return unsupported('ReifierStd.hasTriple', 'vocabulary'); },
   allNodes() { return unsupported('ReifierStd.allNodes', 'vocabulary'); },
   remove() { return unsupported('ReifierStd.remove', 'vocabulary'); },
+  findExposed() { return unsupported('ReifierStd.findExposed', 'vocabulary'); },
+  findEither() { return unsupported('ReifierStd.findEither', 'vocabulary'); },
 });
 
 function eventsOf(g) {
@@ -560,3 +631,5 @@ function distinct(nodes) {
 }
 
 export { tripleOf, quadOf, DEFAULT_GRAPH, asGraphMem, patternTerm, nodeMatches, hasBlank, CAPS_MEM };
+/** Jena NiceIterator: the base class of leana's iterators (ExtendedIterator is the class itself here). */
+export { ExtendedIterator as NiceIterator };

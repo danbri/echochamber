@@ -1,0 +1,97 @@
+{
+  "testContainerOfIntegers": {
+    "verdict": "gap",
+    "gap": "collections",
+    "note": "Model.createBag."
+  },
+  "testContainerOfIntegersRemovingA": {
+    "verdict": "gap",
+    "gap": "collections",
+    "note": "Model.createBag."
+  },
+  "testContainerOfIntegersRemovingB": {
+    "verdict": "gap",
+    "gap": "collections",
+    "note": "Model.createBag."
+  },
+  "testContainerOfIntegersRemovingC": {
+    "verdict": "gap",
+    "gap": "collections",
+    "note": "Model.createBag."
+  },
+  "testEmptyContainer": {
+    "verdict": "gap",
+    "gap": "collections",
+    "note": "Model.createBag."
+  },
+  "testFillingContainer": {
+    "verdict": "gap",
+    "gap": "collections",
+    "note": "Model.createBag."
+  },
+  "testMoreIndexing": {
+    "verdict": "gap",
+    "gap": "collections",
+    "note": "Model.createBag."
+  },
+  "testRemoveA": {
+    "verdict": "gap",
+    "gap": "collections",
+    "note": "Model.createBag."
+  },
+  "testRemoveB": {
+    "verdict": "gap",
+    "gap": "collections",
+    "note": "Model.createBag."
+  },
+  "testRemoveC": {
+    "verdict": "gap",
+    "gap": "collections",
+    "note": "Model.createBag."
+  },
+  "testSeq4": {
+    "verdict": "gap",
+    "gap": "collections",
+    "note": "Model.createBag."
+  },
+  "testSeq5": {
+    "verdict": "gap",
+    "gap": "collections",
+    "note": "Model.createBag."
+  },
+  "testSeq6": {
+    "verdict": "gap",
+    "gap": "collections",
+    "note": "Model.createBag."
+  },
+  "testSeq7": {
+    "verdict": "gap",
+    "gap": "collections",
+    "note": "Model.createBag."
+  },
+  "testSeqAccessByIndexing": {
+    "verdict": "gap",
+    "gap": "collections",
+    "note": "Model.createBag."
+  },
+  "testSeqAdd": {
+    "verdict": "gap",
+    "gap": "collections",
+    "note": "Model.createBag."
+  },
+  "testSeqAddInts": {
+    "verdict": "gap",
+    "gap": "collections",
+    "note": "Model.createBag."
+  },
+  "testSeqInsertByIndexing": {
+    "verdict": "gap",
+    "gap": "collections",
+    "note": "Model.createBag."
+  },
+  "testSet": {
+    "verdict": "gap",
+    "gap": "collections",
+    "note": "Model.createBag."
+  }
+}

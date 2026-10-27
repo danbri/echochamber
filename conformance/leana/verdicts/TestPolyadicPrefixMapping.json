@@ -1,0 +1,8 @@
+{
+  "testCheckNames": {"verdict": "gap", "gap": "iri-split", "noThrow": true, "note": "no exception: leana does not check prefix legality (Jena: XML 1.1 NCName, IllegalPrefixException)."},
+  "testEasyQName": {"verdict": "gap", "gap": "iri-split", "note": "PrefixMapping.qnameFor"},
+  "testNoQNameNoPrefix": {"verdict": "gap", "gap": "iri-split", "note": "PrefixMapping.qnameFor"},
+  "testNoQNameBadLocal": {"verdict": "gap", "gap": "iri-split", "note": "PrefixMapping.qnameFor"},
+  "testQnameFromEmail": {"verdict": "gap", "gap": "iri-split", "note": "PrefixMapping.qnameFor"},
+  "testQNameComponents": {"verdict": "gap", "gap": "iri-split", "note": "PrefixMapping.qnameFor (of the base mapping, then of each sub-graph's)"}
+}

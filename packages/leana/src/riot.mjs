@@ -537,7 +537,8 @@ export function installModelIO() {
       }
       return this;
     }
-    await RDFDataMgr.read(this, input, base ?? null, lang === undefined ? undefined : langOf(lang));
+    // Jena Model.read(InputStream | Reader, base): no lang is RDF/XML (RDFReaderFImpl.DEFAULTLANG).
+    await RDFDataMgr.read(this, input, base ?? null, lang === undefined ? RDFXML : langOf(lang));
     return this;
   };
   Model.prototype.write = function write(out, lang, base) {

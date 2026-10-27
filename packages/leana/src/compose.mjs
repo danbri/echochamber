@@ -13,6 +13,11 @@ import { JenaException } from './errors.mjs';
 
 /** Jena CompositionBase: a GraphBase whose find() results delete through this graph (with events). */
 export class CompositionBase extends GraphBase {
+  /** Jena CompositionBase.butNot(a, b): the elements of a that are not in b. */
+  static butNot(a, b) {
+    const bSet = new JenaSet(b.toList ? b.toList() : [...b]);
+    return a.filterDrop((x) => bSet.contains(x));
+  }
   _notifyingRemove(triples) { return new ExtendedIterator(triples, (t) => this.delete(t)); }
   graphBaseFind(t) { return this._notifyingRemove(this._graphBaseFind(t)); }
   _graphBaseFind(t) { throw new JenaException('abstract'); }
@@ -157,44 +162,52 @@ export class MultiUnion extends Polyadic {
 
 /**
  * Jena PolyadicPrefixMappingImpl: the prefix mapping of a Polyadic graph. Writes
- * go to the base graph's mapping; reads look at the base graph's mapping, then
- * at each sub-graph's.
+ * go to the base graph's mapping (or to a pending mapping while there is no
+ * base graph). Reads look at the base mapping first, then at each sub-graph's
+ * in order; a sub-graph's default ("") prefix is not seen through the
+ * composition, and the sizes are the base mapping's.
  */
 export class PolyadicPrefixMappingImpl extends PrefixMappingImpl {
-  constructor(poly) { super(); this._poly = poly; }
-  _base() { const b = this._poly.getBaseGraph(); return b ? b.getPrefixMapping() : null; }
-  _all() {
-    const b = this._base();
-    const subs = this._poly.getSubGraphs().map((g) => g.getPrefixMapping());
-    return b ? [b, ...subs] : subs;
+  constructor(poly) { super(); this._poly = poly; this._pending = new PrefixMappingImpl(); }
+  _base() { const b = this._poly.getBaseGraph(); return b ? b.getPrefixMapping() : this._pending; }
+  _subs() { return this._poly.getSubGraphs().map((g) => g.getPrefixMapping()); }
+  /** The base mapping's answer, or else the first sub-graph answer that `ok` accepts. */
+  _lookup(ask, miss, ok) {
+    const s = ask(this._base());
+    if (!miss(s)) return s;
+    for (const pm of this._subs()) { const x = ask(pm); if (ok(x)) return x; }
+    return s;
   }
-  _writable() { const b = this._base(); return b || this._local(); }
-  _local() { if (!this._own) this._own = new PrefixMappingImpl(); return this._own; }
-  setNsPrefix(prefix, uri) { this._checkUnlocked(); this._writable().setNsPrefix(prefix, uri); return this; }
-  removeNsPrefix(prefix) { this._checkUnlocked(); this._writable().removeNsPrefix(prefix); return this; }
-  clearNsPrefixMap() { this._checkUnlocked(); this._writable().clearNsPrefixMap(); return this; }
+  setNsPrefix(prefix, uri) { this._checkUnlocked(); this._base().setNsPrefix(prefix, uri); return this; }
+  removeNsPrefix(prefix) { this._checkUnlocked(); this._base().removeNsPrefix(prefix); return this; }
+  clearNsPrefixMap() { this._checkUnlocked(); this._base().clearNsPrefixMap(); return this; }
+  setNsPrefixes(other) { this._checkUnlocked(); this._base().setNsPrefixes(other); return this; }
   getNsPrefixURI(prefix) {
-    for (const pm of this._all()) { const u = pm.getNsPrefixURI(prefix); if (u !== null && u !== undefined) return u; }
-    return null;
-  }
-  /** Every mapping, the sub-graphs' first and the base graph's over them. */
-  getNsPrefixMap() {
-    const out = new Map();
-    const all = this._all();
-    for (const pm of all.slice(1).reverse()) for (const [p, u] of pm.getNsPrefixMap()) out.set(p, u);
-    if (all.length) for (const [p, u] of all[0].getNsPrefixMap()) out.set(p, u);
-    return out;
+    if (prefix === '') return this._base().getNsPrefixURI(prefix);
+    return this._lookup((pm) => pm.getNsPrefixURI(prefix), (s) => s === null, (x) => x !== null);
   }
   getNsURIPrefix(uri) {
-    for (const pm of this._all()) { const p = pm.getNsURIPrefix(uri); if (p !== null && p !== undefined) return p; }
-    return null;
+    return this._lookup((pm) => pm.getNsURIPrefix(uri), (s) => s === null, (x) => x !== null && x !== '');
+  }
+  /** Every mapping: the sub-graphs' (earlier ones win, no default prefix), then the base mapping's over them. */
+  getNsPrefixMap() {
+    const out = new Map();
+    for (const pm of this._subs().reverse()) for (const [p, u] of pm.getNsPrefixMap()) out.set(p, u);
+    out.delete('');
+    for (const [p, u] of this._base().getNsPrefixMap()) out.set(p, u);
+    return out;
+  }
+  expandPrefix(prefixed) {
+    return this._lookup((pm) => pm.expandPrefix(prefixed), (s) => s === prefixed, (x) => x !== prefixed);
   }
   shortForm(uri) {
-    for (const [p, ns] of this.getNsPrefixMap()) if (uri.startsWith(ns)) return p + ':' + uri.substring(ns.length);
-    return uri;
+    return this._lookup((pm) => pm.shortForm(uri), (s) => s === uri, (x) => x !== uri);
   }
-  hasNoMappings() { return this.getNsPrefixMap().size === 0; }
-  numPrefixes() { return this.getNsPrefixMap().size; }
+  qnameFor(uri) {
+    return this._lookup((pm) => pm.qnameFor(uri), (s) => s === null, (x) => x !== null);
+  }
+  hasNoMappings() { return this._base().hasNoMappings(); }
+  numPrefixes() { return this._base().numPrefixes(); }
   forEach(fn) { for (const [p, u] of this.getNsPrefixMap()) fn(p, u); }
-  toString() { return 'pm:' + JSON.stringify(Object.fromEntries(this.getNsPrefixMap())); }
+  toString() { return '<polyadic prefix map>'; }
 }

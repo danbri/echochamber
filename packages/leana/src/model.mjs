@@ -9,7 +9,7 @@
 
 import { Node, NodeFactory, Triple, BaseDatatype } from './node.mjs';
 import { GraphMem, ExtendedIterator, JenaSet, GraphUtil } from './graph.mjs';
-import { ModelListenerAdapter, ArrayList } from './events.mjs';
+import { ModelListenerAdapter, ArrayList, GraphEvents } from './events.mjs';
 import { Union } from './compose.mjs';
 import { XSD_STRING } from '@factoidal/core/rdfjs';
 import {
@@ -81,6 +81,7 @@ export class RDFNode {
       if (!this._node.isTripleTerm()) throw new ResourceRequiredException('not a statement term: ' + this._node);
       return this instanceof StatementTerm ? this : new StatementTerm(this._node, this._model);
     }
+    if (COLLECTION_CLASSES.includes(cls)) return unsupported('RDFNode.as(RDFList | Container | Seq | Bag | Alt)', 'collections');
     return unsupported('RDFNode.as(' + (cls && cls.name) + ')', 'echo');
   }
   canAs(cls) {
@@ -89,6 +90,7 @@ export class RDFNode {
     if (cls === Property) return this._node.isURI();
     if (cls === Resource) return this._node.isURI() || this._node.isBlank();
     if (cls === StatementTerm) return this._node.isTripleTerm();
+    if (COLLECTION_CLASSES.includes(cls)) return unsupported('RDFNode.canAs(RDFList | Container | Seq | Bag | Alt)', 'collections');
     return unsupported('RDFNode.canAs(' + (cls && cls.name) + ')', 'echo');
   }
   /** Jena RDFVisitor dispatch: visitBlank(r, id), visitURI(r, uri), visitLiteral(l), visitStmt(st, statement). */
@@ -406,6 +408,8 @@ export class Model {
   createStatementTerm(st) { return new StatementTerm(NodeFactory.createTripleTerm(st.asTriple()), this); }
   /** Jena createReifier: adds (r, rdf:reifies, <<( s p o )>>); rdf:reifies is a vocabulary IRI. */
   createReifier() { return unsupported('Model.createReifier', 'vocabulary'); }
+  /** Jena 2 Model.getReader(lang): an RDFReaderI (a RIOT reader that notifies startRead/finishRead). */
+  getReader(lang) { return new RDFReaderRIOT(lang ?? 'RDF/XML'); }
   /** Jena createLiteralStatement(s, p, value): the datatype of a JavaScript value needs an engine table. */
   createLiteralStatement(s, p, v) {
     if (v instanceof Literal) return this.createStatement(s, p, v);
@@ -647,6 +651,8 @@ export class Model {
   _stmtIterator(sts) { return new StmtIterator(sts, (st) => this.remove(st)); }
   _asModel(g) { return new Model(g); }
   asModel(g) { return new Model(g); }
+  /** Jena EnhGraph.equals: two models are equal when they are views of the same graph. */
+  equals(o) { return o === this || (o instanceof Model && o._g === this._g); }
   toString() { return '<Model ' + this._g.toString() + '>'; }
 }
 
@@ -776,3 +782,69 @@ export const ResourceFactory = Object.freeze({
   getInstance() { return currentFactory; },
   setInstance(f) { const old = currentFactory; currentFactory = f; return old; },
 });
+
+// ---------------------------------------------------------------------------
+// RDF collections and containers (Jena RDFList, Container, Seq, Bag, Alt).
+// Their structure is rdf:first/rdf:rest/rdf:nil and rdf:_n/rdf:type rdf:Seq ...
+// (vocabulary and collection semantics: GAPS.md 'collections'). The classes
+// exist so that as(...) and canAs(...) can name them; Model.createList,
+// createSeq, createBag, createAlt and as(RDFList | Container ...) are gaps.
+
+export class Container extends Resource {
+  constructor(node, model) { super(node, model); unsupported('new Container', 'collections'); }
+}
+export class Seq extends Container {}
+export class Bag extends Container {}
+export class Alt extends Container {}
+export class RDFList extends Resource {
+  constructor(node, model) { super(node, model); unsupported('new RDFList', 'collections'); }
+}
+const COLLECTION_CLASSES = [Container, Seq, Bag, Alt, RDFList];
+
+/** Jena SeqIndexBoundsException, ListIndexException (collections). */
+export class SeqIndexBoundsException extends JenaException {}
+export class ListIndexException extends JenaException {}
+/** Jena AlreadyReifiedException, CannotReifyException (reification). */
+export class AlreadyReifiedException extends JenaException {}
+export class CannotReifyException extends JenaException {}
+
+// ---------------------------------------------------------------------------
+// Jena 2 readers (RDFReaderI): Model.getReader(lang) and NTripleReader. API shape
+// over Model.read (RIOT); like Jena's RDFReaderRIOT, read() notifies the model's
+// listeners of GraphEvents.startRead before and GraphEvents.finishRead after.
+// Answers a Promise (Model.read does).
+
+class RDFReaderRIOT {
+  constructor(lang) { this._lang = lang; this._eh = null; }
+  async read(model, input, base = null) {
+    model.notifyEvent(GraphEvents.startRead);
+    try {
+      await model.read(input, base, this._lang);
+    } finally {
+      model.notifyEvent(GraphEvents.finishRead);
+    }
+  }
+  setErrorHandler(h) { const old = this._eh; this._eh = h; return old; }
+  setProperty() { return null; }
+}
+/** Jena NTripleReader: the RDFReaderI for N-Triples. */
+export class NTripleReader extends RDFReaderRIOT {
+  constructor() { super('N-TRIPLE'); }
+}
+
+// ---------------------------------------------------------------------------
+// Vocabulary classes (Jena org.apache.jena.vocabulary RDF, OWL, OWL2). leana does not
+// hold vocabulary IRIs (echochamber CLAUDE.md rule 1): every term is a gap.
+
+function vocabularyClass(gap) {
+  return new Proxy(Object.freeze({}), {
+    get(_, k) {
+      // Not a vocabulary term: what JavaScript itself asks of an object.
+      if (typeof k === 'symbol' || k === 'then' || k === 'toJSON' || k === 'constructor') return undefined;
+      return gap(String(k));
+    },
+  });
+}
+export const RDF = vocabularyClass(() => unsupported('RDF.<term>', 'vocabulary'));
+export const OWL = vocabularyClass(() => unsupported('OWL.<term>', 'vocabulary'));
+export const OWL2 = vocabularyClass(() => unsupported('OWL2.<term>', 'vocabulary'));

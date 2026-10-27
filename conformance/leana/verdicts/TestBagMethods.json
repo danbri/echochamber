@@ -1,0 +1,32 @@
+{
+  "testContainerOfIntegers": {
+    "verdict": "gap",
+    "gap": "collections",
+    "note": "Model.createBag."
+  },
+  "testContainerOfIntegersRemovingA": {
+    "verdict": "gap",
+    "gap": "collections",
+    "note": "Model.createBag."
+  },
+  "testContainerOfIntegersRemovingB": {
+    "verdict": "gap",
+    "gap": "collections",
+    "note": "Model.createBag."
+  },
+  "testContainerOfIntegersRemovingC": {
+    "verdict": "gap",
+    "gap": "collections",
+    "note": "Model.createBag."
+  },
+  "testEmptyContainer": {
+    "verdict": "gap",
+    "gap": "collections",
+    "note": "Model.createBag."
+  },
+  "testFillingContainer": {
+    "verdict": "gap",
+    "gap": "collections",
+    "note": "Model.createBag."
+  }
+}
