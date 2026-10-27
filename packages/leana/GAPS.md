@@ -185,6 +185,26 @@ Issue: https://github.com/danbri/factoidal/issues/1088
 - `RIOT read of a syntax the engine does not read (RDF/JSON, TriX, RDF Thrift, RDF Protobuf, SHACLC, CSV)`
 - `RIOT write of a syntax the engine does not write (RDF/JSON, TriX, RDF Thrift, RDF Protobuf, SHACLC, CSV)`
 
+## query: SPARQL object model, substitution, timeouts, property functions
+
+Issue: https://github.com/danbri/factoidal/issues/1089
+
+Queries and updates run in the engine (`Dataset.query`, `Dataset.update`); `execSelect`, `execAsk`, `execConstruct`, `execDescribe`, `UpdateExecution.execute` and the `ResultSetFormatter` writers answer a Promise. `QueryFactory.create` keeps the text, so a syntax error is a `QueryParseException` when the query runs, not when it is created. Initial bindings (`initialBinding`, `QueryExecutionFactory.create(q, m, qsm)`) are a trailing `VALUES` clause. Result sets of SPARQL 1.2 queries and result sets made in code have no formatter output (the engine's results writers read SPARQL 1.1 queries).
+
+- `initial binding of a blank node (SPARQL VALUES has no blank nodes)`
+- `PropertyFunctionRegistry (property functions)`
+- `Query.getPrefixMapping (syntax tree)`
+- `Query.getQueryPattern (syntax tree)`
+- `Query.getResultVars / getProjectVars`
+- `Query.isSelectType and the query form`
+- `Query.serialize (query syntax tree)`
+- `Query.setLimit / setOffset / setDistinct (syntax tree)`
+- `QueryExecution.execJson (ARQ JSON query form)`
+- `QueryExecution.substitution (syntax substitution)`
+- `QueryExecution.timeout`
+- `ResultSetFormatter output of a result set not made by a SPARQL 1.1 query`
+- `UpdateRequest.getOperations (update syntax tree)`
+
 ## inference: Jena rules and a live inference graph
 
 Issue: https://github.com/danbri/factoidal/issues/1087

@@ -37,7 +37,13 @@ export {
   FactoryRDFStd, PrefixMapFactory, RDFReaderFactoryRIOT,
 } from './riot.mjs';
 export {
-  QueryExecution, QueryExecutionFactory, QueryFactory, QuerySolutionMap,
+  Query, QueryFactory, Syntax, QueryExecution, QueryExecutionFactory, QueryExecutionDatasetBuilder, QueryExecutionImpl,
+  QuerySolution, QuerySolutionMap, ResultSet, ResultSetRewindable, ResultSetFactory, ResultSetFormatter, ResultsFormat,
+  QueryException, QueryParseException, QueryExecException, QueryCancelledException, QueryBuildException,
+  UpdateRequest, UpdateFactory, UpdateExecution, UpdateExecutionBuilder, UpdateExecutionFactory, UpdateAction,
+  UpdateException, UpdateParseException, ExprEvalException,
+  NodeValue, FunctionBase, FunctionBase0, FunctionBase1, FunctionBase2, FunctionBase3, FunctionBase4, FunctionRegistry,
+  PropertyFunctionRegistry,
 } from './query.mjs';
 export {
   Quad, ReadWrite, TxnType, JenaTransactionException, Txn, GraphView, GraphUnionView, DatasetGraph,

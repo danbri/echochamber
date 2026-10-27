@@ -42,6 +42,10 @@ export const GAPS = Object.freeze({
     summary: 'RDF syntaxes the engine does not read or write (RDF/JSON, TriX, SHACLC, binary RDF), blank node labels as given, and a writer base IRI need engine ops',
     issue: 'https://github.com/danbri/factoidal/issues/1088',
   },
+  'query': {
+    summary: 'the SPARQL query/update object model (parse to a syntax tree and back), syntax substitution, timeouts, property functions and a results writer for given rows need engine ops',
+    issue: 'https://github.com/danbri/factoidal/issues/1089',
+  },
   'inference': {
     summary: 'the Jena rule language and a synchronous (live) inference graph need engine ops',
     issue: 'https://github.com/danbri/factoidal/issues/1087',

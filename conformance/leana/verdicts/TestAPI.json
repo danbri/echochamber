@@ -1,6 +1,7 @@
 {
-  "testSelect1": {"verdict": "gap", "gap": "echo", "note": "QueryExecution: stage 2 (SPARQL execution exists in @factoidal/core: Dataset.query)."},
-  "testConstruct1": {"verdict": "gap", "gap": "echo", "note": "QueryExecution: stage 2."},
-  "testConstructBad1": {"verdict": "gap", "gap": "echo", "note": "QueryExecution: stage 2."},
-  "testSubstitutionConstruct1": {"verdict": "gap", "gap": "echo", "note": "QuerySolutionMap / QueryExecution: stage 2; substitution also needs a new engine op (feasibility section 6)."}
+  "testSubstitutionConstruct1": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "QueryExecution.substitution (syntax substitution)."
+  }
 }

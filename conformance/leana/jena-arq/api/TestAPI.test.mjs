@@ -22,10 +22,7 @@
 // a1164c5dc5c9e1a9c58d94766c13d870e0a8ba98:
 //   jena-arq/src/test/java/org/apache/jena/sparql/api/TestAPI.java
 // Changed for echochamber: translated from Java/JUnit 5 to JavaScript/node:test
-// over @factoidal/leana. Only 4 of the class's methods are ported (the ones
-// hand-ported in tools/leana-study/sample-port.test.mjs): query execution is
-// stage 2 of docs/leana/feasibility.md. The static Dataset `d` (DatasetFactory)
-// is used only by methods not ported, so it is not built here.
+// over @factoidal/leana. Query execution answers a Promise (awaited).
 // GraphFactory.makeDefaultModel() is ModelFactory.createDefaultModel().
 // try-with-resources is try/finally close().
 
@@ -49,15 +46,15 @@ m.add(r1, p2, 'X2'); // NB Capital
 m.add(r1, p3, 'y1');
 dft.add(s, p, o);
 
-function withExec(qExec, body) {
-  try { return body(qExec); } finally { qExec.close(); }
+async function withExec(qExec, body) {
+  try { return await body(qExec); } finally { qExec.close(); }
 }
 
 describeJena('TestAPI', 'jena-arq/src/test/java/org/apache/jena/sparql/api/TestAPI.java', (t) => {
-  t('testSelect1', () => {
+  t('testSelect1', async () => {
     const qs = 'SELECT * {?s ?p ?o}';
-    withExec(QueryExecution.model(m).query(qs).build(), (qExec) => {
-      const rs = qExec.execSelect();
+    await withExec(QueryExecution.model(m).query(qs).build(), async (qExec) => {
+      const rs = await qExec.execSelect();
       assert.ok(rs.hasNext(), 'No results');
       const qSoln = rs.nextSolution();
       const qr = qSoln.getResource('s');
@@ -67,16 +64,16 @@ describeJena('TestAPI', 'jena-arq/src/test/java/org/apache/jena/sparql/api/TestA
     });
   });
 
-  t('testConstruct1', () => {
+  t('testConstruct1', async () => {
     const qs = 'CONSTRUCT {?s ?p ?o} WHERE { ?s ?p ?o }';
-    withExec(QueryExecution.model(m).query(qs).build(), (qExec) => {
-      const m2 = qExec.execConstruct();
+    await withExec(QueryExecution.model(m).query(qs).build(), async (qExec) => {
+      const m2 = await qExec.execConstruct();
       assert.ok(!m2.isEmpty(), 'No results');
       assert.ok(m.isIsomorphicWith(m2), 'Not isonorphic');
     });
   });
 
-  t('testConstructBad1', () => {
+  t('testConstructBad1', async () => {
     const qs = `PREFIX :     <http://example/>
 PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 CONSTRUCT {
@@ -89,18 +86,18 @@ CONSTRUCT {
  } WHERE { BIND(123 AS ?x) }
 `;
     // Bad triples in result. They should be filtered out.
-    withExec(QueryExecution.model(m).query(qs).build(), (qExec) => {
-      const m2 = qExec.execConstruct();
+    await withExec(QueryExecution.model(m).query(qs).build(), async (qExec) => {
+      const m2 = await qExec.execConstruct();
       assert.ok(m2.isEmpty(), 'Expected empty graph');
     });
   });
 
-  t('testSubstitutionConstruct1', () => {
+  t('testSubstitutionConstruct1', async () => {
     const init = new QuerySolutionMap();
     init.add('z', m.createLiteral('zzz'));
     const qs = "CONSTRUCT {?s ?p ?z} {?s ?p 'x1'}";
-    withExec(QueryExecution.model(m).query(qs).substitution(init).build(), (qExec) => {
-      const r = qExec.execConstruct();
+    await withExec(QueryExecution.model(m).query(qs).substitution(init).build(), async (qExec) => {
+      const r = await qExec.execConstruct();
       assert.ok(r.size() > 0, 'Empty model');
       const p1b = m.createProperty(ns + 'p1');
       assert.ok(r.contains(null, p1b, init.get('z')), 'Empty model');
