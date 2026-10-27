@@ -10,7 +10,7 @@ import { readFileSync } from 'node:fs';
 import * as core from '@factoidal/core';
 
 export { core };
-export const coreVersion = JSON.parse(readFileSync(new URL('../node_modules/@factoidal/core/package.json', import.meta.url))).version;
+export const coreVersion = core.version;
 
 export const KINDS = new Set(['defect', 'divergence', 'gap']);
 

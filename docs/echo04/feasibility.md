@@ -16,7 +16,7 @@ Inputs (measured):
   into a scratch directory outside the repository, read only. Maven and RDF4J
   were not run.
 - `@factoidal/core` 0.16.0 from npm (the latest on 2026-10-27; 0.17.0 not
-  published). Pinned in `conformance/echo04/package.json` and its lock file.
+  published). Pinned as the root `devDependencies` entry and `package-lock.json`.
 - Scripts: `tools/echo04-study/` (`tcount.py`, `classify.py`, `api.py`,
   `count.sh`, `extract-*.{mjs,py}`).
 
@@ -43,7 +43,7 @@ Inputs (measured):
    0.16.0: **2,801 cases from five sources; 2,124 meet RDF4J's expectation,
    377 are Factoidal defects (expected failures with an issue), 300 are
    divergences (RDF4J differs from or extends the specification), 0 gaps.**
-   `cd conformance/echo04 && npm test`: 2,806 tests, 2,806 pass, about 5 s.
+   `npm run test:echo04` (repository root): 2,806 tests, 2,806 pass, about 5 s.
 4. The port found **17 new Factoidal defects** (issues filed, section 5)
    and added evidence to five open ones. No W3C manifest test caught them.
    Largest by case count: SPARQL Update blank-node labels break
@@ -207,8 +207,8 @@ expression checks as one SPARQL query whose `?ok` the engine computes; JS
 reads booleans and counts. A case with no verdict must meet RDF4J's
 expectation; a case with a verdict must not, so a fix (or a change in
 RDF4J's favour) fails the suite until the verdict is read again. CI:
-`.github/workflows/conformance.yml` runs every `conformance/*/` suite from its
-lock file.
+the root `.github/workflows/ci.yml` (`npm ci && npm test`, Node 22 and 24)
+runs these suites with the others; `npm run test:echo04` runs only these.
 
 | Suite | Cases | Meets RDF4J | Defect | Divergence | Gap | Command |
 |---|---|---|---|---|---|---|
@@ -217,7 +217,7 @@ lock file.
 | rio (parsers) | 359 | 330 | 14 | 15 | 0 | `node --test rio/rio.test.mjs` |
 | compliance (Java SPARQL) | 560 | 407 | 36 | 117 | 0 | `node --test compliance/compliance.test.mjs` |
 | shacl (ShaclSail) | 1,266 | 890 | 233 | 143 | 0 | `node --test shacl/shacl.test.mjs` |
-| **total** | **2,801** | **2,124** | **377** | **300** | **0** | `npm test` (2,806 tests incl. one count check per suite) |
+| **total** | **2,801** | **2,124** | **377** | **300** | **0** | `npm run test:echo04` (2,806 tests incl. one count check per suite) |
 
 All on `@factoidal/core` 0.16.0 (npm, the latest published on 2026-10-27),
 Node 22.

@@ -18,9 +18,9 @@ Echoes are an application *of* Factoidal. They add no code to
 | echo | npm name | in the style of | status |
 |---|---|---|---|
 | leana | `@factoidal/leana` | Apache Jena (Java) | feasibility study done; expression tests ported (in core) |
-| echo02 (name to come) | — | RDFLib (Python) | planned |
-| echo03 (name to come) | — | N3.js and RDF/JS (JavaScript) | planned |
-| echo04 (name to come) | — | Eclipse RDF4J (Java) | feasibility study done; stage 0: 2,801 RDF4J test cases run as data (`conformance/echo04`) |
+| echo02 (name to come) | — (prototype `packages/echo02`, private) | RDFLib (Python) | feasibility study; parser and serializer data tests ported (`conformance/echo02`); prototype |
+| echo03 (name to come) | — (prototype `packages/echo03`, private) | N3.js and RDF/JS (JavaScript) | feasibility study; N3.js parser, writer and store tests and the RDF/JS data model and dataset suites ported (`conformance/echo03`); prototype |
+| echo04 (name to come) | — | Eclipse RDF4J (Java) | feasibility study; stage 0: 2,801 of RDF4J's own test cases (SPARQL, functions, Rio, SHACL) run as data (`conformance/echo04`) |
 
 `echo02`–`echo04` are neutral placeholders until the owner names them; `leana` is a working name and may change. The libraries named above are
 trademarks or project names of their owners; an echo is not affiliated with

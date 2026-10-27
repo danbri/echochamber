@@ -4,7 +4,7 @@ Eclipse RDF4J's own tests (not its W3C copies) run as data against
 `@factoidal/core` (version pinned in `package.json`). Study, counts and
 verdict tables: `docs/echo04/feasibility.md`.
 
-    npm ci && npm test
+    npm ci && npm run test:echo04    # from the repository root
 
 | suite | source in RDF4J |
 |---|---|
