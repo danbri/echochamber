@@ -17,7 +17,7 @@ Echoes are an application *of* Factoidal. They add no code to
 
 | echo | npm name | in the style of | status |
 |---|---|---|---|
-| leana | `@factoidal/leana` (private) | Apache Jena (Java) | stage 1: Graph, Model, PrefixMapping, RIOT on strings; 748 Jena tests ported (`conformance/leana`) |
+| leana | `@factoidal/leana` (private) | Apache Jena (Java) | stages 1 and 2: Graph, Model, events, composition graphs, PrefixMapping, RIOT, Dataset/DatasetGraph, transactions, SPARQL query and update, result sets, extension functions; 1,939 Jena tests ported, 1,236 pass (`conformance/leana`) |
 | Hardylib | `@factoidal/hardylib` (prototype, private) | RDFLib (Python) | feasibility study; parser and serializer data tests ported (`conformance/hardylib`); prototype |
 | Enthie | `@factoidal/enthie` (prototype, private) | N3.js and RDF/JS (JavaScript) | feasibility study; N3.js parser, writer and store tests and the RDF/JS data model and dataset suites ported (`conformance/enthie`); prototype |
 | MoonForge | `@factoidal/moonforge` (no package yet) | Eclipse RDF4J (Java) | feasibility study; stage 0: 2,801 of RDF4J's own test cases (SPARQL, functions, Rio, SHACL) run as data (`conformance/moonforge`) |

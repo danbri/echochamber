@@ -7,7 +7,7 @@ name; not published (`private: true`). Design: `docs/leana/feasibility.md`.
 Apache Jena is a project of The Apache Software Foundation. leana is not
 affiliated with or endorsed by it; "in the style of" describes the API only.
 
-## What is here (stage 1)
+## What is here (stages 1 and 2)
 
 - `Node`, `NodeFactory`, `Triple`, `Node.ANY`, `Triple.ANY`
 - `Graph` (Jena's Graph SPI: `add`, `delete`, `remove`, `clear`, `find`,
@@ -17,7 +17,25 @@ affiliated with or endorsed by it; "in the style of" describes the API only.
   `Resource`, `Property`, `Literal`, `StmtIterator`, `ResIterator`, `NodeIterator`
 - `PrefixMapping`
 - `Lang`, `RDFParser`, `RDFWriter`, `RDFDataMgr`, `RDFLanguages.nameToLang`,
-  `StringReader`, `StringWriter`
+  `StringReader`, `StringWriter`, `ErrorHandlerFactory`, `StreamManager`,
+  `LocatorFile`, `FactoryRDFStd`, reads into datasets, HTTP sources
+- Graph events and listeners, transaction handlers, capabilities;
+  `Union`, `Intersection`, `Difference`, `DisjointUnion`, `Delta`, `MultiUnion`
+- `Quad`, `DatasetGraph`, `Dataset`, `DatasetFactory`, `DatasetGraphFactory`,
+  `Txn` (snapshot transactions, promotion)
+- `Query`, `QueryFactory`, `QueryExecution`, `QueryExecutionFactory`,
+  `ResultSet`, `QuerySolution`, `QuerySolutionMap`, `ResultSetFormatter`
+  (the engine's text, JSON, XML, CSV and TSV), `UpdateFactory`,
+  `UpdateRequest`, `UpdateExecution`, `UpdateAction`, `FunctionRegistry`
+  (over `registerExtensionFunction`)
+
+```js
+import { ModelFactory, QueryExecution } from '@factoidal/leana';
+const m = ModelFactory.createDefaultModel();
+m.add(m.createResource('http://example/s'), m.createProperty('http://example/p'), 'o');
+const rs = await QueryExecution.model(m).query('SELECT * { ?s ?p ?o }').build().execSelect();
+while (rs.hasNext()) console.log(String(rs.next().get('o')));
+```
 
 ```js
 import { ModelFactory, RDFParser, RDFWriter, Lang } from '@factoidal/leana';
@@ -41,7 +59,13 @@ console.log(RDFWriter.source(m).lang(Lang.NTRIPLES).asString());
 - **Synchronous, except parsing.** Importing leana loads the engine (top-level
   `await`); every Graph and Model call after that is synchronous.
   `RDFParser...parse()`, `RDFDataMgr.read()` and `Model.read()` answer a
-  Promise, because `@factoidal/core`'s `parse()` does.
+  Promise, because `@factoidal/core`'s `parse()` does; so do query and update
+  execution (`execSelect()`, `execAsk()`, `execConstruct()`, `execute()`) and
+  the `ResultSetFormatter` writers, because `Dataset.query()` and
+  `Dataset.update()` do.
+- **SPARQL text, not a syntax tree.** `QueryFactory.create` keeps the text;
+  a syntax error is a `QueryParseException` when the query runs. Initial
+  bindings are a trailing `VALUES` clause; syntax substitution is a gap.
 - **Strings, and files with a Lang.** leana reads text, or a file path with an
   explicit `Lang`. It does not choose a syntax from a file name.
 - **Generalized triples.** A literal subject, a variable, or a relative IRI is
