@@ -2,7 +2,7 @@
 
 Ported from RDFLib (BSD 3-Clause; `data/LICENSE-RDFLib`, `data/PROVENANCE.md`)
 at commit 58c3700e5e21b5b833d0e31072f930c665059db2, run against
-`@factoidal/core` 0.16.0 from npm (pinned in `verdicts.json`; a test checks
+`@factoidal/core` 0.17.0 from npm (pinned in `verdicts.json`; a test checks
 the version). No new API is needed: the runner calls `parse`,
 `Dataset.serialize`, `Dataset.query`, `fromQuads` and `isomorphic`.
 
@@ -42,8 +42,8 @@ and fails loudly with "now passes" when it stops failing:
 | RDF/XML refuses `<example:predicate>` (`special_chars`, `diverse_triples`, `diverse_quads` x2) | 4 | **defect** https://github.com/danbri/factoidal/issues/1048 |
 | `schema_only_base` .ttl, `xml_literal` .rdf, `rdf11trig_eg2` .jsonld | 3 | divergence: RFC 3986 5.2.3; RDF/XML 7.2.17 with Concepts 3.3; JSON-LD 1.1 graph objects |
 
-Measured 2026-10-27 with `@factoidal/core` 0.16.0: 1,438 cases, 511 pass,
-8 defects, 919 divergences; the whole file runs in under 1 s. Upstream xfails
+Measured 2026-10-27 with `@factoidal/core` 0.16.0 and again with 0.17.0
+(same result): 1,438 cases, 511 pass, 8 defects, 919 divergences; the whole file runs in under 1 s. Upstream xfails
 that pass here: the `diverse_quads` .nq and .jsonld variants, and the
 JSON-LD round trips of `diverse_quads.trig`, `bnode_refs.trig` and
 `keywords-04.nt`.

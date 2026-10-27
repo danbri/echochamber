@@ -7,6 +7,6 @@
   "type": "module",
   "exports": { ".": "./index.mjs" },
   "engines": { "node": ">=22.12" },
-  "dependencies": { "@factoidal/core": "0.16.0" },
+  "dependencies": { "@factoidal/core": "0.17.0" },
   "scripts": { "test": "node --test test/*.test.mjs" }
 }
