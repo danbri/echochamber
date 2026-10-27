@@ -1,0 +1,37 @@
+{
+  "ADD_toNonExistingGraph": {
+    "verdict": "gap",
+    "gap": "query",
+    "noThrow": true,
+    "note": "The update runs on a core Dataset that can hold named graphs; the engine has no store that refuses them (Jena's DatasetGraphOne), so creating a named graph is not an error (SPARQL 1.1 Update section 3.2.1: 'If the graph may not be created, then a failure MUST be returned')."
+  },
+  "COPY_toNonExistingGraph": {
+    "verdict": "gap",
+    "gap": "query",
+    "noThrow": true,
+    "note": "The update runs on a core Dataset that can hold named graphs; the engine has no store that refuses them (Jena's DatasetGraphOne), so creating a named graph is not an error (SPARQL 1.1 Update section 3.2.1: 'If the graph may not be created, then a failure MUST be returned')."
+  },
+  "CREATE_nonExistingGraph": {
+    "verdict": "gap",
+    "gap": "query",
+    "noThrow": true,
+    "note": "The update runs on a core Dataset that can hold named graphs; the engine has no store that refuses them (Jena's DatasetGraphOne), so creating a named graph is not an error (SPARQL 1.1 Update section 3.2.1: 'If the graph may not be created, then a failure MUST be returned')."
+  },
+  "DROP_ofNonExistingGraph": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Update section 3.2.2 (DROP SHOULD return failure if the named graph does not exist; stores that do not record empty graphs always return success)",
+    "note": "The engine records empty graphs and fails; Jena's dataset does not record them and succeeds."
+  },
+  "LOAD_toNonExistingGraph": {
+    "verdict": "gap",
+    "gap": "query",
+    "noThrow": true,
+    "note": "UpdateAction LOAD (the engine fetches no documents): the failure is a LeanaUnsupportedError, not Jena's UpdateException for this file."
+  },
+  "MOVE_toNonExistingGraph_isError": {
+    "verdict": "gap",
+    "gap": "query",
+    "noThrow": true,
+    "note": "The update runs on a core Dataset that can hold named graphs; the engine has no store that refuses them (Jena's DatasetGraphOne), so creating a named graph is not an error (SPARQL 1.1 Update section 3.2.1: 'If the graph may not be created, then a failure MUST be returned')."
+  }
+}

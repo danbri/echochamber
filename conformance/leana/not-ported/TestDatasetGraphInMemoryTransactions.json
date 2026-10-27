@@ -1,0 +1,8 @@
+{
+  "transaction_concurrency_writer": {
+    "reason": "Java threads: two writer transactions on an ExecutorService thread pool, each holding the write lock while it sleeps; leana runs one transaction at a time on one JavaScript thread."
+  },
+  "transaction_concurrency_reader": {
+    "reason": "Java threads: 25 concurrent read transactions on an ExecutorService; leana runs one transaction at a time on one JavaScript thread."
+  }
+}

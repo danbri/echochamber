@@ -29,7 +29,7 @@
 // leana: those tests call the ModelFactory method directly.
 
 import assert from 'node:assert/strict';
-import { ModelFactory } from '@factoidal/leana';
+import { ModelFactory, GenericRuleReasoner, Rule, InfModel } from '@factoidal/leana';
 import { describeJena } from '../../lib/harness.mjs';
 
 describeJena('TestModelFactory', 'jena-core/src/test/java/org/apache/jena/rdf/model/TestModelFactory.java', (t) => {
@@ -43,8 +43,10 @@ describeJena('TestModelFactory', 'jena-core/src/test/java/org/apache/jena/rdf/mo
   t('testCreateInfModel', () => {
     // Jena: new GenericRuleReasoner(Rule.parseRules("-> (eg:r eg:p eg:v).")).bind(graph) -> InfGraph.
     const rule = '-> (eg:r eg:p eg:v).';
-    void rule;
-    const im = ModelFactory.createInfModel(ModelFactory.createDefaultModel().getGraph());
+    const r = new GenericRuleReasoner(Rule.parseRules(rule));
+    const ig = r.bind(ModelFactory.createDefaultModel().getGraph());
+    const im = ModelFactory.createInfModel(ig);
+    assert.ok(im instanceof InfModel);
     assert.equal(im.size(), 1);
   });
 

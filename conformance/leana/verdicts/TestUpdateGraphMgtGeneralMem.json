@@ -1,0 +1,7 @@
+{
+  "testCreateDrop4": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Update section 3.2.2 (DROP SHOULD return failure if the named graph does not exist; stores that do not record empty graphs always return success)",
+    "note": "addGraph of an empty graph records no graph in the engine (leana's in-memory dataset keeps no empty graphs), the engine records empty graphs, so DROP GRAPH fails; Jena's dataset does not record empty graphs and DROP succeeds."
+  }
+}

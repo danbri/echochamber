@@ -1,0 +1,3 @@
+{
+  "testModel": {"verdict": "gap", "gap": "syntax-from-name", "note": "Model.read(path) with no lang: Jena picks RDF/XML from the .rdf extension. The size checks before the read pass."}
+}

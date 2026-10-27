@@ -1,4 +1,7 @@
 {
-  "testCreateInfModel": {"verdict": "gap", "gap": "echo", "note": "Jena rule reasoner and InfModel: stage 3 (feasibility section 6)."},
-  "testCreateUnion": {"verdict": "gap", "gap": "echo", "note": "ModelFactory.createUnion (dynamic Union graph) is not in leana."}
+  "testCreateInfModel": {
+    "verdict": "gap",
+    "gap": "inference",
+    "note": "Rule.parseRules."
+  }
 }

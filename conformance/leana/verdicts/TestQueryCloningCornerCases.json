@@ -1,0 +1,12 @@
+{
+  "testCloneOfDataAndPathBlocks": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "Query.getQueryPattern (syntax tree)."
+  },
+  "testCloneOfValuesDataBlock": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "Query.getQueryPattern (syntax tree)."
+  }
+}

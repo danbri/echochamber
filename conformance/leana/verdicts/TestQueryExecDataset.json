@@ -1,0 +1,12 @@
+{
+  "queryExec_substitution_01": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "QueryExecution.substitution (syntax substitution)."
+  },
+  "queryExec_substitution_02": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "QueryExecution.substitution (syntax substitution)."
+  }
+}

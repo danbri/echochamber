@@ -1,0 +1,7 @@
+{
+  "testQueryExecutionDatasetBuilderWrapping": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "QueryExecution.timeout."
+  }
+}

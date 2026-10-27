@@ -1,0 +1,7 @@
+{
+  "test_user_functions_in_sparql": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "Expr (SPARQL expression object model)."
+  }
+}

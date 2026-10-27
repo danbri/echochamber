@@ -1,0 +1,7 @@
+{
+  "substitute_1": {
+    "verdict": "divergence",
+    "spec": "SPARQL 1.1 Query Language section 18.6 (eval(D(G), Graph(IRI, P)) evaluates P over the named graph IRI of the dataset; an IRI that names no graph gives no solution) and section 13.3.1",
+    "note": "SELECT * { VALUES ?s { :s1 } GRAPH <urn:x-arq:UnionGraph> { ?s ?p ?o } }: Jena reads the IRI as the union of the named graphs (1 row); for SPARQL it names no graph of the dataset (0 rows)."
+  }
+}

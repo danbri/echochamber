@@ -3,6 +3,14 @@
 Date: 2026-10-25. Status: feasibility study, for owner review. No facade code exists.
 Tracking: https://github.com/danbri/factoidal/issues/1036 (SPARQL string-function defects found by this study).
 
+Update 2026-10-27: stage 1 (748 tests) and stage 2 are done in
+`packages/leana`: 1,939 Jena test methods ported, 1,236 pass, 5 defect, 89
+divergence, 609 gap (`node conformance/leana/count.mjs`, `@factoidal/core`
+0.18.0). The engine ops stage 2 still needs are filed as
+https://github.com/danbri/factoidal/issues/1089 (query object model,
+substitution, timeouts, property functions), #1088 (syntaxes and parser
+options) and #1087 (rules and live inference); see `packages/leana/GAPS.md`.
+
 Update 2026-10-26: stages 0 and 0b are done. All 1,070 one-line expression
 tests (measured; 996 ported) run as `npm/factoidal/test/jena-arq-expr.test.mjs`;
 the `ARQ` and `SPARQL-CDTs` manifests run with `l4w3c`. Results and verdicts:

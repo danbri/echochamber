@@ -1,0 +1,17 @@
+{
+  "test_user_defined_function_factory_add_01": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "Expr (SPARQL expression object model)."
+  },
+  "test_user_defined_function_factory_add_02": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "Expr (SPARQL expression object model)."
+  },
+  "test_user_defined_function_factory_add_03": {
+    "verdict": "gap",
+    "gap": "query",
+    "note": "Expr (SPARQL expression object model)."
+  }
+}

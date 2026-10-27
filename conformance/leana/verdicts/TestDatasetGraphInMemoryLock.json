@@ -1,0 +1,7 @@
+{
+  "dataset_11": {
+    "verdict": "defect",
+    "issue": "https://github.com/danbri/factoidal/issues/1094",
+    "note": "addNamedModel(blank node, model) on createTxnMem(): @factoidal/core Dataset.add refuses a quad whose graph name is a blank node (term.invalid: 'a quad in a graph named by a blank node cannot be added or deleted here'; Dataset.delete the same), though RDF 1.1 Concepts section 4 allows a blank node as a graph name and openDataset reads such quads from N-Quads. Candidate defect: issue to be filed."
+  }
+}

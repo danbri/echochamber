@@ -99,7 +99,7 @@ export class Node_Blank extends Node { constructor(label?: string); }
 export class Node_Literal extends Node { constructor(term: Term); }
 export class Node_Variable extends Node { constructor(name: string); }
 export class Node_Triple extends Node { constructor(triple: Triple); }
-/** Not in leana: the constructor throws (gap 'echo'). */
+/** A graph as a node (a Jena extension, not an RDF term). */
 export class Node_Graph extends Node { constructor(graph?: Graph); }
 
 export class LiteralLabel {

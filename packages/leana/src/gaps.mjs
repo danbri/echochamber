@@ -38,6 +38,18 @@ export const GAPS = Object.freeze({
     summary: 'isomorphism of graphs with blank nodes and RDF 1.2 triple terms (RDFC-1.0 has no rule for triple terms)',
     issue: 'https://github.com/danbri/factoidal/issues/957',
   },
+  'syntaxes': {
+    summary: 'RDF syntaxes the engine does not read or write (RDF/JSON, TriX, SHACLC, binary RDF), blank node labels as given, and a writer base IRI need engine ops',
+    issue: 'https://github.com/danbri/factoidal/issues/1088',
+  },
+  'query': {
+    summary: 'the SPARQL query/update object model (parse to a syntax tree and back), syntax substitution, timeouts, property functions and a results writer for given rows need engine ops',
+    issue: 'https://github.com/danbri/factoidal/issues/1089',
+  },
+  'inference': {
+    summary: 'the Jena rule language and a synchronous (live) inference graph need engine ops',
+    issue: 'https://github.com/danbri/factoidal/issues/1087',
+  },
   // Echo gaps: leana has not done it yet. No engine semantics are missing.
   'echo': {
     summary: 'not implemented in leana stage 1 (no engine semantics missing)',

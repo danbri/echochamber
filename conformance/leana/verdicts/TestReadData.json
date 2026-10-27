@@ -1,127 +1,42 @@
 {
-  "read_01": {
-    "verdict": "gap",
-    "gap": "echo",
-    "note": "Reads into a Dataset (DatasetFactory): stage 2. Also no Lang (syntax from the suffix)."
-  },
-  "read_02": {
-    "verdict": "gap",
-    "gap": "echo",
-    "note": "Reads into a Dataset (DatasetFactory): stage 2. Also no Lang (syntax from the suffix)."
-  },
-  "read_03": {
-    "verdict": "gap",
-    "gap": "echo",
-    "note": "Reads into a Dataset (DatasetFactory): stage 2."
-  },
-  "read_04": {
-    "verdict": "gap",
-    "gap": "echo",
-    "note": "Reads into a Dataset (DatasetFactory): stage 2."
-  },
-  "read_11": {
-    "verdict": "gap",
-    "gap": "echo",
-    "note": "Reads into a Dataset (DatasetFactory): stage 2."
-  },
-  "read_12": {
-    "verdict": "gap",
-    "gap": "echo",
-    "note": "Reads into a Dataset (DatasetFactory): stage 2."
-  },
-  "read_13": {
-    "verdict": "gap",
-    "gap": "echo",
-    "note": "Reads into a Dataset (DatasetFactory): stage 2."
-  },
-  "read_14": {
-    "verdict": "gap",
-    "gap": "echo",
-    "note": "Reads into a Dataset (DatasetFactory): stage 2."
-  },
-  "read_15": {
-    "verdict": "gap",
-    "gap": "echo",
-    "note": "Reads into a Dataset (DatasetFactory): stage 2."
-  },
-  "read_21": {
-    "verdict": "gap",
-    "gap": "echo",
-    "note": "Reads into a Dataset (DatasetFactory): stage 2."
-  },
-  "read_22": {
-    "verdict": "gap",
-    "gap": "echo",
-    "note": "Reads into a Dataset (DatasetFactory): stage 2."
-  },
-  "read_23": {
-    "verdict": "gap",
-    "gap": "echo",
-    "note": "Reads into a Dataset (DatasetFactory): stage 2."
-  },
-  "read_24": {
-    "verdict": "gap",
-    "gap": "echo",
-    "note": "Reads into a Dataset (DatasetFactory): stage 2."
-  },
-  "read_input_1": {
-    "verdict": "gap",
-    "gap": "echo",
-    "note": "Reads into a Dataset (DatasetFactory): stage 2."
-  },
-  "read_input_2": {
-    "verdict": "gap",
-    "gap": "echo",
-    "note": "Reads into a Dataset (DatasetFactory): stage 2."
-  },
   "load_01": {
-    "verdict": "gap",
-    "gap": "syntax-from-name",
-    "note": "No Lang: Jena picks N-Triples from the suffix .nt."
-  },
-  "load_11": {
     "verdict": "gap",
     "gap": "syntax-from-name",
     "note": "No Lang: Jena picks N-Triples from the suffix .nt."
   },
   "load_04": {
     "verdict": "gap",
-    "gap": "echo",
-    "note": "Datasets: stage 2."
+    "gap": "syntax-from-name",
+    "note": "RDFParser.source(path) with no lang (syntax from the file name)."
   },
-  "load_05": {
+  "load_11": {
     "verdict": "gap",
-    "gap": "echo",
-    "note": "Datasets: stage 2."
-  },
-  "load_06": {
-    "verdict": "gap",
-    "gap": "echo",
-    "note": "Datasets: stage 2."
+    "gap": "syntax-from-name",
+    "note": "No Lang: Jena picks N-Triples from the suffix .nt."
   },
   "load_14": {
     "verdict": "gap",
-    "gap": "echo",
-    "note": "Datasets: stage 2."
-  },
-  "load_15": {
-    "verdict": "gap",
-    "gap": "echo",
-    "note": "Datasets: stage 2."
-  },
-  "load_16": {
-    "verdict": "gap",
-    "gap": "echo",
-    "note": "Datasets: stage 2."
+    "gap": "syntax-from-name",
+    "note": "RDFParser.source(path) with no lang (syntax from the file name)."
   },
   "load_17": {
     "verdict": "gap",
-    "gap": "echo",
-    "note": "Datasets: stage 2."
+    "gap": "syntax-from-name",
+    "note": "RDFParser.source(path) with no lang (syntax from the file name)."
   },
   "load_18": {
     "verdict": "gap",
-    "gap": "echo",
-    "note": "ErrorHandlerFactory default handlers are not in leana (Jena warns when a graph read meets named graphs; leana keeps the default graph silently)."
+    "gap": "syntax-from-name",
+    "note": "RDFParser.source(path) with no lang (syntax from the file name)."
+  },
+  "read_01": {
+    "verdict": "gap",
+    "gap": "syntax-from-name",
+    "note": "RDFParser.source(path) with no lang (syntax from the file name)."
+  },
+  "read_02": {
+    "verdict": "gap",
+    "gap": "syntax-from-name",
+    "note": "RDFParser.source(path) with no lang (syntax from the file name)."
   }
 }

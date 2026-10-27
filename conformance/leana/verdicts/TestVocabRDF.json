@@ -1,0 +1,17 @@
+{
+  "testLI": {
+    "verdict": "gap",
+    "gap": "vocabulary",
+    "note": "RDF.<term>."
+  },
+  "testNodes": {
+    "verdict": "gap",
+    "gap": "vocabulary",
+    "note": "RDF.<term>."
+  },
+  "testRDFVocabulary": {
+    "verdict": "gap",
+    "gap": "vocabulary",
+    "note": "RDF.<term>."
+  }
+}

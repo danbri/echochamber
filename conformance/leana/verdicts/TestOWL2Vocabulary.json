@@ -1,0 +1,17 @@
+{
+  "testOWL2SharesOWL1URI": {
+    "verdict": "gap",
+    "gap": "vocabulary",
+    "note": "OWL.<term>."
+  },
+  "testOWL2TermSpellings": {
+    "verdict": "gap",
+    "gap": "vocabulary",
+    "note": "OWL2.<term>."
+  },
+  "testSharedOWLTerms": {
+    "verdict": "gap",
+    "gap": "vocabulary",
+    "note": "OWL2.<term>."
+  }
+}
