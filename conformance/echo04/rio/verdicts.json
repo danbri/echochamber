@@ -30,13 +30,6 @@
    "spec": "RDF 1.1 Concepts section 3.3 (Literals); RDF 1.2 Concepts section 3.4",
    "note": "rdf:datatype=\"...#langString\" with no xml:lang; core refuses (parse.syntax)"
   },
-  "AbstractParserHandlingTest#testNoLanguageWithRDFLangStringNoFailCase1#jsonld": {
-   "verdict": "defect",
-   "group": "jsonld-keyword-form-key-with-base",
-   "issue": "https://github.com/danbri/factoidal/issues/1064",
-   "spec": "JSON-LD 1.1 API section 5.2.2 IRI Expansion step 2: \"If value has the form of a keyword (i.e., it matches the ABNF rule \\\"@\\\"1*ALPHA from [RFC5234]), a processor SHOULD generate a warning and return null.\"; section 5.1.2 Expansion Algorithm step 13.3: \"If expanded property is null or it neither contains a colon (:) nor it is a keyword, drop key by continuing to the next key.\"",
-   "note": "The RDF4J resource spells the key \"@datatype\" (not a JSON-LD keyword), so the key is dropped and the value object is {\"@value\": \"G'day mate\"}, an xsd:string literal: RDF4J's expectation. core.parse(text, {format:'jsonld'}) gives that answer; with baseIRI 'urn:test:base:' (what RDF4J passes) or 'http://ex/' it refuses with parse.syntax 'invalid value object'. Minimal: core.parse('[{\"@id\":\"_:a\",\"http://p\":[{\"@value\":\"x\",\"@foo\":\"y\"}]}]', {format:'jsonld', baseIRI:'http://ex/'}) refuses; without baseIRI it gives _:a <http://p> \"x\". A keyword-form key at node level ({\"@foo\":\"y\"}) is dropped correctly with a base."
-  },
   "ResolveUriTest#colonInPathWithoutBaseFails": {
    "verdict": "defect",
    "group": "iri-colon-absolute",

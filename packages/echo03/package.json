@@ -10,7 +10,7 @@
     ".": "./src/index.mjs"
   },
   "dependencies": {
-    "@factoidal/core": "0.17.0"
+    "@factoidal/core": "0.18.0"
   },
   "engines": {
     "node": ">=22.12"

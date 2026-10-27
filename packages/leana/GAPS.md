@@ -6,7 +6,7 @@ issue that asks for the engine op). leana does not reimplement these in
 JavaScript (echochamber CLAUDE.md rule 1). `conformance/leana/gaps.test.mjs`
 checks that every `unsupported(...)` call in `packages/leana/src` is listed here.
 
-Pinned: `@factoidal/core` 0.17.0 (npm).
+Pinned: `@factoidal/core` 0.18.0 (npm).
 
 ## value-matching: Value-based matching of literals
 
