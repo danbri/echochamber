@@ -1,0 +1,192 @@
+{
+ "cases": {
+  "AbstractParserHandlingTest#testNoLanguageWithRDFLangStringNoFailCase1#turtle": {
+   "verdict": "divergence",
+   "group": "langstring-without-tag",
+   "spec": "RDF 1.1 Concepts section 3.3 (Literals): a literal is a language-tagged string if and only if its datatype IRI is rdf:langString, and then it has a non-empty language tag; RDF 1.2 Concepts section 3.4",
+   "note": "\"G'day mate\"^^rdf:langString has no language tag, so it is not a literal of the abstract syntax. RDF4J (RDFLangStringDatatypeHandler) turns it into the xsd:string literal \"G'day mate\"; core refuses (term.invalid-langtag)."
+  },
+  "AbstractParserHandlingTest#testNoLanguageWithRDFLangStringNoFailCase1#ntriples": {
+   "verdict": "divergence",
+   "group": "langstring-without-tag",
+   "spec": "RDF 1.1 Concepts section 3.3 (Literals); RDF 1.2 Concepts section 3.4",
+   "note": "as #turtle"
+  },
+  "AbstractParserHandlingTest#testNoLanguageWithRDFLangStringNoFailCase1#nquads": {
+   "verdict": "divergence",
+   "group": "langstring-without-tag",
+   "spec": "RDF 1.1 Concepts section 3.3 (Literals); RDF 1.2 Concepts section 3.4",
+   "note": "as #turtle"
+  },
+  "AbstractParserHandlingTest#testNoLanguageWithRDFLangStringNoFailCase1#trig": {
+   "verdict": "divergence",
+   "group": "langstring-without-tag",
+   "spec": "RDF 1.1 Concepts section 3.3 (Literals); RDF 1.2 Concepts section 3.4",
+   "note": "as #turtle"
+  },
+  "AbstractParserHandlingTest#testNoLanguageWithRDFLangStringNoFailCase1#rdfxml": {
+   "verdict": "divergence",
+   "group": "langstring-without-tag",
+   "spec": "RDF 1.1 Concepts section 3.3 (Literals); RDF 1.2 Concepts section 3.4",
+   "note": "rdf:datatype=\"...#langString\" with no xml:lang; core refuses (parse.syntax)"
+  },
+  "AbstractParserHandlingTest#testNoLanguageWithRDFLangStringNoFailCase1#jsonld": {
+   "verdict": "defect",
+   "group": "jsonld-keyword-form-key-with-base",
+   "issue": "https://github.com/danbri/factoidal/issues/1064",
+   "spec": "JSON-LD 1.1 API section 5.2.2 IRI Expansion step 2: \"If value has the form of a keyword (i.e., it matches the ABNF rule \\\"@\\\"1*ALPHA from [RFC5234]), a processor SHOULD generate a warning and return null.\"; section 5.1.2 Expansion Algorithm step 13.3: \"If expanded property is null or it neither contains a colon (:) nor it is a keyword, drop key by continuing to the next key.\"",
+   "note": "The RDF4J resource spells the key \"@datatype\" (not a JSON-LD keyword), so the key is dropped and the value object is {\"@value\": \"G'day mate\"}, an xsd:string literal: RDF4J's expectation. core.parse(text, {format:'jsonld'}) gives that answer; with baseIRI 'urn:test:base:' (what RDF4J passes) or 'http://ex/' it refuses with parse.syntax 'invalid value object'. Minimal: core.parse('[{\"@id\":\"_:a\",\"http://p\":[{\"@value\":\"x\",\"@foo\":\"y\"}]}]', {format:'jsonld', baseIRI:'http://ex/'}) refuses; without baseIRI it gives _:a <http://p> \"x\". A keyword-form key at node level ({\"@foo\":\"y\"}) is dropped correctly with a base."
+  },
+  "ResolveUriTest#colonInPathWithoutBaseFails": {
+   "verdict": "defect",
+   "group": "iri-colon-absolute",
+   "issue": "https://github.com/danbri/factoidal/issues/472",
+   "spec": "RFC 3986 section 3.1 (scheme = ALPHA *( ALPHA / DIGIT / \"+\" / \"-\" / \".\" ) \":\") and section 4.2; RDF 1.2 Turtle section 6.3",
+   "note": "core.parse('<urn:s> <urn:p> <path/foo:bar> .', {format:'turtle'}) accepts and keeps the relative reference <path/foo:bar> unresolved, while <a/b> with no base is refused. 'path/foo' cannot be a scheme (contains '/'), so the reference is relative and there is no base."
+  },
+  "ResolveUriTest#leadingColonInFirstPathSegmentIsRejected": {
+   "verdict": "defect",
+   "group": "iri-generic-syntax",
+   "issue": "https://github.com/danbri/factoidal/issues/1057",
+   "spec": "RDF 1.2 Turtle section 6.3 (relative IRI references are resolved per RFC 3986); RFC 3986 section 4.2 (\"A path segment that contains a colon character (e.g., \\\"this:that\\\") cannot be used as the first segment of a relative-path reference\"); RFC 3987 section 2.2 irelative-ref / ipath-noscheme",
+   "note": "core.parse('<urn:s> <urn:p> <:foo> .', {format:'turtle', baseIRI:'http://example.org/dir/doc'}) accepts and gives <http://example.org/dir/:foo>. ':foo' is neither an absolute IRI (a scheme starts with ALPHA) nor a relative reference (ipath-noscheme forbids ':' in the first segment), so RFC 3986 5.2 resolution is not defined for it. The same check would refuse <:foo> and <1a:foo> in N-Triples, which core also accepts."
+  },
+  "AbstractNQuadsParserUnitTest#testSparqlVersionDirectiveDoubleQuotes": {
+   "verdict": "defect",
+   "group": "nt-nq12-version-directive",
+   "issue": "https://github.com/danbri/factoidal/issues/1055",
+   "spec": "RDF 1.2 N-Quads section 5.3 Grammar, productions [2] statement ::= directive | quad, [3] directive ::= versionDirective, [4] versionDirective ::= 'VERSION' versionSpecifier, [5] versionSpecifier ::= STRING_LITERAL_QUOTE; section 6.1: the version announcement is only a hint (https://www.w3.org/TR/rdf12-n-quads/#sec-grammar)",
+   "note": "core.parse('VERSION \"1.2--basic\"', {format: 'nquads12'}) rejects with term.invalid-iri 'expected subject (IRIREF or BLANK_NODE_LABEL) at line 1, column 1'; VERSION \"1.2\" is rejected the same way, and so is a VERSION line followed by a quad. turtle12 accepts the same directive. Expected: an empty graph."
+  },
+  "AbstractNQuadsParserUnitTest#testSparqlVersionDirectiveSingleQuotes": {
+   "verdict": "divergence",
+   "group": "nt-nq12-version-single-quotes",
+   "spec": "RDF 1.2 N-Quads section 5.3 Grammar, [5] versionSpecifier ::= STRING_LITERAL_QUOTE (double quotes only; there is no STRING_LITERAL_SINGLE_QUOTE in the N-Quads grammar) (https://www.w3.org/TR/rdf12-n-quads/#sec-grammar)",
+   "note": "RDF4J accepts VERSION '1.2--basic' in N-Quads; the grammar allows only a double-quoted version specifier, so rejection is correct. Factoidal rejects, but for the reason in the nquads12-version-directive defect (no VERSION support at all); when that is fixed this case must still reject."
+  },
+  "AbstractNQuadsParserUnitTest#testDirLangStringNoLanguage": {
+   "verdict": "divergence",
+   "group": "langstring-without-tag",
+   "spec": "RDF 1.2 Concepts section 3.4 Literals: 'If and only if the datatype IRI is http://www.w3.org/1999/02/22-rdf-syntax-ns#langString or http://www.w3.org/1999/02/22-rdf-syntax-ns#dirLangString, there is a non-empty language tag' (https://www.w3.org/TR/rdf12-concepts/#section-Graph-Literal)",
+   "note": "\"Hello\"^^rdf:dirLangString has no language tag and no base direction, so no RDF literal can be built from it. RDF4J (VERIFY_DATATYPE_VALUES=false, its default) silently rewrites it to \"Hello\"^^xsd:string (RDFParserHelper.createLiteral); Factoidal rejects with term.invalid-langtag."
+  },
+  "AbstractNTriplesParserUnitTest#testSparqlVersionDirectiveDoubleQuotes": {
+   "verdict": "defect",
+   "group": "nt-nq12-version-directive",
+   "issue": "https://github.com/danbri/factoidal/issues/1055",
+   "spec": "RDF 1.2 N-Triples section 5.3 Grammar, productions [2] statement ::= directive | triple, [3] directive ::= versionDirective, [4] versionDirective ::= 'VERSION' versionSpecifier, [5] versionSpecifier ::= STRING_LITERAL_QUOTE; section 6.1: the version announcement is only a hint (https://www.w3.org/TR/rdf12-n-triples/#sec-grammar)",
+   "note": "core.parse('VERSION \"1.2--basic\"', {format: 'ntriples12'}) rejects with term.invalid-iri 'expected subject (IRIREF or BLANK_NODE_LABEL) at line 1, column 1'; VERSION \"1.2\" is rejected the same way, and so is a VERSION line followed by a triple. turtle12 accepts the same directive. Expected: an empty graph."
+  },
+  "AbstractNTriplesParserUnitTest#testSparqlVersionDirectiveSingleQuotes": {
+   "verdict": "divergence",
+   "group": "nt-nq12-version-single-quotes",
+   "spec": "RDF 1.2 N-Triples section 5.3 Grammar, [5] versionSpecifier ::= STRING_LITERAL_QUOTE (double quotes only; there is no STRING_LITERAL_SINGLE_QUOTE in the N-Triples grammar) (https://www.w3.org/TR/rdf12-n-triples/#sec-grammar)",
+   "note": "RDF4J accepts VERSION '1.2--basic' in N-Triples; the grammar allows only a double-quoted version specifier, so rejection is correct. Factoidal rejects, but for the reason in the ntriples12-version-directive defect (no VERSION support at all); when that is fixed this case must still reject."
+  },
+  "AbstractNTriplesParserUnitTest#testDirLangStringNoLanguage": {
+   "verdict": "divergence",
+   "group": "langstring-without-tag",
+   "spec": "RDF 1.2 Concepts section 3.4 Literals: 'If and only if the datatype IRI is http://www.w3.org/1999/02/22-rdf-syntax-ns#langString or http://www.w3.org/1999/02/22-rdf-syntax-ns#dirLangString, there is a non-empty language tag' (https://www.w3.org/TR/rdf12-concepts/#section-Graph-Literal)",
+   "note": "\"Hello\"^^rdf:dirLangString has no language tag and no base direction, so no RDF literal can be built from it. RDF4J (VERIFY_DATATYPE_VALUES=false, its default) silently rewrites it to \"Hello\"^^xsd:string (RDFParserHelper.createLiteral); Factoidal rejects with term.invalid-langtag."
+  },
+  "RDFXMLParserTest#testFatalErrorDoctypeDecl": {
+   "verdict": "divergence",
+   "group": "xml-doctype-disallowed",
+   "spec": "XML 1.0 (Fifth Edition) section 2.8 [22] prolog ::= XMLDecl? Misc* (doctypedecl Misc*)? and section 5.1 (a non-validating processor need not read external parameter entities); RDF 1.2 XML Syntax section 2 (an RDF/XML document is an XML document)",
+   "note": "RDF4J refuses any DOCTYPE by default (XMLParserSettings.DISALLOW_DOCTYPE_DECL=true, an XXE hardening choice). The document is well-formed XML; Factoidal skips the unread external parameter entity and gives the one triple <http://example.org/foo/bar> rdfs:label \"Foo Bar\"."
+  },
+  "TriGParserCustomTest#testParseTruePrefix": {
+   "verdict": "defect",
+   "group": "turtle-keyword-prefix",
+   "issue": "https://github.com/danbri/factoidal/issues/1063",
+   "spec": "RDF 1.2 TriG section 4.5 (grammar [PNAME_LN], [PN_PREFIX]) and RDF 1.2 Turtle section 6 note 3: \"When tokenizing the input and choosing grammar rules, the longest match is chosen.\"",
+   "note": "In object position the lexer reads 'true'/'false' as BooleanLiteral even when ':' follows, so true:o (a PNAME_LN, the longest match) is refused with 'expected . after triple'. Subject and predicate positions accept true:s / true:p; truex:o is accepted. Same in turtle, trig, trig12."
+  },
+  "TriGParserCustomTest#testDirLangStringNoLanguage": {
+   "verdict": "divergence",
+   "group": "langstring-without-tag",
+   "spec": "RDF 1.2 Concepts section 3.3 (Literals: the datatype IRI is rdf:dirLangString if and only if the literal has a language tag and a base direction); W3C rdf-tests rdf12 ntriples-langdir-bad-5 is a negative syntax test of the same literal",
+   "note": "RDF4J (VERIFY_DATATYPE_VALUES=false, its default) rewrites \"Hello\"^^rdf:dirLangString with no language tag to the xsd:string literal \"Hello\"; Factoidal refuses it (term.invalid-langtag)."
+  },
+  "CustomTurtleParserTest#testSES2165LiteralSpaceDatatypeNewline": {
+   "verdict": "defect",
+   "group": "turtle-datatype-ws",
+   "issue": "https://github.com/danbri/factoidal/issues/1063",
+   "spec": "RDF 1.2 Turtle section 6.5 [22] RDFLiteral ::= String (LANG_DIR | ('^^' iri))?; section 6.1 white space separates terminals; section 6.2 comments are treated as white space (RDF 1.1 Turtle section 6.5 [128s] same)",
+   "note": "core rejects white space or a comment between ^^ and the datatype IRI (\"expected prefixed name\"); '^^' and iri are separate terminals, so WS/comment between them is allowed. Same in turtle12 and trig."
+  },
+  "CustomTurtleParserTest#testSES2165LiteralSpaceDatatypeTab": {
+   "verdict": "defect",
+   "group": "turtle-datatype-ws",
+   "issue": "https://github.com/danbri/factoidal/issues/1063",
+   "spec": "RDF 1.2 Turtle section 6.5 [22] RDFLiteral ::= String (LANG_DIR | ('^^' iri))?; section 6.1 white space separates terminals; section 6.2 comments are treated as white space (RDF 1.1 Turtle section 6.5 [128s] same)",
+   "note": "core rejects white space or a comment between ^^ and the datatype IRI (\"expected prefixed name\"); '^^' and iri are separate terminals, so WS/comment between them is allowed. Same in turtle12 and trig."
+  },
+  "CustomTurtleParserTest#testSES2165LiteralSpaceDatatypeCarriageReturn": {
+   "verdict": "defect",
+   "group": "turtle-datatype-ws",
+   "issue": "https://github.com/danbri/factoidal/issues/1063",
+   "spec": "RDF 1.2 Turtle section 6.5 [22] RDFLiteral ::= String (LANG_DIR | ('^^' iri))?; section 6.1 white space separates terminals; section 6.2 comments are treated as white space (RDF 1.1 Turtle section 6.5 [128s] same)",
+   "note": "core rejects white space or a comment between ^^ and the datatype IRI (\"expected prefixed name\"); '^^' and iri are separate terminals, so WS/comment between them is allowed. Same in turtle12 and trig."
+  },
+  "CustomTurtleParserTest#testSES2165LiteralSpaceDatatypeSpace": {
+   "verdict": "defect",
+   "group": "turtle-datatype-ws",
+   "issue": "https://github.com/danbri/factoidal/issues/1063",
+   "spec": "RDF 1.2 Turtle section 6.5 [22] RDFLiteral ::= String (LANG_DIR | ('^^' iri))?; section 6.1 white space separates terminals; section 6.2 comments are treated as white space (RDF 1.1 Turtle section 6.5 [128s] same)",
+   "note": "core rejects white space or a comment between ^^ and the datatype IRI (\"expected prefixed name\"); '^^' and iri are separate terminals, so WS/comment between them is allowed. Same in turtle12 and trig."
+  },
+  "CustomTurtleParserTest#testSES2165LiteralSpaceDatatypeComment": {
+   "verdict": "defect",
+   "group": "turtle-datatype-ws",
+   "issue": "https://github.com/danbri/factoidal/issues/1063",
+   "spec": "RDF 1.2 Turtle section 6.5 [22] RDFLiteral ::= String (LANG_DIR | ('^^' iri))?; section 6.1 white space separates terminals; section 6.2 comments are treated as white space (RDF 1.1 Turtle section 6.5 [128s] same)",
+   "note": "core rejects white space or a comment between ^^ and the datatype IRI (\"expected prefixed name\"); '^^' and iri are separate terminals, so WS/comment between them is allowed. Same in turtle12 and trig."
+  },
+  "CustomTurtleParserTest#testParseTruePrefix": {
+   "verdict": "defect",
+   "group": "turtle-keyword-prefix",
+   "issue": "https://github.com/danbri/factoidal/issues/1063",
+   "spec": "RDF 1.2 Turtle section 6.5 [39] PNAME_NS ::= PN_PREFIX? ':', [58] PN_PREFIX, and Note 3: \"When tokenizing the input and choosing grammar rules, the longest match is chosen.\" (RDF 1.1 Turtle section 6.3 same)",
+   "note": "after @prefix true: ..., the object true:o is read as the keyword true followed by :o (\"expected . after triple\"); longest match makes true:o a PNAME_LN. Subject/predicate position works; object position fails; false: too; turtle12 and trig too."
+  },
+  "CustomTurtleParserTest#testSES1988BlankNodePeriodBNode": {
+   "verdict": "divergence",
+   "group": "bnode-label-dot",
+   "spec": "RDF 1.2 Turtle section 6.5 [41] BLANK_NODE_LABEL ::= '_:' (PN_CHARS_U | [0-9]) ((PN_CHARS | '.')* PN_CHARS)? and Note 3 (longest match)",
+   "note": "in _:blank._:blank the longest BLANK_NODE_LABEL is _:blank._ ('_' is PN_CHARS), leaving :blank with an undeclared empty prefix; RDF4J ends the label before the dot. core rejects, as the grammar requires."
+  },
+  "CustomTurtleParserTest#testParsingDefaultNamespaces": {
+   "verdict": "divergence",
+   "group": "predeclared-prefixes",
+   "spec": "RDF 1.2 Turtle section 7.2 RDF Term Constructors, PNAME_LN: \"The namespaces map MUST have a corresponding namespace\" (RDF 1.1 Turtle section 7.2 same)",
+   "note": "RDF4J pre-binds Namespaces.DEFAULT_RDF4J (skos:, rdf:, owl:, ...) by default (BasicParserSettings.NAMESPACES); a document using skos: without @prefix is accepted. core rejects: undefined prefix."
+  },
+  "TurtleParserTest#testUnparsableIRIFatal": {
+   "verdict": "defect",
+   "group": "iri-generic-syntax",
+   "issue": "https://github.com/danbri/factoidal/issues/1057",
+   "spec": "RDF 1.2 Turtle 7.2 (IRIREF: \"The resulting IRI MUST comply with the syntactic restrictions of generic IRI syntax\"); RDF 1.2 Concepts 3.3 (an IRI \"is a string that conforms to the syntax defined in RFC 3987\"); RFC 3987 2.2 (iauthority = [ iuserinfo \"@\" ] ihost [ \":\" port ], port = *DIGIT)",
+   "note": "<http://www:example.org/> has a non-digit port, so it is not an IRI under RFC 3987 generic syntax; core accepts it (also in N-Triples). RDF4J rejects (ParsedIRI)."
+  },
+  "TurtleParserTest#testUnparsableIRINonFatal": {
+   "verdict": "defect",
+   "group": "iri-generic-syntax",
+   "issue": "https://github.com/danbri/factoidal/issues/1057",
+   "spec": "RDF 1.2 Turtle 7.2 (IRIREF: \"The resulting IRI MUST comply with the syntactic restrictions of generic IRI syntax\"); RFC 3987 2.2",
+   "note": "lenient parse keeps the statement with <http://www:example.org/> (2 quads); RDF4J drops it (1 quad). Same root cause as testUnparsableIRIFatal."
+  },
+  "TurtleParserTest#testDirLangStringNoLanguage": {
+   "verdict": "divergence",
+   "group": "predeclared-prefixes",
+   "spec": "RDF 1.2 Turtle 7.2 (PNAME_LN: \"The namespaces map MUST have a corresponding namespace\"); RDF 1.2 Concepts 3.4 (\"If and only if the datatype IRI is ...rdf:dirLangString, there is a base direction\"; likewise a language tag)",
+   "note": "the input uses rdf: without declaring it; RDF4J's default NAMESPACES setting (RDFa 1.1 initial context plus others) predeclares it, core rejects (undefined prefix). RDF4J also turns \"Hello\"^^rdf:dirLangString (no language tag) into an xsd:string literal, which the Turtle term constructor (datatype taken from the iri) does not do."
+  },
+  "TurtleParserTest#testNestedTripleTerm2": {
+   "verdict": "divergence",
+   "group": "predeclared-prefixes",
+   "spec": "RDF 1.2 Turtle 7.2 (PNAME_LN: \"The namespaces map MUST have a corresponding namespace\")",
+   "note": "the input uses xsd:int without declaring xsd:; RDF4J's default NAMESPACES setting predeclares it, core rejects (undefined prefix: xsd)."
+  }
+ }
+}

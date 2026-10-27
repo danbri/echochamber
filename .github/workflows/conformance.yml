@@ -1,0 +1,31 @@
+# Runs every ported suite: each conformance/<echo>/ with a package.json is
+# installed from its lock file and tested. Each suite pins its own
+# @factoidal/core version.
+name: conformance
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  suites:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run each conformance suite
+        shell: bash
+        run: |
+          set -euo pipefail
+          found=0
+          for p in conformance/*/package.json; do
+            [ -e "$p" ] || continue
+            d=$(dirname "$p"); found=1
+            echo "::group::$d"
+            (cd "$d" && npm ci --no-audit --no-fund && npm test)
+            echo "::endgroup::"
+          done
+          [ "$found" = 1 ] || echo "no suites"

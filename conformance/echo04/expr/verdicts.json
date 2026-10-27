@@ -1,0 +1,735 @@
+{
+ "cases": {
+  "ContainsTest#differentBaseDirectionsAreIncompatible": {
+   "verdict": "defect",
+   "group": "dir-lang-string-functions",
+   "issue": "https://github.com/danbri/factoidal/issues/1042",
+   "spec": "SPARQL 1.2 Query WD §17.4.3 argument compatibility (same language tag and same base direction)",
+   "note": "not argument compatible, must be an error; Factoidal answers a boolean"
+  },
+  "LowerCaseTest#testDirectedLanguageLiteralPreservesBaseDirection": {
+   "verdict": "defect",
+   "group": "dir-lang-string-functions",
+   "issue": "https://github.com/danbri/factoidal/issues/1042",
+   "spec": "SPARQL 1.2 Query WD §17.4.3 (string literal return type), §17.4.3.3/§17.4.3.4/§17.4.3.8/§17.4.3.9",
+   "note": "the result drops the language tag and base direction: an xsd:string is returned"
+  },
+  "UpperCaseTest#testDirectedLanguageLiteralPreservesBaseDirection": {
+   "verdict": "defect",
+   "group": "dir-lang-string-functions",
+   "issue": "https://github.com/danbri/factoidal/issues/1042",
+   "spec": "SPARQL 1.2 Query WD §17.4.3 (string literal return type), §17.4.3.3/§17.4.3.4/§17.4.3.8/§17.4.3.9",
+   "note": "the result drops the language tag and base direction: an xsd:string is returned"
+  },
+  "StrAfterTest#testDirectedLanguageLiteralPreservesBaseDirection": {
+   "verdict": "defect",
+   "group": "dir-lang-string-functions",
+   "issue": "https://github.com/danbri/factoidal/issues/1042",
+   "spec": "SPARQL 1.2 Query WD §17.4.3 (string literal return type), §17.4.3.3/§17.4.3.4/§17.4.3.8/§17.4.3.9",
+   "note": "the result drops the language tag and base direction: an xsd:string is returned"
+  },
+  "StrBeforeTest#testDirectedLanguageLiteralPreservesBaseDirection": {
+   "verdict": "defect",
+   "group": "dir-lang-string-functions",
+   "issue": "https://github.com/danbri/factoidal/issues/1042",
+   "spec": "SPARQL 1.2 Query WD §17.4.3 (string literal return type), §17.4.3.3/§17.4.3.4/§17.4.3.8/§17.4.3.9",
+   "note": "the result drops the language tag and base direction: an xsd:string is returned"
+  },
+  "SubstringTest#testEvaluate1": {
+   "verdict": "defect",
+   "group": "substr-derived-integer",
+   "issue": "https://github.com/danbri/factoidal/issues/1060",
+   "spec": "SPARQL 1.1 Query REC §17.4.3.3 (\"The arguments startingLoc and length may be derived types of xsd:integer\"); SPARQL 1.2 Query WD §17.4.3.2",
+   "note": "startingLoc \"N\"^^xsd:int (createLiteral(int)) makes SUBSTR an error; SUBSTR(\"foobar\", 4) with xsd:integer gives \"bar\". The length argument as xsd:int is accepted. Also fails for xsd:short, xsd:long, xsd:positiveInteger start"
+  },
+  "SubstringTest#testEvaluate2": {
+   "verdict": "defect",
+   "group": "substr-derived-integer",
+   "issue": "https://github.com/danbri/factoidal/issues/1060",
+   "spec": "SPARQL 1.1 Query REC §17.4.3.3 (\"The arguments startingLoc and length may be derived types of xsd:integer\"); SPARQL 1.2 Query WD §17.4.3.2",
+   "note": "startingLoc \"N\"^^xsd:int (createLiteral(int)) makes SUBSTR an error; SUBSTR(\"foobar\", 4) with xsd:integer gives \"bar\". The length argument as xsd:int is accepted. Also fails for xsd:short, xsd:long, xsd:positiveInteger start"
+  },
+  "SubstringTest#testEvaluate3": {
+   "verdict": "defect",
+   "group": "substr-derived-integer",
+   "issue": "https://github.com/danbri/factoidal/issues/1060",
+   "spec": "SPARQL 1.1 Query REC §17.4.3.3 (\"The arguments startingLoc and length may be derived types of xsd:integer\"); SPARQL 1.2 Query WD §17.4.3.2",
+   "note": "startingLoc \"N\"^^xsd:int (createLiteral(int)) makes SUBSTR an error; SUBSTR(\"foobar\", 4) with xsd:integer gives \"bar\". The length argument as xsd:int is accepted. Also fails for xsd:short, xsd:long, xsd:positiveInteger start"
+  },
+  "SubstringTest#testDirectedLanguageLiteralPreservesBaseDirection": {
+   "verdict": "defect",
+   "group": "substr-derived-integer",
+   "issue": "https://github.com/danbri/factoidal/issues/1060",
+   "spec": "SPARQL 1.1 Query REC §17.4.3.3 (\"The arguments startingLoc and length may be derived types of xsd:integer\"); SPARQL 1.2 Query WD §17.4.3.2",
+   "note": "SUBSTR(\"foobar\"@en--rtl, \"4\"^^xsd:int) is unbound: the xsd:int start is rejected. With \"4\"^^xsd:integer the base direction is dropped too (https://github.com/danbri/factoidal/issues/1042), so a fix of one defect alone leaves this case failing"
+  },
+  "SubstringTest#testEvaluateStartBefore1": {
+   "verdict": "defect",
+   "group": "substr-derived-integer",
+   "issue": "https://github.com/danbri/factoidal/issues/1060",
+   "spec": "SPARQL 1.1 Query REC §17.4.3.3 (\"The arguments startingLoc and length may be derived types of xsd:integer\"); SPARQL 1.2 Query WD §17.4.3.2",
+   "note": "startingLoc \"N\"^^xsd:int (createLiteral(int)) makes SUBSTR an error; SUBSTR(\"foobar\", 4) with xsd:integer gives \"bar\". The length argument as xsd:int is accepted. Also fails for xsd:short, xsd:long, xsd:positiveInteger start. With xsd:integer arguments the fn:substring positions are also wrong (SUBSTR(\"ABC\", 0, 1) gives \"A\"; https://github.com/danbri/factoidal/issues/1036, SPARQL 1.1 §17.4.3.3, F&O 3.1 §5.4.3), so this case needs both fixes"
+  },
+  "SubstringTest#testXpathExamples1": {
+   "verdict": "defect",
+   "group": "substr-derived-integer",
+   "issue": "https://github.com/danbri/factoidal/issues/1060",
+   "spec": "SPARQL 1.1 Query REC §17.4.3.3 (\"The arguments startingLoc and length may be derived types of xsd:integer\"); SPARQL 1.2 Query WD §17.4.3.2",
+   "note": "startingLoc \"N\"^^xsd:int (createLiteral(int)) makes SUBSTR an error; SUBSTR(\"foobar\", 4) with xsd:integer gives \"bar\". The length argument as xsd:int is accepted. Also fails for xsd:short, xsd:long, xsd:positiveInteger start"
+  },
+  "SubstringTest#testXpathExamples2": {
+   "verdict": "defect",
+   "group": "substr-derived-integer",
+   "issue": "https://github.com/danbri/factoidal/issues/1060",
+   "spec": "SPARQL 1.1 Query REC §17.4.3.3 (\"The arguments startingLoc and length may be derived types of xsd:integer\"); SPARQL 1.2 Query WD §17.4.3.2",
+   "note": "startingLoc \"N\"^^xsd:int (createLiteral(int)) makes SUBSTR an error; SUBSTR(\"foobar\", 4) with xsd:integer gives \"bar\". The length argument as xsd:int is accepted. Also fails for xsd:short, xsd:long, xsd:positiveInteger start"
+  },
+  "SubstringTest#testXpathExamples3int": {
+   "verdict": "defect",
+   "group": "substr-derived-integer",
+   "issue": "https://github.com/danbri/factoidal/issues/1060",
+   "spec": "SPARQL 1.1 Query REC §17.4.3.3 (\"The arguments startingLoc and length may be derived types of xsd:integer\"); SPARQL 1.2 Query WD §17.4.3.2",
+   "note": "startingLoc \"N\"^^xsd:int (createLiteral(int)) makes SUBSTR an error; SUBSTR(\"foobar\", 4) with xsd:integer gives \"bar\". The length argument as xsd:int is accepted. Also fails for xsd:short, xsd:long, xsd:positiveInteger start"
+  },
+  "SubstringTest#testXpathExamples4": {
+   "verdict": "defect",
+   "group": "substr-derived-integer",
+   "issue": "https://github.com/danbri/factoidal/issues/1060",
+   "spec": "SPARQL 1.1 Query REC §17.4.3.3 (\"The arguments startingLoc and length may be derived types of xsd:integer\"); SPARQL 1.2 Query WD §17.4.3.2",
+   "note": "startingLoc \"N\"^^xsd:int (createLiteral(int)) makes SUBSTR an error; SUBSTR(\"foobar\", 4) with xsd:integer gives \"bar\". The length argument as xsd:int is accepted. Also fails for xsd:short, xsd:long, xsd:positiveInteger start. With xsd:integer arguments the fn:substring positions are also wrong (SUBSTR(\"12345\", 0, 3) gives \"123\"; https://github.com/danbri/factoidal/issues/1036, SPARQL 1.1 §17.4.3.3, F&O 3.1 §5.4.3), so this case needs both fixes"
+  },
+  "SubstringTest#testXpathExamples5": {
+   "verdict": "defect",
+   "group": "substr-derived-integer",
+   "issue": "https://github.com/danbri/factoidal/issues/1060",
+   "spec": "SPARQL 1.1 Query REC §17.4.3.3 (\"The arguments startingLoc and length may be derived types of xsd:integer\"); SPARQL 1.2 Query WD §17.4.3.2",
+   "note": "startingLoc \"N\"^^xsd:int (createLiteral(int)) makes SUBSTR an error; SUBSTR(\"foobar\", 4) with xsd:integer gives \"bar\". The length argument as xsd:int is accepted. Also fails for xsd:short, xsd:long, xsd:positiveInteger start. With xsd:integer arguments the fn:substring positions are also wrong (SUBSTR(\"12345\", 5, -3) gives \"5\"; https://github.com/danbri/factoidal/issues/1036, SPARQL 1.1 §17.4.3.3, F&O 3.1 §5.4.3), so this case needs both fixes"
+  },
+  "SubstringTest#testXpathExamples6": {
+   "verdict": "defect",
+   "group": "substr-derived-integer",
+   "issue": "https://github.com/danbri/factoidal/issues/1060",
+   "spec": "SPARQL 1.1 Query REC §17.4.3.3 (\"The arguments startingLoc and length may be derived types of xsd:integer\"); SPARQL 1.2 Query WD §17.4.3.2",
+   "note": "startingLoc \"N\"^^xsd:int (createLiteral(int)) makes SUBSTR an error; SUBSTR(\"foobar\", 4) with xsd:integer gives \"bar\". The length argument as xsd:int is accepted. Also fails for xsd:short, xsd:long, xsd:positiveInteger start. With xsd:integer arguments the fn:substring positions are also wrong (SUBSTR(\"12345\", -3, 5) is unbound; https://github.com/danbri/factoidal/issues/1036, SPARQL 1.1 §17.4.3.3, F&O 3.1 §5.4.3), so this case needs both fixes"
+  },
+  "SubstringTest#testXpathExample8Inspired": {
+   "verdict": "defect",
+   "group": "substr-derived-integer",
+   "issue": "https://github.com/danbri/factoidal/issues/1060",
+   "spec": "SPARQL 1.1 Query REC §17.4.3.3 (\"The arguments startingLoc and length may be derived types of xsd:integer\"); SPARQL 1.2 Query WD §17.4.3.2",
+   "note": "startingLoc \"N\"^^xsd:int (createLiteral(int)) makes SUBSTR an error; SUBSTR(\"foobar\", 4) with xsd:integer gives \"bar\". The length argument as xsd:int is accepted. Also fails for xsd:short, xsd:long, xsd:positiveInteger start. With xsd:integer arguments the fn:substring positions are also wrong (SUBSTR(\"12345\", -42, 50) is unbound; https://github.com/danbri/factoidal/issues/1036, SPARQL 1.1 §17.4.3.3, F&O 3.1 §5.4.3), so this case needs both fixes"
+  },
+  "TestDateCast#testCastPlainLiteral_date_invalid": {
+   "verdict": "defect",
+   "group": "xsd-constructor-relabels",
+   "issue": "https://github.com/danbri/factoidal/issues/1041",
+   "spec": "XPath F&O 3.1 §19.1, §19.2 (FORG0001); SPARQL 1.1 §17.5",
+   "note": "Factoidal keeps the lexical form and relabels the datatype: an ill-typed xsd:date; F&O gives RDF4J's answer"
+  },
+  "TestDateCast#testCastPlainLiteral_dateTime": {
+   "verdict": "divergence",
+   "group": "cast-string-lenient",
+   "spec": "XPath F&O 3.1 §19.2 (casting from xs:string: the value must be in the lexical space of the target, else FORG0001); SPARQL 1.1 §17.5",
+   "note": "RDF4J casts a dateTime lexical form in an xsd:string to xsd:date; the spec makes it an error. Factoidal is wrong as well (gives the ill-typed \"1999-09-09T14:45:13\"^^xsd:date, https://github.com/danbri/factoidal/issues/1041)"
+  },
+  "TestDateCast#testCastPlainLiteral_dateTime_withTimeZone_utc": {
+   "verdict": "divergence",
+   "group": "cast-string-lenient",
+   "spec": "XPath F&O 3.1 §19.2 (casting from xs:string: the value must be in the lexical space of the target, else FORG0001); SPARQL 1.1 §17.5",
+   "note": "RDF4J casts a dateTime lexical form in an xsd:string to xsd:date; the spec makes it an error. Factoidal is wrong as well (gives the ill-typed \"1999-09-09T14:45:13\"^^xsd:date, https://github.com/danbri/factoidal/issues/1041)"
+  },
+  "TestDateCast#testCastPlainLiteral_dateTime_withTimeZone_offset": {
+   "verdict": "divergence",
+   "group": "cast-string-lenient",
+   "spec": "XPath F&O 3.1 §19.2 (casting from xs:string: the value must be in the lexical space of the target, else FORG0001); SPARQL 1.1 §17.5",
+   "note": "RDF4J casts a dateTime lexical form in an xsd:string to xsd:date; the spec makes it an error. Factoidal is wrong as well (gives the ill-typed \"1999-09-09T14:45:13\"^^xsd:date, https://github.com/danbri/factoidal/issues/1041)"
+  },
+  "TestDateCast#testCastPlainLiteral_dateTime_invalid": {
+   "verdict": "defect",
+   "group": "xsd-constructor-relabels",
+   "issue": "https://github.com/danbri/factoidal/issues/1041",
+   "spec": "XPath F&O 3.1 §19.1, §19.2 (FORG0001); SPARQL 1.1 §17.5",
+   "note": "Factoidal keeps the lexical form and relabels the datatype: an ill-typed xsd:date; F&O gives RDF4J's answer"
+  },
+  "TestDateCast#testCastDateTimeLiteral": {
+   "verdict": "defect",
+   "group": "xsd-constructor-relabels",
+   "issue": "https://github.com/danbri/factoidal/issues/1041",
+   "spec": "XPath F&O 3.1 §19.1, §19.2 (FORG0001); SPARQL 1.1 §17.5",
+   "note": "Factoidal keeps the lexical form and relabels the datatype: an ill-typed xsd:date; F&O gives RDF4J's answer"
+  },
+  "TestDateCast#testCastDateTimeLiteral_withTimeZone_utc": {
+   "verdict": "divergence",
+   "group": "lexical-form",
+   "spec": "SPARQL 1.1 §17.1; XPath F&O 3.1 §19.1 (cast dateTime to date keeps the timezone); XSD 1.1 Part 2 §3.3.9 (canonical timezone Z)",
+   "note": "RDF4J expects \"1999-09-09-00:00\"^^xsd:date; the F&O result is the same value, canonically \"1999-09-09Z\". Factoidal is wrong as well (relabels: \"1999-09-09T14:45:13Z\"^^xsd:date, issue 1041)"
+  },
+  "TestDateCast#testCastDateTimeLiteral_withTimeZone_offset": {
+   "verdict": "defect",
+   "group": "xsd-constructor-relabels",
+   "issue": "https://github.com/danbri/factoidal/issues/1041",
+   "spec": "XPath F&O 3.1 §19.1, §19.2 (FORG0001); SPARQL 1.1 §17.5",
+   "note": "Factoidal keeps the lexical form and relabels the datatype: an ill-typed xsd:date; F&O gives RDF4J's answer"
+  },
+  "TestDateTimeCast#testCastDateLiteral": {
+   "verdict": "divergence",
+   "group": "cast-date-to-datetime",
+   "spec": "SPARQL 1.1 §17.5 (the casting table has no xsd:date; xsd:date is not a SPARQL operand datatype, §17.1)",
+   "note": "RDF4J casts xsd:date to xsd:dateTime (allowed by F&O 3.1 §19.1); Factoidal gives an error, as the Jena port recorded"
+  },
+  "TestStringCast#testCastLangtagLiteral": {
+   "verdict": "defect",
+   "group": "xsd-string-cast-any-literal",
+   "issue": "https://github.com/danbri/factoidal/issues/1062",
+   "spec": "SPARQL 1.1 Query REC §17.5 (\"XPath defines only the casts from one XML Schema datatype to another\"; the only other casts defined are IRI and simple literal); SPARQL 1.2 Query WD §17.5",
+   "note": "xsd:string(\"foo\"@en) gives \"foo\"; rdf:langString is not an XML Schema datatype and has no cast. xsd:integer(\"1\"@en) and xsd:boolean(\"true\"@en) are correctly errors"
+  },
+  "QueryEvaluationUtilTest#effectiveBooleanValueInvalidNumericReturnsFalse": {
+   "verdict": "defect",
+   "group": "ebv-ill-typed-literal",
+   "issue": "https://github.com/danbri/factoidal/issues/1061",
+   "spec": "SPARQL 1.1 Query REC §17.2.2 (\"The EBV of any literal whose type is xsd:boolean or numeric is false if the lexical form is not valid for that datatype (e.g. \\\"abc\\\"^^xsd:integer)\"); SPARQL 1.2 Query WD §17.2.3",
+   "note": "Factoidal raises an error for the EBV of \"abc\"^^xsd:integer: IF(\"abc\"^^xsd:integer, \"t\", \"f\") is unbound and FILTER(!\"abc\"^^xsd:integer) removes the row"
+  },
+  "QueryEvaluationUtilTest#testCompatibleArguments#2": {
+   "verdict": "defect",
+   "group": "string-arg-types-1036",
+   "issue": "https://github.com/danbri/factoidal/issues/1036",
+   "spec": "SPARQL 1.1 Query REC §17.4.3.1.3 argument compatibility rules, §17.4.3.6 STRSTARTS",
+   "note": "observed through STRSTARTS: not argument compatible, must be an error; Factoidal answers a boolean"
+  },
+  "QueryEvaluationUtilTest#testCompatibleArguments#3": {
+   "verdict": "defect",
+   "group": "string-arg-types-1036",
+   "issue": "https://github.com/danbri/factoidal/issues/1036",
+   "spec": "SPARQL 1.1 Query REC §17.4.3.1.3 argument compatibility rules, §17.4.3.6 STRSTARTS",
+   "note": "observed through STRSTARTS: not argument compatible, must be an error; Factoidal answers a boolean"
+  },
+  "QueryEvaluationUtilTest#testCompatibleArguments#5": {
+   "verdict": "defect",
+   "group": "string-arg-types-1036",
+   "issue": "https://github.com/danbri/factoidal/issues/1036",
+   "spec": "SPARQL 1.1 Query REC §17.4.3.1.3 argument compatibility rules, §17.4.3.6 STRSTARTS",
+   "note": "observed through STRSTARTS: not argument compatible, must be an error; Factoidal answers a boolean"
+  },
+  "QueryEvaluationUtilTest#testCompatibleArguments#8": {
+   "verdict": "defect",
+   "group": "string-arg-types-1036",
+   "issue": "https://github.com/danbri/factoidal/issues/1036",
+   "spec": "SPARQL 1.1 Query REC §17.4.3.1.3 argument compatibility rules, §17.4.3.6 STRSTARTS",
+   "note": "observed through STRSTARTS: not argument compatible, must be an error; Factoidal answers a boolean"
+  },
+  "QueryEvaluationUtilTest#testCompatibleArguments#9": {
+   "verdict": "defect",
+   "group": "string-arg-types-1036",
+   "issue": "https://github.com/danbri/factoidal/issues/1036",
+   "spec": "SPARQL 1.1 Query REC §17.4.3.1.3 argument compatibility rules, §17.4.3.6 STRSTARTS",
+   "note": "observed through STRSTARTS: not argument compatible, must be an error; Factoidal answers a boolean"
+  },
+  "QueryEvaluationUtilTest#testCompatibleArguments#11": {
+   "verdict": "defect",
+   "group": "string-arg-types-1036",
+   "issue": "https://github.com/danbri/factoidal/issues/1036",
+   "spec": "SPARQL 1.1 Query REC §17.4.3.1.3 argument compatibility rules, §17.4.3.6 STRSTARTS",
+   "note": "observed through STRSTARTS: not argument compatible, must be an error; Factoidal answers a boolean"
+  },
+  "QueryEvaluationUtilTest#testCompatibleArguments#13": {
+   "verdict": "defect",
+   "group": "string-arg-types-1036",
+   "issue": "https://github.com/danbri/factoidal/issues/1036",
+   "spec": "SPARQL 1.1 Query REC §17.4.3.1.3 argument compatibility rules, §17.4.3.6 STRSTARTS",
+   "note": "observed through STRSTARTS: not argument compatible, must be an error; Factoidal answers a boolean"
+  },
+  "QueryEvaluationUtilTest#testCompatibleArguments#14": {
+   "verdict": "defect",
+   "group": "string-arg-types-1036",
+   "issue": "https://github.com/danbri/factoidal/issues/1036",
+   "spec": "SPARQL 1.1 Query REC §17.4.3.1.3 argument compatibility rules, §17.4.3.6 STRSTARTS",
+   "note": "observed through STRSTARTS: not argument compatible, must be an error; Factoidal answers a boolean"
+  },
+  "QueryEvaluationUtilTest#testCompatibleArguments#17": {
+   "verdict": "defect",
+   "group": "string-arg-types-1036",
+   "issue": "https://github.com/danbri/factoidal/issues/1036",
+   "spec": "SPARQL 1.1 Query REC §17.4.3.1.3 argument compatibility rules, §17.4.3.6 STRSTARTS",
+   "note": "observed through STRSTARTS: not argument compatible, must be an error; Factoidal answers a boolean"
+  },
+  "QueryEvaluationUtilTest#testCompatibleArguments#19": {
+   "verdict": "defect",
+   "group": "string-arg-types-1036",
+   "issue": "https://github.com/danbri/factoidal/issues/1036",
+   "spec": "SPARQL 1.1 Query REC §17.4.3.1.3 argument compatibility rules, §17.4.3.6 STRSTARTS",
+   "note": "observed through STRSTARTS: not argument compatible, must be an error; Factoidal answers a boolean"
+  },
+  "QueryEvaluationUtilTest#testCompatibleArguments#20": {
+   "verdict": "defect",
+   "group": "string-arg-types-1036",
+   "issue": "https://github.com/danbri/factoidal/issues/1036",
+   "spec": "SPARQL 1.1 Query REC §17.4.3.1.3 argument compatibility rules, §17.4.3.6 STRSTARTS",
+   "note": "observed through STRSTARTS: not argument compatible, must be an error; Factoidal answers a boolean"
+  },
+  "QueryEvaluationUtilTest#testCompatibleArguments#22": {
+   "verdict": "defect",
+   "group": "string-arg-types-1036",
+   "issue": "https://github.com/danbri/factoidal/issues/1036",
+   "spec": "SPARQL 1.1 Query REC §17.4.3.1.3 argument compatibility rules, §17.4.3.6 STRSTARTS",
+   "note": "observed through STRSTARTS: not argument compatible, must be an error; Factoidal answers a boolean"
+  },
+  "QueryEvaluationUtilTest#testCompatibleArguments#23": {
+   "verdict": "defect",
+   "group": "string-arg-types-1036",
+   "issue": "https://github.com/danbri/factoidal/issues/1036",
+   "spec": "SPARQL 1.1 Query REC §17.4.3.1.3 argument compatibility rules, §17.4.3.6 STRSTARTS",
+   "note": "observed through STRSTARTS: not argument compatible, must be an error; Factoidal answers a boolean"
+  },
+  "QueryEvaluationUtilTest#testCompatibleArguments#24": {
+   "verdict": "defect",
+   "group": "string-arg-types-1036",
+   "issue": "https://github.com/danbri/factoidal/issues/1036",
+   "spec": "SPARQL 1.1 Query REC §17.4.3.1.3 argument compatibility rules, §17.4.3.6 STRSTARTS",
+   "note": "observed through STRSTARTS: not argument compatible, must be an error; Factoidal answers a boolean"
+  },
+  "QueryEvaluationUtilTest#testCompatibleArguments#25": {
+   "verdict": "defect",
+   "group": "string-arg-types-1036",
+   "issue": "https://github.com/danbri/factoidal/issues/1036",
+   "spec": "SPARQL 1.1 Query REC §17.4.3.1.3 argument compatibility rules, §17.4.3.6 STRSTARTS",
+   "note": "observed through STRSTARTS: not argument compatible, must be an error; Factoidal answers a boolean"
+  },
+  "QueryEvaluationUtilTest#testCompatibleArguments#26": {
+   "verdict": "defect",
+   "group": "string-arg-types-1036",
+   "issue": "https://github.com/danbri/factoidal/issues/1036",
+   "spec": "SPARQL 1.1 Query REC §17.4.3.1.3 argument compatibility rules, §17.4.3.6 STRSTARTS",
+   "note": "observed through STRSTARTS: not argument compatible, must be an error; Factoidal answers a boolean"
+  },
+  "QueryEvaluationUtilTest#testCompatibleArguments#27": {
+   "verdict": "defect",
+   "group": "string-arg-types-1036",
+   "issue": "https://github.com/danbri/factoidal/issues/1036",
+   "spec": "SPARQL 1.1 Query REC §17.4.3.1.3 argument compatibility rules, §17.4.3.6 STRSTARTS",
+   "note": "observed through STRSTARTS: not argument compatible, must be an error; Factoidal answers a boolean"
+  },
+  "QueryEvaluationUtilTest#testDirectedLanguageLiteralArgumentCompatibilityRequiresSameBaseDirection#3": {
+   "verdict": "defect",
+   "group": "dir-lang-string-functions",
+   "issue": "https://github.com/danbri/factoidal/issues/1042",
+   "spec": "SPARQL 1.2 Query WD §17.4.3 argument compatibility (same language tag and same base direction)",
+   "note": "not argument compatible, must be an error; Factoidal answers a boolean"
+  },
+  "QueryEvaluationUtilTest#testDirectedLanguageLiteralArgumentCompatibilityRequiresSameBaseDirection#4": {
+   "verdict": "defect",
+   "group": "dir-lang-string-functions",
+   "issue": "https://github.com/danbri/factoidal/issues/1042",
+   "spec": "SPARQL 1.2 Query WD §17.4.3 argument compatibility (same language tag and same base direction)",
+   "note": "not argument compatible, must be an error; Factoidal answers a boolean"
+  },
+  "QueryEvaluationUtilTest#testDirectedLanguageLiteralArgumentCompatibilityRequiresSameBaseDirection#5": {
+   "verdict": "defect",
+   "group": "dir-lang-string-functions",
+   "issue": "https://github.com/danbri/factoidal/issues/1042",
+   "spec": "SPARQL 1.2 Query WD §17.4.3 argument compatibility (same language tag and same base direction)",
+   "note": "not argument compatible, must be an error; Factoidal answers a boolean"
+  },
+  "QueryEvaluationUtilTest#testDirectedLanguageLiteralArgumentCompatibilityRequiresSameBaseDirection#6": {
+   "verdict": "defect",
+   "group": "dir-lang-string-functions",
+   "issue": "https://github.com/danbri/factoidal/issues/1042",
+   "spec": "SPARQL 1.2 Query WD §17.4.3 argument compatibility (same language tag and same base direction)",
+   "note": "not argument compatible, must be an error; Factoidal answers a boolean"
+  },
+  "QueryEvaluationUtilTest#testCompareEQ#52": {
+   "verdict": "divergence",
+   "group": "equality-of-other-terms",
+   "spec": "SPARQL 1.1 Query REC §17.3 (no = for xsd:gYear), §17.4.1.7 RDFterm-equal (\"produces a type error if the arguments are both literal but are not the same RDF term\"); SPARQL 1.2 Query WD §17.4.2.2",
+   "note": "RDF4J compares xsd:gYear (and gYear with dateTime) by value; in SPARQL 1.1 this is a type error, and Factoidal gives the error"
+  },
+  "QueryEvaluationUtilTest#testCompareEQ#53": {
+   "verdict": "divergence",
+   "group": "equality-of-other-terms",
+   "spec": "SPARQL 1.1 Query REC §17.3 (no = for xsd:gYear), §17.4.1.7 RDFterm-equal (\"produces a type error if the arguments are both literal but are not the same RDF term\"); SPARQL 1.2 Query WD §17.4.2.2",
+   "note": "RDF4J compares xsd:gYear (and gYear with dateTime) by value; in SPARQL 1.1 this is a type error, and Factoidal gives the error"
+  },
+  "QueryEvaluationUtilTest#testCompareEQ#59": {
+   "verdict": "divergence",
+   "group": "equality-of-other-terms",
+   "spec": "SPARQL 1.1 Query REC §17.3 (no = for xsd:gYear), §17.4.1.7 RDFterm-equal (\"produces a type error if the arguments are both literal but are not the same RDF term\"); SPARQL 1.2 Query WD §17.4.2.2",
+   "note": "RDF4J compares xsd:gYear (and gYear with dateTime) by value; in SPARQL 1.1 this is a type error, and Factoidal gives the error"
+  },
+  "QueryEvaluationUtilTest#testCompareNE#50": {
+   "verdict": "divergence",
+   "group": "equality-of-other-terms",
+   "spec": "SPARQL 1.1 Query REC §17.3 (no = for xsd:gYear), §17.4.1.7 RDFterm-equal (\"produces a type error if the arguments are both literal but are not the same RDF term\"); SPARQL 1.2 Query WD §17.4.2.2",
+   "note": "RDF4J compares xsd:gYear (and gYear with dateTime) by value; in SPARQL 1.1 this is a type error, and Factoidal gives the error"
+  },
+  "QueryEvaluationUtilTest#testCompareNE#51": {
+   "verdict": "divergence",
+   "group": "equality-of-other-terms",
+   "spec": "SPARQL 1.1 Query REC §17.3 (no = for xsd:gYear), §17.4.1.7 RDFterm-equal (\"produces a type error if the arguments are both literal but are not the same RDF term\"); SPARQL 1.2 Query WD §17.4.2.2",
+   "note": "RDF4J compares xsd:gYear (and gYear with dateTime) by value; in SPARQL 1.1 this is a type error, and Factoidal gives the error"
+  },
+  "QueryEvaluationUtilTest#testCompareNE#57": {
+   "verdict": "divergence",
+   "group": "equality-of-other-terms",
+   "spec": "SPARQL 1.1 Query REC §17.3 (no = for xsd:gYear), §17.4.1.7 RDFterm-equal (\"produces a type error if the arguments are both literal but are not the same RDF term\"); SPARQL 1.2 Query WD §17.4.2.2",
+   "note": "RDF4J compares xsd:gYear (and gYear with dateTime) by value; in SPARQL 1.1 this is a type error, and Factoidal gives the error"
+  },
+  "QueryEvaluationUtilTest#testCompareLT#5": {
+   "verdict": "divergence",
+   "group": "operator-table",
+   "spec": "SPARQL 1.1 Query REC §17.3 operator mapping (< is defined for numerics, simple literals, xsd:string, xsd:boolean, xsd:dateTime only)",
+   "note": "RDF4J orders xsd:gYear with <; SPARQL makes it a type error, which Factoidal gives"
+  },
+  "QueryEvaluationUtilTest#testCompareLT#35": {
+   "verdict": "divergence",
+   "group": "operator-table",
+   "spec": "SPARQL 1.1 Query REC §17.3 operator mapping (< is defined for numerics, simple literals, xsd:string, xsd:boolean, xsd:dateTime only)",
+   "note": "RDF4J orders xsd:gYear with <; SPARQL makes it a type error, which Factoidal gives"
+  },
+  "ValueComparatorTest#testDirectedLanguageBaseDirection#1": {
+   "verdict": "divergence",
+   "group": "order-undefined",
+   "spec": "SPARQL 1.2 Query WD §15.1 (\"SPARQL does not define a total ordering of all possible RDF terms\")",
+   "note": "RDF4J orders \"abc\"@en--ltr and \"abc\"@en--rtl; SPARQL leaves their order undefined and Factoidal ties them"
+  },
+  "ValueComparatorTest#testDirectedLanguageBaseDirection#2": {
+   "verdict": "divergence",
+   "group": "order-undefined",
+   "spec": "SPARQL 1.2 Query WD §15.1 (\"SPARQL does not define a total ordering of all possible RDF terms\")",
+   "note": "RDF4J orders \"abc\"@en--ltr and \"abc\"@en--rtl; SPARQL leaves their order undefined and Factoidal ties them"
+  },
+  "ValueComparatorTest#testDirectedLanguageBaseDirection#3": {
+   "verdict": "divergence",
+   "group": "order-undefined",
+   "spec": "SPARQL 1.2 Query WD §15.1 (\"SPARQL does not define a total ordering of all possible RDF terms\")",
+   "note": "RDF4J orders \"abc\"@en--ltr and \"abc\"@en--rtl; SPARQL leaves their order undefined and Factoidal ties them"
+  },
+  "ValueComparatorTest#testCalendarValueEqualsUseRdfTermTieBreak#2": {
+   "verdict": "divergence",
+   "group": "order-undefined",
+   "spec": "SPARQL 1.1 Query REC §15.1 (order is given by <; equal values are not ordered); SPARQL 1.1 §17.3",
+   "note": "RDF4J (DEFAULT policy) keeps \"2000-01-01T00:00:00Z\" and \"1999-12-31T19:00:00-05:00\" (the same instant) as a tie; Factoidal breaks the tie (sorts the -05:00 form first). Both are allowed"
+  },
+  "MD5Test#testEvaluate3": {
+   "verdict": "defect",
+   "group": "string-arg-types-1036",
+   "issue": "https://github.com/danbri/factoidal/issues/1036",
+   "spec": "SPARQL 1.1 Query REC §17.4.6.1-§17.4.6.5 (the hash functions take a simple literal or xsd:string)",
+   "note": "the hash of \"4\"^^xsd:integer is computed from its lexical form; must be a type error (issue 1036 row md5(1234))"
+  },
+  "HashLeadingZeroTest#testEvaluate3": {
+   "verdict": "defect",
+   "group": "string-arg-types-1036",
+   "issue": "https://github.com/danbri/factoidal/issues/1036",
+   "spec": "SPARQL 1.1 Query REC §17.4.6.1-§17.4.6.5 (the hash functions take a simple literal or xsd:string)",
+   "note": "the hash of \"4\"^^xsd:integer is computed from its lexical form; must be a type error (issue 1036 row md5(1234))"
+  },
+  "SHA1Test#testEvaluate3": {
+   "verdict": "defect",
+   "group": "string-arg-types-1036",
+   "issue": "https://github.com/danbri/factoidal/issues/1036",
+   "spec": "SPARQL 1.1 Query REC §17.4.6.1-§17.4.6.5 (the hash functions take a simple literal or xsd:string)",
+   "note": "the hash of \"4\"^^xsd:integer is computed from its lexical form; must be a type error (issue 1036 row md5(1234))"
+  },
+  "SHA256Test#testEvaluate3": {
+   "verdict": "defect",
+   "group": "string-arg-types-1036",
+   "issue": "https://github.com/danbri/factoidal/issues/1036",
+   "spec": "SPARQL 1.1 Query REC §17.4.6.1-§17.4.6.5 (the hash functions take a simple literal or xsd:string)",
+   "note": "the hash of \"4\"^^xsd:integer is computed from its lexical form; must be a type error (issue 1036 row md5(1234))"
+  },
+  "SHA384Test#testEvaluate3": {
+   "verdict": "defect",
+   "group": "string-arg-types-1036",
+   "issue": "https://github.com/danbri/factoidal/issues/1036",
+   "spec": "SPARQL 1.1 Query REC §17.4.6.1-§17.4.6.5 (the hash functions take a simple literal or xsd:string)",
+   "note": "the hash of \"4\"^^xsd:integer is computed from its lexical form; must be a type error (issue 1036 row md5(1234))"
+  },
+  "SHA512Test#testEvaluate3": {
+   "verdict": "defect",
+   "group": "string-arg-types-1036",
+   "issue": "https://github.com/danbri/factoidal/issues/1036",
+   "spec": "SPARQL 1.1 Query REC §17.4.6.1-§17.4.6.5 (the hash functions take a simple literal or xsd:string)",
+   "note": "the hash of \"4\"^^xsd:integer is computed from its lexical form; must be a type error (issue 1036 row md5(1234))"
+  },
+  "TestByteCast#testCastBelowMinValue": {
+   "verdict": "defect",
+   "group": "xsd-constructor-relabels",
+   "issue": "https://github.com/danbri/factoidal/issues/1041",
+   "spec": "XPath F&O 3.1 §19.1.2 (numeric to integer truncates), §19.3 (derived types; out of range is FORG0001); SPARQL 1.1 §17.5",
+   "note": "Factoidal relabels the argument (e.g. \"100.01\"^^xsd:byte, \"-129\"^^xsd:byte)"
+  },
+  "TestByteCast#testCastAboveMaxValue": {
+   "verdict": "defect",
+   "group": "xsd-constructor-relabels",
+   "issue": "https://github.com/danbri/factoidal/issues/1041",
+   "spec": "XPath F&O 3.1 §19.1.2 (numeric to integer truncates), §19.3 (derived types; out of range is FORG0001); SPARQL 1.1 §17.5",
+   "note": "Factoidal relabels the argument (e.g. \"100.01\"^^xsd:byte, \"-129\"^^xsd:byte)"
+  },
+  "TestByteCast#testCastPositiveDouble": {
+   "verdict": "defect",
+   "group": "xsd-constructor-relabels",
+   "issue": "https://github.com/danbri/factoidal/issues/1041",
+   "spec": "XPath F&O 3.1 §19.1.2 (numeric to integer truncates), §19.3 (derived types; out of range is FORG0001); SPARQL 1.1 §17.5",
+   "note": "Factoidal relabels the argument (e.g. \"100.01\"^^xsd:byte, \"-129\"^^xsd:byte)"
+  },
+  "TestByteCast#testCastPositiveDoubleWithLargeFraction": {
+   "verdict": "defect",
+   "group": "xsd-constructor-relabels",
+   "issue": "https://github.com/danbri/factoidal/issues/1041",
+   "spec": "XPath F&O 3.1 §19.1.2 (numeric to integer truncates), §19.3 (derived types; out of range is FORG0001); SPARQL 1.1 §17.5",
+   "note": "Factoidal relabels the argument (e.g. \"100.01\"^^xsd:byte, \"-129\"^^xsd:byte)"
+  },
+  "TestShortCast#testCastBelowMinValue": {
+   "verdict": "defect",
+   "group": "xsd-constructor-relabels",
+   "issue": "https://github.com/danbri/factoidal/issues/1041",
+   "spec": "XPath F&O 3.1 §19.1.2 (numeric to integer truncates), §19.3 (derived types; out of range is FORG0001); SPARQL 1.1 §17.5",
+   "note": "Factoidal relabels the argument (e.g. \"100.01\"^^xsd:byte, \"-129\"^^xsd:byte)"
+  },
+  "TestShortCast#testCastAboveMaxValue": {
+   "verdict": "defect",
+   "group": "xsd-constructor-relabels",
+   "issue": "https://github.com/danbri/factoidal/issues/1041",
+   "spec": "XPath F&O 3.1 §19.1.2 (numeric to integer truncates), §19.3 (derived types; out of range is FORG0001); SPARQL 1.1 §17.5",
+   "note": "Factoidal relabels the argument (e.g. \"100.01\"^^xsd:byte, \"-129\"^^xsd:byte)"
+  },
+  "TestShortCast#testCastPositiveDouble": {
+   "verdict": "defect",
+   "group": "xsd-constructor-relabels",
+   "issue": "https://github.com/danbri/factoidal/issues/1041",
+   "spec": "XPath F&O 3.1 §19.1.2 (numeric to integer truncates), §19.3 (derived types; out of range is FORG0001); SPARQL 1.1 §17.5",
+   "note": "Factoidal relabels the argument (e.g. \"100.01\"^^xsd:byte, \"-129\"^^xsd:byte)"
+  },
+  "TestShortCast#testCastPositiveDoubleWithLargeFraction": {
+   "verdict": "defect",
+   "group": "xsd-constructor-relabels",
+   "issue": "https://github.com/danbri/factoidal/issues/1041",
+   "spec": "XPath F&O 3.1 §19.1.2 (numeric to integer truncates), §19.3 (derived types; out of range is FORG0001); SPARQL 1.1 §17.5",
+   "note": "Factoidal relabels the argument (e.g. \"100.01\"^^xsd:byte, \"-129\"^^xsd:byte)"
+  },
+  "TestIntCast#testCastBelowMinValue": {
+   "verdict": "defect",
+   "group": "xsd-constructor-relabels",
+   "issue": "https://github.com/danbri/factoidal/issues/1041",
+   "spec": "XPath F&O 3.1 §19.1.2 (numeric to integer truncates), §19.3 (derived types; out of range is FORG0001); SPARQL 1.1 §17.5",
+   "note": "Factoidal relabels the argument (e.g. \"100.01\"^^xsd:byte, \"-129\"^^xsd:byte)"
+  },
+  "TestIntCast#testCastAboveMaxValue": {
+   "verdict": "defect",
+   "group": "xsd-constructor-relabels",
+   "issue": "https://github.com/danbri/factoidal/issues/1041",
+   "spec": "XPath F&O 3.1 §19.1.2 (numeric to integer truncates), §19.3 (derived types; out of range is FORG0001); SPARQL 1.1 §17.5",
+   "note": "Factoidal relabels the argument (e.g. \"100.01\"^^xsd:byte, \"-129\"^^xsd:byte)"
+  },
+  "TestIntCast#testCastPositiveDouble": {
+   "verdict": "defect",
+   "group": "xsd-constructor-relabels",
+   "issue": "https://github.com/danbri/factoidal/issues/1041",
+   "spec": "XPath F&O 3.1 §19.1.2 (numeric to integer truncates), §19.3 (derived types; out of range is FORG0001); SPARQL 1.1 §17.5",
+   "note": "Factoidal relabels the argument (e.g. \"100.01\"^^xsd:byte, \"-129\"^^xsd:byte)"
+  },
+  "TestIntCast#testCastPositiveDoubleWithLargeFraction": {
+   "verdict": "defect",
+   "group": "xsd-constructor-relabels",
+   "issue": "https://github.com/danbri/factoidal/issues/1041",
+   "spec": "XPath F&O 3.1 §19.1.2 (numeric to integer truncates), §19.3 (derived types; out of range is FORG0001); SPARQL 1.1 §17.5",
+   "note": "Factoidal relabels the argument (e.g. \"100.01\"^^xsd:byte, \"-129\"^^xsd:byte)"
+  },
+  "TestLongCast#testCastBelowMinValue": {
+   "verdict": "defect",
+   "group": "xsd-constructor-relabels",
+   "issue": "https://github.com/danbri/factoidal/issues/1041",
+   "spec": "XPath F&O 3.1 §19.1.2 (numeric to integer truncates), §19.3 (derived types; out of range is FORG0001); SPARQL 1.1 §17.5",
+   "note": "Factoidal relabels the argument (e.g. \"100.01\"^^xsd:byte, \"-129\"^^xsd:byte)"
+  },
+  "TestLongCast#testCastAboveMaxValue": {
+   "verdict": "defect",
+   "group": "xsd-constructor-relabels",
+   "issue": "https://github.com/danbri/factoidal/issues/1041",
+   "spec": "XPath F&O 3.1 §19.1.2 (numeric to integer truncates), §19.3 (derived types; out of range is FORG0001); SPARQL 1.1 §17.5",
+   "note": "Factoidal relabels the argument (e.g. \"100.01\"^^xsd:byte, \"-129\"^^xsd:byte)"
+  },
+  "TestLongCast#testCastPositiveDouble": {
+   "verdict": "defect",
+   "group": "xsd-constructor-relabels",
+   "issue": "https://github.com/danbri/factoidal/issues/1041",
+   "spec": "XPath F&O 3.1 §19.1.2 (numeric to integer truncates), §19.3 (derived types; out of range is FORG0001); SPARQL 1.1 §17.5",
+   "note": "Factoidal relabels the argument (e.g. \"100.01\"^^xsd:byte, \"-129\"^^xsd:byte)"
+  },
+  "TestLongCast#testCastPositiveDoubleWithLargeFraction": {
+   "verdict": "defect",
+   "group": "xsd-constructor-relabels",
+   "issue": "https://github.com/danbri/factoidal/issues/1041",
+   "spec": "XPath F&O 3.1 §19.1.2 (numeric to integer truncates), §19.3 (derived types; out of range is FORG0001); SPARQL 1.1 §17.5",
+   "note": "Factoidal relabels the argument (e.g. \"100.01\"^^xsd:byte, \"-129\"^^xsd:byte)"
+  },
+  "TestNegativeIntegerCast#testCastAboveMaxValue": {
+   "verdict": "defect",
+   "group": "xsd-constructor-relabels",
+   "issue": "https://github.com/danbri/factoidal/issues/1041",
+   "spec": "XPath F&O 3.1 §19.1.2 (numeric to integer truncates), §19.3 (derived types; out of range is FORG0001); SPARQL 1.1 §17.5",
+   "note": "Factoidal relabels the argument (e.g. \"100.01\"^^xsd:byte, \"-129\"^^xsd:byte)"
+  },
+  "TestNonNegativeInteger#testCastBelowMinValue": {
+   "verdict": "defect",
+   "group": "xsd-constructor-relabels",
+   "issue": "https://github.com/danbri/factoidal/issues/1041",
+   "spec": "XPath F&O 3.1 §19.1.2 (numeric to integer truncates), §19.3 (derived types; out of range is FORG0001); SPARQL 1.1 §17.5",
+   "note": "Factoidal relabels the argument (e.g. \"100.01\"^^xsd:byte, \"-129\"^^xsd:byte)"
+  },
+  "TestNonNegativeInteger#testCastPositiveDouble": {
+   "verdict": "defect",
+   "group": "xsd-constructor-relabels",
+   "issue": "https://github.com/danbri/factoidal/issues/1041",
+   "spec": "XPath F&O 3.1 §19.1.2 (numeric to integer truncates), §19.3 (derived types; out of range is FORG0001); SPARQL 1.1 §17.5",
+   "note": "Factoidal relabels the argument (e.g. \"100.01\"^^xsd:byte, \"-129\"^^xsd:byte)"
+  },
+  "TestNonNegativeInteger#testCastPositiveDoubleWithLargeFraction": {
+   "verdict": "defect",
+   "group": "xsd-constructor-relabels",
+   "issue": "https://github.com/danbri/factoidal/issues/1041",
+   "spec": "XPath F&O 3.1 §19.1.2 (numeric to integer truncates), §19.3 (derived types; out of range is FORG0001); SPARQL 1.1 §17.5",
+   "note": "Factoidal relabels the argument (e.g. \"100.01\"^^xsd:byte, \"-129\"^^xsd:byte)"
+  },
+  "TestNonPositiveIntegerCast#testCastAboveMaxValue": {
+   "verdict": "defect",
+   "group": "xsd-constructor-relabels",
+   "issue": "https://github.com/danbri/factoidal/issues/1041",
+   "spec": "XPath F&O 3.1 §19.1.2 (numeric to integer truncates), §19.3 (derived types; out of range is FORG0001); SPARQL 1.1 §17.5",
+   "note": "Factoidal relabels the argument (e.g. \"100.01\"^^xsd:byte, \"-129\"^^xsd:byte)"
+  },
+  "TestPositiveIntegerCast#testCastBelowMinValue": {
+   "verdict": "defect",
+   "group": "xsd-constructor-relabels",
+   "issue": "https://github.com/danbri/factoidal/issues/1041",
+   "spec": "XPath F&O 3.1 §19.1.2 (numeric to integer truncates), §19.3 (derived types; out of range is FORG0001); SPARQL 1.1 §17.5",
+   "note": "Factoidal relabels the argument (e.g. \"100.01\"^^xsd:byte, \"-129\"^^xsd:byte)"
+  },
+  "TestPositiveIntegerCast#testCastPositiveDouble": {
+   "verdict": "defect",
+   "group": "xsd-constructor-relabels",
+   "issue": "https://github.com/danbri/factoidal/issues/1041",
+   "spec": "XPath F&O 3.1 §19.1.2 (numeric to integer truncates), §19.3 (derived types; out of range is FORG0001); SPARQL 1.1 §17.5",
+   "note": "Factoidal relabels the argument (e.g. \"100.01\"^^xsd:byte, \"-129\"^^xsd:byte)"
+  },
+  "TestPositiveIntegerCast#testCastPositiveDoubleWithLargeFraction": {
+   "verdict": "defect",
+   "group": "xsd-constructor-relabels",
+   "issue": "https://github.com/danbri/factoidal/issues/1041",
+   "spec": "XPath F&O 3.1 §19.1.2 (numeric to integer truncates), §19.3 (derived types; out of range is FORG0001); SPARQL 1.1 §17.5",
+   "note": "Factoidal relabels the argument (e.g. \"100.01\"^^xsd:byte, \"-129\"^^xsd:byte)"
+  },
+  "TestUnsignedByteCast#testCastBelowMinValue": {
+   "verdict": "defect",
+   "group": "xsd-constructor-relabels",
+   "issue": "https://github.com/danbri/factoidal/issues/1041",
+   "spec": "XPath F&O 3.1 §19.1.2 (numeric to integer truncates), §19.3 (derived types; out of range is FORG0001); SPARQL 1.1 §17.5",
+   "note": "Factoidal relabels the argument (e.g. \"100.01\"^^xsd:byte, \"-129\"^^xsd:byte)"
+  },
+  "TestUnsignedByteCast#testCastAboveMaxValue": {
+   "verdict": "defect",
+   "group": "xsd-constructor-relabels",
+   "issue": "https://github.com/danbri/factoidal/issues/1041",
+   "spec": "XPath F&O 3.1 §19.1.2 (numeric to integer truncates), §19.3 (derived types; out of range is FORG0001); SPARQL 1.1 §17.5",
+   "note": "Factoidal relabels the argument (e.g. \"100.01\"^^xsd:byte, \"-129\"^^xsd:byte)"
+  },
+  "TestUnsignedByteCast#testCastPositiveDouble": {
+   "verdict": "defect",
+   "group": "xsd-constructor-relabels",
+   "issue": "https://github.com/danbri/factoidal/issues/1041",
+   "spec": "XPath F&O 3.1 §19.1.2 (numeric to integer truncates), §19.3 (derived types; out of range is FORG0001); SPARQL 1.1 §17.5",
+   "note": "Factoidal relabels the argument (e.g. \"100.01\"^^xsd:byte, \"-129\"^^xsd:byte)"
+  },
+  "TestUnsignedByteCast#testCastPositiveDoubleWithLargeFraction": {
+   "verdict": "defect",
+   "group": "xsd-constructor-relabels",
+   "issue": "https://github.com/danbri/factoidal/issues/1041",
+   "spec": "XPath F&O 3.1 §19.1.2 (numeric to integer truncates), §19.3 (derived types; out of range is FORG0001); SPARQL 1.1 §17.5",
+   "note": "Factoidal relabels the argument (e.g. \"100.01\"^^xsd:byte, \"-129\"^^xsd:byte)"
+  },
+  "TestUnsignedShortCast#testCastBelowMinValue": {
+   "verdict": "defect",
+   "group": "xsd-constructor-relabels",
+   "issue": "https://github.com/danbri/factoidal/issues/1041",
+   "spec": "XPath F&O 3.1 §19.1.2 (numeric to integer truncates), §19.3 (derived types; out of range is FORG0001); SPARQL 1.1 §17.5",
+   "note": "Factoidal relabels the argument (e.g. \"100.01\"^^xsd:byte, \"-129\"^^xsd:byte)"
+  },
+  "TestUnsignedShortCast#testCastAboveMaxValue": {
+   "verdict": "defect",
+   "group": "xsd-constructor-relabels",
+   "issue": "https://github.com/danbri/factoidal/issues/1041",
+   "spec": "XPath F&O 3.1 §19.1.2 (numeric to integer truncates), §19.3 (derived types; out of range is FORG0001); SPARQL 1.1 §17.5",
+   "note": "Factoidal relabels the argument (e.g. \"100.01\"^^xsd:byte, \"-129\"^^xsd:byte)"
+  },
+  "TestUnsignedShortCast#testCastPositiveDouble": {
+   "verdict": "defect",
+   "group": "xsd-constructor-relabels",
+   "issue": "https://github.com/danbri/factoidal/issues/1041",
+   "spec": "XPath F&O 3.1 §19.1.2 (numeric to integer truncates), §19.3 (derived types; out of range is FORG0001); SPARQL 1.1 §17.5",
+   "note": "Factoidal relabels the argument (e.g. \"100.01\"^^xsd:byte, \"-129\"^^xsd:byte)"
+  },
+  "TestUnsignedShortCast#testCastPositiveDoubleWithLargeFraction": {
+   "verdict": "defect",
+   "group": "xsd-constructor-relabels",
+   "issue": "https://github.com/danbri/factoidal/issues/1041",
+   "spec": "XPath F&O 3.1 §19.1.2 (numeric to integer truncates), §19.3 (derived types; out of range is FORG0001); SPARQL 1.1 §17.5",
+   "note": "Factoidal relabels the argument (e.g. \"100.01\"^^xsd:byte, \"-129\"^^xsd:byte)"
+  },
+  "TestUnsignedIntCast#testCastBelowMinValue": {
+   "verdict": "defect",
+   "group": "xsd-constructor-relabels",
+   "issue": "https://github.com/danbri/factoidal/issues/1041",
+   "spec": "XPath F&O 3.1 §19.1.2 (numeric to integer truncates), §19.3 (derived types; out of range is FORG0001); SPARQL 1.1 §17.5",
+   "note": "Factoidal relabels the argument (e.g. \"100.01\"^^xsd:byte, \"-129\"^^xsd:byte)"
+  },
+  "TestUnsignedIntCast#testCastAboveMaxValue": {
+   "verdict": "defect",
+   "group": "xsd-constructor-relabels",
+   "issue": "https://github.com/danbri/factoidal/issues/1041",
+   "spec": "XPath F&O 3.1 §19.1.2 (numeric to integer truncates), §19.3 (derived types; out of range is FORG0001); SPARQL 1.1 §17.5",
+   "note": "Factoidal relabels the argument (e.g. \"100.01\"^^xsd:byte, \"-129\"^^xsd:byte)"
+  },
+  "TestUnsignedIntCast#testCastPositiveDouble": {
+   "verdict": "defect",
+   "group": "xsd-constructor-relabels",
+   "issue": "https://github.com/danbri/factoidal/issues/1041",
+   "spec": "XPath F&O 3.1 §19.1.2 (numeric to integer truncates), §19.3 (derived types; out of range is FORG0001); SPARQL 1.1 §17.5",
+   "note": "Factoidal relabels the argument (e.g. \"100.01\"^^xsd:byte, \"-129\"^^xsd:byte)"
+  },
+  "TestUnsignedIntCast#testCastPositiveDoubleWithLargeFraction": {
+   "verdict": "defect",
+   "group": "xsd-constructor-relabels",
+   "issue": "https://github.com/danbri/factoidal/issues/1041",
+   "spec": "XPath F&O 3.1 §19.1.2 (numeric to integer truncates), §19.3 (derived types; out of range is FORG0001); SPARQL 1.1 §17.5",
+   "note": "Factoidal relabels the argument (e.g. \"100.01\"^^xsd:byte, \"-129\"^^xsd:byte)"
+  },
+  "TestUnsignedLongCast#testCastBelowMinValue": {
+   "verdict": "defect",
+   "group": "xsd-constructor-relabels",
+   "issue": "https://github.com/danbri/factoidal/issues/1041",
+   "spec": "XPath F&O 3.1 §19.1.2 (numeric to integer truncates), §19.3 (derived types; out of range is FORG0001); SPARQL 1.1 §17.5",
+   "note": "Factoidal relabels the argument (e.g. \"100.01\"^^xsd:byte, \"-129\"^^xsd:byte)"
+  },
+  "TestUnsignedLongCast#testCastAboveMaxValue": {
+   "verdict": "divergence",
+   "group": "unsignedlong-range",
+   "spec": "XSD 1.1 Part 2 §3.4.21 unsignedLong (maxInclusive 18446744073709551615)",
+   "note": "RDF4J's test declares Long.MAX_VALUE as the maximum of xsd:unsignedLong; 9223372036854775808 is in range, and Factoidal correctly answers \"9223372036854775808\"^^xsd:unsignedLong"
+  },
+  "TestUnsignedLongCast#testCastPositiveDouble": {
+   "verdict": "defect",
+   "group": "xsd-constructor-relabels",
+   "issue": "https://github.com/danbri/factoidal/issues/1041",
+   "spec": "XPath F&O 3.1 §19.1.2 (numeric to integer truncates), §19.3 (derived types; out of range is FORG0001); SPARQL 1.1 §17.5",
+   "note": "Factoidal relabels the argument (e.g. \"100.01\"^^xsd:byte, \"-129\"^^xsd:byte)"
+  },
+  "TestUnsignedLongCast#testCastPositiveDoubleWithLargeFraction": {
+   "verdict": "defect",
+   "group": "xsd-constructor-relabels",
+   "issue": "https://github.com/danbri/factoidal/issues/1041",
+   "spec": "XPath F&O 3.1 §19.1.2 (numeric to integer truncates), §19.3 (derived types; out of range is FORG0001); SPARQL 1.1 §17.5",
+   "note": "Factoidal relabels the argument (e.g. \"100.01\"^^xsd:byte, \"-129\"^^xsd:byte)"
+  }
+ }
+}

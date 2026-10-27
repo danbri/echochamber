@@ -1,0 +1,18 @@
+{
+ "_about": "Verdicts for sparql/cases.json (echochamber CLAUDE.md rule 2). A case listed here must NOT meet the RDF4J expectation; when it does, the suite fails and the verdict must be revised. Original to echochamber, Apache-2.0.",
+ "coreVersion": "0.16.0",
+ "cases": {
+  "testcases-sparql-1.1/bindings#sparql11-bindings-01": {"verdict": "divergence", "group": "bindings-keyword", "spec": "SPARQL 1.1 Query §19.8 [7] ValuesClause (REC keyword VALUES; BINDINGS is the working-draft keyword used until 2012)", "note": "RDF4J's parser still accepts BINDINGS; Factoidal answers query.syntax."},
+  "testcases-sparql-1.1/bindings#sparql11-bindings-02": {"verdict": "divergence", "group": "bindings-keyword", "spec": "SPARQL 1.1 Query §19.8 [7] ValuesClause"},
+  "testcases-sparql-1.1/property-paths#sparql11-sequence-04": {"verdict": "divergence", "group": "path-length-range", "spec": "SPARQL 1.1 Query §9.1 and §19.8 [93] PathMod ('?' | '*' | '+'); the {n,m} forms were removed after the 2010 working drafts", "note": "foaf:knows{2,4}: RDF4J extension."},
+  "testcases-sparql-1.1/property-paths#sparql11-sequence-05": {"verdict": "divergence", "group": "path-length-range", "spec": "SPARQL 1.1 Query §9.1, §19.8 [93] PathMod"},
+  "testcases-sparql-1.1/property-paths#sparql11-sequence-06": {"verdict": "divergence", "group": "path-length-range", "spec": "SPARQL 1.1 Query §9.1, §19.8 [93] PathMod"},
+  "testcases-sparql-1.1/builtin#sparql11-not-in-02": {"verdict": "defect", "group": "in-error-propagation", "issue": "https://github.com/danbri/factoidal/issues/1049", "spec": "SPARQL 1.1 Query §17.4.1.10 NOT IN, §17.4.1.7 RDFterm-equal", "note": "Factoidal keeps :book4 (\"no discount\") and :book5 (\"70\"), whose comparisons with 700 are errors."},
+  "testcases-sparql-1.1/subquery#sparql11-subquery-03": {"verdict": "defect", "group": "order-by-aggregate", "issue": "https://github.com/danbri/factoidal/issues/1050", "spec": "SPARQL 1.1 Query §18.2.4.1, §15.1, §19.8 [24] OrderCondition"},
+  "testcases-sparql-1.1/subquery#sparql11-subquery-04": {"verdict": "defect", "group": "order-by-aggregate", "issue": "https://github.com/danbri/factoidal/issues/1050", "spec": "SPARQL 1.1 Query §18.2.4.1, §15.1"},
+  "testcases-sparql-1.1/aggregates#sparql11-order-02": {"verdict": "defect", "group": "order-by-aggregate", "issue": "https://github.com/danbri/factoidal/issues/1050", "spec": "SPARQL 1.1 Query §18.2.4.1, §15.1"},
+  "testcases-sparql-1.1/aggregates#sparql11-order-03": {"verdict": "defect", "group": "order-by-aggregate", "issue": "https://github.com/danbri/factoidal/issues/1050", "spec": "SPARQL 1.1 Query §18.2.4.1, §15.1"},
+  "testcases-sparql-1.1/aggregates#sparql11-sum-04": {"verdict": "divergence", "group": "lexical-form", "spec": "SPARQL 1.1 Query §17.1 and §18.5 (Sum is op:numeric-add; the lexical form of the result is not fixed)", "note": "RDF4J expects \"10.0\"^^xsd:decimal; Factoidal gives \"10\"^^xsd:decimal (the XSD 1.1 canonical form). Same value and datatype. Factoidal is inconsistent with itself here: AVG gives \"7.0\"."},
+  "testcases-sparql-1.1/aggregates#sparql11-avg-01": {"verdict": "divergence", "group": "lexical-form", "spec": "SPARQL 1.1 Query §17.1 and §18.5 (Avg is Sum/Count; lexical form not fixed)", "note": "RDF4J expects \"7\"^^xsd:decimal; Factoidal gives \"7.0\"^^xsd:decimal. Same value and datatype."}
+ }
+}

@@ -1,0 +1,30 @@
+{
+ "cases": {
+  "TurtleParserTest#testUnparsableIRIFatal": {
+   "verdict": "defect",
+   "group": "iri-generic-syntax",
+   "issue": "https://github.com/danbri/factoidal/issues/1057",
+   "spec": "RDF 1.2 Turtle 7.2 (IRIREF: \"The resulting IRI MUST comply with the syntactic restrictions of generic IRI syntax\"); RDF 1.2 Concepts 3.3 (an IRI \"is a string that conforms to the syntax defined in RFC 3987\"); RFC 3987 2.2 (iauthority = [ iuserinfo \"@\" ] ihost [ \":\" port ], port = *DIGIT)",
+   "note": "<http://www:example.org/> has a non-digit port, so it is not an IRI under RFC 3987 generic syntax; core accepts it (also in N-Triples). RDF4J rejects (ParsedIRI)."
+  },
+  "TurtleParserTest#testUnparsableIRINonFatal": {
+   "verdict": "defect",
+   "group": "iri-generic-syntax",
+   "issue": "https://github.com/danbri/factoidal/issues/1057",
+   "spec": "RDF 1.2 Turtle 7.2 (IRIREF: \"The resulting IRI MUST comply with the syntactic restrictions of generic IRI syntax\"); RFC 3987 2.2",
+   "note": "lenient parse keeps the statement with <http://www:example.org/> (2 quads); RDF4J drops it (1 quad). Same root cause as testUnparsableIRIFatal."
+  },
+  "TurtleParserTest#testDirLangStringNoLanguage": {
+   "verdict": "divergence",
+   "group": "predeclared-prefixes",
+   "spec": "RDF 1.2 Turtle 7.2 (PNAME_LN: \"The namespaces map MUST have a corresponding namespace\"); RDF 1.2 Concepts 3.4 (\"If and only if the datatype IRI is ...rdf:dirLangString, there is a base direction\"; likewise a language tag)",
+   "note": "the input uses rdf: without declaring it; RDF4J's default NAMESPACES setting (RDFa 1.1 initial context plus others) predeclares it, core rejects (undefined prefix). RDF4J also turns \"Hello\"^^rdf:dirLangString (no language tag) into an xsd:string literal, which the Turtle term constructor (datatype taken from the iri) does not do."
+  },
+  "TurtleParserTest#testNestedTripleTerm2": {
+   "verdict": "divergence",
+   "group": "predeclared-prefixes",
+   "spec": "RDF 1.2 Turtle 7.2 (PNAME_LN: \"The namespaces map MUST have a corresponding namespace\")",
+   "note": "the input uses xsd:int without declaring xsd:; RDF4J's default NAMESPACES setting predeclares it, core rejects (undefined prefix: xsd)."
+  }
+ }
+}
